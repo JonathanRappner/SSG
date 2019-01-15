@@ -42,35 +42,25 @@ class Member extends CI_Model
 		//kolla om användaren har rad i ssg_members
 		$this->has_member_row($this->id);
 
-		//hämta member_data
-		$member_data = $this->set_member_data();
+		//sätt medlemsdata
+		$this->set_member_data($this->id);
 
 		//valid
 		$this->valid = true;
 	}
 
 	/**
-	 * Hämtar och sätter medlemsdata för member_id $this->id;
-	 *
-	 * @return void
-	 */
-	private function set_member_data()
+	 * Hämtar och sätter medlemsdata till publika variabler i denna modell.
+	 * 
+	* @param int $member_id
+	* @return void
+	*/
+	private function set_member_data($member_id)
 	{
-		$member = $this->get_member_data($this->id);
+		$member = $this->get_member_data($member_id);
 
-		$this->name = $member->name;
-		$this->avatar_url = $member->avatar;
-		$this->group_id = $member->group_id;
-		$this->group_name = $member->group_name;
-		$this->group_code = $member->group_code;
-		$this->role_id = $member->role_id;
-		$this->role_name = $member->role_name;
-		$this->rank_id = $member->rank_id;
-		$this->rank_name = $member->rank_name;
-		$this->registered_date = $member->registered_date;
-		$this->uid = $member->uid;
-		$this->is_active = $member->is_active;
-		$this->permission_groups = $member->permission_groups;
+		foreach($member as $attr_name => $attr_value)
+			$this->$attr_name = $attr_value;
 	}
 
 	/**
@@ -135,7 +125,8 @@ class Member extends CI_Model
 			if(count($local_avatars) > 0)
 			{
 				sort($local_avatars); //sortera, stigande ordning
-				$member_data->avatar = base_url('../avs/'. end($local_avatars)); //hämta högsta (sista) avataren, lägg till lokal-url
+				$member_data->avatar_url = base_url('../avs/'. end($local_avatars)); //hämta högsta (sista) avataren, lägg till lokal-url
+				unset($member_data->avatar);
 			}
 		}
 

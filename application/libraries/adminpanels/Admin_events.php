@@ -7,13 +7,15 @@ class Admin_events implements Adminpanel
 {
 	protected $CI;
 	private
+		$view,
 		$event_id,
 		$events = array(),
 		$event,
 		$results_per_page = 20,
 		$page,
 		$total_events,
-		$total_pages
+		$total_pages,
+		$delete_event_id
 	;
 
 	public function __construct()
@@ -31,10 +33,19 @@ class Admin_events implements Adminpanel
 	 */
 	public function main($event_id = 0, $page = 0)
 	{
+		//moduler
+		$this->CI->load->model('signup/Events');
+
 		//post variabler finns, gå till submits
 		if($this->CI->input->post('task') != null)
 		{
 			$this->submit($this->CI->input->post('task'));
+			return;
+		}
+		else if($this->CI->input->get('delete_confirm') != null)
+		{
+			$this->view = 'delete_confirm';
+			$this->delete_event = $this->CI->Events->get_event($this->CI->input->get('delete_confirm'));
 			return;
 		}
 		else if($this->CI->input->get('delete') != null)
@@ -45,7 +56,7 @@ class Admin_events implements Adminpanel
 
 		//variabler
 		$this->event_id = empty($event_id) ? 0 : $event_id-0;
-		$this->page = empty($page) ? 0 : $page-0;
+		$this->page = empty($page) ? 0 : $page-0; //onödig
 		$this->total_events = $this->CI->db->query('SELECT COUNT(*) AS count FROM ssg_events')->row()->count;
 		$this->total_pages = ceil($this->total_events / $this->results_per_page);
 
@@ -76,39 +87,27 @@ class Admin_events implements Adminpanel
 		echo
 			'<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css">';
 
-		$this->print_form();
-		echo '<hr class="my-4" />';
-		$this->print_table();
-	}
+		if($this->view == 'delete_confirm') //delete confirmation-vy
+		{
+			echo 
+				'<div class="row text-center">
+					<h5 class="col">Är du säker på att du vill ta bort <i>'. $this->delete_event->title .' ('. $this->delete_event->start_date .')</i>?</h5>
+				</div>';
 
-	/**
-	 * Hämta events
-	 *
-	 * @return void
-	 */
-	private function get_events($page = 0)////////////////////////$page <- wut?
-	{
-		//variabler
-		$events = array();
-
-		$sql =
-			"SELECT
-				ssg_events.id, ssg_events.title, author, forum_link, preview_image,
-				ssg_event_types.title-0 AS type_id,
-				ssg_event_types.title AS type_name,
-				DATE_FORMAT(start_datetime, '%Y-%m-%d') AS start_date,
-				TIME_FORMAT(start_datetime, '%H:%i') AS start_time,
-				TIME_FORMAT(ADDTIME(start_datetime, length_time), '%H:%i') AS end_time
-			FROM ssg_events
-			INNER JOIN ssg_event_types
-				ON ssg_events.type_id = ssg_event_types.id
-			ORDER BY start_datetime DESC";
-		$query = $this->CI->db->query($sql);
-
-		foreach($query->result() as $row)
-			$events[] = $row;
-		
-		return $events;
+			echo 
+				'<div class="row text-center mt-2">
+					<div class="col">
+						<a href="'. base_url('signup/admin/events/') .'" class="btn btn-danger mr-2">Nej</a>
+						<a href="'. base_url('signup/admin/events/?delete='. $this->delete_event->id) .'" class="btn btn-success">Ja</a>
+					</div>	
+				</div>';
+		}
+		else //vanlig vy
+		{
+			$this->print_form();
+			echo '<hr class="my-4" />';
+			$this->print_table();
+		}
 	}
 
 	/**
@@ -254,24 +253,23 @@ class Admin_events implements Adminpanel
 
 		foreach($this->events as $event)
 		{
-			$signed_count = $this->CI->attendance->count_signed($event->signups); //antal anmälda
 			echo
 				"<tr data-event_id='$event->id' class='". ($event->is_old ? 'grayed' : null) ."'>
 					<th scope='row'>$event->title</th>
 					<td>$event->type_name</td>
 					<td><abbr title='$event->start_time - $event->end_time' data-toggle='tooltip'>$event->start_date</abbr></td>
-					<td>$signed_count</td>
+					<td>$event->signed_sum</td>
 					<td class='btn_manage'>
 						<a href='". base_url("signup/event/$event->id") ."' class='btn btn-success' title='Se detaljer'><i class='fas fa-search'></i></a>
 						<a href='". base_url("signup/admin/events/$event->id") ."' class='btn btn-primary' title='Redigera'><i class='fas fa-edit'></i></a>
-						<a href='". base_url("signup/admin/events/?delete=$event->id") ."' class='btn_delete btn btn-danger' title='Ta bort'><i class='far fa-trash-alt'></i></a>
+						<a href='". base_url("signup/admin/events/?delete_confirm=$event->id") ."' class='btn_delete btn btn-danger' title='Ta bort'><i class='far fa-trash-alt'></i></a>
 					</td>
 				</tr>";
 		}
 		echo '</tbody></table></div>';
 
 		//pagination
-		echo $this->CI->doodads->pagination($this->page, $this->total_pages, base_url("signup/admin/events/$this->event_id/"));
+		echo $this->CI->doodads->pagination($this->page, $this->total_pages, base_url("signup/admin/events/$this->event_id/"), 'wrapper_events_table');
 	}
 
 	/**

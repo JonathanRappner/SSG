@@ -38,15 +38,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	</nav>
 
 	<!-- Inloggad som... -->
-	<div class="col-sm text-sm-right my-1">
-		<p class="d-none d-md-inline mr-2 text-nowrap">Inloggad som: <strong><?php echo $member->name;?></strong></p>
+	<a id="userbox" class="col-sm text-sm-right my-1" href="<?php echo base_url('signup/logout_confirm?redirect='. current_url()); ?>">
+		<p class="d-none d-md-inline mr-2 text-nowrap">Inloggad som: <strong><?php echo $this->member->name;?></strong></p>
 		<?php
-		$avatar = !empty($member->avatar_url)
-			? $member->avatar_url
+		$avatar = !empty($this->member->avatar_url)
+			? $this->member->avatar_url
 			: base_url('images/unknown.png');
 		echo "<img class='avatar rounded' src='$avatar' alt='Avatar'>"
 		?>
-	</div>
+		<p class="d-inline d-md-none ml-2 text-nowrap"><strong><?php echo $this->member->name;?></strong></p>
+	</a>
 
 </div>
 

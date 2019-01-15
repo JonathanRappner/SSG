@@ -14,6 +14,7 @@ $this->current_page = 'history';
 
 	<!-- Page-specific -->
 	<link rel="stylesheet" href="<?php echo base_url('css/signup/admin.css');?>">
+	<script src="<?php echo base_url('js/signup/clickable_table.js');?>"></script>
 
 	<title>Historik</title>
 
@@ -26,10 +27,38 @@ $this->current_page = 'history';
 	<?php $this->load->view('signup/sub-views/top');?>
 
 	<h1>Historik</h1>
-	<div class="alert alert-info alert-dismissible fade show" role="alert">
-		Denna undersida är inte implementerad ännu.
+
+	<p>Här kan du se gamla events. Klicka på ett event i listan för att se fler detaljer.</p>
+
+	<div id="wrapper_events_table" class="table-responsive table-sm">
+		<table class="table table-hover clickable">
+			<thead class="table-borderless">
+				<tr>
+					<th scope="col" style="width:50%;">Titel</th>
+					<th scope="col">Typ</th>
+					<th scope="col">Datum</th>
+					<th scope="col">Anmälda</th>
+					<th scope="col">Din närvaro</th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php foreach($events as $event):?>
+				<tr data-url='<?php echo base_url("signup/event/$event->id");?>'>
+					<th scope='row'><?php echo $event->title;?></th>
+					<td><?php echo $event->type_name;?></td>
+					<td><abbr title='<?php echo "$event->start_time - $event->end_time";?>' data-toggle='tooltip'><?php echo $event->start_date;?></abbr></td>
+					<td><?php echo $event->signed_sum;?></td>
+					<td><span class="text-<?php echo $event->current_member_attendance->code;?>"><?php echo $event->current_member_attendance->text;?></span></td>
+				</tr>
+			<?php endforeach;?>
+			</tbody>
+		</table>
 	</div>
-	<p>Här kommer du kunna se detaljer och anmälningar för äldre events.</p>
+
+	<?php
+	//pagination
+	echo $this->doodads->pagination($page, $total_pages, base_url("signup/history/"), 'wrapper_events_table');
+	?>
 
 	<!-- Footer -->
 	<?php $this->load->view('signup/sub-views/footer');?>

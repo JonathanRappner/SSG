@@ -12,7 +12,7 @@ $message_max_length = 50;
 
 //signup-variabler
 $this->member_not_signed = empty($signup); //har medlemmen anmält sig till detta event?
-$this->preselects = $this->member_not_signed ? $this->Signups->get_preselects($member->id) : null; //förvalda alternativ till anmälningsformuläret
+$this->preselects = $this->member_not_signed ? $this->Signups->get_preselects($this->member->id) : null; //förvalda alternativ till anmälningsformuläret
 
 //highlight:a jip, qip & noshow
 $patterns = array('/(?<!\w)(jip)(?!\w)/i', '/(?<!\w)(qip)(?!\w)/i', '/(?<!\w)(noshow)(?!\w)/i');
@@ -168,22 +168,22 @@ foreach($signups as $s)
 					<tbody>
 						<?php
 						$prev_group = null;
-						foreach($non_signups as $member):?>
+						foreach($non_signups as $this->member):?>
 							<?php
 								//ny tabell-rad
-								if($member->group_code != $prev_group) //rad med ny grupp
+								if($this->member->group_code != $prev_group) //rad med ny grupp
 								{
 									echo '<tr class="new_group_row">';
-									$prev_group = $member->group_code;
+									$prev_group = $this->member->group_code;
 								}
 								else //samma grupp som förra raden
 									echo '<tr>';
 							?>
-								<th scope="row"><?php echo $member->name;?></th>
+								<th scope="row"><?php echo $this->member->name;?></th>
 								<td><?php
-									echo $this->doodads->group_icon($member->group_code);
-									echo isset($member->group_name)
-										? $member->group_name
+									echo $this->doodads->group_icon($this->member->group_code);
+									echo isset($this->member->group_name)
+										? $this->member->group_name
 										: null;
 								?></td>
 							</tr>

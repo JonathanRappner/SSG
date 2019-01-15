@@ -21,8 +21,14 @@
 	font-weight: bold;
 }
 
+/*  */
+#userbox{
+	color: #000;
+	text-decoration: none;
+}
+
 /* Avatar i toppraden */
-#wrapper_top .avatar{
+#userbox .avatar{
 	max-width: 48px;
 	max-height: 48px;
 }

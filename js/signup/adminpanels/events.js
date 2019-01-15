@@ -15,12 +15,6 @@ $(document).ready(function()
 		$(this).hide();
 	});
 
-
-	//delete-knapp klick
-	$("a.btn_delete").click(function(){
-		return confirm("Är du säker du vill ta bort eventet?");
-	});
-
 	//forum submit
 	$("#wrapper_events_form form").submit(function()
 	{

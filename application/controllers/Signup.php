@@ -27,7 +27,6 @@ class Signup extends CI_Controller
 
 		//ladda vy
 		$this->load->view('signup/events', array(
-			'member' => $this->member,
 			'next_event' => $next_event,
 			'upcoming_events' => $upcoming_events
 		));
@@ -66,7 +65,6 @@ class Signup extends CI_Controller
 
 		$this->load->view('signup/event',
 			array(
-				'member' => $this->member,
 				'event' => $event,
 				'events' => $events,
 				'signups' => $signups,
@@ -115,7 +113,6 @@ class Signup extends CI_Controller
 
 		//ladda vy
 		$this->load->view('signup/form', array(
-			'member' => $this->member,
 			'event' => $event,
 			'events' => $events,
 			'signup' => $signup,
@@ -130,18 +127,34 @@ class Signup extends CI_Controller
 		if(!$this->check_login()) return;
 		
 		//ladda vy
-		$this->load->view('signup/strolir', array('member' => $this->member));
+		$this->load->view('signup/strolir');
 	}
 
 	/**
 	 * Historik-sida
 	 */
-	public function history()
+	public function history($page = 0)
 	{
 		if(!$this->check_login()) return;
 		
+		//moduler
+		$this->load->model('signup/Events');
+		$this->load->library('Doodads');
+
+		//variabler
+		$results_per_page = 20;
+		$total_events = $this->db->query('SELECT COUNT(*) AS count FROM ssg_events WHERE ADDTIME(start_datetime, length_time) < NOW()')->row()->count;
+		$total_pages = ceil($total_events / $results_per_page);
+
+		//ladda data
+		$events = $this->Events->get_old_events($page, $results_per_page);
+		
 		//ladda vy
-		$this->load->view('signup/history', array('member' => $this->member));
+		$this->load->view('signup/history', array(
+			'events' => $events,
+			'page' => $page,
+			'total_pages' => $total_pages,
+		));
 	}
 
 	/**
@@ -164,7 +177,6 @@ class Signup extends CI_Controller
 		
 		//ladda vy
 		$this->load->view('signup/mypage', array(
-			'member' => $this->member, //inloggade medlemen
 			'loaded_member' => $this->Mypage->get_loaded_member(), //medlemen vars statistik visas på sidan
 			'stats' => $this->Mypage->get_stats(),
 			'page' => $page,
@@ -231,6 +243,30 @@ class Signup extends CI_Controller
 	}
 
 	/**
+	 * Visar dialogruta ang. utloggning
+	 *
+	 * @param string $redirect Redirect-url om svaret var nej.
+	 */
+	public function logout_confirm($redirect = null)
+	{
+		if(!$this->check_login()) return;
+		
+		//ladda vy
+		$this->load->view('signup/logout', array('redirect'=>$redirect));
+	}
+
+	/**
+	 * Loggar ut användaren.
+	 *
+	 * @return void
+	 */
+	public function logout()
+	{
+		$this->session->sess_destroy();
+		redirect('signup');
+	}
+
+	/**
 	 * Ny eller redigerad anmälan ska sparas.
 	 *
 	 * @return void
@@ -281,11 +317,13 @@ class Signup extends CI_Controller
 		return true;
 	}
 
-	// public function test()
-	// {
-	// 	// $this->db->query('');
-	// 	echo '<pre>';
-	// 	print_r($this->db->query('SELECT text FROM ssg_test')->row()->text);
-	// 	echo '</pre>';
-	// }
+	public function test()
+	{
+		if(ENVIRONMENT != 'development')
+			show_404();
+
+		// echo '<pre>';
+		// print_r($this->member);
+		// echo '</pre>';
+	}
 }

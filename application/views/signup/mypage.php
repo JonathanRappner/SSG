@@ -11,7 +11,7 @@ $this->load->library('Doodads');
 $this->current_page = 'mypage';
 $member_has_signups = isset($stats->attendance_total);
 $link_prefix = base_url("signup/mypage/$loaded_member->id/");
-$max_pages = 12; //max sid-nummer som visas i pagination
+$scroll_to_id = 'wrapper_signups';
 
 
 //--Variabler till js--
@@ -337,7 +337,7 @@ $admin_groups = implode(', ', $admin_groups_arr);
 
 		<?php 
 		if($member_has_signups)
-			echo $this->doodads->pagination($stats->page_data->page, $stats->page_data->total_pages, $link_prefix, $max_pages);
+			echo $this->doodads->pagination($stats->page_data->page, $stats->page_data->total_pages, $link_prefix, $scroll_to_id);
 		?>
 		
 	</div>
