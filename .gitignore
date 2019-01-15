@@ -1,0 +1,16 @@
+#development
+_stuff/
+tests/
+todo.txt
+application/config/development
+
+##config files
+application/config/database.php
+
+#logs
+application/logs
+
+#vscode
+.code-workspace
+.editorconfig
+.vscode

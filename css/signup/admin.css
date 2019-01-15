@@ -1,0 +1,31 @@
+/* --Admin-sidan-- */
+
+/* --Admin panel Events-- */
+
+/* events-tabellen */
+#wrapper_events_table{
+	font-size: 0.8rem;
+}
+
+/* redigera & ta bort-knappar */
+#wrapper_events_table .btn_manage a{
+	padding: 0.2rem 0.4rem;
+	font-size: 0.8rem;
+}
+
+
+/* Layouts större än sm */
+@media (min-width: 576px) {
+	/* Större text i tabellen i desktop-versionen */
+	#wrapper_events_table{
+		font-size: 1rem;
+	}
+
+	#wrapper_events_table .btn_manage a{
+		padding: 0.2rem 0.4rem;
+	}
+
+	#wrapper_events_table i{
+		font-size: 1rem;
+	}
+}

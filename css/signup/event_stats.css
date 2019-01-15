@@ -1,0 +1,26 @@
+/* --Event-statistik-rutan-- */
+
+/* Derscription list */
+dt, dd { float: left; }
+dt { clear:both; margin-right: 8px; }
+
+#event_stats{
+	padding: 1rem;
+	margin-bottom: 1rem;
+	overflow: auto;
+}
+
+
+/* Layouts större än sm */
+@media (min-width: 576px) {
+	
+
+
+}
+
+/* Layouts större än md */
+@media (min-width: 992px){
+	
+	
+
+}

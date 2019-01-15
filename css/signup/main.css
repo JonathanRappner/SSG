@@ -1,0 +1,127 @@
+/* Gemensam stylesheet för hela anmälningssidan */
+
+/* påverkar endast mobilversionen */
+.navbar-nav{
+	width: 100%;
+}
+
+/* borders på navbar sm-vy */
+.nav-link{
+	border-bottom: 1px solid #dee2e6;
+}
+
+/* navbar länk hover */
+.nav-link:hover{
+	border-radius: 5px;
+	background-color: #FAFAFA;
+}
+
+/* navbar aktiv länk */
+.navbar li.active{
+	font-weight: bold;
+}
+
+/* Avatar i toppraden */
+#wrapper_top .avatar{
+	max-width: 48px;
+	max-height: 48px;
+}
+
+/* ingen underline på <abbr>, på mobil */
+abbr{
+	text-decoration: none !important;
+}
+
+/* gör btn-primary lite ljusare */
+.btn-primary{
+	background-color: #3A99FC !important;
+	border-color: #3A99FC !important;
+}
+.btn-primary:hover{
+	background-color: #007DFF !important;
+	border-color: #007DFF !important;
+}
+
+/* Alerts */
+.alert{
+	padding: .5rem 1rem; /* mindre padding på mobil */
+}
+
+/* form input labels */
+form label{
+	font-weight: bold;
+}
+
+/* forms */
+input.invalid,
+select.invalid{
+	border: 1px solid red;
+}
+
+/* celler som ska kortas ner om de innehåller för mycket text */
+.truncate{
+	white-space: nowrap;
+    overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* muspekar-ikon för tabellrader */
+table.clickable tbody tr:hover{
+	cursor: pointer;
+}
+
+/* tabell grå */
+tr.grayed{ background-color: #B0B0B0; }
+tr.grayed:hover { color: white; background-color: #858585 !important; }
+
+/* mindre headings i sm */
+h1 { font-size: 2rem; }
+h4 { font-size: 1.5rem; }
+h6 { font-size: 1rem; }
+
+/* grupp-ikoner */
+img.group_icon_16,
+img.group_icon_32{
+	width: 16px;
+	margin: 0 3px 4px 0;
+}
+
+/* signup-färger */
+.text-jip, .text-qip, .text-noshow, .text-signed, .text-notsigned, .text-awol{font-weight: bold; margin: 0 2px;}
+.text-signed{color: #28a745;}
+.text-jip{color: #285ca6;}
+.text-qip{color: #fea500;}
+.text-noshow{color: #fff; background-color: #fc302b; padding:2px 4px;}
+.text-noshow-light{padding:2px 4px;}
+.text-notsigned{color: #848484;}
+.text-awol{color: #fff; background-color: #7B23A8; padding:4px;}
+
+/* grupp-färger */
+.group-ea{color: black;}
+.group-fa{color: black;}
+.group-ga{color: black;}
+.group-ha{color: #B80000;}
+.group-sl{color: #bf9000;}
+.group-vl{color: #2C6822;}
+.group-tl{color: black;}
+.group-nl{color: #e69138;}
+.group-ql{color: black;}
+
+
+/* Layouts större än sm */
+@media (min-width: 576px) {
+	/* inga borders på navbar > sm */
+	.nav-link{
+		border: none;
+	}
+
+	/* större headings i > sm */
+	h1 { font-size: 3rem; }
+	h4 { font-size: 2rem; }
+	h6 { font-size: 1.5rem; }
+
+	/* Alerts */
+	.alert{
+		padding: .75rem 1.25rem; /* default padding */
+	}
+}
