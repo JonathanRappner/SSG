@@ -1,7 +1,7 @@
-#SSG Site
+# SSG Site
 Hemsida till SSG (Swedish Strategic Group) http://www.ssg-clan.se/
 
-##Installation
+## Installation
 1. Redigera index.php. Ändra konstanten ENVIRONMENT till **development** eller **production**.
 2. Redigera databas-konfigurationsfilen:
    - Om production:
