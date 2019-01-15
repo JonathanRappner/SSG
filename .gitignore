@@ -11,6 +11,6 @@ application/config/database.php
 application/logs
 
 #vscode
-.code-workspace
-.editorconfig
+*.code-workspace
+*.editorconfig
 .vscode
