@@ -96,17 +96,6 @@ img.group_icon_32{
 .text-notsigned{color: #848484;}
 .text-awol{color: #fff; background-color: #7B23A8; padding:4px;}
 
-/* grupp-färger */
-.group-ea{color: black;}
-.group-fa{color: black;}
-.group-ga{color: black;}
-.group-ha{color: #B80000;}
-.group-sl{color: #bf9000;}
-.group-vl{color: #2C6822;}
-.group-tl{color: black;}
-.group-nl{color: #e69138;}
-.group-ql{color: black;}
-
 
 /* Layouts större än sm */
 @media (min-width: 576px) {
