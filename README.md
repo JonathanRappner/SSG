@@ -1,6 +1,8 @@
 # SSG Site
 Hemsida till SSG (Swedish Strategic Group) http://www.ssg-clan.se/
+
 Webpage for SSG (Swedish Strategic Group) http://www.ssg-clan.se/
+
 All instructions, comments and text in this projects is written in Swedish.
 
 ## Installation
