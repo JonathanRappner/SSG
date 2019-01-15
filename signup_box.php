@@ -9,9 +9,9 @@ defined('SIGNUP_BOX') || die("No direct access.");
 function get_member_id()
 {
 	foreach($_SESSION as $first)
-	foreach($first as $key => $second)
-		if($key == 'id')
-			return $second;
+		foreach($first as $key => $second)
+			if($key == 'id')
+				return $second;
 }
 
 //sätt tidzon (php)
