@@ -36,6 +36,8 @@ class Member extends CI_Model
 		// $this->id = 1001; ////////Viktor
 		// $this->id = 1713; ////////ThoKaWi
 		// $this->id = 1472; ////////Jonasson
+		// $this->id = 1441; ////////Insane_laughter
+		// $this->id = 1337; ////////Cowboy
 		// if($this->id == 1655)
 		// 	$this->id = 1675; ////////Gibby
 		
@@ -64,7 +66,7 @@ class Member extends CI_Model
 	}
 
 	/**
-	 * Hämtar flertalet medlems-attribut såsom smeknamn och avatar.
+	 * Hämtar medlems-attribut såsom smeknamn och avatar.
 	 *
 	 * @param int $member_id Medlems-id
 	 * @return object
@@ -83,9 +85,7 @@ class Member extends CI_Model
 				ssg_groups.name AS group_name,
 				ssg_groups.code AS group_code,
 				role_id,
-				ssg_roles.name AS role_name,
-				rank_id,
-				ssg_ranks.name AS rank_name
+				ssg_roles.name AS role_name
 			FROM smf_members
 			LEFT JOIN ssg_members
 				ON smf_members.id_member = ssg_members.id
@@ -93,8 +93,6 @@ class Member extends CI_Model
 				ON ssg_members.group_id = ssg_groups.id
 			LEFT JOIN ssg_roles
 				ON ssg_members.role_id = ssg_roles.id
-			LEFT JOIN ssg_ranks
-				ON ssg_members.rank_id = ssg_ranks.id
 			WHERE id_member = ?';
 		$query = $this->db->query($sql, $member_id);
 
@@ -141,6 +139,37 @@ class Member extends CI_Model
 		$member_data->permission_groups = array();
 		foreach($query->result() as $row)
 			$member_data->permission_groups[] = $row->persmission_id;
+
+		//--Rank--
+		$sql =
+			'SELECT
+				name,
+				rank_id, 
+				icon
+			FROM ssg_promotions
+			INNER JOIN ssg_ranks
+				ON ssg_promotions.rank_id = ssg_ranks.id
+			WHERE ssg_promotions.member_id = ?
+			ORDER BY date DESC
+			LIMIT 1';
+		$query = $this->db->query($sql, $member_id);
+		$member_data->promotions = array();
+		$rank = $query->row();
+		
+		//sätt senaste grad
+		if(!empty($rank))
+		{
+			$member_data->rank_id = $rank->rank_id;
+			$member_data->rank_name = $rank->name;
+			$member_data->rank_icon = $rank->icon;
+			
+		}
+		else
+		{
+			$member_data->rank_id = null;
+			$member_data->rank_name = null;
+			$member_data->rank_icon = null;
+		}
 		
 		return $member_data;
 	}

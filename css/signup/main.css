@@ -21,16 +21,22 @@
 	font-weight: bold;
 }
 
-/*  */
+/* Medlemsnamn, grad-ikon och avatar-boxen */
 #userbox{
 	color: #000;
 	text-decoration: none;
 }
 
+/* Gradikon i toppraden */
+#userbox img.rank_icon{
+	width: 40px;
+}
+
 /* Avatar i toppraden */
 #userbox .avatar{
-	max-width: 48px;
-	max-height: 48px;
+	width: 48px;
+	height: 48px;
+	margin-left: 6px;
 }
 
 /* ingen underline på <abbr>, på mobil */
@@ -85,11 +91,23 @@ h1 { font-size: 2rem; }
 h4 { font-size: 1.5rem; }
 h6 { font-size: 1rem; }
 
-/* grupp-ikoner */
+/* Enhetsikoner */
 img.group_icon_16,
 img.group_icon_32{
 	width: 16px;
-	margin: 0 3px 4px 0;
+    margin-right: 3px;
+    position: relative;
+    bottom: 2px;
+    left: 0px;
+}
+
+/* Gradikoner */
+img.rank_icon{
+	width: 18px;
+    margin-right: 3px;
+    position: relative;
+    bottom: 2px;
+    left: 0px;
 }
 
 /* signup-färger */

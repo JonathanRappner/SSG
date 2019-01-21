@@ -159,8 +159,8 @@ $admin_groups = implode(', ', $admin_groups_arr);
 			<dt>Befattning:</dt>
 			<dd><?php echo isset($loaded_member->role_name) ? $loaded_member->role_name : '-';?></dd>
 
-			<!-- <dt>Grad:</dt>
-			<dd><?php echo isset($loaded_member->rank_name) ? $loaded_member->rank_name : '-';?></dd> -->
+			<dt>Grad:</dt>
+			<dd><?php echo isset($loaded_member->rank_name) ? '<img class="rank_icon" src="'. base_url("images/rank_icons/$loaded_member->rank_icon") .'" />'. $loaded_member->rank_name : '-';?></dd>
 
 			<dt>Aktiv:</dt>
 			<dd><?php echo $loaded_member->is_active ? 'Ja': 'Nej';?></dd>

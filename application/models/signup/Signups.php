@@ -63,6 +63,8 @@ class Signups extends CI_Model
 				ssg_signups.role_id,
 				ssg_roles.name AS role_name,
 				ssg_roles.name_long AS role_name_long,
+				(SELECT ssg_ranks.name FROM ssg_promotions INNER JOIN ssg_ranks ON ssg_promotions.rank_id = ssg_ranks.id WHERE member_id = ssg_signups.member_id AND NOT ssg_ranks.dummy ORDER BY date DESC LIMIT 1) AS rank_name,
+				(SELECT ssg_ranks.icon FROM ssg_promotions INNER JOIN ssg_ranks ON ssg_promotions.rank_id = ssg_ranks.id WHERE member_id = ssg_signups.member_id AND NOT ssg_ranks.dummy ORDER BY date DESC LIMIT 1) AS rank_icon,
 				attendance-0 AS attendance_id,
 				attendance AS attendance_text,
 				DATE_FORMAT(signed_datetime, '%Y-%m-%d') AS signed_date,
@@ -85,16 +87,11 @@ class Signups extends CI_Model
 				END ASC,
 				ssg_groups.sorting ASC,
 				ssg_roles.sorting ASC";
-		$query = $this->db->query($sql, $event_id);
+		$query = $this->db->query($sql, array($event_id));
 		foreach ($query->result() as $row)
 		{
 			//input-sanering
-			$row->message =
-				trim(
-					strip_tags(
-						$row->message
-					)
-				);
+			$row->message = trim(strip_tags($row->message));
 			$signups[] = $row;
 		}
 

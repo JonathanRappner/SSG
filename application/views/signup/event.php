@@ -9,6 +9,7 @@ $this->current_page = 'event';
 $title = "$event->title";
 $date_and_time = "$event->start_date ($event->start_time - $event->end_time)";
 $message_max_length = 50;
+$is_admin = $this->permissions->has_permissions(array('super', 's0', 's1', 'grpchef')); //om true = gör tabeller clickable
 
 //signup-variabler
 $this->member_not_signed = empty($signup); //har medlemmen anmält sig till detta event?
@@ -29,6 +30,7 @@ foreach($signups as $s)
 	<link rel="stylesheet" href="<?php echo base_url('css/signup/event.css');?>">
 	<link rel="stylesheet" href="<?php echo base_url('css/signup/event_stats.css');?>">
 	<link rel="stylesheet" href="<?php echo base_url('css/signup/form.css');?>">
+	<script src="<?php echo base_url('js/signup/clickable_table.js');?>"></script>
 
 	<title><?php echo $title;?></title>
 
@@ -82,7 +84,7 @@ foreach($signups as $s)
 	<!-- Anmälningar -->
 	<h3 class="mt-2">Anmälningar</h3>
 	<div id="wrapper_signup_table" class="table-responsive table-sm">
-		<table class="table table-hover">
+		<table class="table table-hover<?php echo $is_admin ? ' clickable' : null ?>">
 			<thead class="table-borderless">
 				<tr>
 					<th scope="col">Namn</th>
@@ -95,12 +97,13 @@ foreach($signups as $s)
 			<tbody>
 
 				<?php
-				//anmälnings
+				//Anmälningar
 				$prev_group = null;
 				$gray_row = false;
 				foreach($signups as $s)
 				{
 					//variabler
+					$clickable_url = base_url("signup/mypage/$s->member_id");
 					$att = $this->attendance->get_type_by_id($s->attendance_id); //närvaro-objekt
 					$message = mb_strlen($s->message) <= $message_max_length
 						? $s->message
@@ -109,15 +112,20 @@ foreach($signups as $s)
 					//ny grupp
 					if($s->group_code != $prev_group)
 					{
-						echo '<tr class="new_group_row">';
+						echo '<tr class="new_group_row"'. ($is_admin ? " data-url='$clickable_url'" : null) .'>';
 						$prev_group = $s->group_code;
 					}
 					else
-						echo '<tr>';
+						echo '<tr'. ($is_admin ? " data-url='$clickable_url'" : null) .'>';
 					
-					echo "<th scope='row' class='truncate'>$s->member_name</th>";
-					//visa högre upplösning för mobiler (eftersom de scale:ar upp allting)
-					//visa bara förkortning på small vy
+					//namn
+					echo
+					"<th scope='row' class='truncate'>
+						$s->member_name
+					</th>";
+					// ". (isset($s->rank_name) ? '<img class="rank_icon" src="'. base_url("images/rank_icons/$s->rank_icon") .'" title="'. $s->rank_name .'" data-toggle="tooltip" />' : null) ."
+						
+					//grupp med ikon
 					echo
 						"<td class='text-nowrap'>
 							". $this->doodads->group_icon($s->group_code) ."
@@ -158,7 +166,7 @@ foreach($signups as $s)
 					Aktiva medlemmar som inte anmält sig
 					<small>(Endast admins ser detta)</small>
 				</h3>
-				<table class="table table-hover">
+				<table class="table table-hover<?php echo $is_admin ? ' clickable' : null ?>">
 					<thead class="table-borderless">
 						<tr>
 							<th scope="col" class="column_non_signed_name">Namn</th>
@@ -168,22 +176,25 @@ foreach($signups as $s)
 					<tbody>
 						<?php
 						$prev_group = null;
-						foreach($non_signups as $this->member):?>
+						foreach($non_signups as $member):?>
 							<?php
+								//variabler
+								$clickable_url = base_url("signup/mypage/$member->id");
+
 								//ny tabell-rad
-								if($this->member->group_code != $prev_group) //rad med ny grupp
+								if($member->group_code != $prev_group) //rad med ny grupp
 								{
-									echo '<tr class="new_group_row">';
-									$prev_group = $this->member->group_code;
+									echo '<tr class="new_group_row"'. ($is_admin ? " data-url='$clickable_url'" : null) .'>';
+									$prev_group = $member->group_code;
 								}
 								else //samma grupp som förra raden
-									echo '<tr>';
+									echo '<tr'. ($is_admin ? " data-url='$clickable_url'" : null) .'>';
 							?>
-								<th scope="row"><?php echo $this->member->name;?></th>
+								<th scope="row"><?php echo $member->name;?></th>
 								<td><?php
-									echo $this->doodads->group_icon($this->member->group_code);
-									echo isset($this->member->group_name)
-										? $this->member->group_name
+									echo $this->doodads->group_icon($member->group_code);
+									echo isset($member->group_name)
+										? $member->group_name
 										: null;
 								?></td>
 							</tr>

@@ -319,11 +319,7 @@ class Signup extends CI_Controller
 
 	public function test()
 	{
-		if(ENVIRONMENT != 'development')
+		if($this->member->id != 1655) //Smorfty only
 			show_404();
-
-		// echo '<pre>';
-		// print_r($this->member);
-		// echo '</pre>';
 	}
 }

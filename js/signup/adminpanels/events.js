@@ -16,32 +16,15 @@ $(document).ready(function()
 	});
 
 	//forum submit
-	$("#wrapper_events_form form").submit(function()
+	$("#wrapper_events_form form").submit(function(event)
 	{
 		//variabler
 		var valid = true;
+		var regex_time = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 
-		//start_time
-		if($("#input_start_time").val().match(/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/) != null)
-		{
-			$("#input_start_time").removeClass("invalid");
-		}
-		else
-		{
-			$("#input_start_time").addClass("invalid");
-			valid = false;
-		}
-
-		//length_time
-		if($("#input_length_time").val().match(/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/) != null)
-		{
-			$("#input_length_time").removeClass("invalid");
-		}
-		else
-		{
-			$("#input_length_time").addClass("invalid");
-			valid = false;
-		}
+		//validera
+		valid = valid && validate_regex($("#input_start_time"), regex_time, false); //start_time
+		valid = valid && validate_regex($("#input_length_time"), regex_time, false); //length_time
 		
 		return valid;
 	});

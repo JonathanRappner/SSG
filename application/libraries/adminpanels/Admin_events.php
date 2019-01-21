@@ -81,6 +81,7 @@ class Admin_events implements Adminpanel
 		echo 
 			'<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.sv.min.js"></script>
+			<script src="'. base_url('js/signup/form_validation.js') .'"></script>
 			<script src="'. base_url('js/signup/adminpanels/events.js') .'"></script>';
 		
 		//css

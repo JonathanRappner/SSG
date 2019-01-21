@@ -21,6 +21,11 @@
 	font-size:0.7rem;
 }
 
+/* Deadline-text */
+#deadline{
+	font-weight: bold;
+}
+
 
 /* Layouts större än sm */
 @media (min-width: 576px) {
