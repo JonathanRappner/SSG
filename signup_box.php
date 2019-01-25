@@ -44,7 +44,7 @@ $sql =
 		ON ssg_events.type_id = ssg_event_types.id
 	WHERE
 		ADDTIME(start_datetime, length_time) >= NOW()
-		AND ssg_event_types.obligatory = 1
+		AND ssg_event_types.display = 1
 	ORDER BY start_datetime ASC
 	LIMIT 1';
 if($result = $mysqli->query($sql))

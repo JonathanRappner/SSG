@@ -108,6 +108,19 @@ foreach($loaded_member->permission_groups as $grp)
 	$admin_groups_arr[] = $this->permissions->get_by_id($grp)->title;
 $admin_groups = implode(', ', $admin_groups_arr);
 
+//tid sedan senaste bumpning
+if(isset($loaded_member->rank_date))
+{
+	$bump_date = strtotime($loaded_member->rank_date);
+	$timespan_epoch = date('U') - $bump_date;
+	$timespan_days = floor($timespan_epoch / (3600 * 24));
+	$day_string = $timespan_days == 1
+		? 'dag'
+		: 'dagar';
+
+	$bump_string = "$loaded_member->rank_date ($timespan_days $day_string sedan)";
+}
+
 ?><!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -161,6 +174,9 @@ $admin_groups = implode(', ', $admin_groups_arr);
 
 			<dt>Grad:</dt>
 			<dd><?php echo isset($loaded_member->rank_name) ? '<img class="rank_icon" src="'. base_url("images/rank_icons/$loaded_member->rank_icon") .'" />'. $loaded_member->rank_name : '-';?></dd>
+
+			<dt>Senast bumpad:</dt>
+			<dd><?php echo isset($bump_string) ? $bump_string : '?';?></dd>
 
 			<dt>Aktiv:</dt>
 			<dd><?php echo $loaded_member->is_active ? 'Ja': 'Nej';?></dd>

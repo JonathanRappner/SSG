@@ -14,7 +14,7 @@ class Doodads
 	}
 
 	/**
-	 * SKriver ut pagination-kontroller (Föregående, 1, 2, 3, Nästa)
+	 * Skriver ut pagination-kontroller (Föregående, 1, 2, 3, Nästa)
 	 *
 	 * @param int $page Nuvarande sida
 	 * @param int $total_pages Totala antal sidor.
@@ -37,7 +37,7 @@ class Doodads
 	}
 
 	/**
-	 * SKriver ut pagination-kontroller (Föregående, 1, 2, 3, Nästa)
+	 * Skriver ut pagination-kontroller (Föregående, 1, 2, 3, Nästa)
 	 *
 	 * @param int $page Nuvarande sida
 	 * @param int $total_pages Totala antal sidor.

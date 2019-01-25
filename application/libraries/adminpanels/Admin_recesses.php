@@ -35,7 +35,7 @@ class Admin_recesses implements Adminpanel
 
 	public function get_title()
 	{
-		return 'Uppehållsperioder';
+		return 'Uppehåll';
 	}
 
 	public function get_permissions_needed()

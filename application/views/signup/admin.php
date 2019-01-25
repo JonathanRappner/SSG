@@ -14,6 +14,7 @@ $this->current_page = 'admin';
 
 	<!-- Page-specific -->
 	<link rel="stylesheet" href="<?php echo base_url('css/signup/admin.css');?>">
+	<script src="<?php echo base_url('js/signup/clickable_table.js');?>"></script>
 
 	<!-- Misc -->
 	<title>Admin - <?php echo $adminpanel->get_title();?></title>

@@ -79,9 +79,11 @@ class Mypage extends CI_Model
 				attendance AS name,
 				COUNT(attendance) AS count
 			FROM ssg_signups
+			INNER JOIN ssg_events
+				ON ssg_signups.event_id = ssg_events.id
 			WHERE
 				member_id = ?
-				AND last_changed_datetime >= DATE_SUB(NOW(), INTERVAL 3 MONTH)
+				AND ssg_events.start_datetime >= DATE_SUB(NOW(), INTERVAL 3 MONTH) #senaste kvartalet
 			GROUP BY attendance
 			ORDER BY attendance-0 ASC';
 		$query = $this->db->query($sql, $this->loaded_member->id);

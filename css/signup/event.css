@@ -20,11 +20,6 @@
 	table-layout:fixed;
 }
 
-/* Första raden i en ny grupp */
-tr.new_group_row{
-	border-top:2px solid #CECECE;
-}
-
 /* ?-ikon ska vara lika stor i mobil som desktop */
 table i.fas{
 	font-size: 1.0rem;

@@ -30,6 +30,7 @@
 /* Gradikon i toppraden */
 #userbox img.rank_icon{
 	width: 40px;
+	margin-left: 0;
 }
 
 /* Avatar i toppraden */
@@ -82,9 +83,14 @@ table.clickable tbody tr:hover{
 	cursor: pointer;
 }
 
-/* tabell grå */
+/* Tabell grå */
 tr.grayed{ background-color: #B0B0B0; }
 tr.grayed:hover { color: white; background-color: #858585 !important; }
+
+/* Första raden i en ny grupp */
+tr.new_group_row{
+	border-top:2px solid #CECECE;
+}
 
 /* mindre headings i sm */
 h1 { font-size: 2rem; }
@@ -101,12 +107,21 @@ img.group_icon_32{
     left: 0px;
 }
 
-/* Gradikoner */
+/* Gradikon */
 img.rank_icon{
 	width: 18px;
-    margin-right: 3px;
+    margin-right: 4px;
     position: relative;
     bottom: 2px;
+    left: 0px;
+}
+
+/* Gradikon, stor */
+img.rank_icon_big{
+	width: 32px;
+    margin-left: 4px;
+    position: relative;
+    bottom: 4px;
     left: 0px;
 }
 

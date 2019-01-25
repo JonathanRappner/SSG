@@ -81,7 +81,7 @@ class Events extends CI_Model
 				ON ssg_events.type_id = ssg_event_types.id
 			WHERE
 				ADDTIME(start_datetime, length_time) >= NOW()
-				AND ssg_event_types.obligatory = 1
+				AND ssg_event_types.display = 1
 			ORDER BY start_datetime ASC
 			LIMIT 1';
 		$query = $this->db->query($sql);
@@ -168,7 +168,8 @@ class Events extends CI_Model
 				DATE_FORMAT(start_datetime, "%Y-%m-%d") AS start_date,
 				DATE_FORMAT(ADDTIME(start_datetime, length_time), "%Y-%m-%d") AS end_date,
 				TIME_FORMAT(start_datetime, "%H:%i") AS start_time,
-				TIME_FORMAT(ADDTIME(start_datetime, length_time), "%H:%i") AS end_time
+				TIME_FORMAT(ADDTIME(start_datetime, length_time), "%H:%i") AS end_time,
+				ADDTIME(start_datetime, length_time) < NOW() AS is_old
 			FROM ssg_events
 			INNER JOIN ssg_event_types
 				ON ssg_events.type_id = ssg_event_types.id
@@ -181,7 +182,6 @@ class Events extends CI_Model
 			$row->signups = $this->get_num_signups($row->id);
 			$row->signed_sum = $this->attendance->count_signed($row->signups); //antal positiva anmälningar
 			$row->current_member_attendance = $this->get_member_attendance($row->id, $this->member->id);
-			$row->is_old = "$row->end_date $row->end_time" < date('Y-m-d G:i');
 			$events[] = $row;
 		}
 		

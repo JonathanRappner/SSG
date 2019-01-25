@@ -98,8 +98,8 @@ class Admin_events implements Adminpanel
 			echo 
 				'<div class="row text-center mt-2">
 					<div class="col">
-						<a href="'. base_url('signup/admin/events/') .'" class="btn btn-danger mr-2">Nej</a>
-						<a href="'. base_url('signup/admin/events/?delete='. $this->delete_event->id) .'" class="btn btn-success">Ja</a>
+						<a href="'. base_url('signup/admin/events/?delete='. $this->delete_event->id) .'" class="btn btn-success mr-2">Ja</a>
+						<a href="'. base_url('signup/admin/events/') .'" class="btn btn-danger">Nej</a>
 					</div>	
 				</div>';
 		}

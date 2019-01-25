@@ -97,5 +97,15 @@ class Permissions
 			if($permission_group->code == $code)
 				return $permission_group;
 	}
+
+	/**
+	 * Hämtar alla rättighetsgrupper.
+	 *
+	 * @return array
+	 */
+	public function get_permissions()
+	{
+		return $this->permission_groups;
+	}
 }
 ?>

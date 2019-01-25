@@ -81,7 +81,7 @@ class Member extends CI_Model
 			'SELECT
 				avatar, registered_date, uid, is_active, group_id,
 				id_member AS id,
-				real_name AS name,
+				ssg_members.name AS name,
 				ssg_groups.name AS group_name,
 				ssg_groups.code AS group_code,
 				role_id,
@@ -141,11 +141,19 @@ class Member extends CI_Model
 			$member_data->permission_groups[] = $row->persmission_id;
 
 		//--Rank--
+
+		//tomma värden
+		$member_data->rank_id = null;
+		$member_data->rank_name = null;
+		$member_data->rank_icon = null;
+		$member_data->rank_date = null;
+		
 		$sql =
 			'SELECT
 				name,
 				rank_id, 
-				icon
+				icon,
+				date
 			FROM ssg_promotions
 			INNER JOIN ssg_ranks
 				ON ssg_promotions.rank_id = ssg_ranks.id
@@ -153,22 +161,16 @@ class Member extends CI_Model
 			ORDER BY date DESC
 			LIMIT 1';
 		$query = $this->db->query($sql, $member_id);
-		$member_data->promotions = array();
 		$rank = $query->row();
 		
-		//sätt senaste grad
+		//sätt grad efter senaste bumpningen
 		if(!empty($rank))
 		{
 			$member_data->rank_id = $rank->rank_id;
 			$member_data->rank_name = $rank->name;
 			$member_data->rank_icon = $rank->icon;
+			$member_data->rank_date = $rank->date;
 			
-		}
-		else
-		{
-			$member_data->rank_id = null;
-			$member_data->rank_name = null;
-			$member_data->rank_icon = null;
 		}
 		
 		return $member_data;
