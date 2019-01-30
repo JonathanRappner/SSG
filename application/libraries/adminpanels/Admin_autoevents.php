@@ -39,7 +39,7 @@ class Admin_autoevents implements Adminpanel
 
 	public function get_permissions_needed()
 	{
-		return array('super', 's0');
+		return array('s0');
 	}
 }
 ?>

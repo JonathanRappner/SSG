@@ -3,12 +3,6 @@
  */
 $(document).ready(function()
 {
-	//datepicker inställningar
-	$('#input_start_date').datepicker({
-		language: 'sv',
-		format: 'yyyy-mm-dd'
-	});
-
 	//Skapa nytt event-klick
 	$("#btn_show_form").click(function(){
 		$("#wrapper_events_form").show();

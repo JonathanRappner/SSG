@@ -39,7 +39,7 @@ class Admin_groups implements Adminpanel
 
 	public function get_permissions_needed()
 	{
-		return array('super', 's0', 'grpchef');
+		return array('s0', 'grpchef');
 	}
 }
 ?>

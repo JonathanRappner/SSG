@@ -81,9 +81,9 @@ $this->current_page = 'events';
 				<div class="mb-2">
 					<a href="<?php echo base_url('signup/event/'. $next_event->id);?>" class="btn btn-primary">Se anmälningar <i class="fas fa-list-ul"></i></i></a>
 					<?php
-						echo $next_event->member_attendance->id != $this->attendance->get_type_by_code('notsigned')->id
-							? '<a href="'. base_url("signup/form/$next_event->id") .'" class="btn btn-primary">Redigera anmälan <i class="fas fa-edit"></i></a>'
-							: '<a href="'. base_url("signup/form/$next_event->id") .'" class="btn btn-success">Anmäl dig <i class="fas fa-arrow-circle-right"></i></a>';
+						echo $next_event->member_attendance->id != $this->attendance->get_type_by_code('notsigned')->id //anmälan finns redan
+							? '<a href="'. base_url("signup/event/$next_event->id/showform") .'" class="btn btn-primary">Redigera anmälan <i class="fas fa-edit"></i></a>'
+							: '<a href="'. base_url("signup/event/$next_event->id/showform") .'" class="btn btn-success">Anmäl dig <i class="fas fa-arrow-circle-right"></i></a>';
 					?>
 				</div>
 

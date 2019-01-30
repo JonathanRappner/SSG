@@ -43,7 +43,7 @@ class Admin_main implements Adminpanel
 	public function get_permissions_needed()
 	{
 		//åtkomst: alla admins
-		return array('super', 's0', 's1', 's2',  's3', 's4', 'grpchef');
+		return array('s0', 's1', 's2',  's3', 's4', 'grpchef');
 	}
 }
 ?>

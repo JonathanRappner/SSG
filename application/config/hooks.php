@@ -12,14 +12,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 
-//Sätt tidszon PHP
+
 $hook['pre_system'][] = function()
 {
-    //php
+    //Sätt tidszon PHP
     date_default_timezone_set('Europe/Stockholm');
 };
 
-// Sätt tidzon MySQL
 $hook['post_controller_constructor'] = function()
 {
 	$CI =& get_instance();

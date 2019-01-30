@@ -31,8 +31,8 @@ $this->current_page = 'logout';
 
 	<div class="row text-center mt-2">
 		<div class="col">
-			<a href="<?php echo $this->input->get('redirect');?>" class="btn btn-danger mr-2">Nej</a>
-			<a href="<?php echo base_url('signup/logout');?>" class="btn btn-success">Ja</a>
+			<a href="<?php echo base_url('signup/logout');?>" class="btn btn-success mr-2">Ja</a>
+			<a href="<?php echo $this->input->get('redirect');?>" class="btn btn-danger">Nej</a>
 		</div>	
 	</div>
 

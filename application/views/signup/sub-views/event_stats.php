@@ -67,7 +67,7 @@ if(!empty($stats->last_changed))
 		<dl>
 			<?php foreach($stats->groups as $group):?>
 				<dt>
-					<?php echo $this->doodads->group_icon($group->code);?>
+					<?php echo group_icon($group->code);?>
 					<?php echo $group->name;?>:
 				</dt>
 				<dd>

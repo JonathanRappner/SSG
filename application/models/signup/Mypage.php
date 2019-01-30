@@ -29,9 +29,6 @@ class Mypage extends CI_Model
 	 */
 	public function init($other_member_id, $page)
 	{
-		//modeller
-		$this->load->model('Member');
-
 		//variabler
 		$this->page_data = new stdClass;
 		$this->page_data->results_per_page = 20;
@@ -41,9 +38,9 @@ class Mypage extends CI_Model
 		//ladda annan medlem eller använd inloggade medlemen
 		if(isset($other_member_id) && $other_member_id != $this->member->id) //ladda inloggad medlem om $other_member_id är dennes egna id
 		{
-			if($this->permissions->has_permissions(array('super', 's0', 's1', 'grpchef'))) //success
+			if($this->permissions->has_permissions(array('s0', 's1', 'grpchef'))) //success
 			{
-				$this->loaded_member = $this->Member->get_member_data($other_member_id);
+				$this->loaded_member = $this->member->get_member_data($other_member_id);
 				$this->alerts->add_alert('info', 'Du tittar på "Min sida" för en annan medlem: <strong>'. $this->loaded_member->name .'</strong>');
 			}
 			else //fail
@@ -210,11 +207,10 @@ class Mypage extends CI_Model
 				ssg_events.start_datetime DESC
 			LIMIT ?, ?';
 		$query = $this->db->query($sql, array($this->loaded_member->id, $page * $this->page_data->results_per_page, $this->page_data->results_per_page));
-		foreach ($query->result() as $row)
-			$this->signups[] = $row;
+		$this->signups = $query->result();
 		
-		$total_signups = $this->db->query('SELECT COUNT(*) AS count FROM ssg_signups WHERE member_id = ?', $this->loaded_member->id)->row()->count;
-		$this->page_data->total_pages = ceil($total_signups / $this->page_data->results_per_page);
+		//total signups
+		$this->page_data->total_signups = $this->db->query('SELECT COUNT(*) AS count FROM ssg_signups WHERE member_id = ?', $this->loaded_member->id)->row()->count;
 	}
 
 	/**

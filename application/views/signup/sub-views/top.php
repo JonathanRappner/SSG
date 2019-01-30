@@ -17,10 +17,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				<a class="nav-link" href="<?php echo base_url();?>">Events</a>
 			</li>
 
-			<li class="nav-item<?php echo $this->current_page == 'strolir' ? ' active' : null;?>">
-				<a class="nav-link" href="<?php echo base_url('signup/strolir');?>">Strölir</a>
-			</li>
-
 			<li class="nav-item<?php echo $this->current_page == 'history' ? ' active' : null;?>">
 				<a class="nav-link" href="<?php echo base_url('signup/history');?>">Historik</a>
 			</li>
@@ -29,7 +25,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				<a class="nav-link" href="<?php echo base_url('signup/mypage');?>">Min sida</a>
 			</li>
 			
-			<?php if($this->permissions->has_permissions(array('super', 's0', 's1', 's2',  's3', 's4', 'grpchef'))):?>
+			<?php if($this->permissions->has_permissions(array('s0', 's1', 's2',  's3', 's4', 'grpchef'))):?>
 				<li class="nav-item<?php echo $this->current_page == 'admin' ? ' active' : null;?>">
 					<a class="nav-link" href="<?php echo base_url('signup/admin');?>">Admin</a>
 				</li>

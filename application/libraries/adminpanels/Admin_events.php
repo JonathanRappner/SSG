@@ -34,7 +34,8 @@ class Admin_events implements Adminpanel
 	public function main($event_id = 0, $page = 0)
 	{
 		//moduler
-		$this->CI->load->model('signup/Events');
+		$this->CI->load->library('attendance');
+		$this->CI->load->library('eventsignup');
 
 		//post variabler finns, gå till submits
 		if($this->CI->input->post('task') != null)
@@ -56,37 +57,27 @@ class Admin_events implements Adminpanel
 
 		//variabler
 		$this->event_id = empty($event_id) ? 0 : $event_id-0;
-		$this->page = empty($page) ? 0 : $page-0; //onödig
+		$this->page = empty($page) ? 0 : $page-0;
 		$this->total_events = $this->CI->db->query('SELECT COUNT(*) AS count FROM ssg_events')->row()->count;
-		$this->total_pages = ceil($this->total_events / $this->results_per_page);
 
 		//moduler
-		$this->CI->load->model('signup/Events');
-		$this->CI->load->model('signup/Signups');
+		$this->CI->load->library('eventsignup');
 
-		//ladda events
-		$this->events = $this->CI->Events->get_events($this->page, $this->results_per_page);
+		//ladda data
+		$this->events = $this->CI->eventsignup->get_events($this->page, $this->results_per_page);
+		$this->event_types = $this->CI->db->query('SELECT id, title FROM ssg_event_types ORDER BY id ASC')->result();
 
 		//ladda event
 		if(!empty($this->event_id))
-			$this->event = $this->CI->Events->get_event($this->event_id);
+			$this->event = $this->CI->eventsignup->get_event($this->event_id);
 	}
 
 	public function view()
 	{
-		//moduler
-		$this->CI->load->library('doodads');
-
 		//js
 		echo 
-			'<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.sv.min.js"></script>
-			<script src="'. base_url('js/signup/form_validation.js') .'"></script>
+			'<script src="'. base_url('js/signup/form_validation.js') .'"></script>
 			<script src="'. base_url('js/signup/adminpanels/events.js') .'"></script>';
-		
-		//css
-		echo
-			'<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css">';
 
 		if($this->view == 'delete_confirm') //delete confirmation-vy
 		{
@@ -138,10 +129,11 @@ class Admin_events implements Adminpanel
 		}
 
 		//event-typer
-		$event_types = $this->CI->misc_data->get_event_types();
+		$event_types = $this->event_types;
 		$event_type_options = null;
 		foreach($event_types as $type)
 			$event_type_options .= "<option value='$type->id' ". (!$is_new && $type->id == $this->event->type_id ? 'selected' : null) .">$type->title</option>";
+		
 		
 		//--print--
 		echo '<div id="wrapper_events_form" '. ($is_new ? 'style="display: none;"' : null) .'>';
@@ -181,21 +173,21 @@ class Admin_events implements Adminpanel
 		echo 
 			'<div class="form-group">
 				<label for="input_start_date">Start-datum<span class="text-danger">*</span></label>
-				<input type="text" id="input_start_date" name="start_date" class="form-control datepicker" value="'. ($is_new ? null : $this->event->start_date) .'" placeholder="åååå-mm-dd" required>
+				<input type="date" id="input_start_date" name="start_date" class="form-control" value="'. ($is_new ? null : $this->event->start_date) .'" required>
 			</div>';
 
 		//start-tid
 		echo 
 			'<div class="form-group">
 				<label for="input_start_time">Start-tid<span class="text-danger">*</span></label>
-				<input type="text" id="input_start_time" name="start_time" class="form-control" value="'. ($is_new ? null : $this->event->start_time) .'" placeholder="hh:mm" required>
+				<input type="time" id="input_start_time" name="start_time" class="form-control" value="'. ($is_new ? null : $this->event->start_time) .'" required>
 			</div>';
 		
 		//längd
 		echo 
 			'<div class="form-group">
 				<label for="input_length_time">Längd<span class="text-danger">*</span></label>
-				<input type="text" id="input_length_time" name="length_time" class="form-control" value="'. ($is_new ? null : $this->event->length_time) .'" placeholder="hh:mm" required>
+				<input type="time" id="input_length_time" name="length_time" class="form-control" value="'. ($is_new ? null : $this->event->length_time) .'" required>
 			</div>';
 
 		//typ
@@ -270,7 +262,7 @@ class Admin_events implements Adminpanel
 		echo '</tbody></table></div>';
 
 		//pagination
-		echo $this->CI->doodads->pagination($this->page, $this->total_pages, base_url("signup/admin/events/$this->event_id/"), 'wrapper_events_table');
+		echo pagination($this->page, $this->total_events, $this->results_per_page, base_url("signup/admin/events/$this->event_id/"), 'wrapper_events_table');
 	}
 
 	/**
@@ -342,7 +334,7 @@ class Admin_events implements Adminpanel
 	private function insert_event($data)
 	{
 		//kolla om event kommer overlap:a andra events
-		if($overlaps = $this->CI->Events->is_overlapping($start_datetime, $end_datetime))
+		if($overlaps = $this->CI->eventsignup->is_overlapping($start_datetime, $end_datetime))
 		{
 			$this->CI->alerts->add_alert('danger', 'Eventet skapades inte då det krockar med: <strong>'. current($overlaps) .'</strong>');
 			redirect('signup/admin/events');
@@ -375,7 +367,7 @@ class Admin_events implements Adminpanel
 	private function update_event($data)
 	{
 		//kolla om event kommer overlap:a andra events (räkna inte med detta event)
-		$overlaps = $this->CI->Events->is_overlapping($start_datetime, $end_datetime);
+		$overlaps = $this->CI->eventsignup->is_overlapping($start_datetime, $end_datetime);
 		
 		//lägg alla overlaps utom detta event i $overlaps_sans_self
 		$overlaps_sans_self = array();
@@ -445,7 +437,7 @@ class Admin_events implements Adminpanel
 
 	public function get_permissions_needed()
 	{
-		return array('super', 's0', 's2', 's3', 's4');
+		return array('s0', 's2', 's3', 's4');
 	}
 }
 ?>

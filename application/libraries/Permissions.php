@@ -27,8 +27,7 @@ class Permissions
 			'SELECT *
 			FROM ssg_permission_groups';
 		$query = $this->CI->db->query($sql);
-		foreach($query->result() as $row)
-			$this->permission_groups[] = $row;
+		$this->permission_groups = $query->result();
 	}
 
 	/**
@@ -40,10 +39,6 @@ class Permissions
 	 */
 	public function has_permissions($permissions_code, $member_id = null)
 	{
-		// grupper att klipp-o-klistra
-		// array('super', 's0', 's1', 's2',  's3', 's4', 'grpchef')
-		// array('super', 's0')
-
 		//input-sanering
 		assert(!empty($permissions_code));
 
@@ -68,6 +63,10 @@ class Permissions
 		$member_permissions = empty($member_id)
 			? $this->CI->member->permission_groups //ladda inloggade medlemmens data
 			: $this->CI->member->get_member_data($member_id)->permission_groups; //ladda specifierade medlemmens data
+		
+		//om super-admin, avbryt och ge true
+		if(in_array(1, $member_permissions))
+			return true;
 
 		return !empty(array_intersect($permissions_id, $member_permissions));
 	}

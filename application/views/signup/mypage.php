@@ -4,9 +4,6 @@
 */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-//moduler
-$this->load->library('Doodads');
-
 //variabler
 $this->current_page = 'mypage';
 $member_has_signups = isset($stats->attendance_total);
@@ -118,7 +115,7 @@ if(isset($loaded_member->rank_date))
 		? 'dag'
 		: 'dagar';
 
-	$bump_string = "$loaded_member->rank_date ($timespan_days $day_string sedan)";
+	$bump_string = "<span title='$timespan_days $day_string sedan' data-toggle='tooltip'>$loaded_member->rank_date <i class='fas fa-question-circle'></i></span>";
 }
 
 ?><!DOCTYPE html>
@@ -167,7 +164,7 @@ if(isset($loaded_member->rank_date))
 			<dd><?php echo isset($loaded_member->name) ? $loaded_member->name : '-';?></dd>
 
 			<dt>Enhet:</dt>
-			<dd><?php echo isset($loaded_member->group_name) ? $this->doodads->group_icon($loaded_member->group_code) . $loaded_member->group_name : '-';?></dd>
+			<dd><?php echo isset($loaded_member->group_name) ? group_icon($loaded_member->group_code) . $loaded_member->group_name : '-';?></dd>
 
 			<dt>Befattning:</dt>
 			<dd><?php echo isset($loaded_member->role_name) ? $loaded_member->role_name : '-';?></dd>
@@ -200,7 +197,7 @@ if(isset($loaded_member->rank_date))
 			<div class="col-12">
 				<h3 class="d-inline" title="Data sedan november 2014." data-toggle="tooltip">
 					Statistik
-					<i class="fas fa-info-circle"></i>
+					<i class="fas fa-question-circle"></i>
 				</h3>
 			</div>
 
@@ -235,7 +232,7 @@ if(isset($loaded_member->rank_date))
 			<div class="statbox col-sm-6 col-lg-4">
 				<h6 title="Räknar inte med NOSHOWs" data-toggle="tooltip">
 					Anmälningar OP:ar vs. Träningar
-					<i class="fas fa-info-circle"></i>
+					<i class="fas fa-question-circle"></i>
 				</h6>
 				<canvas id="chart_event_types"></canvas>
 				<dl>
@@ -264,7 +261,7 @@ if(isset($loaded_member->rank_date))
 			<div class="statbox col-sm-6 col-lg-4">
 				<h6 title="Räknar inte med &quot;Vilken som helst&quot;-anmälningar" data-toggle="tooltip">
 					Anmälning till enhet
-					<i class="fas fa-info-circle"></i>
+					<i class="fas fa-question-circle"></i>
 				</h6>
 				<canvas id="chart_groups"></canvas>
 				<dl>
@@ -279,7 +276,7 @@ if(isset($loaded_member->rank_date))
 			<div class="statbox col-sm-6 col-lg-4">
 				<h6 title="Räknar inte med &quot;Vad som helst&quot;-anmälningar" data-toggle="tooltip">
 					Anmälning till befattning
-					<i class="fas fa-info-circle"></i>
+					<i class="fas fa-question-circle"></i>
 				</h6>
 				<canvas id="chart_roles"></canvas>
 				<dl>
@@ -329,7 +326,7 @@ if(isset($loaded_member->rank_date))
 					//enhet
 					echo
 						"<td class='text-nowrap'>
-							". $this->doodads->group_icon($s->group_code) ."
+							". group_icon($s->group_code) ."
 							<span class='d-inline d-md-none'>". strtoupper($s->group_code) ."</span>
 							<span class='d-none d-md-inline'>$s->group_name</span>
 						</td>";
@@ -353,7 +350,7 @@ if(isset($loaded_member->rank_date))
 
 		<?php 
 		if($member_has_signups)
-			echo $this->doodads->pagination($stats->page_data->page, $stats->page_data->total_pages, $link_prefix, $scroll_to_id);
+			echo pagination($stats->page_data->page, $stats->page_data->total_signups, $stats->page_data->results_per_page, $link_prefix, $scroll_to_id);
 		?>
 		
 	</div>

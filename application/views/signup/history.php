@@ -57,7 +57,7 @@ $this->current_page = 'history';
 
 	<?php
 	//pagination
-	echo $this->doodads->pagination($page, $total_pages, base_url("signup/history/"), 'wrapper_events_table');
+	echo pagination($page, $total_events, $results_per_page, base_url("signup/history/"), 'wrapper_events_table');
 	?>
 
 	<!-- Footer -->

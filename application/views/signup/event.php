@@ -1,19 +1,18 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-//moduler
-$this->load->library('doodads');
-
 //event-variabler
 $this->current_page = 'event';
 $title = "$event->title";
 $date_and_time = "$event->start_date ($event->start_time - $event->end_time)";
 $message_max_length = 50;
-$is_admin = $this->permissions->has_permissions(array('super', 's0', 's1', 'grpchef')); //om true = gör tabeller clickable
+$is_admin = $this->permissions->has_permissions(array('s0', 's1', 'grpchef')); //om true = gör tabeller clickable
 
 //signup-variabler
 $this->member_not_signed = empty($signup); //har medlemmen anmält sig till detta event?
-$this->preselects = $this->member_not_signed ? $this->Signups->get_preselects($this->member->id) : null; //förvalda alternativ till anmälningsformuläret
+$this->preselects = $this->member_not_signed
+	? $this->eventsignup->get_preselects($this->member->id)
+	: null; //förvalda alternativ till anmälningsformuläret
 
 //highlight:a jip, qip & noshow
 $patterns = array('/(?<!\w)(jip)(?!\w)/i', '/(?<!\w)(qip)(?!\w)/i', '/(?<!\w)(noshow)(?!\w)/i');
@@ -31,6 +30,12 @@ foreach($signups as $s)
 	<link rel="stylesheet" href="<?php echo base_url('css/signup/event_stats.css');?>">
 	<link rel="stylesheet" href="<?php echo base_url('css/signup/form.css');?>">
 	<script src="<?php echo base_url('js/signup/clickable_table.js');?>"></script>
+	<script src="<?php echo base_url('js/signup/event.js');?>"></script>
+
+	<?php
+		//visa formulär on load
+		echo '<script>var show_form = '. ($show_form ? 'true' : 'false') .';</script>';
+	?>
 
 	<title><?php echo $title;?></title>
 
@@ -128,7 +133,7 @@ foreach($signups as $s)
 					//grupp med ikon
 					echo
 						"<td class='text-nowrap'>
-							". $this->doodads->group_icon($s->group_code) ."
+							". group_icon($s->group_code) ."
 							<span class='d-inline d-md-none'>". strtoupper($s->group_code) ."</span>
 							<span class='d-none d-md-inline'>$s->group_name</span>
 						</td>";
@@ -158,14 +163,11 @@ foreach($signups as $s)
 				$event->obligatory
 				&& !$event->is_old
 				&& !empty($non_signups)
-				&& $this->permissions->has_permissions(array('super', 's0', 's1', 'grpchef'))):
+				&& $this->permissions->has_permissions(array('s0', 's1', 'grpchef'))):
 		?>
 			<!-- Ej anmälda, aktiva medlemmar -->
 			<div id="wrapper_not_signed_table" class="table-responsive table-sm">
-				<h3 class="mt-4">
-					Aktiva medlemmar som inte anmält sig
-					<small>(Endast admins ser detta)</small>
-				</h3>
+				<h3 class="mt-4" title="Endast admins ser detta" data-toggle="tooltip">Aktiva medlemmar som inte anmält sig <i class='fas fa-question-circle'></i></h3>
 				<table class="table table-hover<?php echo $is_admin ? ' clickable' : null ?>">
 					<thead class="table-borderless">
 						<tr>
@@ -192,7 +194,7 @@ foreach($signups as $s)
 							?>
 								<th scope="row"><?php echo $member->name;?></th>
 								<td><?php
-									echo $this->doodads->group_icon($member->group_code);
+									echo group_icon($member->group_code);
 									echo isset($member->group_name)
 										? $member->group_name
 										: null;
@@ -206,35 +208,34 @@ foreach($signups as $s)
 
 	</div>
 
+	<?php if(!$event->is_old):?>
+		<!-- Modal -->
+		<div class="modal fade" id="form_popup" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
 
-	<!-- Modal -->
-	<div class="modal fade" id="form_popup" tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
+					<div class="modal-header">
+						<!-- Heading -->
+						<div>
+							<h5 class="modal-title"><?php echo $this->member_not_signed ? 'Ny anmälan' : 'Redigera anmälan';?> till</h5>
+							<h4 class="modal-title"><?php echo "$event->title";?></h4>
+							<h5 class="text-muted text-nowrap"><?php echo "($event->start_date)";?></h5>
+						</div>
 
-				<div class="modal-header">
-					<!-- Heading -->
-					<div>
-						<h5 class="modal-title"><?php echo $this->member_not_signed ? 'Ny anmälan' : 'Redigera anmälan';?> till</h5>
-						<h4 class="modal-title"><?php echo "$event->title";?></h4>
-						<h5 class="text-muted text-nowrap"><?php echo "($event->start_date)";?></h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+						</button>
 					</div>
 
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-					</button>
+					
+						<div class="modal-body">
+							<!-- Formulär -->
+							<?php $this->load->view('signup/sub-views/form', array('event' => $event, 'signup' => $signup));?>
+						</div>
 				</div>
-
-				<?php if(!$event->is_old):?>
-					<div class="modal-body">
-						<!-- Formulär -->
-						<?php $this->load->view('signup/sub-views/form', array('event' => $event, 'events' => $events, 'signup' => $signup));?>
-					</div>
-				<?php endif;?>
-
 			</div>
 		</div>
-	</div>
+	<?php endif;?>
 
 </div>
 

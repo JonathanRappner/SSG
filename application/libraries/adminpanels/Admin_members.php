@@ -7,18 +7,7 @@ class Admin_members implements Adminpanel
 {
 	protected $CI;
 	private
-		$view,
-		$page,
-		$total_pages,
-		$results_per_page = 30, //medlemslistan i huvudvyn
-		$members,
-		$groups,
-		$group_id,
-		$loaded_member,
-		$member_id,
-		$promotions,
-		$ranks
-	;
+		$results_per_page = 30; //medlemslistan i huvudvyn
 
 	public function __construct()
 	{
@@ -40,8 +29,7 @@ class Admin_members implements Adminpanel
 		{
 			assert($var2 == null || is_numeric($var2), "Inkorrekt sidnummer: $var2");
 			$this->page = $var2; //sida för medlemstabellen
-			$total_members = $this->CI->db->query('SELECT COUNT(*) AS count FROM ssg_members WHERE group_id IS NULL')->row()->count;
-			$this->total_pages = ceil($total_members / $this->results_per_page);
+			$this->total_members = $this->CI->db->query('SELECT COUNT(*) AS count FROM ssg_members WHERE group_id IS NULL')->row()->count;
 			$this->members = $this->get_orphan_members($this->page, $this->results_per_page);
 			$this->groups = $this->get_all_groups();
 		}
@@ -110,7 +98,7 @@ class Admin_members implements Adminpanel
 		echo '<div id="wrapper_members">';
 
 		if($this->view == 'main') //huvud-vy
-			$this->view_main($this->groups, $this->members, $this->page, $this->total_pages);
+			$this->view_main($this->groups, $this->members, $this->page, $this->total_members);
 		else if($this->view == 'group') //grupp-vy
 			$this->view_group($this->group, $this->members);
 		else if($this->view == 'member') //medlems-vy
@@ -129,14 +117,11 @@ class Admin_members implements Adminpanel
 	 * @param array $groups	Till grupp-vy-länkarna.
 	 * @param array $members Till medlemstabellen.
 	 * @param int $page Sida för medlemstabellen.
-	 * @param int $total_pages Antal sidor för medlemstabellen.
+	 * @param int $total_members Totala antalet medlemmar i tabellen.
 	 * @return void
 	 */
-	private function view_main($groups, $members, $page, $total_pages)
+	private function view_main($groups, $members, $page, $total_members)
 	{
-		//moduler
-		$this->CI->load->library('Doodads');
-
 		//variabler
 		$prev_group = null;
 
@@ -188,7 +173,7 @@ class Admin_members implements Adminpanel
 			echo '</table>';
 
 			//pagination
-			echo $this->CI->doodads->pagination($page, $total_pages, base_url('signup/admin/members/main/'), 'wrapper_member_table');
+			echo pagination($page, $total_members, $this->results_per_page, base_url('signup/admin/members/main/'), 'wrapper_member_table');
 
 		echo '</div>';
 	}
@@ -390,65 +375,68 @@ class Admin_members implements Adminpanel
 
 
 		// formulär
-		echo '<h5>Medlemsdata</h5>';
-		echo '<form action="'. base_url('signup/admin/members/update_member/') .'" method="post">';
-		echo '<input type="hidden" name="member_id" value="'. $this->loaded_member->id .'">';
-			
-			echo '<div class="col-md-6 col-lg-4">';
-
-				//Namn
-				echo '<div class="form-group row">';
-					echo '<label for="name">Namn</label>';
-					echo '<input type="text" id="name" name="name" value="'. $this->loaded_member->name .'" class="form-control">';
-				echo '</div>';
+		if($this->CI->permissions->has_permissions(array('s0', 's1')))
+		{
+			echo '<h5>Medlemsdata</h5>';
+			echo '<form action="'. base_url('signup/admin/members/update_member/') .'" method="post">';
+			echo '<input type="hidden" name="member_id" value="'. $this->loaded_member->id .'">';
 				
-				//Grupp
-				echo '<div class="form-group row">';
-					echo '<label for="group">Grupp</label>';
-					echo '<select class="form-control" id="group" name="group_id">'. $group_options_string .'</select>';
-				echo '</div>';
-				
-				//Befattning
-				echo '<div class="form-group row">';
-					echo '<label for="role">Befattning</label>';
-					echo '<select class="form-control" id="role" name="role_id">'. $roles_options_string .'</select>';
-				echo '</div>';
+				echo '<div class="col-md-6 col-lg-4">';
 
-				//UID
-				echo '<div class="form-group row">';
-					echo '<label for="uid">UID</label>';
-					echo '<input type="text" id="uid" name="uid" value="'. $this->loaded_member->uid .'" class="form-control">';
-				echo '</div>';
+					//Namn
+					echo '<div class="form-group row">';
+						echo '<label for="name">Namn</label>';
+						echo '<input type="text" id="name" name="name" value="'. $this->loaded_member->name .'" class="form-control" required>';
+					echo '</div>';
+					
+					//Grupp
+					echo '<div class="form-group row">';
+						echo '<label for="group">Grupp</label>';
+						echo '<select class="form-control" id="group" name="group_id">'. $group_options_string .'</select>';
+					echo '</div>';
+					
+					//Befattning
+					echo '<div class="form-group row">';
+						echo '<label for="role">Befattning</label>';
+						echo '<select class="form-control" id="role" name="role_id">'. $roles_options_string .'</select>';
+					echo '</div>';
 
-				//Aktiv
-				echo '<div class="form-group form-check row">';
-					echo '<input class="form-check-input" type="checkbox" value="1" '. ($this->loaded_member->is_active ? 'checked' : null) .' id="active" name="active">';
-					echo '<label class="form-check-label" for="active" title="Inaktiv medlem = supporter. Aktiva medlemmar får oanmäld frånvaro på obligatoriska events som de inte anmält sig till." data-toggle="tooltip">';
-						echo 'Aktiv <i class="fas fa-question-circle"></i>';
-					echo '</label>';
-				echo '</div>';
+					//UID
+					echo '<div class="form-group row">';
+						echo '<label for="uid">UID</label>';
+						echo '<input type="text" id="uid" name="uid" value="'. $this->loaded_member->uid .'" class="form-control">';
+					echo '</div>';
+
+					//Aktiv
+					echo '<div class="form-group form-check row">';
+						echo '<input class="form-check-input" type="checkbox" value="1" '. ($this->loaded_member->is_active ? 'checked' : null) .' id="active" name="active">';
+						echo '<label class="form-check-label" for="active" title="Inaktiv medlem = supporter. Aktiva medlemmar får oanmäld frånvaro på obligatoriska events som de inte anmält sig till." data-toggle="tooltip">';
+							echo 'Aktiv <i class="fas fa-question-circle"></i>';
+						echo '</label>';
+					echo '</div>';
 
 
-				//Rättighetsgrupper
-				if($this->CI->permissions->has_permissions(array('super', 's0')))
-				{
-					echo '<h5 class="row" title="Endast S0 och Super Admins kan sätta rättigheter." data-toggle="tooltip">Rättighetsgrupper&nbsp;<i class="fas fa-question-circle"></i></h5>';
-
-					foreach($this->CI->permissions->get_permissions() as $perm)
+					//Rättighetsgrupper
+					if($this->CI->permissions->has_permissions('s0'))
 					{
-						echo '<div class="form-group form-check row">';
-							echo '<input class="form-check-input" type="checkbox" '. (in_array($perm->id, $this->loaded_member->permission_groups) ? 'checked' : null) .' id="permission_'. $perm->code .'" name="permission[]" value="'. $perm->id .'">';
-							echo '<label class="form-check-label" for="permission_'. $perm->code .'">'. $perm->title .'</label>';
-						echo '</div>';
+						echo '<h5 class="row" title="Endast S0 och Super Admins kan sätta rättigheter." data-toggle="tooltip">Rättighetsgrupper&nbsp;<i class="fas fa-question-circle"></i></h5>';
+
+						foreach($this->CI->permissions->get_permissions() as $perm)
+						{
+							echo '<div class="form-group form-check row">';
+								echo '<input class="form-check-input" type="checkbox" '. (in_array($perm->id, $this->loaded_member->permission_groups) ? 'checked' : null) .' id="permission_'. $perm->code .'" name="permission[]" value="'. $perm->id .'">';
+								echo '<label class="form-check-label" for="permission_'. $perm->code .'">'. $perm->title .'</label>';
+							echo '</div>';
+						}
 					}
-				}
 
-			echo '</div>'; //end div.col
+				echo '</div>'; //end div.col
 
-			//submit
-			echo '<button type="submit" class="btn btn-success">Spara <i class="fas fa-save"></i></button>';
+				//submit
+				echo '<button type="submit" class="btn btn-success">Spara <i class="fas fa-save"></i></button>';
 
-		echo '</form>';
+			echo '</form>';
+		}
 	}
 
 	/**
@@ -735,7 +723,7 @@ class Admin_members implements Adminpanel
 
 		//--ssg_permission_groups_members--
 		//bara super och s0 får ändra rättigheter
-		if(!$this->CI->permissions->has_permissions(array('super', 's0')))
+		if(!$this->CI->permissions->has_permissions('s0'))
 			return;
 
 		//ta bort gamla rättigheter
@@ -762,7 +750,7 @@ class Admin_members implements Adminpanel
 	public function get_permissions_needed()
 	{
 		//åtkomst: admins
-		return array('super', 's0', 's1', 's4', 'grpchef');
+		return array('s0', 's1', 's4', 'grpchef');
 	}
 }
 ?>

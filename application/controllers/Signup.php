@@ -3,6 +3,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Signup extends CI_Controller
 {
+	public function __construct()
+	{
+		parent::__construct();
+
+		//första april
+		if(date('n') == 4 && date('j') == 1)
+		{
+			define('APRIL_FOOLS', true);
+			$this->load->library('april_fools');
+		}
+	}
+
 	/**
 	 * Huvudsida
 	 */
@@ -19,11 +31,14 @@ class Signup extends CI_Controller
 		if(!$this->check_login()) return;
 
 		//moduler
+		$this->load->library('attendance');
+		$this->load->library('eventsignup');
 		$this->load->model('signup/Events');
 
-		$next_event = $this->Events->get_next_event();
-		$next_event->member_attendance = $this->Events->get_member_attendance($next_event->id, $this->member->id); //nuvarande inloggadde medlem närvaro
-		$upcoming_events = $this->Events->get_upcoming_events(false);
+		$next_event_id = $this->Events->get_next_event_id();
+		$next_event = $this->eventsignup->get_event($next_event_id);
+		$next_event->member_attendance = $this->eventsignup->get_member_attendance($next_event_id, $this->member->id); //nuvarande inloggadde medlem närvaro
+		$upcoming_events = $this->Events->get_upcoming_events();
 
 		//ladda vy
 		$this->load->view('signup/events', array(
@@ -37,14 +52,15 @@ class Signup extends CI_Controller
 	 *
 	 * @param int $event_id Event-id
 	 */
-	public function event($event_id = null)
+	public function event($event_id = null, $show_form = null)
 	{
 		//moduler
-		$this->load->model('signup/Events');
-		$this->load->model('signup/Signups');
+		$this->load->library('attendance');
+		$this->load->library('eventsignup');
+		$this->load->model('signup/Form');
 
 		//hämta event-data före inloggning till ogp/twitter-preview
-		$event = $this->Events->get_event($event_id);
+		$event = $this->eventsignup->get_event($event_id);
 
 		//twitter/ogp-preview
 		$this->preview->set_data(
@@ -56,19 +72,20 @@ class Signup extends CI_Controller
 		//kolla login, fortsätt om medlem är inloggad
 		if(!$this->check_login()) return;
 
-		//hämta data som inte behövs för ogp/twitter-preview
-		$signup = $this->Signups->get_signup($event_id, $this->member->id);
-		$signups = $this->Signups->get_signups($event_id);
-		$non_signups = $this->Signups->get_non_signups($event_id);
-		$events = $this->Events->get_upcoming_events(true);
-		$advanced_stats = $this->Signups->get_advanced_stats($event_id);
+		//hämta data
+		$show_form = isset($show_form) && !$event->is_old;
+		$signup = $this->eventsignup->get_signup($event_id, $this->member->id);
+		$signups = $this->eventsignup->get_signups($event_id);
+		$groups = $this->Form->get_groups();
+		$non_signups = $this->eventsignup->get_non_signups($event_id);
+		$advanced_stats = $this->eventsignup->get_advanced_stats($event_id);
 
-		$this->load->view('signup/event',
-			array(
+		$this->load->view('signup/event', array(
 				'event' => $event,
-				'events' => $events,
 				'signups' => $signups,
 				'signup' => $signup,
+				'show_form' => $show_form,
+				'groups' => $groups,
 				'non_signups' => $non_signups,
 				'advanced_stats' => $advanced_stats,
 			)
@@ -76,58 +93,14 @@ class Signup extends CI_Controller
 	}
 
 	/**
-	 * Ny anmälan
+	 * Redirect:a gamla länkar
 	 *
-	 * @param int $event_id Event-id
+	 * @param int $event_id
+	 * @return void
 	 */
-	public function form($event_id = null)
+	public function form($event_id)
 	{
-		//modeller
-		$this->load->model('signup/Events');
-		$this->load->model('signup/Signups');
-
-		//hämta data
-		$event = $event_id != null ? $this->Events->get_event($event_id) : null;
-
-		//twitter/ogp-preview
-		$this->preview->set_data(
-			"SSG Anmälan: $event->title",
-			"Datum: $event->start_date ($event->start_time - $event->end_time)",
-			$event->preview_image
-		);
-
-		//kolla login
-		if(!$this->check_login()) return;
-
-		//hämta data
-		$events = $this->Events->get_upcoming_events(true);
-		$signup = $event_id != null ? $this->Signups->get_signup($event_id, $this->member->id) : null;
-
-		//visa inte form för gamla events
-		if(isset($event) && $event->is_old)
-		{
-			$this->alerts->add_alert('danger', 'Du kan inte anmäla dig till gamla events.');
-			redirect('signup');
-			return;
-		}
-
-		//ladda vy
-		$this->load->view('signup/form', array(
-			'event' => $event,
-			'events' => $events,
-			'signup' => $signup,
-		));
-	}
-
-	/**
-	 * Strölir-sida
-	 */
-	public function strolir()
-	{
-		if(!$this->check_login()) return;
-		
-		//ladda vy
-		$this->load->view('signup/strolir');
+		redirect("signup/event/$event_id/showform");
 	}
 
 	/**
@@ -138,22 +111,23 @@ class Signup extends CI_Controller
 		if(!$this->check_login()) return;
 		
 		//moduler
-		$this->load->model('signup/Events');
-		$this->load->library('Doodads');
+		$this->load->library('attendance');
+		$this->load->library('eventsignup');
+		$this->load->model('signup/History');
 
 		//variabler
 		$results_per_page = 20;
 		$total_events = $this->db->query('SELECT COUNT(*) AS count FROM ssg_events WHERE ADDTIME(start_datetime, length_time) < NOW()')->row()->count;
-		$total_pages = ceil($total_events / $results_per_page);
 
 		//ladda data
-		$events = $this->Events->get_old_events($page, $results_per_page);
+		$events = $this->History->get_old_events($page, $results_per_page);
 		
 		//ladda vy
 		$this->load->view('signup/history', array(
 			'events' => $events,
 			'page' => $page,
-			'total_pages' => $total_pages,
+			'total_events' => $total_events,
+			'results_per_page' => $results_per_page,
 		));
 	}
 
@@ -169,7 +143,8 @@ class Signup extends CI_Controller
 		if(!$this->check_login()) return;
 		
 		//modeller
-		$this->load->model('signup/Signups');
+		$this->load->library('attendance');
+		$this->load->library('eventsignup');
 		$this->load->model('signup/Mypage');
 
 		//init
@@ -191,7 +166,7 @@ class Signup extends CI_Controller
 		if(!$this->check_login()) return;
 
 		//permissions
-		if(!$this->permissions->has_permissions(array('super', 's0', 's1', 's2',  's3', 's4', 'grpchef')))
+		if(!$this->permissions->has_permissions(array('s0', 's1', 's2',  's3', 's4', 'grpchef')))
 		{
 			$this->alerts->add_alert('danger', 'Du har inte tillgång till denna sida.');
 			redirect('signup');
@@ -273,9 +248,10 @@ class Signup extends CI_Controller
 	 */
 	public function submit_signup()
 	{
-		$this->load->model('signup/Signups');
+		//moduler
+		$this->load->library('eventsignup');
 
-		$this->Signups->submit($this->input->post(), null);
+		$this->eventsignup->submit_signup($this->input->post(), null);
 	}
 
 	/**

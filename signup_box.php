@@ -225,7 +225,7 @@ mysqli_close($mysqli);
 		<?php endif;?>
 		
 		<!-- knapp -->
-		<a href="new/signup/form/<?php echo $event->id;?>" id="<?php echo isset($member_signup->attendance_id) ? 'btn_edit' : 'btn_signup';?>">
+		<a href="new/signup/event/<?php echo $event->id;?>/showform" id="<?php echo isset($member_signup->attendance_id) ? 'btn_edit' : 'btn_signup';?>">
 			<?php echo isset($member_signup->attendance_id) ? 'Ändra anmälan &raquo;' : 'Anmäl dig &raquo;';?>	
 		</a>
 

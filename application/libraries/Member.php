@@ -1,11 +1,13 @@
 <?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
 /**
  * Hanterar användarlogins.
  * Laddas automatiskt på varje sida.
  * Kollar om login-session från gamla sidan existerar och kopierar till sitt egna session-system.
  * Annars visar den ett login-formulär som kollar uppgifter mot den gamla sidans databas.
  */
-class Member extends CI_Model
+class Member
 {
 	public
 		$valid = false; //Är en existerande användare inloggad?
@@ -16,19 +18,19 @@ class Member extends CI_Model
 	 */
 	public function __construct()
 	{
-		parent::__construct();
+		// Assign the CodeIgniter super-object
+		$this->CI =& get_instance();
 
 		//är medlem redan inloggad?
-		if(!empty($this->session->member_id))
-			$this->id = $this->session->member_id;
+		if(!empty($this->CI->session->member_id))
+			$this->id = $this->CI->session->member_id;
 		else //ingen session finns, låt $this->is_valid vara false så login-formuläret visas
 			return;
-		
-		
 		/*** Lyckad inloggning ***/
 		
 		// debugging
 		// $this->id = 237; ////////Bezz
+		// $this->id = 220; ////////NinjaNils
 		// $this->id = 1603; ////////Nehls
 		// $this->id = 1207; ////////Nabel
 		// $this->id = 136;  ////////Kalle
@@ -94,7 +96,7 @@ class Member extends CI_Model
 			LEFT JOIN ssg_roles
 				ON ssg_members.role_id = ssg_roles.id
 			WHERE id_member = ?';
-		$query = $this->db->query($sql, $member_id);
+		$query = $this->CI->db->query($sql, $member_id);
 
 		//felkoll
 		if(!$member_data = $query->row())
@@ -135,7 +137,7 @@ class Member extends CI_Model
 			INNER JOIN ssg_permission_groups
 				ON ssg_permission_groups_members.permission_group_id = ssg_permission_groups.id
 			WHERE member_id = ?';
-		$query = $this->db->query($sql, $member_id);
+		$query = $this->CI->db->query($sql, $member_id);
 		$member_data->permission_groups = array();
 		foreach($query->result() as $row)
 			$member_data->permission_groups[] = $row->persmission_id;
@@ -160,7 +162,7 @@ class Member extends CI_Model
 			WHERE ssg_promotions.member_id = ?
 			ORDER BY date DESC
 			LIMIT 1';
-		$query = $this->db->query($sql, $member_id);
+		$query = $this->CI->db->query($sql, $member_id);
 		$rank = $query->row();
 		
 		//sätt grad efter senaste bumpningen
@@ -195,13 +197,13 @@ class Member extends CI_Model
 			WHERE
 				member_name = '$username' &&
 				passwd = '$salt'";
-		$query = $this->db->query($sql);
+		$query = $this->CI->db->query($sql);
 		
 		$row = $query->row();
 
 		if($query->num_rows() > 0) //success
 		{
-			$this->session->member_id = $row->id;
+			$this->CI->session->member_id = $row->id;
 			return true;
 		}
 		else
@@ -226,7 +228,7 @@ class Member extends CI_Model
 			INNER JOIN smf_members
 				ON ssg_members.id = smf_members.id_member
 			ORDER BY real_name ASC';
-		$query = $this->db->query($sql);
+		$query = $this->CI->db->query($sql);
 		foreach($query->result() as $row)
 			$members[$row->id] = $row->real_name;
 		
@@ -247,7 +249,7 @@ class Member extends CI_Model
 			'SELECT id
 			FROM ssg_members
 			WHERE id = ?';
-		$query = $this->db->query($sql, $member_id);
+		$query = $this->CI->db->query($sql, $member_id);
 
 		//om rad finns, fortsätt
 		if($query->num_rows() > 0)
@@ -260,7 +262,7 @@ class Member extends CI_Model
 				FROM_UNIXTIME(date_registered, "%Y-%m-%d") AS registered_date
 			FROM smf_members
 			WHERE id_member = ?';
-		$query = $this->db->query($sql, $member_id);
+		$query = $this->CI->db->query($sql, $member_id);
 		$name = $query->row()->name;
 		$registered_date = $query->row()->registered_date;
 
@@ -268,7 +270,7 @@ class Member extends CI_Model
 		$sql =
 			'INSERT INTO ssg_members(id, name, registered_date)
 			VALUES (?, ?, ?)';
-		$query = $this->db->query($sql, array($member_id, $name, $registered_date));
+		$query = $this->CI->db->query($sql, array($member_id, $name, $registered_date));
 	}
 
 	/**
@@ -363,4 +365,3 @@ class Member extends CI_Model
 		echo $this->unit->report();
 	}
 }
-?>

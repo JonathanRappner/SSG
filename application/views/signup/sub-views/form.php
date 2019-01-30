@@ -7,14 +7,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //variabler
 $title_long = $this->member_not_signed ? null : "$event->title ($event->type_name) &ndash; $event->start_date ($event->start_time - $event->end_time)";
 
-//Event-<option>s
-$events_options = '';
-foreach($events as $e)
-	$events_options .= "<option value='$e->id' ". (isset($event->id) && $e->id == $event->id ? 'selected' : null) .">$e->title ($e->type_name) &ndash; $e->start_date ($e->start_time - $e->end_time)</option>\n";
-
 //Önskad Enhet-<option>s
 $group_options = '';
-$groups = $this->misc_data->get_groups();
 foreach($groups as $group)
 {
 	$selected =
@@ -57,27 +51,13 @@ echo "</script>\n";
 
 ?><script src="<?php echo base_url('js/signup/form.js');?>"></script>
 <form class="ssg_form" action="<?php echo base_url('signup/submit_signup');?>" method="post">
+
+	<input type="hidden" name="event_id" value="<?php echo $event->id;?>" />
 	
 	<!-- Namn -->
 	<div class="form-group">
 		<label for="input_name">Namn</label>
 		<input type="text" id="input_name" class="form-control" placeholder="<?php echo $this->member->name;?>" readonly>
-	</div>
-
-
-	<!-- Event/Datum -->
-	<div class="form-group">
-		<label for="input_event">Event</label>
-
-		<?php if($this->member_not_signed):?>
-			<select class="form-control" id="input_event" name="event_id">
-				<?php echo $events_options;?>
-			</select>
-		<?php else:?>
-			<input type="text" id="input_event" class="form-control" placeholder="<?php echo $title_long;?>" readonly>
-			<input type="hidden" name="event_id" value="<?php echo $event->id;?>" />
-		<?php endif;?>
-		
 	</div>
 
 	<!-- Enhet -->

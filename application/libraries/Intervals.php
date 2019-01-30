@@ -60,10 +60,10 @@ class Intervals
 	private function daily()
 	{
 		//moduler
-		$this->CI->load->model('signup/Events');
+		$this->CI->load->library('eventsignup');
 
 		//metoder
-		$this->CI->Events->create_auto_events();
+		$this->CI->eventsignup->create_auto_events();
 		$this->archive_old_events();
 		$this->remove_outdated_recesses();
 
@@ -107,8 +107,7 @@ class Intervals
 	private function archive_old_events()
 	{
 		//moduler
-		$this->CI->load->model('signup/Events');
-		$this->CI->load->model('signup/Signups');
+		$this->CI->load->library('eventsignup');
 
 		//variabler
 		$events = array();
@@ -131,7 +130,7 @@ class Intervals
 		//--Bearbeta events--
 		foreach($events as $event_id) //iterera events
 		{
-			$non_signups = $this->CI->Signups->get_non_signups($event_id);
+			$non_signups = $this->CI->eventsignup->get_non_signups($event_id);
 			foreach($non_signups as $member) //iterera medlemmar
 			{
 				//lägg till Oanmäld frånvaro för alla non_signups
