@@ -236,7 +236,7 @@ class Eventsignup
 			$row->message = trim(strip_tags($row->message));
 
 			//första april
-			if(defined('APRIL_FOOLS')) $row->message .= ' '. $this->CI->april_fools->random_emojis($row->message);
+			if(defined('APRIL_FOOLS') && !empty($row->message)) $row->message .= ' '. $this->CI->april_fools->random_emojis($row->message);
 
 			$signups[] = $row;
 		}

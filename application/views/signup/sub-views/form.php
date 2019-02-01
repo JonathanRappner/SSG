@@ -28,14 +28,15 @@ foreach($groups as $group) //alla grupper
 	$groups_roles[$group->id] = array(); //skapa blank array
 
 	//iterera genom alla gruppens roller
-	foreach($group->roles as $role_id => $role)
-	{
-		$obj = new stdClass;
-		$obj->role_id = $role_id;
-		$obj->role_name = $role;
+	if(isset($group->roles))
+		foreach($group->roles as $role_id => $role)
+		{
+			$obj = new stdClass;
+			$obj->role_id = $role_id;
+			$obj->role_name = $role;
 
-		$groups_roles[$group->id][] = $obj;
-	}
+			$groups_roles[$group->id][] = $obj;
+		}
 }
 
 

@@ -44,7 +44,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			<?php
 			//grad-ikon
 			if($this->member->rank_id != null)
-				echo '<img class="rank_icon" src="'. base_url('images/rank_icons/'. $this->member->rank_icon) .'" title="'. $this->member->rank_name .'" data-toggle="tooltip" />';
+				echo '<img class="rank_icon d-none d-md-inline" src="'. base_url('images/rank_icons/'. $this->member->rank_icon) .'" title="'. $this->member->rank_name .'" data-toggle="tooltip" />';
 
 			//avatar
 			$avatar = !empty($this->member->avatar_url)

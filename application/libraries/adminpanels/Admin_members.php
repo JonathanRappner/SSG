@@ -31,7 +31,7 @@ class Admin_members implements Adminpanel
 			$this->page = $var2; //sida för medlemstabellen
 			$this->total_members = $this->CI->db->query('SELECT COUNT(*) AS count FROM ssg_members WHERE group_id IS NULL')->row()->count;
 			$this->members = $this->get_orphan_members($this->page, $this->results_per_page);
-			$this->groups = $this->get_all_groups();
+			$this->groups = $this->get_active_groups();
 		}
 		else if($this->view == 'group') //grupp-vy
 		{
@@ -86,7 +86,10 @@ class Admin_members implements Adminpanel
 			
 			//success
 			$this->CI->alerts->add_alert('success', 'Ändringarna sparades utan problem.');
-			redirect('signup/admin/members/group/'. $vars->group_id);
+			if($vars->group_id > 0)
+				redirect('signup/admin/members/group/'. $vars->group_id);
+			else
+			redirect('signup/admin/members');
 		}
 	}
 	
@@ -265,17 +268,16 @@ class Admin_members implements Adminpanel
 			$rank_options_string .= "<option value='$rank->id'>$rank->name</option>";
 
 		//grupper options
-		$group_options_string = null;
-		$groups = $this->CI->db->query('SELECT id, name FROM ssg_groups WHERE NOT dummy ORDER BY sorting ASC')->result();
+		$group_options_string = '<option value="-1">&ndash; Ingen grupp &ndash;</option>';
+		$groups = $this->get_active_groups();
 		foreach($groups as $group)
 			$group_options_string .= "<option value='$group->id' ". ($group->id == $this->loaded_member->group_id ? 'selected' : null) .">$group->name</option>";
 		
 		//befattningar options
-		$roles_options_string = null;
+		$roles_options_string = '<option value="-1">&ndash; Ingen befattning &ndash;</option>';
 		$roles = $this->CI->db->query('SELECT id, name FROM ssg_roles WHERE NOT dummy ORDER BY sorting ASC')->result();
 		foreach($roles as $role)
 			$roles_options_string .= "<option value='$role->id' ". ($role->id == $this->loaded_member->role_id ? 'selected' : null) .">$role->name</option>";
-
 
 
 		//breadcrumbs
@@ -464,11 +466,11 @@ class Admin_members implements Adminpanel
 	}
 
 	/**
-	 * Hämta alla grupper.
+	 * Hämta alla aktiva, icke-dummy-grupper.
 	 *
 	 * @return array
 	 */
-	private function get_all_groups()
+	private function get_active_groups()
 	{
 		//varibaler
 		$groups = array();
@@ -625,14 +627,7 @@ class Admin_members implements Adminpanel
 			LEFT JOIN ssg_roles
 				ON ssg_members.role_id = ssg_roles.id
 			WHERE group_id IS NULL
-			ORDER BY
-				is_active DESC,
-				CASE
-					WHEN ssg_members.group_id IS NULL THEN 1 #inaktiv medlem som inte har grupp
-					ELSE 0 #inaktiv medlem som har grupp
-				END ASC,
-				ssg_roles.sorting ASC,
-				name
+			ORDER BY name ASC
 			LIMIT ?, ?';
 		$query = $this->CI->db->query($sql, array($page * $results_per_page, $results_per_page));
 		foreach($query->result() as $row)
@@ -713,8 +708,8 @@ class Admin_members implements Adminpanel
 		//--ssg_member--
 		$data = array(
 			'name' => $vars->name,
-			'group_id' => $vars->group_id,
-			'role_id' => $vars->role_id,
+			'group_id' => $vars->group_id > 0 ? $vars->group_id : null,
+			'role_id' => $vars->role_id > 0 ? $vars->role_id : null,
 			'uid' => $vars->uid,
 			'is_active' => $vars->active,
 		);

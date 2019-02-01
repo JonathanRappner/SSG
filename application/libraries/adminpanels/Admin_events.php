@@ -253,9 +253,9 @@ class Admin_events implements Adminpanel
 					<td><abbr title='$event->start_time - $event->end_time' data-toggle='tooltip'>$event->start_date</abbr></td>
 					<td>$event->signed_sum</td>
 					<td class='btn_manage'>
-						<a href='". base_url("signup/event/$event->id") ."' class='btn btn-success' title='Se detaljer'><i class='fas fa-search'></i></a>
-						<a href='". base_url("signup/admin/events/$event->id") ."' class='btn btn-primary' title='Redigera'><i class='fas fa-edit'></i></a>
-						<a href='". base_url("signup/admin/events/?delete_confirm=$event->id") ."' class='btn_delete btn btn-danger' title='Ta bort'><i class='far fa-trash-alt'></i></a>
+						<a href='". base_url("signup/event/$event->id") ."' class='btn btn-success' title='Se detaljer' data-toggle='tooltip'><i class='fas fa-search'></i></a>
+						<a href='". base_url("signup/admin/events/$event->id") ."' class='btn btn-primary' title='Redigera' data-toggle='tooltip'><i class='fas fa-edit'></i></a>
+						<a href='". base_url("signup/admin/events/?delete_confirm=$event->id") ."' class='btn_delete btn btn-danger' title='Ta bort' data-toggle='tooltip'><i class='far fa-trash-alt'></i></a>
 					</td>
 				</tr>";
 		}
