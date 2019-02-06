@@ -7,7 +7,17 @@ class Admin_members implements Adminpanel
 {
 	protected $CI;
 	private
-		$results_per_page = 30; //medlemslistan i huvudvyn
+		$results_per_page = 30, //medlemslistan i huvudvyn
+		$page,
+		$total_members,
+		$members,
+		$groups,
+		$group_id,
+		$group,
+		$ranks,
+		$loaded_member,
+		$promotions,
+		$promotion_id;
 
 	public function __construct()
 	{

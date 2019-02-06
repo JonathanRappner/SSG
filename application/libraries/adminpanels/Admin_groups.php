@@ -183,7 +183,7 @@ class Admin_groups implements Adminpanel
 					echo '<input class="form-check-input" type="checkbox" value="1" '. (!$is_new && $this->group->active ? 'checked' : null) .' id="active" name="active">';
 					echo '<label class="form-check-label" for="active">';
 						echo 'Aktiv ';
-						echo '<small>(Om en grupp sparas som inaktiv så sätts dess medlemmas grupptillhörighet till "Ingen grupp".)</small>';
+						echo '<small>(Om en grupp sparas som inaktiv så sätts dess medlemmas grupptillhörighet till "Ingen grupp")</small>';
 					echo '</label>';
 				echo '</div>';
 
@@ -271,7 +271,7 @@ class Admin_groups implements Adminpanel
 							echo '<tr><td colspan="4" class="text-center">&ndash; Inga grupper &ndash;</td></tr>';
 					echo '</tbody>';
 				echo '</table>';
-			echo '</div>'; //end #wrapper_promotions_table
+			echo '</div>'; //end #wrapper_groups_table
 		echo '</div>'; //end div.row
 	}
 
@@ -309,7 +309,7 @@ class Admin_groups implements Adminpanel
 		assert(isset($vars), 'Post-variabler saknas.');
 		assert(isset($vars->name) && strlen($vars->name) > 0, "Grupp-namn: $vars->name");
 		assert(isset($vars->code) && strlen($vars->code) > 0, "Grupp-kod: $vars->code");
-		assert(isset($vars->sorting) && is_numeric($vars->sorting) > 0, "Gruppsotertingsvärde: $vars->sorting");
+		assert(isset($vars->sorting) && is_numeric($vars->sorting), "Gruppsotertingsvärde: $vars->sorting");
 
 		//uppdatera grupp
 		$data = array

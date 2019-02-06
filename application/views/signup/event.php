@@ -167,7 +167,7 @@ foreach($signups as $s)
 		?>
 			<!-- Ej anmälda, aktiva medlemmar -->
 			<div id="wrapper_not_signed_table" class="table-responsive table-sm">
-				<h3 class="mt-4" title="Endast admins ser detta" data-toggle="tooltip">Aktiva medlemmar som inte anmält sig <i class='fas fa-question-circle'></i></h3>
+				<h3 class="mt-4 d-inline-block" title="Endast admins ser listan" data-toggle="tooltip">Aktiva medlemmar som inte anmält sig <i class='fas fa-question-circle'></i></h3>
 				<table class="table table-hover<?php echo $is_admin ? ' clickable' : null ?>">
 					<thead class="table-borderless">
 						<tr>

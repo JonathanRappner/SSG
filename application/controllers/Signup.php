@@ -178,16 +178,26 @@ class Signup extends CI_Controller
 
 		$this->load->library('adminpanels/Admin_main');
 		$this->load->library('adminpanels/Admin_events');
+		$this->load->library('adminpanels/Admin_signups');
 		$this->load->library('adminpanels/Admin_groups');
+		$this->load->library('adminpanels/Admin_grouproles');
 		$this->load->library('adminpanels/Admin_members');
-		$this->load->library('adminpanels/Admin_autoevents');
+		$this->load->library('adminpanels/Admin_roles');
+		$this->load->library('adminpanels/Admin_ranks');
 		$this->load->library('adminpanels/Admin_recesses');
+		$this->load->library('adminpanels/Admin_autoevents');
+		$this->load->library('adminpanels/Admin_event_types');
 		$adminpanels[] = new Admin_main();
 		$adminpanels[] = new Admin_events();
+		$adminpanels[] = new Admin_signups();
 		$adminpanels[] = new Admin_groups();
+		$adminpanels[] = new Admin_grouproles();
 		$adminpanels[] = new Admin_members();
+		$adminpanels[] = new Admin_roles();
+		$adminpanels[] = new Admin_ranks();
 		$adminpanels[] = new Admin_recesses();
 		$adminpanels[] = new Admin_autoevents();
+		$adminpanels[] = new Admin_event_types();
 
 		//hitta current adminpanel
 		$adminpanel = null;
