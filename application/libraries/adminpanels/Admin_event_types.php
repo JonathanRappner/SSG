@@ -27,12 +27,10 @@ class Admin_event_types implements Adminpanel
 		{
 			$this->event_types = $this->get_event_types();
 		}
-		else if($this->view == 'new') //formulär: ny
-		{
-		}
 		else if($this->view == 'edit') //formulär: redigera
 		{
 			$this->event_type_id = $var2;
+			$this->event_type = $this->CI->db->query('SELECT * FROM ssg_event_types WHERE id = ?', $this->event_type_id)->row();
 		}
 		else if($this->view == 'delete_confirm') //ta bort bekräftan/nekan om events_count > 0
 		{
@@ -83,7 +81,6 @@ class Admin_event_types implements Adminpanel
 		}
 		else if($this->view == 'edit') //formulär: redigera
 		{
-			$this->event_type = $this->CI->db->query('SELECT * FROM ssg_event_types WHERE id = ?', $this->event_type_id)->row();
 			$this->view_form();
 		}
 		else if($this->view == 'delete_confirm')
