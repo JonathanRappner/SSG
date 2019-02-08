@@ -18,7 +18,7 @@ class Admin_roles implements Adminpanel
 		$this->CI =& get_instance();
 	}
 
-	public function main($var1, $var2)
+	public function main($var1, $var2, $var3)
 	{
 		//variabler
 		$this->view = $var1;
@@ -237,7 +237,6 @@ class Admin_roles implements Adminpanel
 		//input-sanering
 		assert(isset($vars), 'Post-variabler saknas.');
 		assert(!empty($vars->name), "name: $vars->name");
-		assert(!empty($vars->name_long), "name_long: $vars->name_long");
 		assert(isset($vars->sorting) && is_numeric($vars->sorting), "sorting: $vars->sorting");
 		
 		$data = array(
@@ -253,7 +252,6 @@ class Admin_roles implements Adminpanel
 		//input-sanering
 		assert(isset($vars), 'Post-variabler saknas.');
 		assert(!empty($vars->name), "name: $vars->name");
-		assert(!empty($vars->name_long), "name_long: $vars->name_long");
 		assert(isset($vars->sorting) && is_numeric($vars->sorting), "sorting: $vars->sorting");
 		assert(isset($vars->id) && is_numeric($vars->id), "id: $vars->id");
 

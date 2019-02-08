@@ -31,7 +31,7 @@ class Admin_autoevents implements Adminpanel
 		);
 	}
 
-	public function main($var1, $var2)
+	public function main($var1, $var2, $var3)
 	{
 		//variabler
 		$this->view = $var1;

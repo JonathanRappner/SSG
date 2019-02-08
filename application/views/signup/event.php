@@ -93,7 +93,7 @@ foreach($signups as $s)
 			<thead class="table-borderless">
 				<tr>
 					<th scope="col">Namn</th>
-					<th scope="col">Enhet</th>
+					<th scope="col">Grupp</th>
 					<th scope="col">Befattning</th>
 					<th scope="col">Närvaro</th>
 					<th class="column_message" scope="col">Meddelande</th>

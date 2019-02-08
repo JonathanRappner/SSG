@@ -161,7 +161,7 @@ class Signup extends CI_Controller
 	/**
 	 * Admin-sida
 	 */
-	public function admin($load_adminpanel = 'main', $var1 = null, $var2 = null)
+	public function admin($load_adminpanel = 'main', $var1 = null, $var2 = null, $var3 = null)
 	{
 		if(!$this->check_login()) return;
 
@@ -211,7 +211,7 @@ class Signup extends CI_Controller
 
 		//kör adminpanelens main-metod
 		if($this->permissions->has_permissions($adminpanel->get_permissions_needed()))
-			$adminpanel->main($var1, $var2);
+			$adminpanel->main($var1, $var2, $var3);
 		else //access denied
 		{
 			$this->alerts->add_alert('danger', 'Du har inte tillgång till admin-panelen <strong>'. $adminpanel->get_title() .'</strong>');

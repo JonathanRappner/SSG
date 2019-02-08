@@ -28,7 +28,7 @@ class Admin_members implements Adminpanel
 	/**
 	 * Ladda data beroende på vyn.
 	 */
-	public function main($var1, $var2)
+	public function main($var1, $var2, $var3)
 	{
 		//sätt view
 		$this->view = $var1 == null

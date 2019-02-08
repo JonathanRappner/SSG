@@ -7,7 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //variabler
 $title_long = $this->member_not_signed ? null : "$event->title ($event->type_name) &ndash; $event->start_date ($event->start_time - $event->end_time)";
 
-//Önskad Enhet-<option>s
+//Önskad grupp-<option>s
 $group_options = '';
 foreach($groups as $group)
 {
@@ -61,9 +61,9 @@ echo "</script>\n";
 		<input type="text" id="input_name" class="form-control" placeholder="<?php echo $this->member->name;?>" readonly>
 	</div>
 
-	<!-- Enhet -->
+	<!-- Grupp -->
 	<div class="form-group">
-		<label for="input_group">Önskad enhet</label>
+		<label for="input_group">Önskad grupp</label>
 		<select class="form-control" id="input_group" name="group_id">
 			<?php echo $group_options;?>
 		</select>

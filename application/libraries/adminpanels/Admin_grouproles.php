@@ -19,7 +19,7 @@ class Admin_grouproles implements Adminpanel
 		$this->CI =& get_instance();
 	}
 
-	public function main($var1, $var2)
+	public function main($var1, $var2, $var3)
 	{
 		//variabler
 		$this->view = $var1;

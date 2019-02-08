@@ -31,7 +31,7 @@ class Admin_events implements Adminpanel
 	 * @param int $page Sidnummer (sida 1 = 0, sida 2 = 1, osv.)
 	 * @return void
 	 */
-	public function main($event_id = 0, $page = 0)
+	public function main($event_id = 0, $page = 0, $var3)
 	{
 		//moduler
 		$this->CI->load->library('attendance');
