@@ -104,7 +104,7 @@ class Admin_event_types implements Adminpanel
 					echo '<tr>';
 						echo '<th scope="col">Titel</th>';
 						echo '<th scope="col">Antal events</th>';
-						echo '<th scope="col">Obligatirisk</th>';
+						echo '<th scope="col">Obligatorisk</th>';
 						echo '<th scope="col">Highlight:a</th>';
 						echo '<th scope="col">Ta bort</th>';
 					echo '</tr>';

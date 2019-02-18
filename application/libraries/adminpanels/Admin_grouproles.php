@@ -274,7 +274,7 @@ class Admin_grouproles implements Adminpanel
 
 	public function get_permissions_needed()
 	{
-		return array('s0', 'grpchef');
+		return array('s0', 's1', 'grpchef');
 	}
 }
 ?>

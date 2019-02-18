@@ -278,7 +278,13 @@ class Signup extends CI_Controller
 		{
 			//försök logga in användare, om det inte går: visa login_form
 			if($this->member->validate_login($username, $password))
+			{
+				//kopiera medlemsdata från sfm-forumet till phpbb-forumet (ta bort när smf är nerlagt)
+				$this->load->library('phpbb');
+				$this->phpbb->add_user_from_smf($this->session->member_id, $password); //gör ingenting om medlemmen redan är kopierad
+				
 				header("location: $redirect"); //använd inte redirect()
+			}
 			else
 				$this->load->view('signup/login_form', array('fail' => true));
 		}
@@ -307,5 +313,8 @@ class Signup extends CI_Controller
 	{
 		if($this->member->id != 1655) //Smorfty only
 			show_404();
+		
+		// $this->load->library('phpbb');
+		// $this->phpbb->add_user_from_smf(1713, 'foobar'); //thokawi
 	}
 }

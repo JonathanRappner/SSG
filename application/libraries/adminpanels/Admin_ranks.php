@@ -311,7 +311,7 @@ class Admin_ranks implements Adminpanel
 
 	public function get_permissions_needed()
 	{
-		return array('s0');
+		return array('s0', 's1');
 	}
 }
 ?>

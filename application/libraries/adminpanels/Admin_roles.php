@@ -100,6 +100,7 @@ class Admin_roles implements Adminpanel
 					echo '<tr>';
 						echo '<th scope="col">Namn</th>';
 						echo '<th scope="col">Namn långt</th>';
+						echo '<th scope="col">Sortering</th>';
 						echo '<th scope="col">Antal anmälningar</th>';
 						echo '<th scope="col">Ta bort</th>';
 					echo '</tr>';
@@ -119,6 +120,11 @@ class Admin_roles implements Adminpanel
 									echo $role->name_long;
 								echo '</td>';
 							
+								//Sortering
+								echo '<td>';
+									echo $role->sorting;
+								echo '</td>';
+							
 								//Antal anmälningar
 								echo '<td>';
 									echo $role->signups_count;
@@ -134,7 +140,7 @@ class Admin_roles implements Adminpanel
 							echo '</tr>';
 						}
 					else
-						echo '<tr><td colspan="4" class="text-center">&ndash; Inga befattningar &ndash;</td></tr>';
+						echo '<tr><td colspan="5" class="text-center">&ndash; Inga befattningar &ndash;</td></tr>';
 				echo '</tbody>';
 			echo '</table>';
 		echo '</div>'; //end #wrapper_roles_table
@@ -219,7 +225,7 @@ class Admin_roles implements Adminpanel
 	{
 		$sql =
 			'SELECT
-				r.id, name, name_long,
+				r.id, name, name_long, sorting,
 				COUNT(s.role_id) AS signups_count
 			FROM ssg_roles r
 			LEFT OUTER JOIN ssg_signups s
@@ -275,7 +281,7 @@ class Admin_roles implements Adminpanel
 
 	public function get_permissions_needed()
 	{
-		return array('s0');
+		return array('s0', 's1');
 	}
 }
 ?>

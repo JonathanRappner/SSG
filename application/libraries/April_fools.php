@@ -47,9 +47,7 @@ class April_fools
 
 		$output = null;
 		for($i=0; $i<$count; $i++)
-		{
 			$output .= $this->emojis[rand(0, count($this->emojis)-1)];
-		}
 
 		return $output;
 	}

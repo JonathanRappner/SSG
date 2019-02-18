@@ -26,6 +26,8 @@ class Member
 			$this->id = $this->CI->session->member_id;
 		else //ingen session finns, låt $this->is_valid vara false så login-formuläret visas
 			return;
+		
+		
 		/*** Lyckad inloggning ***/
 		
 		// debugging
@@ -43,10 +45,10 @@ class Member
 		// if($this->id == 1655)
 		// 	$this->id = 1675; ////////Gibby
 		
-		//kolla om användaren har rad i ssg_members
+		//kolla om användaren har rad i ssg_members, om inte: skapa en
 		$this->has_member_row($this->id);
 
-		//sätt medlemsdata
+		//sätt laddad medlemsdata till $this
 		$this->set_member_data($this->id);
 
 		//valid
@@ -195,9 +197,9 @@ class Member
 			"SELECT id_member AS id
 			FROM smf_members
 			WHERE
-				member_name = '$username' &&
-				passwd = '$salt'";
-		$query = $this->CI->db->query($sql);
+				member_name = ? &&
+				passwd = ?";
+		$query = $this->CI->db->query($sql, array($username, $salt));
 		
 		$row = $query->row();
 

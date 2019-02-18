@@ -1,6 +1,7 @@
 #development
 _stuff/
 tests/
+forum/
 todo.txt
 application/config/development
 index.live.php
