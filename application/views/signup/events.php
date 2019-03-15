@@ -13,7 +13,7 @@ $this->current_page = 'events';
 	<?php $this->load->view('signup/sub-views/head');?>
 
 	<!-- Page-specific -->
-	<script src="<?php echo base_url('js/signup/deadline.js');?>"></script>
+	<script src="<?php echo base_url('js/deadline.js');?>"></script>
 	<script src="<?php echo base_url('js/signup/events.js');?>"></script>
 	<script src="<?php echo base_url('js/signup/clickable_table.js');?>"></script>
 	<link rel="stylesheet" href="<?php echo base_url('css/signup/events.css');?>">

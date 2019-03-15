@@ -27,7 +27,7 @@ class Alerts
 	 */
 	public function add_alert($type, $message)
 	{
-		$_SESSION['messages'][] = array('type' => $type, 'message' => $message); //kan inte använda CIs tillvägagångssät av någon anledning
+		$_SESSION['messages'][] = array('type' => $type, 'message' => $message); //kan inte använda CIs tillvägagångssätt av någon anledning
 	}
 
 	/**

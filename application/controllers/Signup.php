@@ -288,8 +288,8 @@ class Signup extends CI_Controller
 			else
 				$this->load->view('signup/login_form', array('fail' => true));
 		}
-		else //variabler finns inte
-			show_error('Variabler saknas vid inloggningsförsök.');
+		else //post-variabler finns inte
+			redirect('signup');
 	}
 
 	/**
@@ -302,7 +302,7 @@ class Signup extends CI_Controller
 	{
 		if(!$this->member->valid)
 		{
-			$this->load->view('signup/login_form');
+			$this->load->view('login_form');
 			return false;
 		}
 
@@ -313,8 +313,5 @@ class Signup extends CI_Controller
 	{
 		if($this->member->id != 1655) //Smorfty only
 			show_404();
-		
-		// $this->load->library('phpbb');
-		// $this->phpbb->add_user_from_smf(1713, 'foobar'); //thokawi
 	}
 }

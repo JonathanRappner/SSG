@@ -6,6 +6,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Phpbb
 {
 	protected $CI;
+	private $phpbb_dummy_user_id = 48;
 
 	public function __construct()
 	{
@@ -26,7 +27,6 @@ class Phpbb
 		//hämta data från smf_members och ssg_members
 		$sql =
 			'SELECT
-				LOWER(member_name) AS username_clean,
 				real_name AS username,
 				email_address,
 				date_registered,
@@ -45,7 +45,7 @@ class Phpbb
 		//lägg till phpbb-användare
 		$phpbb_user_id = $this->create_user(
 			$member->username,
-			$member->username_clean,
+			strtolower($member->username),
 			$password,
 			$member->email_address,
 			$member->date_registered,
@@ -134,12 +134,115 @@ class Phpbb
 	 * @param string $hash
 	 * @return bool
 	 */
-	public function check($password, $hash)
+	public function check_password($password, $hash)
 	{
 		$salt = substr($hash, 0, 29);
 		$new_hash = crypt($password, $salt);
 
 		return $new_hash === $hash;
+	}
+
+
+	public function get_smf_thread($topic_id)
+	{
+		$thread = new stdClass;
+
+		//topic
+		$sql =
+			'SELECT
+				t.id_member_started AS author_id,
+				ssg_mem.phpbb_user_id AS author_phpbb_id,
+				m.real_name AS author_name,
+				t.num_views
+			FROM smf_topics t
+			INNER JOIN smf_members m
+				ON t.id_member_started = m.id_member
+			LEFT OUTER JOIN ssg_members ssg_mem
+				ON t.id_member_started = ssg_mem.id
+			WHERE id_topic = ?';
+		$thread->topic = $this->CI->db->query($sql, $topic_id)->row();
+
+		//posts
+		$sql =
+			'SELECT
+				mes.id_member AS author_id,
+				ssg_mem.phpbb_user_id AS author_phpbb_id,
+				mem.real_name AS author_name,
+				mes.poster_time AS created_time,
+				mes.subject,
+				mes.modified_time,
+				mes.body
+			FROM smf_messages mes
+			INNER JOIN smf_members mem #smf_members
+				ON mes.id_member = mem.id_member
+			LEFT OUTER JOIN ssg_members ssg_mem #ssg_member
+				ON mes.id_member = ssg_mem.id
+			WHERE id_topic = ?
+			ORDER BY poster_time ASC';
+		$thread->posts = $this->CI->db->query($sql, $topic_id)->result();
+
+		return $thread;
+	}
+
+
+	public function create_thread($thread, $forum_id)
+	{
+		assert(count($thread->posts) > 0);
+
+		//sätt author_phpbb_id till dummy-user om null
+		foreach($thread->posts as &$pst)
+			if($pst->author_phpbb_id == null)
+				$pst->author_phpbb_id = $this->phpbb_dummy_user_id;
+
+		//skapa topic
+		$data = array(
+			'forum_id' => $forum_id,
+			'topic_title' => $thread->posts[0]->subject,
+			'topic_poster' => $thread->posts[0]->author_phpbb_id,
+			'topic_time' => $thread->posts[0]->created_time,
+			'topic_views' => $thread->topic->num_views,
+			'topic_first_poster_name' => $thread->posts[0]->author_name,
+			'topic_first_poster_colour' => 'FFFFFF',
+			'topic_last_poster_id' => end($thread->posts)->author_phpbb_id,
+			'topic_last_poster_name' => end($thread->posts)->author_name,
+			'topic_last_poster_colour' => 'FFFFFF',
+			'topic_last_post_subject' => end($thread->posts)->subject,
+			'topic_last_post_time' => end($thread->posts)->created_time,
+			'topic_visibility' => 1,
+			'topic_posts_approved' => count($thread->posts),
+		);
+		$this->CI->db->insert('phpbb_topics', $data);
+		$topic_id = $this->CI->db->insert_id();
+		// $topic_id = 0;//////////////////////////////////
+
+		//skapa posts
+		$first_post_id = null;
+		$last_post_id = null;
+		foreach($thread->posts as $post)
+		{
+			$data = array(
+				'topic_id' => $topic_id,
+				'forum_id' => $forum_id,
+				'poster_id' => $post->author_phpbb_id,
+				'post_time' => $post->created_time,
+				'post_subject' => $post->subject,
+				'post_text' => $post->body,
+				'post_visibility' => 1,
+				'post_checksum' => md5($post->body),
+				'bbcode_uid' => substr(base_convert(uniqid(), 16, 36), 0, 8), //inte 100% legit men ska nog funka bra
+			);
+			$post_id = $this->CI->db->insert('phpbb_posts', $data);
+			// $post_id = 0;////////////////////////
+			
+			$last_post_id = $post_id;
+			if($first_post_id == null)
+				$first_post_id = $post_id;
+		}
+
+		//uppdatera topic
+		$this->CI->db
+			->where(array('topic_id' => $topic_id))
+			->update('phpbb_topics', array('topic_first_post_id' => $first_post_id, 'topic_last_post_id' => $last_post_id));
 	}
 }
 ?>

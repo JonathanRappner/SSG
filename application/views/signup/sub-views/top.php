@@ -14,7 +14,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			</li>
 
 			<li class="nav-item<?php echo $this->current_page == 'events' ? ' active' : null;?>">
-				<a class="nav-link" href="<?php echo base_url();?>">Events</a>
+				<a class="nav-link" href="<?php echo base_url('signup');?>">Events</a>
 			</li>
 
 			<li class="nav-item<?php echo $this->current_page == 'history' ? ' active' : null;?>">

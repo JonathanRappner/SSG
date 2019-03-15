@@ -21,12 +21,8 @@ class Member
 		// Assign the CodeIgniter super-object
 		$this->CI =& get_instance();
 
-		//är medlem redan inloggad?
-		if(!empty($this->CI->session->member_id))
-			$this->id = $this->CI->session->member_id;
-		else //ingen session finns, låt $this->is_valid vara false så login-formuläret visas
+		if(!$this->id = $this->get_phpbb_session_member())
 			return;
-		
 		
 		/*** Lyckad inloggning ***/
 		
@@ -53,6 +49,48 @@ class Member
 
 		//valid
 		$this->valid = true;
+	}
+
+
+	/**
+	 * Försöker identifiera inloggad användare (ssg_member.id) med hjälp av phpbb-cookie.
+	 * Ger false om ingen är inloggad.
+	 *
+	 * @return int SSG-medlems-id om inloggad, annars null.
+	 */
+	private function get_phpbb_session_member()
+	{
+		$regex_pattern = '/phpbb3_(\w){5}_sid/'; //ex: phpbb3_jyup2_sid, phpbb3_r9r3j_sid
+		$phpbb_session_id = null;
+		$member_id = null;
+
+		//leta efter session-id-cookie:n och spara värdet
+		foreach($_COOKIE as $key => $value)
+			if(preg_match($regex_pattern, $key))
+			{
+				$phpbb_session_id = $value;
+				break;
+			}
+		
+		//avbryt om ingen cookie hittades
+		if(empty($phpbb_session_id))
+			return null;
+		
+		//kolla upp session i db
+		$sql =
+			'SELECT m.id
+			FROM phpbb_sessions s
+			INNER JOIN ssg_members m
+				ON s.session_user_id = m.phpbb_user_id
+			WHERE session_id = ?';
+		$query = $this->CI->db->query($sql, $phpbb_session_id);
+
+		if($query->num_rows() <= 0)
+			return null;
+
+		$member_id = $query->row()->id;
+
+		return $member_id;
 	}
 
 	/**
@@ -91,7 +129,7 @@ class Member
 				role_id,
 				ssg_roles.name AS role_name
 			FROM smf_members
-			LEFT JOIN ssg_members
+			INNER JOIN ssg_members
 				ON smf_members.id_member = ssg_members.id
 			LEFT JOIN ssg_groups
 				ON ssg_members.group_id = ssg_groups.id

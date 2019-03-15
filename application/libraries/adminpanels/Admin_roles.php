@@ -263,7 +263,7 @@ class Admin_roles implements Adminpanel
 
 		$data = array(
 			'name' => $vars->name,
-			'name_long' => $vars->name_long,
+			'name_long' => empty($vars->name_long) ? null : $vars->name_long,
 			'sorting' => $vars->sorting,
 		);
 		$this->CI->db->where('id', $vars->id)->update('ssg_roles', $data);

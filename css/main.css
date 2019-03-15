@@ -1,0 +1,123 @@
+/* Huvudstyle för site och signup */
+
+/* mindre headings i sm */
+h1 { font-size: 2rem; }
+h4 { font-size: 1.5rem; }
+h6 { font-size: 1rem; }
+
+/* Medlemsnamn, grad-ikon och avatar-boxen */
+#userbox{
+	color: #000;
+	text-decoration: none;
+}
+
+/* Gradikon i toppraden */
+#userbox img.rank_icon{
+	width: 40px;
+	margin-left: 0;
+}
+
+/* Avatar i toppraden */
+#userbox .avatar{
+	width: 48px;
+	height: 48px;
+	margin-left: 6px;
+}
+
+/* Enhetsikoner */
+img.group_icon_16,
+img.group_icon_32{
+	width: 16px;
+	margin-right: 3px;
+    position: relative;
+    bottom: 2px;
+	left: 0px;
+}
+
+/* Gradikon */
+img.rank_icon{
+	width: 18px;
+    margin-right: 4px;
+    position: relative;
+    bottom: 2px;
+    left: 0px;
+}
+
+/* Gradikon, stor */
+img.rank_icon_big{
+	width: 32px;
+    margin-left: 4px;
+    position: relative;
+    bottom: 4px;
+    left: 0px;
+}
+
+/* Alerts */
+.alert{
+	padding: .5rem 1rem; /* mindre padding på mobil */
+}
+
+/* form input labels */
+form label{
+	font-weight: bold;
+}
+
+/* forms */
+input.invalid,
+select.invalid{
+	border: 1px solid red;
+}
+
+/* påverkar endast mobilversionen */
+.navbar-nav{
+	width: 100%;
+}
+
+/* borders på navbar sm-vy */
+.nav-link{
+	border-bottom: 1px solid #dee2e6;
+}
+
+/* navbar länk hover */
+.nav-link:hover{
+	border-radius: 5px;
+	background-color: #FAFAFA;
+}
+
+/* navbar aktiv länk */
+.navbar li.active{
+	font-weight: bold;
+}
+
+/* ingen underline på <abbr>, på mobil */
+abbr{
+	text-decoration: none !important;
+}
+
+/* signup-färger */
+.text-jip, .text-qip, .text-noshow, .text-signed, .text-notsigned, .text-awol{font-weight: bold; margin: 0 2px;}
+.text-signed{color: #28a745;}
+.text-jip{color: #285ca6;}
+.text-qip{color: #fea500;}
+.text-noshow{color: #fff; background-color: #fc302b; padding:2px 4px;}
+.text-noshow-light{padding:2px 4px;}
+.text-notsigned{color: #848484;}
+.text-awol{color: #fff; background-color: #7B23A8; padding:4px;}
+
+/* Layouts större än sm */
+@media (min-width: 576px) {
+	/* inga borders på navbar > sm */
+	.nav-link{
+		border: none;
+	}
+
+	/* större headings i > sm */
+	h1 { font-size: 3rem; }
+	h4 { font-size: 2rem; }
+	h6 { font-size: 1.5rem; }
+
+	/* Alerts */
+	.alert{
+		padding: .75rem 1.25rem; /* default padding */
+	}
+}

@@ -31,6 +31,7 @@ class April_fools
 
 	/**
 	 * Ger serie slumpmässiga emojis från $this->emojis.
+	 * $seed ser till att du alltid får samma grupp emojis varje gång du anropar metoden.
 	 *
 	 * @param string $seed Seed
 	 * @param int $count Antal emojis. Skippa för 0-3 emojis.

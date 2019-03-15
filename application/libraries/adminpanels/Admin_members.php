@@ -39,7 +39,7 @@ class Admin_members implements Adminpanel
 		{
 			assert($var2 == null || is_numeric($var2), "Inkorrekt sidnummer: $var2");
 			$this->page = $var2; //sida för medlemstabellen
-			$this->total_members = $this->CI->db->query('SELECT COUNT(*) AS count FROM ssg_members WHERE group_id IS NULL')->row()->count;
+			$this->total_members = $this->CI->db->query('SELECT COUNT(*) AS count FROM ssg_members INNER JOIN smf_members ON smf_members.id_member = ssg_members.id WHERE group_id IS NULL')->row()->count;
 			$this->members = $this->get_orphan_members($this->page, $this->results_per_page);
 			$this->groups = $this->get_active_groups();
 		}
@@ -540,6 +540,8 @@ class Admin_members implements Adminpanel
 				ssg_members.id, ssg_members.name, is_active,
 				roles.name AS role_name
 			FROM ssg_members
+			INNER JOIN smf_members #ge null-resultat om medlem är borttagen från smf_members
+				ON smf_members.id_member = ssg_members.id
 			LEFT JOIN ssg_roles roles
 				ON ssg_members.role_id = roles.id
 			WHERE group_id = ?
@@ -634,6 +636,8 @@ class Admin_members implements Adminpanel
 				ssg_members.id, ssg_members.name, is_active,
 				ssg_roles.name AS role_name
 			FROM ssg_members
+			INNER JOIN smf_members #ge null-resultat om medlem är borttagen från smf_members
+				ON smf_members.id_member = ssg_members.id
 			LEFT JOIN ssg_roles
 				ON ssg_members.role_id = ssg_roles.id
 			WHERE group_id IS NULL
@@ -735,11 +739,12 @@ class Admin_members implements Adminpanel
 		$this->CI->db->delete('ssg_permission_groups_members', array('member_id'=>$vars->member_id));
 
 		//lägg till rättigheter
-		foreach($vars->permission as $perm_id)
-		{
-			$data = array('member_id'=>$vars->member_id, 'permission_group_id'=>$perm_id);
-			$this->CI->db->insert('ssg_permission_groups_members', $data);
-		}
+		if(!empty($vars->permission))
+			foreach($vars->permission as $perm_id)
+			{
+				$data = array('member_id'=>$vars->member_id, 'permission_group_id'=>$perm_id);
+				$this->CI->db->insert('ssg_permission_groups_members', $data);
+			}
 	}
 
 	public function get_code()
