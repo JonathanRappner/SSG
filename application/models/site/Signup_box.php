@@ -10,10 +10,11 @@ class Signup_box extends CI_Model
 	{
 		parent::__construct();
 
-		
+		///////////////////////////inte 100% säker på att resten av konstruktorn är korrekt, testa att vara utloggad osv.
 		$this->event = $this->get_event();
 		$this->event->signups_count = $this->get_signups_count($this->event->event_id);
-		$this->event->member_signup = $this->get_member_signup($this->event->event_id, $this->member->id);
+		if($this->member->valid)
+			$this->event->member_signup = $this->get_member_signup($this->event->event_id, $this->member->id);
 	}
 
 	

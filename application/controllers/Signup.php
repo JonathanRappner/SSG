@@ -308,10 +308,4 @@ class Signup extends CI_Controller
 
 		return true;
 	}
-
-	public function test()
-	{
-		if($this->member->id != 1655) //Smorfty only
-			show_404();
-	}
 }

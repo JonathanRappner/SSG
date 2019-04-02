@@ -47,9 +47,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				echo '<img class="rank_icon d-none d-md-inline" src="'. base_url('images/rank_icons/'. $this->member->rank_icon) .'" title="'. $this->member->rank_name .'" data-toggle="tooltip" />';
 
 			//avatar
-			$avatar = !empty($this->member->avatar_url)
-				? $this->member->avatar_url
-				: base_url('images/unknown.png');
+			$avatar = $this->member->avatar_url;
 			echo "<img class='avatar rounded' src='$avatar' alt='Avatar'>"
 			?>
 			<p class="d-inline d-sm-none ml-2 text-nowrap"><strong><?php echo $this->member->name;?></strong></p>

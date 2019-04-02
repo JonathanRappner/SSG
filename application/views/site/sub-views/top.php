@@ -10,20 +10,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<nav class="col-sm navbar navbar-expand-sm navbar-light text-nowrap">
 		<ul class="navbar-nav">
 			
-			<li class="nav-item<?php echo $this->current_page == 'news' ? ' active' : null;?>">
-				<a class="nav-link" href="<?php echo base_url();?>">Hem</a>
+			<li class="nav-item<?=$this->current_page == 'news' ? ' active' : null?>">
+				<a class="nav-link" href="<?=base_url()?>">Hem</a>
 			</li>
 			
 			<li class="nav-item">
-				<a class="nav-link" href="<?php echo base_url('forum');?>">Forum</a>
+				<a class="nav-link" href="<?=base_url('forum')?>">Forum</a>
 			</li>
 			
 			<li class="nav-item">
-				<a class="nav-link" href="<?php echo base_url('signup');?>">Anmälning</a>
+				<a class="nav-link" href="<?=base_url('signup')?>">Anmälning</a>
 			</li>
 			
 			<li class="nav-item">
-				<a class="nav-link" href="<?php echo base_url('admin');?>">Admin</a>
+				<a class="nav-link" href="<?=base_url('site/members')?>">Medlemmar</a>
+			</li>
+			
+			<li class="nav-item<?=$this->current_page == 'streamers' ? ' active' : null?>">
+				<a class="nav-link" href="<?=base_url('site/streamers')?>">Streamers</a>
+			</li>
+			
+			<li class="nav-item">
+				<a class="nav-link" href="<?=base_url('admin')?>">Admin</a>
 			</li>
 
 		</ul>
@@ -41,7 +49,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		
 		<?php if($this->member->valid):?>
 		<div id="userbox">
-			<span class="d-none d-md-inline text-nowrap"><strong><?php echo $this->member->name;?></strong></span>
+			<span class="d-none d-md-inline text-nowrap"><strong><?=$this->member->name;?></strong></span>
 			<?php
 			//grad-ikon
 			if(isset($this->member->rank_id))
@@ -53,12 +61,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				: base_url('images/unknown.png');
 			echo "<img class='avatar rounded' src='$avatar' alt='Avatar'>"
 			?>
-			<p class="d-inline d-sm-none ml-2 text-nowrap"><strong><?php echo $this->member->name;?></strong></p>
+			<p class="d-inline d-sm-none ml-2 text-nowrap"><strong><?=$this->member->name;?></strong></p>
 		</div>
 		<?php else:?>
 			<div class="mt-2">
-				<a class="btn btn-primary" href="<?php echo base_url('forum/ucp.php?mode=login');?>">Logga in</a>
-				<a class="btn btn-success" href="<?php echo base_url('forum/ucp.php?mode=register');?>">Registrera dig</a>
+				<a class="btn btn-primary" href="<?=base_url('forum/ucp.php?mode=login');?>">Logga in</a>
+				<a class="btn btn-success" href="<?=base_url('forum/ucp.php?mode=register');?>">Registrera dig</a>
 			</div>
 		<?php endif;?>
 

@@ -21,7 +21,14 @@ class Member
 		// Assign the CodeIgniter super-object
 		$this->CI =& get_instance();
 
-		if(!$this->id = $this->get_phpbb_session_member())
+		//hämta inloggad medlem från phpbb-session, via cookies (nya)
+		// if(!$this->id = $this->get_phpbb_session_member())
+		// 	return;
+
+		//hämta inloggad medlem från session-variabler (gamla standalone-session som autenticeras via loginform->smf-lösenord)
+		if(!empty($this->CI->session->member_id))
+			$this->id = $this->CI->session->member_id;
+		else //ingen session finns, låt $this->is_valid vara false så login-formuläret visas
 			return;
 		
 		/*** Lyckad inloggning ***/
@@ -50,7 +57,6 @@ class Member
 		//valid
 		$this->valid = true;
 	}
-
 
 	/**
 	 * Försöker identifiera inloggad användare (ssg_member.id) med hjälp av phpbb-cookie.
@@ -121,7 +127,7 @@ class Member
 
 		$sql =
 			'SELECT
-				avatar, registered_date, uid, is_active, group_id,
+				registered_date, uid, is_active, group_id,
 				id_member AS id,
 				ssg_members.name AS name,
 				ssg_groups.name AS group_name,
@@ -143,32 +149,8 @@ class Member
 			show_error("Hittade inte medlem med id: $member_id i databasen.");
 
 		//--Avatar--
-		//om ingen extern avatar är angiven: kolla om medlem har avatar liggande på servern
-		if(empty($member_data->avatar))
-		{
-			// /avs/avatar_<member_id>_<unix_date>.jpeg
-			// ex: /avs/avatar_1655_1516569554.jpeg
-			$pattern_avatar = "/(?<=avatar_)$member_id/";
-			$local_avatars = array(); //filnamn för denna användarens avatarer (kan finnas flera)
-
-			//kolla genom all avatarer och leta efter match
-			foreach(scandir('../avs') as $file_name)
-			{
-				$matches = array();
-				preg_match($pattern_avatar, $file_name, $matches);
-				if(count($matches) > 0)
-					$local_avatars[] = $file_name;
-			}
-
-			//lokal(a) avatar(er) hittades
-			//om inte så är avatar tom eller extern
-			if(count($local_avatars) > 0)
-			{
-				sort($local_avatars); //sortera, stigande ordning
-				$member_data->avatar_url = base_url('../avs/'. end($local_avatars)); //hämta högsta (sista) avataren, lägg till lokal-url
-				unset($member_data->avatar);
-			}
-		}
+		$member_data->avatar_url = $this->get_smf_avatar($member_id);
+		// $member_data->avatar_url = $this->get_phpbb_avatar($member_id);
 
 		//--Permission Groups--
 		$sql =
@@ -216,6 +198,90 @@ class Member
 		}
 		
 		return $member_data;
+	}
+
+	/**
+	 * Hitta medlemmens SMF-avatar.
+	 * Lokal eller extern.
+	 * Om ingen hittades, returnera unknown.png-bilden.
+	 *
+	 * @param int $member_id
+	 * @return string Avatarens fulla url.
+	 */
+	public function get_smf_avatar($member_id)
+	{
+		//försök hämta avatar-url från db
+		$avatar_url = $this->CI->db->query('SELECT avatar FROM smf_members WHERE id_member = ?', $member_id)->row()->avatar;
+		
+		if(empty($avatar_url)) //avatar-fältet är tomt, leta efter avatar-fil på servern
+		{
+			// leta i avs-mappen efter en avatar:
+			// /avs/avatar_<member_id>_<unix_date>.jpeg
+			// ex: /avs/avatar_1655_1516569554.jpeg
+			$pattern_avatar = "/(?<=avatar_)$member_id/";
+			$local_avatars = array(); //filnamn för denna användarens avatarer (kan finnas flera)
+
+			//kolla genom all avatarer och leta efter match
+			foreach(scandir('../avs') as $file_name)
+			{
+				$matches = array();
+				preg_match($pattern_avatar, $file_name, $matches);
+				if(count($matches) > 0)
+					$local_avatars[] = $file_name;
+			}
+
+			//lokal(a) avatar(er) hittades
+			if(count($local_avatars) > 0) //lokal avatar(er) hittades
+			{
+				sort($local_avatars); //sortera, stigande ordning
+				return base_url('../avs/'. end($local_avatars)); //hämta högsta (sista) avataren, lägg till lokal-url
+			}
+			else //medlemmen har ingen avatar
+				return base_url('images/unknown.png');
+		}
+		else //avatar är extern
+			return $avatar_url;
+
+
+		// //om ingen extern avatar är angiven: kolla om medlem har avatar liggande på servern
+		// if(empty($member_data->avatar))
+		// {
+			
+
+			
+		// }
+	}
+
+	/**
+	 * Hitta medlemmens phpbb3-avatar.
+	 * Lokal, extern eller gravatar.
+	 * Om ingen hittades, returnera unknown.png-bilden. 
+	 *
+	 * @param int $member_id
+	 * @return string Avatarens fulla url.
+	 */
+	public function get_phpbb_avatar($member_id)
+	{
+		$sql =
+			'SELECT
+				phpbb.user_avatar,
+				phpbb.user_avatar_type,
+				phpbb.user_avatar_width
+			FROM ssg_members m
+			LEFT OUTER JOIN phpbb_users phpbb
+				ON m.phpbb_user_id = phpbb.user_id
+			WHERE m.id = ?';
+		$row = $this->CI->db->query($sql, $member_id)->row();
+
+		//avatar-länk
+		if(empty($row->user_avatar_type)) //ingen avatar
+			return base_url('images/unknown.png');
+		else if($row->user_avatar_type == 'avatar.driver.upload') //avatar är upladdad på servern
+			return base_url("forum/download/file.php?avatar={$row->user_avatar}");
+		else if($row->user_avatar_type == 'avatar.driver.remote') //remote avatar
+			return $row->user_avatar;
+		else if($row->user_avatar_type == 'avatar.driver.gravatar') //gravatar
+			return 'https://secure.gravatar.com/avatar/'. md5($row->user_avatar) .'?s='. $row->user_avatar_width;
 	}
 
 	/**

@@ -5,13 +5,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * Den här klassen använder sig av tabellen ssg_intervals.
  * Varje gång den laddas (när en användare besöker hemsidan) så kollar den med tabellen
  * när intervallens kod senast kördes. Om perioden sedan dess är högre än dess intervall
- * så körs koden och last_performed_datetime i tabellen uppdateras.
+ * så körs koden och last_performedtime i tabellen uppdateras.
  * 
  * Kom ihåg att t.ex. ett dagligt intervall inte nödvändigtvis utförs varje dag.
  * 
  * Intervall-ID:
- * 1 = dagligen
- * 2 = veckovis
+ * 1 = Dagligen
+ * 2 = Veckovis
+ * 3 = Var 10:de minut
  */
 class Intervals
 {
@@ -28,6 +29,7 @@ class Intervals
 		assert(count($intervals) >= 2);
 		if($intervals[1]) $this->daily();
 		if($intervals[2]) $this->weekly();
+		// if($intervals[3]) $this->ten_minutes(); kör inte 10-min-metoden här, API-kontrollern använder den för att cacha streamer-data
 	}
 
 	/**
@@ -43,7 +45,7 @@ class Intervals
 		$sql =
 			'SELECT
 				id,
-				DATEDIFF(NOW(), last_performed_date) >= interval_length_days AS perform
+				TIMEDIFF(NOW(), last_performed) >= length AS perform #timespan since last perform >= stated timespan
 			FROM ssg_intervals';
 		$query = $this->CI->db->query($sql);
 		foreach ($query->result() as $row)
@@ -62,12 +64,13 @@ class Intervals
 		//moduler
 		$this->CI->load->library('eventsignup');
 
+
 		//metoder
 		$this->CI->eventsignup->create_auto_events();
 		$this->archive_old_events();
 		$this->remove_outdated_recesses();
 
-		$this->update_interval(1, date('Y-m-d'));
+		$this->update_interval(1);
 	}
 
 	/**
@@ -79,23 +82,22 @@ class Intervals
 	{
 		//metoder här
 
-		$this->update_interval(2, date('Y-m-d'));
+		$this->update_interval(2);
 	}
 
 	/**
 	 * Uppdatera när intervallen senast kördes
 	 *
-	 * @param int $interval_id
-	 * @param string $date_time
+	 * @param int $interval_id 1=daily, 2=weekly, 3=10min
 	 * @return void
 	 */
-	private function update_interval($interval_id, $date_time)
+	private function update_interval($interval_id)
 	{
 		$sql =
 			"UPDATE ssg_intervals
-			SET last_performed_date = ?
+			SET last_performed = NOW()
 			WHERE id = ?";
-		$this->CI->db->query($sql, array($date_time, $interval_id));
+		$this->CI->db->query($sql, array($interval_id));
 	}
 
 	/**

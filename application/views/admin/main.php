@@ -20,7 +20,7 @@ $this->current_page = 'main';
 	admin main
 
 	<!-- Footer -->
-	<?php $this->load->view('main/sub-views/footer');?>
+	<?php $this->load->view('site/sub-views/footer');?>
 
 </div>
 
