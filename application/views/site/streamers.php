@@ -10,10 +10,9 @@ $this->current_page = 'streamers';
 
 	<!-- CSS/JS -->
 	<?php $this->load->view('site/sub-views/head');?>
+
+	<!-- Custom CSS/JS -->
 	<link rel="stylesheet" href="<?php echo base_url('css/site/streamers.css');?>">
-	<script>
-		var streamers = <?=json_encode($streamers)?>;
-	</script>
 	<script type="text/javascript" src="/ssg/new/js/model_streamers.js"></script>
 	<script type="text/javascript" src="/ssg/new/js/site/streamers.js"></script>
 
@@ -36,28 +35,38 @@ $this->current_page = 'streamers';
 
 	<div id="streamers">
 
-		<h3>Online</h3>
-		<ul class="online"></ul>
-
-		<h3>Offline</h3>
-		<ul class="offline">
+		<div class="row">
 			<?php
-			//skriv ut länkar, föredra youtube, js kan byta länken senare om det behövs
+			//
 			foreach($streamers as $streamer)
 			{
-				$row = $streamer->name;
-				if(isset($streamer->channel_youtube))
-					$row .= " (<a href=\"https://youtube.com/channel/$streamer->channel_youtube\" class=\"channel_youtube\" target='_blank'>YouTube</a>)";
-				
-				if(isset($streamer->channel_twitch))
-					$row .= " (<a href=\"https://twitch.tv/$streamer->channel_twitch\" class=\"channel_twitch\" target='_blank'>Twitch</a>)";
-
-				echo '<li data-member_id="'. $streamer->member_id .'">';
-					echo $row;
-				echo '</li>';
+				echo '<div class="col-12 col-sm-6">';
+				echo "<h3>". group_icon($streamer->group_code) ."{$streamer->name}</h3>";
+				if($streamer->prefered == 'youtube')
+				{
+					echo
+					"<iframe
+						width='100%'
+						src='https://www.youtube.com/embed/live_stream?channel={$streamer->channel_youtube}'
+						frameborder='0'
+						allowfullscreen>
+					</iframe>";
+				}
+				else
+				{
+					echo
+					"<iframe
+						src='https://player.twitch.tv/?autoplay=false&channel={$streamer->channel_twitch}'
+						width='100%'
+						frameborder='0'
+						scrolling='no'
+						allowfullscreen='true'>
+					</iframe>";
+				}
+				echo '</div>';
 			}
 			?>
-		</ul>
+		</div>
 
 	</div>
 

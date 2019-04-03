@@ -19,8 +19,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class API extends CI_Controller
 {
 	private 
-		$method,
-		$update_interval = 10; //10 min mellan uppdateringar
+		$method; //get/post/put/delete etc.
 
 
 	public function __construct()
@@ -101,10 +100,10 @@ class API extends CI_Controller
 		if($this->method != 'get' || !is_numeric($member_id))
 			$this->output(null, 400); //bad request
 
-		$minutes_since_update = $this->streamers->check_interval();
+		$do_update = $this->streamers->check_interval();
 
 		//om gammal data, uppdatera
-		if($minutes_since_update >= $this->update_interval)
+		if($do_update)
 		{
 			//hämta data från youtube/twitch och spara i db
 			//////////////avstängt temporärt
@@ -112,6 +111,7 @@ class API extends CI_Controller
 			// $this->streamers->update_twitch();
 		}
 
+		//hämta data från db
 		$streamer = $this->streamers->get_streamer($member_id);
 		// $streamer->minutes_since_update = $minutes_since_update; //////////////avstängt temporärt
 
@@ -123,10 +123,22 @@ class API extends CI_Controller
 		//moduler
 		$this->load->model('api/streamers');
 
+		$do_update = $this->streamers->check_interval();
+
+		//om gammal data, uppdatera
+		if($do_update)
+		{
+			//hämta data från youtube/twitch och spara i db
+			//////////////avstängt temporärt
+			// $this->streamers->update_youtube();
+			// $this->streamers->update_twitch();
+		}
+
 		//endast GET-requests
 		if($this->method != 'get')
 			$this->output(null, 400); //bad request
 		
+		//hämta data från db
 		$streamers = $this->streamers->get_streamers();
 
 		$this->output($streamers);

@@ -28,7 +28,7 @@ class Streamers extends CI_Model
 	 * Hämta antalet minuter sedan senaste intervall.
 	 * Om den är mer än 10 min: uppdatera tidpunkten.
 	 *
-	 * @return int Antalet minuter sedan senaste intervallen.
+	 * @return bool Är det tajm för en update?
 	 */
 	public function check_interval()
 	{
@@ -41,9 +41,13 @@ class Streamers extends CI_Model
 
 		//uppdatera timespan om den har gått över tiden
 		if($timespan >= TIMESPAN_MAX)
+		{
 			$this->db->query('UPDATE ssg_intervals SET last_performed = NOW() WHERE id = 3');
-
-		return $timespan; //tid sedan förra update:en
+			return true; //tid sedan förra update:en
+		}
+		else
+			return false;
+		
 	}
 
 
@@ -140,6 +144,7 @@ class Streamers extends CI_Model
 				#s.youtube_video_id,
 				#s.youtube_video_id IS NOT NULL AS youtube_online,
 				#twitch_online,
+				s.prefered,
 				m.name AS name,
 				m.id AS member_id,
 				g.name AS group_name,
@@ -176,6 +181,7 @@ class Streamers extends CI_Model
 				#s.youtube_video_id,
 				#s.youtube_video_id IS NOT NULL AS youtube_online,
 				#twitch_online,
+				s.prefered,
 				m.name AS name,
 				m.id AS member_id,
 				g.name AS group_name,
