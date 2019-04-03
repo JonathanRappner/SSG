@@ -107,12 +107,13 @@ class API extends CI_Controller
 		if($minutes_since_update >= $this->update_interval)
 		{
 			//hämta data från youtube/twitch och spara i db
-			$this->streamers->update_youtube();
-			$this->streamers->update_twitch();
+			//////////////avstängt temporärt
+			// $this->streamers->update_youtube();
+			// $this->streamers->update_twitch();
 		}
 
 		$streamer = $this->streamers->get_streamer($member_id);
-		$streamer->minutes_since_update = $minutes_since_update;
+		// $streamer->minutes_since_update = $minutes_since_update; //////////////avstängt temporärt
 
 		$this->output($streamer);
 	}
@@ -125,7 +126,9 @@ class API extends CI_Controller
 		//endast GET-requests
 		if($this->method != 'get')
 			$this->output(null, 400); //bad request
+		
+		$streamers = $this->streamers->get_streamers();
 
-		$this->output(null, 503); //service unavailable
+		$this->output($streamers);
 	}
 }

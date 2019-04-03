@@ -90,9 +90,6 @@ class Streamers extends CI_Model
 			{
 				echo 'fail';
 			}
-			
-			
-			
 		}
 		$promise->wait(); //vänta på alla responses
 	}
@@ -140,11 +137,11 @@ class Streamers extends CI_Model
 			'SELECT
 				s.channel_youtube,
 				s.channel_twitch,
-				s.youtube_video_id,
-				s.youtube_video_id IS NOT NULL AS youtube_online,
-				twitch_online,
+				#s.youtube_video_id,
+				#s.youtube_video_id IS NOT NULL AS youtube_online,
+				#twitch_online,
 				m.name AS name,
-				m.id AS id,
+				m.id AS member_id,
 				g.name AS group_name,
 				g.code AS group_code,
 				m.group_id,
@@ -160,7 +157,7 @@ class Streamers extends CI_Model
 			WHERE s.member_id = ?';
 		$row = $this->db->query($sql, $member_id)->row();
 
-		$row->youtube_url = $this->youtube_stream_url_prefix . $row->youtube_video_id;
+		// $row->youtube_url = $this->youtube_stream_url_prefix . $row->youtube_video_id;
 
 		return $row;
 	}
@@ -176,11 +173,11 @@ class Streamers extends CI_Model
 			'SELECT
 				s.channel_youtube,
 				s.channel_twitch,
-				s.youtube_video_id,
-				s.youtube_video_id IS NOT NULL AS youtube_online,
-				twitch_online,
+				#s.youtube_video_id,
+				#s.youtube_video_id IS NOT NULL AS youtube_online,
+				#twitch_online,
 				m.name AS name,
-				m.id AS id,
+				m.id AS member_id,
 				g.name AS group_name,
 				g.code AS group_code,
 				m.group_id,
@@ -194,14 +191,15 @@ class Streamers extends CI_Model
 			LEFT JOIN ssg_roles r
 				ON m.role_id = r.id
 			ORDER BY
-				online_youtube DESC,
-				online_twitch DESC,
+				#online_youtube DESC,
+				#online_twitch DESC,
+				m.is_active DESC,
 				g.sorting ASC,
 				r.sorting ASC';
-		$result = $this->db->query($sql, $member_id)->result();
+		$result = $this->db->query($sql)->result();
 
-		foreach($result as $row)
-			$row->youtube_url = $this->youtube_stream_url_prefix . $row->youtube_video_id;
+		// foreach($result as $row)
+		// 	$row->youtube_url = $this->youtube_stream_url_prefix . $row->youtube_video_id;
 
 		return $result;
 	}
