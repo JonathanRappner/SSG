@@ -5,19 +5,22 @@
 class Streamers extends CI_Model
 {
 	private
-		$youtube_api_key = 'AIzaSyBCgr9Vf9yh9h6QadScVmUcYbS2Xt6a_AQ',
+		$youtube_api_key,
 		$youtube_stream_url_prefix = 'https://www.youtube.com/watch?v=',
 		$youtube_api_url_live_prefix = 'https://www.googleapis.com/youtube/v3/search?part=snippet&eventType=live&type=video'; //fort. &key=<key>&channelId=<channel id>
 
 	private
-		$twitch_api_key = 'gjcr2q76gff0ggip597gdvnieesc0h', //localhost-alternativ: i9xuh4xflec3n05mns7ynas653j2x0
+		$twitch_api_key,
 		$twitch_stream_url_prefix = 'https://www.twitch.tv/',
-		$twitch_api_url_live_prefix = '';
+		$twitch_api_url_live_prefix = '???';
 
 	public function __construct()
 	{
 		parent::__construct();
 
+		$this->load->helper('api_keys');
+		$this->youtube_api_key = api_key('youtube');
+		$this->twitch_api_key = api_key('twitch');
 		define('TIMESPAN_MAX', 10); //10 min mellan uppdateringar/intervaller
 	}
 

@@ -48,6 +48,17 @@ class Site extends CI_Controller
 		if($this->member->id != 1655) //Smorfty only
 			show_404();
 		
-		
+		echo "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/live_stream?channel=UCODDGRneUTTsCS419HWafMA\" frameborder=\"0\" allowfullscreen></iframe>";
+		echo "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/live_stream?channel=UCEuMm7uHImRKi_dkIgodBfg\" frameborder=\"0\" allowfullscreen></iframe>";
+
+		echo
+		'<iframe
+			src="https://player.twitch.tv/?autoplay=false&channel=smorfty"
+			width="560"
+			height="315"
+			frameborder="0"
+			scrolling="no"
+			allowfullscreen="true">
+		</iframe>';
 	}
 }

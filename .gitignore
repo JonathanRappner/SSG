@@ -8,6 +8,7 @@ index.live.php
 
 #config files
 application/config/database.php
+application/helpers/api_keys_helper.php
 
 #logs
 application/logs
