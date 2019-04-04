@@ -45,7 +45,7 @@ class Intervals
 		$sql =
 			'SELECT
 				id,
-				TIMEDIFF(NOW(), last_performed) >= length AS perform #timespan since last perform >= stated timespan
+				DATEDIFF(NOW(), DATE(last_performed)) >= length AS perform #avrundat till dagar
 			FROM ssg_intervals';
 		$query = $this->CI->db->query($sql);
 		foreach ($query->result() as $row)

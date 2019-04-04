@@ -44,7 +44,7 @@ $this->current_page = 'news';
 		</div>
 
 		<div class="col-12 rounded bg-info text-light mb-2">
-			Aktiva streamers: <strong>Knatte</strong>, <strong>Fnatte</strong>, <strong>Tjatte</strong>
+			Streamar just nu: <strong>Knatte</strong>, <strong>Fnatte</strong>, <strong>Tjatte</strong>
 		</div>
 		
 		<!-- Left column -->

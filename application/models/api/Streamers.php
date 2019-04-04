@@ -199,9 +199,7 @@ class Streamers extends CI_Model
 			ORDER BY
 				#online_youtube DESC,
 				#online_twitch DESC,
-				m.is_active DESC,
-				g.sorting ASC,
-				r.sorting ASC';
+				s.sorting ASC';
 		$result = $this->db->query($sql)->result();
 
 		// foreach($result as $row)

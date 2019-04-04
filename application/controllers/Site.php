@@ -3,12 +3,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Site extends CI_Controller
 {
+	public $pm_count;
+	
+	public function __construct()
+	{
+		parent::__construct();
+
+		$this->load->model('site/pm_alert');
+		$this->pm_count = $this->pm_alert->get_pm_count($this->member->id); //antal olästa pm
+	}
+
 	public function index()
 	{
-		//data
+		//moduler
 		$this->load->model('site/signup_box');
 		$this->load->library('Attendance');
-		$attendance_types = $this->attendance->get_all();
+
+		//data
+		$attendance_types = $this->attendance->get_all(); //till signupbox
+		
 
 		//vy
 		$this->load->view('site/news', array_merge((array)$this->signup_box->event, array('attendance_types' => $attendance_types)));
@@ -16,6 +29,9 @@ class Site extends CI_Controller
 
 	public function members()
 	{
+		//moduler
+		$this->load->model('site/pm_alert');
+
 		//vy
 		$this->load->view('site/members');
 	}

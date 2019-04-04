@@ -30,18 +30,17 @@ $this->current_page = 'streamers';
 
 	<div id="intro" class="mb-4">
 		<p>Många av SSG:s medlemmar streamar våra OP:ar och träningar.</p>
-		<p>Här ser du vilka som streamar just nu samt länkar till deras YouTube eller Twitch-kanaler.</p>
+		<p>Här kan du se om någon av dem är live just nu eller titta i deras video-arkiv på Twitch eller YouTube.</p>
 	</div>
 
 	<div id="streamers">
 
 		<div class="row">
 			<?php
-			//
 			foreach($streamers as $streamer)
 			{
-				echo '<div class="col-12 col-sm-6">';
-				echo "<h3>". group_icon($streamer->group_code) ."{$streamer->name}</h3>";
+				echo '<div class="col-6 col-md-4">';
+				echo '<h3>'. group_icon($streamer->group_code, $streamer->group_name, true) . $streamer->name .'</h3>';
 				if($streamer->prefered == 'youtube')
 				{
 					echo

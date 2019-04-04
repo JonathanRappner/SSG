@@ -88,23 +88,32 @@ function pagination_base($page, $total_results, $results_per_page, $link_prefix,
 
 /**
  * Ger HTML-kod för grupp-ikon.
- * Använder en 16px-ikon för desktop och 32px-ikon för mobil.
+ * Kan skriva ut 16px-version och 32px-version.
+ * Eftersom mobiltelefoner använder högre zoom-nivå (de är inte pixel-perfect) så ser en 16px-bild inte bra ut.
+ * Istället trycker vi ihop en 32px-ikon till 16px-storlek på mobiler men inte desktop.
  *
  * @param string $group_code Grupp-kod (ex. 'fa', 'vl')
+ * @param string $group_name Om grupp-namnet ska stå i tooltip, skriv in det här.
+ * @param boolean $big True ger 32px-ikon, false ger 16px-ikon.
  * @return void
  */
-function group_icon($group_code)
+function group_icon($group_code, $group_name = null, $big = false)
 {
 	//variabler
 	$no_icon = array('ja', 'ka', 'gb', 'ib'); //grupper som inte har ikoner
-	$icon_string_start = base_url("images/group_icons/$group_code");
+	$icon_string_start = base_url("images/group_icons/{$group_code}");
+	$tooltip_string = isset($group_name) ? "data-toggle=\"tooltip\" title=\"{$group_name}\"" : null;
 
 	if($group_code != null && !in_array($group_code, $no_icon))
 	{
-		return
-			'<img class="group_icon_16 d-none d-md-inline" src="'. $icon_string_start .'_16.png" />
-			<img class="group_icon_32 d-inline d-md-none" src="'. $icon_string_start .'_32.png" />';
+		if(!$big) //16px
+			return
+				"<img class=\"group_icon_16 d-none d-md-inline\" src=\"{$icon_string_start}_16.png\" {$tooltip_string} />
+				<img class=\"group_icon_16 d-inline d-md-none\" src=\"{$icon_string_start}_32.png\" {$tooltip_string} />";
+		else //32px
+			return "<img class=\"group_icon_32 d-inline\" src=\"{$icon_string_start}_32.png\" {$tooltip_string} />";
 	}
 	else
 		return '<i class="fas fa-question-circle"></i>';
 }
+

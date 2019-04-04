@@ -24,11 +24,19 @@ h6 { font-size: 1rem; }
 	margin-left: 6px;
 }
 
-/* Enhetsikoner */
-img.group_icon_16,
-img.group_icon_32{
+/* Enhetsikoner 16px */
+img.group_icon_16{
 	width: 16px;
 	margin-right: 3px;
+    position: relative;
+    bottom: 2px;
+	left: 0px;
+}
+
+/* Enhetsikoner 32px */
+img.group_icon_32{
+	width: 32px;
+	margin-right: 6px;
     position: relative;
     bottom: 2px;
 	left: 0px;

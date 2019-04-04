@@ -37,12 +37,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		</ul>
 	</nav>
 
+	<?php if($this->pm_count > 0):?>
 	<div class="col text-right">
-		<div class="rounded bg-danger text-light d-inline-block py-2 px-3 mt-2">
+		<a class="pm_alert rounded bg-danger d-inline-block py-2 px-3 mt-2" href="<?=base_url('forum/ucp.php?i=pm&folder=inbox')?>">
 			<i class="fas fa-envelope mr-2"></i>
-			Du har <strong>1337</strong> olästa meddelanden
-		</div>
+			Du har <strong><?=$this->pm_count?></strong> <?php echo $this->pm_count == 1 ? 'oläst meddelande' : 'olästa meddelanden';?>
+		</a>
 	</div>
+	<?php endif;?>
 
 	<!-- Inloggad som... -->
 	<div class="col-3-sm text-sm-right my-1">
