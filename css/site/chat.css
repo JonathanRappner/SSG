@@ -1,0 +1,44 @@
+/* --Chat-rutan-- */
+
+/* Wrapper */
+#chat{
+	height: 200px;
+
+}
+
+/* meddelande-listan */
+#chat-list{
+	width: 100%;
+	height: 160px;
+	padding: 0 0 0 10px;
+	overflow-y: scroll;
+	font-size: 0.8rem;
+}
+
+/* meddelande-rad */
+#chat li{
+	border-bottom: 1px solid #EEE;
+	list-style-type: none;
+	padding: 4px 0;
+}
+
+
+
+
+/* input-raden */
+#input_row{
+	height: 30px;
+}
+
+/* font-storlek på input-raden */
+#chat .input-group input,
+#chat .btn{
+	font-size: .8rem;
+	height: 30px;
+	padding: 4px 8px;
+}
+
+/* text-input */
+#chat .input-group input{
+	height: 30px;
+}

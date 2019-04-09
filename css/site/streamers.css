@@ -1,9 +1,10 @@
 /* Stylesheet för streamers-undersidan */
 
-#intro p{
-	margin: 0;
-}
+/* Introtext */
+#intro p { margin: 0; }
 
-iframe{
-	margin-bottom: 40px;
-}
+/* Streamer-namn-länkar */
+h3 a, h3 a:hover { color: #000; }
+
+/* stream iframes */
+iframe { margin-bottom: 40px; }

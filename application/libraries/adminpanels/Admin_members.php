@@ -387,7 +387,7 @@ class Admin_members implements Adminpanel
 
 
 		// formulär
-		if($this->CI->permissions->has_permissions(array('s0', 's1')))
+		if($this->CI->permissions->has_permissions(array('s0', 's1', 'grpchef')))
 		{
 			echo '<h5>Medlemsdata</h5>';
 			echo '<form action="'. base_url('signup/admin/members/update_member/') .'" method="post">';

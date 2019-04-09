@@ -13,8 +13,6 @@ $this->current_page = 'streamers';
 
 	<!-- Custom CSS/JS -->
 	<link rel="stylesheet" href="<?php echo base_url('css/site/streamers.css');?>">
-	<script type="text/javascript" src="/ssg/new/js/model_streamers.js"></script>
-	<script type="text/javascript" src="/ssg/new/js/site/streamers.js"></script>
 
 	<title>Swedish Strategic Group - Streamers</title>
 
@@ -39,8 +37,12 @@ $this->current_page = 'streamers';
 			<?php
 			foreach($streamers as $streamer)
 			{
-				echo '<div class="col-6 col-md-4">';
-				echo '<h3>'. group_icon($streamer->group_code, $streamer->group_name, true) . $streamer->name .'</h3>';
+				echo '<div class="col-12 col-sm-6 col-md-4 col-xl-3">';
+				echo '<h3>';
+					echo '<a href="'. ($streamer->prefered == 'youtube' ? "https://www.youtube.com/channel/{$streamer->channel_youtube}/videos" : "https://www.twitch.tv/{$streamer->channel_twitch}/videos") .'" target="_blank">';
+						echo group_icon($streamer->group_code, $streamer->group_name, true) . $streamer->name;
+					echo '</a>';
+				echo '</h3>';
 				if($streamer->prefered == 'youtube')
 				{
 					echo

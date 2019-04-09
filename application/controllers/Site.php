@@ -10,7 +10,10 @@ class Site extends CI_Controller
 		parent::__construct();
 
 		$this->load->model('site/pm_alert');
-		$this->pm_count = $this->pm_alert->get_pm_count($this->member->id); //antal olästa pm
+
+		//antal olästa pm
+		if($this->member->valid)
+			$this->pm_count = $this->pm_alert->get_pm_count($this->member->id);
 	}
 
 	public function index()

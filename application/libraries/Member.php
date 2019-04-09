@@ -21,16 +21,16 @@ class Member
 		// Assign the CodeIgniter super-object
 		$this->CI =& get_instance();
 
-		//hämta inloggad medlem från phpbb-session, via cookies (nya)
-		// if(!$this->id = $this->get_phpbb_session_member())
-		// 	return;
 
-		//hämta inloggad medlem från session-variabler (gamla standalone-session som autenticeras via loginform->smf-lösenord)
-		if(!empty($this->CI->session->member_id))
+		//försök hitta inloggad användare genom phpbb-cookie eller session-variabel
+		if($id = $this->get_phpbb_session_member()) //hämta inloggad medlem från phpbb-session, via cookies (nya)
+			$this->id = $id;
+		else if(!empty($this->CI->session->member_id)) //hämta inloggad medlem från session-variabler (gamla standalone-session som autenticeras via loginform->smf-lösenord)
 			$this->id = $this->CI->session->member_id;
-		else //ingen session finns, låt $this->is_valid vara false så login-formuläret visas
+		else //ingen session finns, låt $this->valid vara false så login-formuläret visas
 			return;
 		
+			
 		/*** Lyckad inloggning ***/
 		
 		// debugging
@@ -94,9 +94,7 @@ class Member
 		if($query->num_rows() <= 0)
 			return null;
 
-		$member_id = $query->row()->id;
-
-		return $member_id;
+		return $query->row()->id;
 	}
 
 	/**

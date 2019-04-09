@@ -8,6 +8,8 @@ $this->current_page = 'news';
 
 	<!-- CSS/JS -->
 	<?php $this->load->view('site/sub-views/head');?>
+	<link rel="stylesheet" href="<?php echo base_url('css/site/signup-box.css');?>">
+	<link rel="stylesheet" href="<?php echo base_url('css/site/chat.css');?>">
 	<script src="<?php echo base_url('js/deadline.js');?>"></script>
 
 	<title>Swedish Strategic Group</title>
@@ -39,22 +41,25 @@ $this->current_page = 'news';
 
 	<div class="row">
 
+		<?php if($this->member->valid):?>
+		<!-- Meddelanden -->
 		<div class="col-12 rounded bg-danger text-light mb-2">
 			Viktigt Meddelande!
 		</div>
-
-		<div class="col-12 rounded bg-info text-light mb-2">
-			Streamar just nu: <strong>Knatte</strong>, <strong>Fnatte</strong>, <strong>Tjatte</strong>
-		</div>
+		<?php endif;?>
 		
 		<!-- Left column -->
 		<div class="col-9">
 
-			<div class="row bg-warning text-light text-center" style="height:200px;">
-				scummbar
+			<?php if($this->member->valid):?>
+			<!-- Chat -->
+			<div id="chat" class="row">
+				<?php $this->load->view('site/sub-views/chat');?>
 			</div>
+			<?php endif;?>
 
-			<div class="row bg-primary text-light text-center" style="height:600px;">
+			<!-- News -->
+			<div class="row bg-warning text-light text-center" style="height:600px;">
 				nyhets-feed
 			</div>
 
