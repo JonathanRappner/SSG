@@ -7,19 +7,34 @@
 }
 
 /* meddelande-listan */
-#chat-list{
+ul.chat-list{
 	width: 100%;
-	height: 160px;
+	height: 162px;
 	padding: 0 0 0 10px;
+	margin: 0;
 	overflow-y: scroll;
 	font-size: 0.8rem;
 }
 
 /* meddelande-rad */
-#chat li{
-	border-bottom: 1px solid #EEE;
+ul.chat-list li{
+	border-bottom: 1px dashed rgb(216, 216, 216);
 	list-style-type: none;
-	padding: 4px 0;
+	padding: 3px 0;
+}
+ul.chat-list li:hover{ background-color:rgb(245, 245, 245); }
+
+/* namn-länk */
+ul.chat-list li a{
+	color: #000;
+	font-weight: bold;
+}
+
+/* datum-text */
+.timespan{
+	color:rgb(167, 167, 167);
+	font-size: 0.6rem;
+	margin: 0 0 0 2px;
 }
 
 
@@ -28,6 +43,8 @@
 /* input-raden */
 #input_row{
 	height: 30px;
+	padding-top: 4px;
+	/* box-shadow: rgba(0, 0, 0, 0.1) 0 -10px 10px -5px; */
 }
 
 /* font-storlek på input-raden */
@@ -41,4 +58,9 @@
 /* text-input */
 #chat .input-group input{
 	height: 30px;
+}
+
+/* formatting-info-knappen */
+#btn_info{
+	width:32px
 }

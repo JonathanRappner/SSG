@@ -24,7 +24,10 @@ class Member
 
 		//försök hitta inloggad användare genom phpbb-cookie eller session-variabel
 		if($id = $this->get_phpbb_session_member()) //hämta inloggad medlem från phpbb-session, via cookies (nya)
+		{
 			$this->id = $id;
+			$this->CI->session->member_id = $id;
+		}
 		else if(!empty($this->CI->session->member_id)) //hämta inloggad medlem från session-variabler (gamla standalone-session som autenticeras via loginform->smf-lösenord)
 			$this->id = $this->CI->session->member_id;
 		else //ingen session finns, låt $this->valid vara false så login-formuläret visas
@@ -290,17 +293,17 @@ class Member
 	 * @param string $password Lösenord
 	 * @return bool
 	 */
-	public function validate_login($username, $password)
+	public function validate_smf_login($username, $password)
 	{
 		//variabler
 		$salt = sha1(strtolower($username) . strip_tags($password));
 
 		$sql =
-			"SELECT id_member AS id
+			'SELECT id_member AS id
 			FROM smf_members
 			WHERE
 				member_name = ? &&
-				passwd = ?";
+				passwd = ?';
 		$query = $this->CI->db->query($sql, array($username, $salt));
 		
 		$row = $query->row();

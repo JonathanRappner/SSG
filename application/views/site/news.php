@@ -11,6 +11,7 @@ $this->current_page = 'news';
 	<link rel="stylesheet" href="<?php echo base_url('css/site/signup-box.css');?>">
 	<link rel="stylesheet" href="<?php echo base_url('css/site/chat.css');?>">
 	<script src="<?php echo base_url('js/deadline.js');?>"></script>
+	<script src="<?php echo base_url('js/site/chat.js');?>"></script>
 
 	<title>Swedish Strategic Group</title>
 
@@ -44,7 +45,10 @@ $this->current_page = 'news';
 		<?php if($this->member->valid):?>
 		<!-- Meddelanden -->
 		<div class="col-12 rounded bg-danger text-light mb-2">
-			Viktigt Meddelande!
+			Viktigt meddelande!
+		</div>
+		<div class="col-12 rounded bg-info text-light mb-2">
+			Inte lika viktigt meddelande.
 		</div>
 		<?php endif;?>
 		
@@ -54,7 +58,7 @@ $this->current_page = 'news';
 			<?php if($this->member->valid):?>
 			<!-- Chat -->
 			<div id="chat" class="row">
-				<?php $this->load->view('site/sub-views/chat');?>
+				<?php $this->load->view('site/sub-views/chat', array('chat_messages' => $chat_messages));?>
 			</div>
 			<?php endif;?>
 

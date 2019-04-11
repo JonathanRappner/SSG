@@ -31,7 +31,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			</li>
 			
 			<li class="nav-item">
-				<a class="nav-link" href="<?=base_url('admin')?>">Admin</a>
+				<a class="nav-link" href="<?=base_url('admin')?>">&gt;Admin&lt;</a>
 			</li>
 
 		</ul>

@@ -20,14 +20,19 @@ class Site extends CI_Controller
 	{
 		//moduler
 		$this->load->model('site/signup_box');
+		$this->load->model('site/chat');
 		$this->load->library('Attendance');
 
 		//data
 		$attendance_types = $this->attendance->get_all(); //till signupbox
-		
+		$chat_messages = $this->chat->get_messages(null, 16);
 
 		//vy
-		$this->load->view('site/news', array_merge((array)$this->signup_box->event, array('attendance_types' => $attendance_types)));
+		$this->load->view('site/news',
+			array_merge((array)$this->signup_box->event,
+				array('attendance_types' => $attendance_types, 'chat_messages' => $chat_messages)
+			)
+		);
 	}
 
 	public function members()

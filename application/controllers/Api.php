@@ -30,6 +30,20 @@ class API extends CI_Controller
 		$this->method = $this->input->method();
 	}
 
+	public function index()
+	{
+		//data
+		$data = new stdClass;
+		$data->member = site_url('api/member/{member_id}');
+		$data->members = site_url('api/members');
+		$data->streamer = site_url('api/streamer/{member_id}');
+		$data->streamers = site_url('api/streamers');
+		$data->chat_messages = site_url('api/chat_messages/?start={int}&length={int}');
+
+		//skriv ut
+		$this->output($data);
+	}
+
 	/**
 	 * Skriv ut json-data.
 	 *
@@ -46,19 +60,6 @@ class API extends CI_Controller
 			: '{}';
 	}
 
-	public function index()
-	{
-		//data
-		$data = new stdClass;
-		$data->member = site_url('api/member/{member_id}');
-		$data->members = site_url('api/members');
-		$data->streamer = site_url('api/streamer/{member_id}');
-		$data->streamers = site_url('api/streamers');
-
-		//skriv ut
-		$this->output($data);
-	}
-
 	public function member($member_id = null)
 	{
 		//moduler
@@ -66,7 +67,10 @@ class API extends CI_Controller
 
 		//endast GET-requests och numerisk $member_id
 		if($this->method != 'get' || !is_numeric($member_id))
+		{
 			$this->output(null, 400); //bad request
+			return;
+		}
 		
 		//hämta data
 		$member = $this->members->get_member($member_id);
@@ -82,7 +86,10 @@ class API extends CI_Controller
 
 		//endast GET-requests
 		if($this->method != 'get')
+		{
 			$this->output(null, 400); //bad request
+			return;
+		}
 
 		//hämta data
 		$members = $this->members->get_members();
@@ -90,7 +97,6 @@ class API extends CI_Controller
 		$this->output($members);
 	}
 
-	
 	public function streamer($member_id = null)
 	{
 		//moduler
@@ -98,7 +104,10 @@ class API extends CI_Controller
 
 		//endast GET-requests och numerisk $member_id
 		if($this->method != 'get' || !is_numeric($member_id))
+		{
 			$this->output(null, 400); //bad request
+			return;
+		}
 
 		$do_update = $this->streamers->check_interval();
 
@@ -136,11 +145,50 @@ class API extends CI_Controller
 
 		//endast GET-requests
 		if($this->method != 'get')
+		{
 			$this->output(null, 400); //bad request
+			return;
+		}
 		
 		//hämta data från db
 		$streamers = $this->streamers->get_streamers();
 
 		$this->output($streamers);
+	}
+
+	public function chat_messages()
+	{
+		//endast GET-requests
+		if($this->method != 'get')
+		{
+			$this->output(null, 400); //bad request
+			return;
+		}
+		
+		//GET-variabler
+		$get = $this->input->get();
+
+		//parameter-sanering
+		if(
+			!key_exists('message_id', $get)
+			|| !key_exists('length', $get)
+			|| !is_numeric($get['message_id'])
+			|| !is_numeric($get['length'])
+		)
+		{
+			$this->output(null, 400); //bad request
+			return;
+		}
+
+		//GET-variabler
+		$message_id = $get['message_id']-0;
+		$length = $get['length']-0;
+
+		//moduler
+		$this->load->model('site/chat');
+
+		$chat_messages = $this->chat->get_messages($message_id, $length);
+
+		$this->output($chat_messages);
 	}
 }
