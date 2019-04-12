@@ -26,11 +26,12 @@ class Site extends CI_Controller
 		//data
 		$attendance_types = $this->attendance->get_all(); //till signupbox
 		$chat_messages = $this->chat->get_messages(null, 16);
+		$earliest_message_id = $this->chat->get_last_message_id(); //hämta tidigaste meddelandet i db så att js vet när den inte ska ladda fler
 
 		//vy
 		$this->load->view('site/news',
 			array_merge((array)$this->signup_box->event,
-				array('attendance_types' => $attendance_types, 'chat_messages' => $chat_messages)
+				array('attendance_types' => $attendance_types, 'chat_messages' => $chat_messages, 'earliest_message_id' => $earliest_message_id)
 			)
 		);
 	}

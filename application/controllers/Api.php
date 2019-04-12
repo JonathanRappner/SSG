@@ -164,16 +164,23 @@ class API extends CI_Controller
 			$this->output(null, 400); //bad request
 			return;
 		}
+
+		//endast inloggade medlemmar får se meddelanden
+		if(!$this->member->valid)
+		{
+			$this->output(null, 401); //unauthorized
+			return;
+		}
+
 		
 		//GET-variabler
 		$get = $this->input->get();
 
 		//parameter-sanering
 		if(
-			!key_exists('message_id', $get)
-			|| !key_exists('length', $get)
-			|| !is_numeric($get['message_id'])
+			!key_exists('length', $get)
 			|| !is_numeric($get['length'])
+			|| (key_exists('message_id', $get) && !is_numeric($get['message_id'])) //kolla bara message_id om den finns
 		)
 		{
 			$this->output(null, 400); //bad request
@@ -181,7 +188,7 @@ class API extends CI_Controller
 		}
 
 		//GET-variabler
-		$message_id = $get['message_id']-0;
+		$message_id = key_exists('message_id', $get) ? $get['message_id']-0 : null;
 		$length = $get['length']-0;
 
 		//moduler

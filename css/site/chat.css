@@ -6,6 +6,20 @@
 
 }
 
+/* ajax-loading-animation wrapper */
+#chat div.status{
+	position: absolute;
+	right: 18px;
+	top: 0;
+	display: none;
+}
+
+/* ajax-loading-animation */
+#chat div.status .spinner-border{
+	width: 1.6rem;
+    height: 1.6rem;
+}
+
 /* meddelande-listan */
 ul.chat-list{
 	width: 100%;
@@ -63,4 +77,9 @@ ul.chat-list li a{
 /* formatting-info-knappen */
 #btn_info{
 	width:32px
+}
+
+/* skicka-knapp loading animation */
+#btn_send div.spinner-border{
+	display: none;
 }

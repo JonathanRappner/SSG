@@ -4,7 +4,15 @@
 */
 defined('BASEPATH') or exit('No direct script access allowed');
 
-?><ul id="chat-list" class="chat-list">
+?><script>
+	var earliest_message_id = <?=$earliest_message_id?>
+</script>
+
+<div class="status">
+	<div class="spinner-border text-secondary"></div>
+</div>
+
+<ul id="chat-list" class="chat-list">
 	<?php if(!isset($chat_messages) || count($chat_messages) <= 0):?>
 		<li><strong>SSG</strong>: Inga chatmeddelanden 😢</li>
 	<?php else:?>
@@ -24,5 +32,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<button id="btn_send" class="btn btn-success">
 		Skicka
 		<i class="fas fa-comment"></i>
+		<div class="spinner-border spinner-border-sm"></div>
 	</button>
 </div>

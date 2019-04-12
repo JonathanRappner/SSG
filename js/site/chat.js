@@ -2,23 +2,38 @@
 
 //globals
 var is_loading; //antal meddelanden som laddas per ajax-request
-var earliest_message; //id för meddelandet längst ner i listan
+var earliest_loaded_message_id; //id för meddelandet längst ner i listan
 
 $(document).ready(function()
 {
 	var message_count = $("#chat-list li").length; //ladda alltid samma antal meddelanden som php gör
-	earliest_message = $("#chat-list li:last").data("message_id");
+	earliest_loaded_message_id = $("#chat-list li:last").data("message_id");
 	is_loading = false; //true när meddelanden laddas
 	
+	//chat-lista skroll
 	$("#chat-list").scroll(function(event)
 	{
 		var scroll_ratio = get_scroll_ratio($(this).scrollTop(), $(this).height(), $(this).prop("scrollHeight"));
-		if(!is_loading && scroll_ratio >= 1) //har skrollat till botten och laddar inte fler meddelanden för tillfället
+		if(
+			scroll_ratio >= 1 && //har skrollat till botten
+			!is_loading && //laddar inte redan meddelanden
+			earliest_loaded_message_id < earliest_message_id //finns fler meddelanden i db att ladda
+		)
 		{
-			append_messages(earliest_message, message_count);
+			append_messages(earliest_loaded_message_id, message_count);
 		}
 	});
+
+	//skicka-knapp klick
+	$("#btn_send").click(function(event)
+	{
+		$(this).prop("disabled", true);
+		$("i", this).hide();
+		$("div.spinner-border", this).css("display", "inline-block");
+	});
 });
+
+
 
 /**
  * Ger skroll-positionen från 0 (längst upp) till 1 (längst ner).
@@ -39,6 +54,7 @@ function get_scroll_ratio(scroll_pos_top, visible_height, total_height)
 function append_messages(message_id, length)
 {
 	is_loading = true;
+	$("#chat div.status").fadeIn(50); //visa loading animation
 
 	var url = base_url +"api/chat_messages/?message_id="+ message_id +"&length="+ length;
 
@@ -68,7 +84,8 @@ function append_messages_response(data)
 				"</p>"+
 			"</li>"
 		);
+		earliest_loaded_message_id = message.id-0;
 	}
-
 	is_loading = false;
+	$("#chat div.status").fadeOut(50); //göm loading animation
 }

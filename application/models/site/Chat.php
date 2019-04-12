@@ -14,6 +14,7 @@ class Chat extends CI_Model
 		$this->min = 60;
 		$this->hour = 3600;
 		$this->day = 86400;
+		$this->six_days = 518400;
 		$this->week = 604800;
 		$this->days_swe = array(1=>'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag', 'söndag');
 	}
@@ -54,6 +55,16 @@ class Chat extends CI_Model
 	}
 
 	/**
+	 * Hämtar id för det tidigaste meddelandet.
+	 *
+	 * @return int
+	 */
+	public function get_last_message_id()
+	{
+		return $this->db->query('SELECT id FROM ssg_chat ORDER BY created ASC LIMIT 1')->row()->id;
+	}
+
+	/**
 	 * Ger formaterad, relativ tidssträng.
 	 * Ex: '(2 timmar sedan)'
 	 * '(i måndags 11:07)'
@@ -67,7 +78,7 @@ class Chat extends CI_Model
 		$now = time();
 		$diff = abs($now - $date);
 		$date_string = date('Y-m-d G:i', $date);
-		$edited_prefix = $edited ? 'redigerat: ' : null;
+		$edited_prefix = $edited ? 'redigerad: ' : null;
 
 		if($diff < $this->min) //mindre än en minut sedan
 			$output = 'nyss';
@@ -81,9 +92,9 @@ class Chat extends CI_Model
 			$output = 'idag '. date('G:i', $date);
 		else if($diff < ($this->day * 2)) //mer är en OCH mindre än två dagar sedan (ex: 'igår 0:22')
 			$output = 'igår '. date('G:i', $date);
-		else if($diff < $this->week) //mer är en dag sedan (ex: 'i fredags 13:49')
+		else if($diff < $this->six_days) //mer är en dag sedan (ex: 'i fredags 13:49') (använd six_days so att det inte står "i fredags" på en fredag)
 			$output = 'i '. $this->days_swe[date('N', $date)] . 's '. date('G:i', $date);
-		else //mer än en vecka sedan
+		else //mer än sex dagar sedan
 			$output = $edited_prefix . $date_string;
 
 		return "<span title='$date_string' data-toggle='tooltip'>({$edited_prefix}$output)</span>";
