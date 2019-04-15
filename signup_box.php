@@ -197,7 +197,7 @@ mysqli_close($mysqli);
 </style>
 
 
-<script src="new/js/signup/deadline.js"></script>
+<script src="new/js/deadline.js"></script>
 <script>
 	$(document).ready(function()
 	{

@@ -47,9 +47,16 @@ class Chat extends CI_Model
 			LIMIT 0, '. $this->db->escape($length);
 		$result = $this->db->query($sql)->result();
 
-		//formatera timespan-strängen
+		//formatering
 		foreach($result as $message)
+		{
+			//formatera timespan-strängen
 			$message->timespan_string = $this->chat->timespan_string($message->created_timestamp, isset($message->last_edited));
+
+			//sanering (spara meddelanden "smutsiga" och städa upp här istället för vid input, ett misstag kan annars trigga sanering felaktigt)
+			$message->text = trim($message->text);
+			$message->text = strip_tags($message->text);
+		}
 
 		return $result;
 	}

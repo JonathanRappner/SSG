@@ -251,6 +251,7 @@ class Admin_signups implements Adminpanel
 
 	private function view_form()
 	{
+
 		//moduler
 		$this->CI->load->library('attendance');
 
@@ -275,6 +276,11 @@ class Admin_signups implements Adminpanel
 		$events_options_string = null;
 		if($is_new) foreach($this->events as $event)
 			$events_options_string .= "<option value='$event->id'>$event->title</option>";
+		
+		
+		//js
+		echo '<script src="'. base_url('js/signup/form_validation.js') .'"></script>';
+		echo '<script src="'. base_url('js/signup/adminpanels/signups.js') .'"></script>';
 
 		//breadcrumbs
 		echo '<nav aria-label="breadcrumb"><ol class="breadcrumb">';
@@ -463,7 +469,7 @@ class Admin_signups implements Adminpanel
 	}
 
 	/**
-	 * Lägg till auto-event.
+	 * Lägg till anmälan.
 	 *
 	 * @param object $vars POST-variabler.
 	 * @return void
@@ -476,8 +482,8 @@ class Admin_signups implements Adminpanel
 		assert(!empty($vars->member_id) && is_numeric($vars->member_id), "member_id: $vars->member_id");
 		assert(!empty($vars->role_id) && is_numeric($vars->role_id), "role_id: $vars->role_id");
 		assert(!empty($vars->attendance_id) && is_numeric($vars->attendance_id), "attendance_id: $vars->attendance_id");
-		assert(!empty($vars->signed_datetime) && preg_match('/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', $vars->signed_datetime), "signed_datetime: $vars->signed_datetime");
-		assert(!empty($vars->last_changed_datetime) && preg_match('/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', $vars->last_changed_datetime), "last_changed_datetime: $vars->last_changed_datetime");
+		assert(!empty($vars->signed_datetime) && preg_match('/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/', $vars->signed_datetime), "signed_datetime: $vars->signed_datetime");
+		assert(!empty($vars->last_changed_datetime) && preg_match('/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/', $vars->last_changed_datetime), "last_changed_datetime: $vars->last_changed_datetime");
 		
 		$data = array(
 			'event_id' => $vars->event_id,
@@ -493,7 +499,7 @@ class Admin_signups implements Adminpanel
 	}
 
 	/**
-	 * Uppdatera auto-event.
+	 * Uppdatera anmälan.
 	 *
 	 * @param object $vars POST-variabler.
 	 * @return void
@@ -506,8 +512,8 @@ class Admin_signups implements Adminpanel
 		assert(!empty($vars->member_id) && is_numeric($vars->member_id), "member_id: $vars->member_id");
 		assert(!empty($vars->role_id) && is_numeric($vars->role_id), "role_id: $vars->role_id");
 		assert(!empty($vars->attendance_id) && is_numeric($vars->attendance_id), "attendance_id: $vars->attendance_id");
-		assert(!empty($vars->signed_datetime) && preg_match('/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', $vars->signed_datetime), "signed_datetime: $vars->signed_datetime");
-		assert(!empty($vars->last_changed_datetime) && preg_match('/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', $vars->last_changed_datetime), "last_changed_datetime: $vars->last_changed_datetime");
+		assert(!empty($vars->signed_datetime) && preg_match('/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/', $vars->signed_datetime), "signed_datetime: $vars->signed_datetime");
+		assert(!empty($vars->last_changed_datetime) && preg_match('/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/', $vars->last_changed_datetime), "last_changed_datetime: $vars->last_changed_datetime");
 		
 		$data = array(
 			'group_id' => $vars->group_id,

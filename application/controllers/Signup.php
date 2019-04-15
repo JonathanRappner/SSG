@@ -277,7 +277,7 @@ class Signup extends CI_Controller
 		if(!empty($username) && !empty($password)) //variabler finns
 		{
 			//försök logga in användare, om det inte går: visa login_form
-			if($this->member->validate_login($username, $password))
+			if($this->member->validate_smf_login($username, $password))
 			{
 				//kopiera medlemsdata från sfm-forumet till phpbb-forumet (ta bort när smf är nerlagt)
 				$this->load->library('phpbb');

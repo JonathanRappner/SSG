@@ -9,7 +9,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 </script>
 
 <div class="status">
-	<div class="spinner-border text-secondary"></div>
+
+	<div id="loading-animation" class="spinner-border text-secondary"></div>
+
+	<button id="btn_refresh" class="btn btn-primary">
+		<i class="fas fa-sync-alt"></i>
+	</button>
+
 </div>
 
 <ul id="chat-list" class="chat-list">
@@ -19,7 +25,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 		<?php foreach($chat_messages as $message):?>
 			<li data-message_id="<?=$message->id?>">
 				<a href="<?=base_url('forum/memberlist.php?mode=viewprofile&u='. $message->phpbb_user_id)?>" target="_blank"><?=$message->name?></a>:
-				<?=strip_tags($message->text)?>
+				<?=$message->text?>
 				<p class="timespan"><?=$message->timespan_string?></p>
 			</li>
 		<?php endforeach;?>

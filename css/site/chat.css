@@ -6,19 +6,25 @@
 
 }
 
-/* ajax-loading-animation wrapper */
+/* top-right icons/buttons wrapper */
 #chat div.status{
 	position: absolute;
 	right: 18px;
 	top: 0;
-	display: none;
 }
 
 /* ajax-loading-animation */
-#chat div.status .spinner-border{
+#loading-animation{
 	width: 1.6rem;
     height: 1.6rem;
+	display: none;
 }
+
+/* refresh-knappen som syns efter man skrollat ner */
+#btn_refresh{
+	display: none;
+}
+
 
 /* meddelande-listan */
 ul.chat-list{
@@ -45,7 +51,7 @@ ul.chat-list li a{
 }
 
 /* datum-text */
-.timespan{
+ul.chat-list p.timespan{
 	color:rgb(167, 167, 167);
 	font-size: 0.6rem;
 	margin: 0 0 0 2px;
