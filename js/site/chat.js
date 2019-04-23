@@ -1,7 +1,8 @@
 // JS för chat-rutan
 
 //globals
-var is_loading; //antal meddelanden som laddas per ajax-request
+var is_loading;
+var is_sending;
 var earliest_loaded_message_id; //id för meddelandet längst ner i listan
 var message_count; //antal meddelanden som laddas åt gången
 
@@ -10,7 +11,8 @@ $(document).ready(function()
 	message_count = $("#chat-list li").length; //ladda alltid samma antal meddelanden som php gör
 	earliest_loaded_message_id = $("#chat-list li:last").data("message_id");
 	is_loading = false; //true när meddelanden laddas
-	var update_timer = 60000; //antal millisekunder mellan uppdateringar
+	is_sending = false; //true när meddelanden skickas/uppdateras/tas bort
+	var update_interval = 60000; //antal millisekunder mellan uppdateringar
 	
 	//chat-lista skroll
 	$("#chat-list").scroll(function(event)
@@ -32,6 +34,7 @@ $(document).ready(function()
 			earliest_loaded_message_id < earliest_message_id //finns fler meddelanden i db att ladda
 		)
 		{
+			event.preventDefault(); //hindrar webbläsaren från att skrolla hela rutan medan ett meddelande laddas
 			append_messages(earliest_loaded_message_id, message_count);
 		}
 	});
@@ -47,9 +50,19 @@ $(document).ready(function()
 	//skicka-knapp klick
 	$("#btn_send").click(function(event)
 	{
-		$(this).prop("disabled", true);
-		$("i", this).hide();
-		$("div.spinner-border", this).css("display", "inline-block");
+		if($("#message").val().length > 0)
+		{
+			send_message($("#message").val());
+		}
+	});
+
+	//enter-tryck i chat-input
+	$(document).on('keypress',function(e)
+	{
+		if(e.which == 13 && $("#message").is(":focus")) //knappen var Enter och chat-input hade focus
+		{
+			send_message($("#message").val());
+		}
 	});
 
 	//uppdatera meddelanden
@@ -60,7 +73,7 @@ $(document).ready(function()
 		{
 			refresh_messages(message_count);
 		}
-	}, update_timer);
+	}, update_interval);
 });
 
 
@@ -85,9 +98,9 @@ function refresh_messages(length)
 	$("#loading-animation").fadeIn(50); //visa loading animation
 
 	//hämta data
-	var url = base_url +"api/chat_messages/?length="+ length;
-	$.get(url, function(data){
-
+	var url = base_url +"api/chat/?length="+ length;
+	$.get(url, function(data)
+	{
 		refresh_messages_response(data);
 	});
 }
@@ -119,7 +132,7 @@ function append_messages(message_id, length)
 	$("#loading-animation").fadeIn(50); //visa loading animation
 
 	//hämta data
-	var url = base_url +"api/chat_messages/?message_id="+ message_id +"&length="+ length;
+	var url = base_url +"api/chat/?message_id="+ message_id +"&length="+ length;
 	$.get(url, function(data){
 		append_messages_response(data);
 	});
@@ -161,4 +174,45 @@ function add_messages(messages)
 		);
 		earliest_loaded_message_id = message.id-0;
 	}
+}
+
+/**
+ * Skicka nytt text-meddelande till chat.
+ * Validering utförs av server-side baserat på inloggad användare.
+ * @param {string} text 
+ */
+function send_message(text)
+{
+	//avbryt som redan skickar
+	if(is_sending)
+	{
+		return;
+	}
+
+	is_sending = true;
+	$("#btn_send").prop("disabled", true); //disable:a Skicka-knapp
+	$("#btn_send i").hide(); //göm pratbubbla-ikonen
+	$("#btn_send div.spinner-border").css("display", "inline-block"); //visa spinner-animationen
+	
+	$.post(
+		base_url +"api/chat/", //url
+		{text: text}, //data
+		function(data){ send_message_response(data); } //success function
+	);
+}
+
+/**
+ * Återställ element efter ajax-request return:ar success.
+ */
+function send_message_response(data)
+{
+	is_sending = false;
+
+	$("#btn_send").prop("disabled", false); //enable:a Skicka-knapp
+	$("#btn_send div.spinner-border").hide(); //göm spinner-animationen
+	$("#btn_send i").css("display", "inline-block"); //visa pratbubbla-ikonen
+	$("#message").val(null); //rensa input
+
+	//refresh:a
+	refresh_messages(message_count);
 }

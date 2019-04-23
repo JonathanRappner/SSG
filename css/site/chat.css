@@ -67,12 +67,22 @@ ul.chat-list p.timespan{
 	/* box-shadow: rgba(0, 0, 0, 0.1) 0 -10px 10px -5px; */
 }
 
+/* länk i chatmeddelande, hakparenteserna */
+#chat span.link{
+	font-weight: bold;
+}
+
+/* länk i chatmeddelande */
+#chat span.link a{ color: #007bff; }
+/* #chat span.link a:visited{ color: #00448B; } */
+
+
 /* font-storlek på input-raden */
 #chat .input-group input,
 #chat .btn{
 	font-size: .8rem;
-	height: 30px;
 	padding: 4px 8px;
+	height: 30px;
 }
 
 /* text-input */
@@ -82,8 +92,18 @@ ul.chat-list p.timespan{
 
 /* formatting-info-knappen */
 #btn_info{
-	width:32px
+	width:32px;
 }
+
+/* emoji-picker-knappen */
+#btn_emoji{
+	font-size: 1rem !important;
+    padding: 0 8px !important;
+}
+
+/* skicka-knappen */
+/* #btn_send{
+} */
 
 /* skicka-knapp loading animation */
 #btn_send div.spinner-border{

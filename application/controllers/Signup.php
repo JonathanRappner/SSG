@@ -286,7 +286,7 @@ class Signup extends CI_Controller
 				header("location: $redirect"); //använd inte redirect()
 			}
 			else
-				$this->load->view('signup/login_form', array('fail' => true));
+				$this->load->view('login_form', array('fail' => true));
 		}
 		else //post-variabler finns inte
 			redirect('signup');

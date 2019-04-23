@@ -7,12 +7,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * när intervallens kod senast kördes. Om perioden sedan dess är högre än dess intervall
  * så körs koden och last_performedtime i tabellen uppdateras.
  * 
- * Kom ihåg att t.ex. ett dagligt intervall inte nödvändigtvis utförs varje dag.
- * 
- * Intervall-ID:
- * 1 = Dagligen
- * 2 = Veckovis
- * 3 = Var 10:de minut
+ * Tanken är att man ska kunna köra kod om det gått mer än 10 min, en dag, en vecka osv. sedan förra intervallen.
+ * Just nu körs endast dagliga intervaller.
  */
 class Intervals
 {
@@ -24,12 +20,10 @@ class Intervals
 		$this->CI =& get_instance();
 		
 		//hämta intervaller
-		$intervals = $this->get_intervals();
+		$interval = $this->get_interval();
 
-		assert(count($intervals) >= 2);
-		if($intervals[1]) $this->daily();
-		if($intervals[2]) $this->weekly();
-		// if($intervals[3]) $this->ten_minutes(); kör inte 10-min-metoden här, API-kontrollern använder den för att cacha streamer-data
+		if($interval >= 1)
+			$this->daily();
 	}
 
 	/**
@@ -37,21 +31,14 @@ class Intervals
 	 *
 	 * @return array
 	 */
-	private function get_intervals()
+	private function get_interval()
 	{
-		//variabler
-		$intervals = array();
-
 		$sql =
 			'SELECT
-				id,
-				DATEDIFF(NOW(), DATE(last_performed)) >= length AS perform #avrundat till dagar
+				DATEDIFF(NOW(), last_performed) AS length_days
 			FROM ssg_intervals';
 		$query = $this->CI->db->query($sql);
-		foreach ($query->result() as $row)
-			$intervals[$row->id] = $row->perform; //$interval[id] = needs performing?
-
-		return $intervals;
+		return $query->row()->length_days;
 	}
 
 	/**
@@ -64,40 +51,26 @@ class Intervals
 		//moduler
 		$this->CI->load->library('eventsignup');
 
-
 		//metoder
 		$this->CI->eventsignup->create_auto_events();
 		$this->archive_old_events();
 		$this->remove_outdated_recesses();
 
-		$this->update_interval(1);
-	}
-
-	/**
-	 * Körs en gång i veckan.
-	 *
-	 * @return void
-	 */
-	private function weekly()
-	{
-		//metoder här
-
-		$this->update_interval(2);
+		$this->update_interval();
 	}
 
 	/**
 	 * Uppdatera när intervallen senast kördes
 	 *
-	 * @param int $interval_id 1=daily, 2=weekly, 3=10min
 	 * @return void
 	 */
-	private function update_interval($interval_id)
+	private function update_interval()
 	{
 		$sql =
 			"UPDATE ssg_intervals
 			SET last_performed = NOW()
-			WHERE id = ?";
-		$this->CI->db->query($sql, array($interval_id));
+			WHERE id = 0";
+		$this->CI->db->query($sql);
 	}
 
 	/**

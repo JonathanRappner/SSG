@@ -1,7 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-
 /*
  * --Status Codes--
  * 200 ok
@@ -13,6 +12,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * 405 method not allowed (inkorrekt funktion)
  * 500 internal server error
  * 503 service unavailable
+*/
+
+/*
+ * --HTTP Methods--
+ * GET		Read
+ * POST		Create
+ * PUT		Update
+ * DELETE	Remove
 */
 
 
@@ -32,13 +39,13 @@ class API extends CI_Controller
 
 	public function index()
 	{
-		//data
+		//$data konverteras till json-objekt
 		$data = new stdClass;
-		$data->member = site_url('api/member/{member_id}');
-		$data->members = site_url('api/members');
-		$data->streamer = site_url('api/streamer/{member_id}');
-		$data->streamers = site_url('api/streamers');
-		$data->chat_messages = site_url('api/chat_messages/?start={int}&length={int}');
+		$data->member = site_url('GET api/member/{member_id}');
+		$data->members = site_url('GET api/members');
+		$data->streamer = site_url('GET api/streamer/{member_id}');
+		$data->streamers = site_url('GET api/streamers');
+		$data->chat = site_url('GET, POST, PUT & DELETE api/chat/?start={int}&length={int}');
 
 		//skriv ut
 		$this->output($data);
@@ -156,46 +163,57 @@ class API extends CI_Controller
 		$this->output($streamers);
 	}
 
-	public function chat_messages()
+	public function chat()
 	{
-		//endast GET-requests
-		if($this->method != 'get')
-		{
-			$this->output(null, 400); //bad request
-			return;
-		}
-
-		//endast inloggade medlemmar får se meddelanden
+		//endast inloggade medlemmar får se/skicka/uppdatera meddelanden
 		if(!$this->member->valid)
 		{
 			$this->output(null, 401); //unauthorized
 			return;
 		}
 
-		
-		//GET-variabler
-		$get = $this->input->get();
+		$this->load->model('site/Chat');
 
-		//parameter-sanering
-		if(
-			!key_exists('length', $get)
-			|| !is_numeric($get['length'])
-			|| (key_exists('message_id', $get) && !is_numeric($get['message_id'])) //kolla bara message_id om den finns
-		)
+		//kör funktion baserat på HTTP-metod
+		switch ($this->method)
 		{
-			$this->output(null, 400); //bad request
-			return;
+			//GET
+			case 'get':
+				$messages = $this->Chat->api_get($this->input->get());
+				$this->output($messages);
+			break;
+
+			//POST
+			case 'post':
+				$this->Chat->api_post($this->input->post());
+				$this->output(array('success' => true));
+			break;
+
+			//PUT
+			case 'put':
+				$this->chat_put();///////////////////////
+			break;
+
+			//DELETE
+			case 'delete':
+				$this->chat_delete();///////////////////////
+			break;
+			
+			default:
+				$this->output(null, 400); //bad request
+			break;
 		}
+	}
 
-		//GET-variabler
-		$message_id = key_exists('message_id', $get) ? $get['message_id']-0 : null;
-		$length = $get['length']-0;
+	
+	private function chat_put()
+	{
 
-		//moduler
-		$this->load->model('site/chat');
+	}
 
-		$chat_messages = $this->chat->get_messages($message_id, $length);
+	
+	private function chat_delete()
+	{
 
-		$this->output($chat_messages);
 	}
 }

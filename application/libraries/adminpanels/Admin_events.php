@@ -46,7 +46,7 @@ class Admin_events implements Adminpanel
 		else if($this->CI->input->get('delete_confirm') != null)
 		{
 			$this->view = 'delete_confirm';
-			$this->delete_event = $this->CI->Events->get_event($this->CI->input->get('delete_confirm'));
+			$this->delete_event = $this->CI->eventsignup->get_event($this->CI->input->get('delete_confirm'));
 			return;
 		}
 		else if($this->CI->input->get('delete') != null)
