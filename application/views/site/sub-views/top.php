@@ -30,6 +30,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				<a class="nav-link" href="<?=base_url('site/streamers')?>">Streamers</a>
 			</li>
 			
+			<li class="nav-item<?=$this->current_page == 'emblem' ? ' active' : null?>">
+				<a class="nav-link" href="<?=base_url('site/emblem')?>">Emblem</a>
+			</li>
+			
 			<li class="nav-item">
 				<a class="nav-link" href="<?=base_url('admin')?>">&gt;Admin&lt;</a>
 			</li>

@@ -57,6 +57,18 @@ class Site extends CI_Controller
 		$this->load->view('site/streamers', array('streamers'=>$streamers));
 	}
 
+	public function emblem()
+	{
+		//moduler
+		// $this->load->model('');
+
+		//data
+		// $streamers = $this->streamers->get_streamers();
+
+		//vy
+		$this->load->view('site/emblem'/*, array('streamers'=>$streamers)*/);
+	}
+
 	public function test()
 	{
 		if($this->member->id != 1655) //Smorfty only

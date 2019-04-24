@@ -71,7 +71,7 @@ class Chat extends CI_Model
 
 		//sanering
 		$text = trim($text);
-		$text = strip_tags($text);
+		$text = htmlentities($text);
 
 		$this->add_message($this->member->id, $text);
 	}
@@ -86,9 +86,29 @@ class Chat extends CI_Model
 	public function get_messages($message_id, $length)
 	{
 		//textformatering
-		$regex_url = '/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/';
-		$smileys = 				array(':)', '=)', ';)', ':(', ':P', ';P', '=P', ':D', ';D', ':O', ":'(", 'XD', 'X(', '8)', '^^', ':X');
-		$smileys_replacement = 	array('🙂', '🙂', '😉', '🙁', '😋', '😜', '😋', '😀', '😁', '😮', '😢', '😂', '😣', '😎', '😊', '🤐');
+		$regex_url = '/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/i';
+		$smileys = 
+			array(
+				'/(?<!\w):\)/', // :)
+				'/(?<!\w)=\)/', // =)
+				'/(?<!\w);\)/', // ;)
+				'/(?<!\w):\(/', // :(
+				'/(?<!\w):P/i', // :P
+				'/(?<!\w);P/i', // ;P
+				'/(?<!\w)=P/i', // =P
+				'/(?<!\w):D/i', // :D
+				'/(?<!\w);D/i', // ;D
+				'/(?<!\w):O/i', // :O
+				'/(?<!\w):\'\(/', // :'(
+				'/(?<!\w)XD/i', // XD
+				'/(?<!\w)X\(/i', // X(
+				'/(?<!\w)8\)/', // 8)
+				'/(?<!\w)\^\^/', // ^^
+				'/(?<!\w):X/i', // :X
+				'/(?<!http|https):\/(?!\/)/i', // :/
+				'/(?<!\w)(<|&lt;)3/' //<3
+			);
+		$emojis = 	array('🙂', '🙂', '😉', '🙁', '😋', '😜', '😋', '😀', '😁', '😮', '😢', '😂', '😣', '😎', '😊', '🤐', '😕', '❤');
 
 		//om $message_id är null så behövs ingen where-sats och det senaste meddelandet ladds först
 		$where_clause = $message_id != null
@@ -117,31 +137,31 @@ class Chat extends CI_Model
 
 			//sanering (en del meddelanden kan vara "smutsiga" och städas upp även här såsom vid input)
 			$message->text = trim($message->text);
-			$message->text = strip_tags($message->text);
+			$message->text = strip_tags($message->text); //gör troligen ingenting eftersom htmlentities() kördes vid input
 
 			//länkar
-			$matches = null;
-			if(preg_match($regex_url, $message->text, $matches)) //hitta url i texten
-			{
-				$replacement = "<span class=\"link\">[<a href=\"{$matches[0]}\" target=\"_blank\">länk</a>]</span>"; //skapa ersättnings-sträng (en html-länk: "[länk]")
-				$message->text = preg_replace($regex_url, $replacement, $message->text); //ersätt länken
-			}
+			$message->text = preg_replace($regex_url, '<span class="link">[<a href="$0" target="_blank">länk</a>]</span>', $message->text); //case insensitive replace
 
 			//ersätt smileys med emojis ":)" -> "🙂"
-			$message->text = str_ireplace($smileys, $smileys_replacement, $message->text); //case insensitive replace
+			$message->text = preg_replace($smileys, $emojis, $message->text);
 
-
-
-
-
+			// *bold* -> <strong>bold</strong>
+			$message->text = preg_replace('/(?:\*{1})(.+?)(?:\*{1})/', '<strong>$1</strong>', $message->text);
+			//$0 är full match, dvs. '*tjock text*'. $1 är första matchade gruppen
+			//en grupp är regex som ligger inom parenteser
+			//'?:' definierar en grupp som non-capturing vilket gör att '(.+)' är den enda gruppen som fångas
 			
+			//_underscore_ -> <u>underscore</u>
+			$message->text = preg_replace('/(?:_{1}?)(.+?)(?:_{1}?)/', '<u>$1</u>', $message->text);
+			
+			//{italic} -> <i>italic</i>
+			$message->text = preg_replace('/(?:\{{1}?)(.+?)(?:\}{1}?)/', '<i>$1</i>', $message->text);
 
-		// *italic* **bold** _underscore_
-		// JIP/QIP/NOSHOW-med coola färger
-
-
-
-
+			//JIP/QIP/NOSHOW
+			$message->text = preg_replace(
+				array('/(?<!\w)jip(?!\w)/i', '/(?<!\w)qip(?!\w)/i', '/(?<!\w)noshow(?!\w)/i'),
+				array('<span class="text-jip">JIP</span>', '<span class="text-qip">QIP</span>', '<span class="text-noshow">NOSHOW</span>'),
+			$message->text);
 		}
 
 		return $result;
