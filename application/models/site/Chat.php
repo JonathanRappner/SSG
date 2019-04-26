@@ -31,17 +31,11 @@ class Chat extends CI_Model
 			!key_exists('length', $get) || !is_numeric($get['length']) //om length är tom eller inkorrekt
 			|| (key_exists('message_id', $get) && !is_numeric($get['message_id'])) //kolla bara message_id om den finns
 		)
-		{
-			$this->output(null, 400); //bad request
-			return;
-		}
+			return false;
 
 		//GET-variabler
 		$message_id = key_exists('message_id', $get) ? $get['message_id']-0 : null;
 		$length = $get['length']-0;
-
-		//moduler
-		$this->load->model('site/chat');
 
 		$chat_messages = $this->chat->get_messages($message_id, $length);
 
@@ -49,31 +43,131 @@ class Chat extends CI_Model
 	}
 
 	/**
-	 * Lägger till chat-meddelande baserat på POST-variablen text och den inloggade användaren.
+	 * Hämta data relaterat till ett meddelande.
 	 *
+	 * @param array $get GET_variabler
 	 * @return void
 	 */
-	public function api_post($post)
+	public function api_get_message($get)
 	{
-		//variabler
-		$post = $this->input->post();
+		//parameter-sanering
+		if(!key_exists('message_id', $get) || !is_numeric($get['message_id']))
+			return false; //bad request
+		
+		$message_id = $get['message_id']-0;
 
+		$sql =
+			'SELECT
+				c.*,
+				UNIX_TIMESTAMP(created) AS created_timestamp,
+				UNIX_TIMESTAMP(last_edited) AS last_edited_timestamp,
+				m.name, m.phpbb_user_id
+			FROM ssg_chat c
+			INNER JOIN ssg_members m
+				ON c.member_id = m.id
+			WHERE c.id = ?
+			ORDER BY c.created DESC';
+		$row = $this->db->query($sql, $message_id)->row();
+
+		$row->text_plain = $row->text; //////////////////temp
+
+		return $row;
+	}
+
+	/**
+	 * Lägger till chat-meddelande baserat på POST-variablen text och den inloggade användaren.
+	 *
+	 * @param array $vars POST-variabler
+	 * @return int HTTP status code
+	 */
+	public function api_post($vars)
+	{
 		//--parameter-sanering--
 
-		//text saknas helt
-		if(!key_exists('text', $post))
-		{
-			$this->output(null, 400); //bad request
-			return;
-		}
+		//text saknas
+		if(!isset($vars) || !key_exists('text', $vars) || strlen($vars['text']) < 1)
+			return 400; //bad request
 
-		$text = $post['text'];
+		$text = $vars['text'];
 
 		//sanering
 		$text = trim($text);
 		$text = htmlentities($text);
 
+		//skicka text som nuvarande inloggade person
 		$this->add_message($this->member->id, $text);
+
+		return 200; //ok
+	}
+
+	/**
+	 * Ta bort chat-meddelande.
+	 * Icke admins kan bara ta bort sina egna meddelanden
+	 *
+	 * @param array $vars GET-variabler. Måste innehålla message_id.
+	 * @return int HTTP status code
+	 */
+	public function api_delete($vars)
+	{
+		//variabel saknas eller är felaktig
+		if(!isset($vars) || !key_exists('message_id', $vars) || !is_numeric($vars['message_id']))
+			return 400; //bad request
+
+		$message_id = $vars['message_id']-0;
+
+		//hämta meddelandets skapare
+		$row = $this->db->query('SELECT member_id FROM ssg_chat WHERE id = ?', $message_id)->row();
+		
+		//finns inget meddelande med detta id
+		if($row == null)
+			return 400; //bad request
+		
+		//får medlemmen ta bort detta meddelande?
+		$this->load->library("Permissions");
+		if(!$this->permissions->has_permissions(array('super', 's1')) || !$row->member_id == $this->member->id) //är inte admin eller är inte skaparen av meddelandet
+			return 401; //unauthorized
+
+		$this->db->delete('ssg_chat', array('id' => $message_id));
+		
+		return 200; //ok
+	}
+
+	/**
+	 * Uppdatera meddelande.
+	 *
+	 * @param array $vars GET-variabler. Måste innehålla message_id och text.
+	 * @return int HTTP status code
+	 */
+	public function api_put($vars)
+	{
+		//variabler saknas eller är felaktiga
+		if(
+			!isset($vars) || !key_exists('message_id', $vars) || !is_numeric($vars['message_id'])
+			|| !key_exists('text', $vars) || strlen($vars['text']) < 1
+		)
+			return 400; //bad request
+		
+		$message_id = $vars['message_id']-0;
+		$text = $vars['text'];
+
+		//hämta meddelandets skapare
+		$row = $this->db->query('SELECT member_id FROM ssg_chat WHERE id = ?', $message_id)->row();
+
+		//finns inget meddelande med detta id
+		if($row == null)
+			return 400; //bad request
+		
+		//får medlemmen uppdatera detta meddelande?
+		$this->load->library("Permissions");
+		if(!$this->permissions->has_permissions(array('super', 's1')) || !$row->member_id == $this->member->id) //är inte admin eller är inte skaparen av meddelandet
+			return 401; //unauthorized
+		
+		$now = date('Y-m-d G:i:s');
+		$this->db
+			->where(array('id' => $message_id))
+			->update('ssg_chat', array('text' => $text, 'last_edited' => $now));
+
+		return 200;
 	}
 
 	/**
@@ -133,11 +227,13 @@ class Chat extends CI_Model
 		foreach($result as $message)
 		{
 			//formatera timespan-strängen
-			$message->timespan_string = $this->chat->timespan_string($message->created_timestamp, isset($message->last_edited));
+			$message->timespan_string = $this->timespan_string($message->created_timestamp, $message->last_edited_timestamp);
 
 			//sanering (en del meddelanden kan vara "smutsiga" och städas upp även här såsom vid input)
 			$message->text = trim($message->text);
 			$message->text = strip_tags($message->text); //gör troligen ingenting eftersom htmlentities() kördes vid input
+
+			$message->text_plain = $message->text;
 
 			//länkar
 			$message->text = preg_replace($regex_url, '<span class="link">[<a href="$0" target="_blank">länk</a>]</span>', $message->text); //case insensitive replace
@@ -146,16 +242,16 @@ class Chat extends CI_Model
 			$message->text = preg_replace($smileys, $emojis, $message->text);
 
 			// *bold* -> <strong>bold</strong>
-			$message->text = preg_replace('/(?:\*{1})(.+?)(?:\*{1})/', '<strong>$1</strong>', $message->text);
+			$message->text = preg_replace('/(?:\*{1})([\w\s]+?)(?:\*{1})/', '<strong>$1</strong>', $message->text);
 			//$0 är full match, dvs. '*tjock text*'. $1 är första matchade gruppen
 			//en grupp är regex som ligger inom parenteser
 			//'?:' definierar en grupp som non-capturing vilket gör att '(.+)' är den enda gruppen som fångas
 			
 			//_underscore_ -> <u>underscore</u>
-			$message->text = preg_replace('/(?:_{1}?)(.+?)(?:_{1}?)/', '<u>$1</u>', $message->text);
+			$message->text = preg_replace('/(?:_{1}?)([\w\s]+?)(?:_{1}?)/', '<u>$1</u>', $message->text);
 			
 			//{italic} -> <i>italic</i>
-			$message->text = preg_replace('/(?:\{{1}?)(.+?)(?:\}{1}?)/', '<i>$1</i>', $message->text);
+			$message->text = preg_replace('/(?:\{{1}?)([\w\s]+?)(?:\}{1}?)/', '<i>$1</i>', $message->text);
 
 			//JIP/QIP/NOSHOW
 			$message->text = preg_replace(
@@ -182,12 +278,16 @@ class Chat extends CI_Model
 	 * Ex: '(2 timmar sedan)'
 	 * '(i måndags 11:07)'
 	 *
-	 * @param [type] $date
-	 * @param boolean $edited
+	 * @param int $date Skapad datum (unix epoch)
+	 * @param int $edited Senast redigerad (unix epoch)
 	 * @return void
 	 */
-	public function timespan_string($date, $edited = false)
+	public function timespan_string($date, $last_edited)
 	{
+		$edited = isset($last_edited);
+		if($edited)
+			$date = $last_edited; //använd last_edited om meddelandet har blivit redigerat
+
 		$now = time();
 		$diff = abs($now - $date);
 		$date_string = date('Y-m-d G:i', $date);

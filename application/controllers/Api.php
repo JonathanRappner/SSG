@@ -165,38 +165,72 @@ class API extends CI_Controller
 
 	public function chat()
 	{
-		//endast inloggade medlemmar får se/skicka/uppdatera meddelanden
+		//endast inloggade medlemmar får se meddelanden
 		if(!$this->member->valid)
 		{
 			$this->output(null, 401); //unauthorized
 			return;
 		}
 
-		$this->load->model('site/Chat');
+		$this->load->model('site/chat');
 
 		//kör funktion baserat på HTTP-metod
 		switch ($this->method)
 		{
 			//GET
 			case 'get':
-				$messages = $this->Chat->api_get($this->input->get());
-				$this->output($messages);
+				$messages = $this->chat->api_get($this->input->get());
+				if($messages)
+					$this->output($messages);
+				else
+					$this->output(null, 400); //bad request
+			break;
+			
+			default:
+				$this->output(null, 400); //bad request
+			break;
+		}
+	}
+
+	public function message()
+	{
+		//endast inloggade medlemmar får hantera meddelanden
+		if(!$this->member->valid)
+		{
+			$this->output(null, 401); //unauthorized
+			return;
+		}
+		
+		$this->load->model('site/chat');
+
+		//kör funktion baserat på HTTP-metod
+		switch ($this->method)
+		{
+			//GET
+			case 'get':
+				$message = $this->chat->api_get_message($this->input->get());
+				if($message)
+					$this->output($message, 200);
+				else
+					$this->output(null, 400); //bad request
 			break;
 
 			//POST
 			case 'post':
-				$this->Chat->api_post($this->input->post());
-				$this->output(array('success' => true));
+				$status = $this->chat->api_post($this->input->post());
+				$this->output(null, $status);
 			break;
 
 			//PUT
 			case 'put':
-				$this->chat_put();///////////////////////
+				$status = $this->chat->api_put($this->input->get());
+				$this->output(null, $status);
 			break;
 
 			//DELETE
 			case 'delete':
-				$this->chat_delete();///////////////////////
+				$status = $this->chat->api_delete($this->input->get());
+				$this->output(null, $status);
 			break;
 			
 			default:

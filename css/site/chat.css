@@ -11,6 +11,7 @@
 	position: absolute;
 	right: 18px;
 	top: 0;
+	z-index: 10;
 }
 
 /* ajax-loading-animation */
@@ -27,8 +28,7 @@
 
 
 /* meddelande-listan */
-ul.chat-list{
-	width: 100%;
+div.chat-list{
 	height: 162px;
 	padding: 0 0 0 10px;
 	margin: 0;
@@ -37,25 +37,44 @@ ul.chat-list{
 }
 
 /* meddelande-rad */
-ul.chat-list li{
+div.chat-list div.chat_row{
+	width: 100%;
 	border-bottom: 1px dashed rgb(216, 216, 216);
 	list-style-type: none;
 	padding: 3px 0;
 }
-ul.chat-list li:hover{ background-color:rgb(245, 245, 245); }
+div.chat-list div.chat_row:hover{ background-color:rgb(245, 245, 245); }
 
 /* namn-länk */
-ul.chat-list li a{
+div.chat-list div.chat_row a{
 	color: #000;
 	font-weight: bold;
 }
 
 /* datum-text */
-ul.chat-list p.timespan{
+div.chat-list p.timespan{
 	color:rgb(167, 167, 167);
 	font-size: 0.6rem;
 	margin: 0 0 0 2px;
 }
+
+/* vänsterkolumnen i varje meddelanderad */
+div.chat_row div.message_left{
+}
+
+/* högerkolumnen i varje meddelanderad */
+div.chat_row div.message_right{
+	padding-right: 0;
+}
+
+/* edit/delete-knapparna */
+div.chat_row div.message_right button{
+	font-size: .6rem !important;
+	height: 22px !important;
+	padding: 2px 4px !important;
+}
+
+
 
 
 
@@ -105,7 +124,14 @@ ul.chat-list p.timespan{
 /* #btn_send{
 } */
 
-/* skicka-knapp loading animation */
-#btn_send div.spinner-border{
+/* skicka-knapp och spara-knapp loading animation */
+#btn_send div.spinner-border,
+#btn_save div.spinner-border{
+	display: none;
+}
+
+/* göm spara/avbryt-knapparna by default */
+#btn_save,
+#btn_abort{
 	display: none;
 }
