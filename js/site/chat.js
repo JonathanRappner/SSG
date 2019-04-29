@@ -2,16 +2,15 @@
 
 //globals
 var is_loading;
-var is_sending;
 var earliest_loaded_message_id; //id för meddelandet längst ner i listan
 var message_count; //antal meddelanden som laddas åt gången
+var edit_mode = false;
 
 $(document).ready(function()
 {
 	message_count = $("#chat-list div.chat_row").length; //ladda alltid samma antal meddelanden som php gör
 	earliest_loaded_message_id = $("#chat-list div.chat_row:last").data("message_id");
-	is_loading = false; //true när meddelanden laddas
-	is_sending = false; //true när meddelanden skickas/uppdateras/tas bort
+	is_loading = false; //true när ajax laddar någonting
 	var update_interval = 60000; //antal millisekunder mellan uppdateringar
 	
 	//chat-lista skroll
@@ -61,15 +60,25 @@ $(document).ready(function()
 	{
 		if(e.which == 13 && $("#message").is(":focus")) //knappen var Enter och chat-input hade focus
 		{
-			send_message($("#message").val());
+			if(!edit_mode)
+			{
+				send_message($("#message").val());
+			}
+			else
+			{
+				save_message($("#message").data("message_id"), $("#message").val());
+			}
 		}
 	});
 
 	//uppdatera meddelanden
 	setInterval(function()
 	{
-		//avbryt om webbläsar-fliken inte är i fokus eller listan inte är skrollad längst upp
-		if(!document.hidden && get_scroll_ratio() <= 0)
+		//avbryt om
+		//webbläsar-fliken inte är i fokus
+		//listan inte är skrollad längst upp
+		//redigerar inte ett meddelande
+		if(!document.hidden && get_scroll_ratio() <= 0 && !edit_mode)
 		{
 			refresh_messages(message_count);
 		}
@@ -81,10 +90,7 @@ $(document).ready(function()
 	//spara-knapp klick
 	$("#btn_save").click(function(event)
 	{
-		if($("#message").val().length > 0)
-		{
-			save_message($("#message").data("message_id"), $("#message").val());
-		}
+		save_message($("#message").data("message_id"), $("#message").val());
 	});
 
 	//avbryt-knapp klick
@@ -132,7 +138,7 @@ function refresh_messages(length)
 	$("#loading-animation").fadeIn(50); //visa loading animation
 
 	//hämta data
-	var url = base_url +"api/chat/?length="+ length;
+	var url = base_url +"api/messages/?length="+ length;
 	$.get(url, function(data)
 	{
 		refresh_messages_response(data);
@@ -148,6 +154,7 @@ function refresh_messages_response(data)
 	//lägg in meddelanden
 	$("#chat-list").html(""); //rensa gamla meddelanden
 	add_messages(data);
+	stop_editing(); //om man är i edit mode och tar bort meddelande eller trycker refresh så ska edit mode avbrytass
 	set_edit_delete_events();
 
 	//avbryt laddning
@@ -167,7 +174,7 @@ function append_messages(message_id, length)
 	$("#loading-animation").fadeIn(50); //visa loading animation
 
 	//hämta data
-	var url = base_url +"api/chat/?message_id="+ message_id +"&length="+ length;
+	var url = base_url +"api/messages/?message_id="+ message_id +"&length="+ length;
 	$.get(url, function(data){
 		append_messages_response(data);
 	});
@@ -232,12 +239,12 @@ function add_messages(messages)
 function send_message(text)
 {
 	//avbryt som redan skickar
-	if(is_sending)
+	if(is_loading || text.length <= 0)
 	{
 		return;
 	}
 
-	is_sending = true;
+	is_loading = true;
 	$("#btn_send").prop("disabled", true); //disable:a Skicka-knapp
 	$("#btn_send i").hide(); //göm pratbubbla-ikonen
 	$("#btn_send div.spinner-border").css("display", "inline-block"); //visa spinner-animationen
@@ -254,7 +261,7 @@ function send_message(text)
  */
 function send_message_response(data)
 {
-	is_sending = false;
+	is_loading = false;
 
 	$("#btn_send").prop("disabled", false); //enable:a Skicka-knapp
 	$("#btn_send div.spinner-border").hide(); //göm spinner-animationen
@@ -315,6 +322,7 @@ function setup_editing(message)
 {
 	//återställ
 	is_loading = false;
+	edit_mode = true;
 	$("#loading-animation").fadeOut(50); //göm loading animation
 
 	//fyll i text-input
@@ -337,12 +345,17 @@ function stop_editing()
 	$("#btn_send").show();
 	$("#btn_save").hide();
 	$("#btn_abort").hide();
+	edit_mode = false;
 }
 
-
+/**
+ * Spara ändrat meddelande
+ * @param {number} message_id 
+ * @param {string} text 
+ */
 function save_message(message_id, text)
 {
-	if(is_loading)
+	if(is_loading || text.length <= 0)
 	{
 		return;
 	}
@@ -361,12 +374,16 @@ function save_message(message_id, text)
 	});
 }
 
-
+/**
+ * Lyckats att spara redigerat meddelande.
+ * @param {string} data JSON-svar
+ */
 function save_message_response(data)
 {
 	//återställ
 	is_loading = false;
 
+	//återställ knappar efter loading är klart
 	$("#btn_save").prop("disabled", false);
 	$("#btn_abort").prop("disabled", false);
 	$("#btn_save i").css("display", "inline-block"); //visa knapp-ikonen

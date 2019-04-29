@@ -4,7 +4,7 @@
  */
 class Chat extends CI_Model
 {
-	private $min, $hour, $day, $week, $days_swe;
+	private $min, $hour, $day, $week, $days_swe, $message_max_length;
 
 	public function __construct()
 	{
@@ -16,7 +16,14 @@ class Chat extends CI_Model
 		$this->day = 86400;
 		$this->six_days = 518400;
 		$this->week = 604800;
+		$this->message_max_length = 1000;
 		$this->days_swe = array(1=>'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag', 'söndag');
+	}
+
+	
+	public function get_messages($message_id, $length)
+	{
+		return $this->api_get_messages(array('message_id' => $message_id, 'length' => $length));
 	}
 
 	/**
@@ -24,12 +31,12 @@ class Chat extends CI_Model
 	 *
 	 * @return array Array med objekt som ska konverteras till JSON.
 	 */
-	public function api_get($get)
+	public function api_get_messages($get)
 	{
 		//parameter-sanering
 		if(
 			!key_exists('length', $get) || !is_numeric($get['length']) //om length är tom eller inkorrekt
-			|| (key_exists('message_id', $get) && !is_numeric($get['message_id'])) //kolla bara message_id om den finns
+			|| (isset($get['message_id']) && !is_numeric($get['message_id'])) //kolla bara message_id om den finns
 		)
 			return false;
 
@@ -37,9 +44,34 @@ class Chat extends CI_Model
 		$message_id = key_exists('message_id', $get) ? $get['message_id']-0 : null;
 		$length = $get['length']-0;
 
-		$chat_messages = $this->chat->get_messages($message_id, $length);
+		//om $message_id är null så behövs ingen where-sats och det senaste meddelandet ladds först
+		$where_clause = $message_id != null
+			? 'WHERE c.created < (SELECT created FROM ssg_chat WHERE id = '. $this->db->escape($message_id) .')'
+			: null;
 
-		return $chat_messages;
+		$sql =
+			'SELECT
+				c.*,
+				c.text AS text_plain,
+				UNIX_TIMESTAMP(created) AS created_timestamp,
+				UNIX_TIMESTAMP(last_edited) AS last_edited_timestamp,
+				m.name, m.phpbb_user_id
+			FROM ssg_chat c
+			INNER JOIN ssg_members m
+				ON c.member_id = m.id
+			'. $where_clause .'
+			ORDER BY c.created DESC
+			LIMIT 0, '. $this->db->escape($length);
+		$messages = $this->db->query($sql)->result();
+
+		//formatering
+		foreach($messages as $message)
+		{
+			$message->timespan_string = $this->timespan_string($message->created_timestamp, $message->last_edited_timestamp); //timespan-strängen
+			$message->text = $this->format_text($message->text); //text
+		}
+
+		return $messages;
 	}
 
 	/**
@@ -83,9 +115,7 @@ class Chat extends CI_Model
 	public function api_post($vars)
 	{
 		//--parameter-sanering--
-
-		//text saknas
-		if(!isset($vars) || !key_exists('text', $vars) || strlen($vars['text']) < 1)
+		if(!isset($vars) || !key_exists('text', $vars) || strlen($vars['text']) < 1 || strlen($vars['text']) > $this->message_max_length)
 			return 400; //bad request
 
 		$text = $vars['text'];
@@ -143,7 +173,7 @@ class Chat extends CI_Model
 		//variabler saknas eller är felaktiga
 		if(
 			!isset($vars) || !key_exists('message_id', $vars) || !is_numeric($vars['message_id'])
-			|| !key_exists('text', $vars) || strlen($vars['text']) < 1
+			|| !key_exists('text', $vars) || strlen($vars['text']) < 1 || strlen($vars['text']) > $this->message_max_length
 		)
 			return 400; //bad request
 		
@@ -171,15 +201,18 @@ class Chat extends CI_Model
 	}
 
 	/**
-	 * Hämtar $length antal meddelanden med början eller efter $message_id.
+	 * Trimmar text och tar bort tags.
+	 * Gör om länkar till "[länk]"
+	 * Gör om smileys till emojis.
+	 * Formaterar om *bold* _underline_ {italic}.
+	 * Gör om JIP/QIP/NOSHOW
 	 *
-	 * @param int $message_id Ladda meddelanden efter detta. Låt vara null om meddelanden det senaste meddelandet ska vara först i retur-listan.
-	 * @param int $length Antal meddelanden att ladda.
-	 * @return array
+	 * @param string $text
+	 * @return string
 	 */
-	public function get_messages($message_id, $length)
+	public function format_text($text)
 	{
-		//textformatering
+		//variabler
 		$regex_url = '/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/i';
 		$smileys = 
 			array(
@@ -204,63 +237,36 @@ class Chat extends CI_Model
 			);
 		$emojis = 	array('🙂', '🙂', '😉', '🙁', '😋', '😜', '😋', '😀', '😁', '😮', '😢', '😂', '😣', '😎', '😊', '🤐', '😕', '❤');
 
-		//om $message_id är null så behövs ingen where-sats och det senaste meddelandet ladds först
-		$where_clause = $message_id != null
-			? 'WHERE c.created < (SELECT created FROM ssg_chat WHERE id = '. $this->db->escape($message_id) .')'
-			: null;
+		//sanering (en del meddelanden kan vara "smutsiga" och städas upp även här såsom vid input)
+		$text = trim($text);
+		$text = strip_tags($text); //gör troligen ingenting eftersom htmlentities() kördes vid input
 
-		$sql =
-			'SELECT
-				c.*,
-				UNIX_TIMESTAMP(created) AS created_timestamp,
-				UNIX_TIMESTAMP(last_edited) AS last_edited_timestamp,
-				m.name, m.phpbb_user_id
-			FROM ssg_chat c
-			INNER JOIN ssg_members m
-				ON c.member_id = m.id
-			'. $where_clause .'
-			ORDER BY c.created DESC
-			LIMIT 0, '. $this->db->escape($length);
-		$result = $this->db->query($sql)->result();
+		//länkar
+		$text = preg_replace($regex_url, '<span class="link">[<a href="$0" target="_blank">länk</a>]</span>', $text); //case insensitive replace
 
-		//formatering
-		foreach($result as $message)
-		{
-			//formatera timespan-strängen
-			$message->timespan_string = $this->timespan_string($message->created_timestamp, $message->last_edited_timestamp);
+		//ersätt smileys med emojis ":)" -> "🙂"
+		$text = preg_replace($smileys, $emojis, $text);
 
-			//sanering (en del meddelanden kan vara "smutsiga" och städas upp även här såsom vid input)
-			$message->text = trim($message->text);
-			$message->text = strip_tags($message->text); //gör troligen ingenting eftersom htmlentities() kördes vid input
+		// *bold* -> <strong>bold</strong>
+		$text = preg_replace('/(?:\*{1})([\w\s]+?)(?:\*{1})/', '<strong>$1</strong>', $text);
+		//$0 är full match, dvs. '*tjock text*'. $1 är första matchade gruppen
+		//en grupp är regex som ligger inom parenteser
+		//'?:' definierar en grupp som non-capturing vilket gör att '(.+)' är den enda gruppen som fångas
+		
+		//_underscore_ -> <u>underscore</u>
+		$text = preg_replace('/(?:_{1}?)([\w\s]+?)(?:_{1}?)/', '<u>$1</u>', $text);
+		
+		//{italic} -> <i>italic</i>
+		$text = preg_replace('/(?:\{{1}?)([\w\s]+?)(?:\}{1}?)/', '<i>$1</i>', $text);
 
-			$message->text_plain = $message->text;
+		//JIP/QIP/NOSHOW
+		$text = preg_replace(
+			array('/(?<!\w)jip(?!\w)/i', '/(?<!\w)qip(?!\w)/i', '/(?<!\w)noshow(?!\w)/i'),
+			array('<span class="text-jip">JIP</span>', '<span class="text-qip">QIP</span>', '<span class="text-noshow">NOSHOW</span>'),
+			$text
+		);
 
-			//länkar
-			$message->text = preg_replace($regex_url, '<span class="link">[<a href="$0" target="_blank">länk</a>]</span>', $message->text); //case insensitive replace
-
-			//ersätt smileys med emojis ":)" -> "🙂"
-			$message->text = preg_replace($smileys, $emojis, $message->text);
-
-			// *bold* -> <strong>bold</strong>
-			$message->text = preg_replace('/(?:\*{1})([\w\s]+?)(?:\*{1})/', '<strong>$1</strong>', $message->text);
-			//$0 är full match, dvs. '*tjock text*'. $1 är första matchade gruppen
-			//en grupp är regex som ligger inom parenteser
-			//'?:' definierar en grupp som non-capturing vilket gör att '(.+)' är den enda gruppen som fångas
-			
-			//_underscore_ -> <u>underscore</u>
-			$message->text = preg_replace('/(?:_{1}?)([\w\s]+?)(?:_{1}?)/', '<u>$1</u>', $message->text);
-			
-			//{italic} -> <i>italic</i>
-			$message->text = preg_replace('/(?:\{{1}?)([\w\s]+?)(?:\}{1}?)/', '<i>$1</i>', $message->text);
-
-			//JIP/QIP/NOSHOW
-			$message->text = preg_replace(
-				array('/(?<!\w)jip(?!\w)/i', '/(?<!\w)qip(?!\w)/i', '/(?<!\w)noshow(?!\w)/i'),
-				array('<span class="text-jip">JIP</span>', '<span class="text-qip">QIP</span>', '<span class="text-noshow">NOSHOW</span>'),
-			$message->text);
-		}
-
-		return $result;
+		return $text;
 	}
 
 	/**

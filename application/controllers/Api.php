@@ -41,11 +41,12 @@ class API extends CI_Controller
 	{
 		//$data konverteras till json-objekt
 		$data = new stdClass;
-		$data->member = site_url('GET api/member/{member_id}');
+		$data->member = site_url('GET api/member/{int}');
 		$data->members = site_url('GET api/members');
-		$data->streamer = site_url('GET api/streamer/{member_id}');
+		$data->streamer = site_url('GET api/streamer/{int}');
 		$data->streamers = site_url('GET api/streamers');
-		$data->chat = site_url('GET, POST, PUT & DELETE api/chat/?start={int}&length={int}');
+		$data->message = site_url('GET, POST, PUT & DELETE api/message/?message_id={int}[&text={string}]');
+		$data->messages = site_url('GET api/messages/?length={int}[&message_id={int}] message_id = get messages after this message');
 
 		//skriv ut
 		$this->output($data);
@@ -163,7 +164,7 @@ class API extends CI_Controller
 		$this->output($streamers);
 	}
 
-	public function chat()
+	public function messages()
 	{
 		//endast inloggade medlemmar får se meddelanden
 		if(!$this->member->valid)
@@ -179,7 +180,7 @@ class API extends CI_Controller
 		{
 			//GET
 			case 'get':
-				$messages = $this->chat->api_get($this->input->get());
+				$messages = $this->chat->api_get_messages($this->input->get());
 				if($messages)
 					$this->output($messages);
 				else
@@ -237,17 +238,5 @@ class API extends CI_Controller
 				$this->output(null, 400); //bad request
 			break;
 		}
-	}
-
-	
-	private function chat_put()
-	{
-
-	}
-
-	
-	private function chat_delete()
-	{
-
 	}
 }

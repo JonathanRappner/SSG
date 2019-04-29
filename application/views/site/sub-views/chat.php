@@ -24,8 +24,8 @@ $this->load->library("Permissions");
 </div>
 
 <div id="chat-list" class="chat-list row">
-	<?php if(!isset($chat_messages) || count($chat_messages) <= 0):?>
-		<li><strong>SSG</strong>: Inga chatmeddelanden 😢</li>
+	<?php if(!$chat_messages || count($chat_messages) <= 0):?>
+		<div>&ndash;Inga chatmeddelanden 😢&ndash;</div>
 	<?php else:?>
 		<?php foreach($chat_messages as $message):?>
 			<div class="row chat_row" data-message_id="<?=$message->id?>">
@@ -45,7 +45,7 @@ $this->load->library("Permissions");
 	<?php endif;?>
 </div>
 <div id="input_row" class="input-group">
-	<input type="text" id="message" class="form-control mr-2">
+	<input type="text" id="message" maxlength="998" class="form-control mr-2">
 	
 	<button id="btn_info" class="btn btn-primary mr-2"><i class="fas fa-info"></i></button>
 	
