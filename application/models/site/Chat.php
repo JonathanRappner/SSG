@@ -101,7 +101,7 @@ class Chat extends CI_Model
 			ORDER BY c.created DESC';
 		$row = $this->db->query($sql, $message_id)->row();
 
-		$row->text_plain = $row->text; //////////////////temp
+		$row->text_plain = $row->text;
 
 		return $row;
 	}
@@ -120,9 +120,8 @@ class Chat extends CI_Model
 
 		$text = $vars['text'];
 
-		//sanering
+		//sanering kör inte htmlentities(), gör det på vägen ut
 		$text = trim($text);
-		$text = htmlentities($text);
 
 		//skicka text som nuvarande inloggade person
 		$this->add_message($this->member->id, $text);
@@ -178,7 +177,7 @@ class Chat extends CI_Model
 			return 400; //bad request
 		
 		$message_id = $vars['message_id']-0;
-		$text = $vars['text'];
+		$text = trim($vars['text']);
 
 		//hämta meddelandets skapare
 		$row = $this->db->query('SELECT member_id FROM ssg_chat WHERE id = ?', $message_id)->row();
@@ -191,6 +190,8 @@ class Chat extends CI_Model
 		$this->load->library("Permissions");
 		if(!$this->permissions->has_permissions(array('super', 's1')) || !$row->member_id == $this->member->id) //är inte admin eller är inte skaparen av meddelandet
 			return 401; //unauthorized
+
+		
 		
 		$now = date('Y-m-d G:i:s');
 		$this->db
@@ -213,7 +214,8 @@ class Chat extends CI_Model
 	public function format_text($text)
 	{
 		//variabler
-		$regex_url = '/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/i';
+		$regex_url = '/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.,~#?&\/\/=]*)/i';
+		// $regex_url = '/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/i';
 		$smileys = 
 			array(
 				'/(?<!\w):\)/', // :)
@@ -235,11 +237,11 @@ class Chat extends CI_Model
 				'/(?<!http|https):\/(?!\/)/i', // :/
 				'/(?<!\w)(<|&lt;)3/' //<3
 			);
-		$emojis = 	array('🙂', '🙂', '😉', '🙁', '😋', '😜', '😋', '😀', '😁', '😮', '😢', '😂', '😣', '😎', '😊', '🤐', '😕', '❤');
+		$emojis = array('🙂', '🙂', '😉', '🙁', '😋', '😜', '😋', '😀', '😁', '😮', '😢', '😂', '😣', '😎', '😊', '🤐', '😕', '❤');
 
 		//sanering (en del meddelanden kan vara "smutsiga" och städas upp även här såsom vid input)
 		$text = trim($text);
-		$text = strip_tags($text); //gör troligen ingenting eftersom htmlentities() kördes vid input
+		$text = str_replace(array('<', '>'), array('&lt;', '&gt;'), $text);
 
 		//länkar
 		$text = preg_replace($regex_url, '<span class="link">[<a href="$0" target="_blank">länk</a>]</span>', $text); //case insensitive replace
@@ -276,7 +278,8 @@ class Chat extends CI_Model
 	 */
 	public function get_last_message_id()
 	{
-		return $this->db->query('SELECT id FROM ssg_chat ORDER BY created ASC LIMIT 1')->row()->id;
+		$row = $this->db->query('SELECT id FROM ssg_chat ORDER BY created ASC LIMIT 1')->row();
+		return $row ? $row->id : null;
 	}
 
 	/**
@@ -372,12 +375,28 @@ class Chat extends CI_Model
 	}
 
 	/**
-	 * Importerar meddelanden från smf-chat/shout/scummbar
+	 * Importerar meddelanden från smf-chat/shout/scummbar.
+	 * !!!!Se till att rensa ssg_chat först!!!!
 	 *
 	 * @return void
 	 */
 	public function import_shouts()
 	{
-		
+		$messages_count = 512;
+
+		$sql =
+			'SELECT
+				id_member AS member_id,
+				FROM_UNIXTIME(log_time) AS created,
+				body AS text
+			FROM smf_sp_shouts
+			INNER JOIN ssg_members
+				ON smf_sp_shouts.id_member = ssg_members.id
+			ORDER BY log_time DESC
+			LIMIT ?';
+		$result = $this->db->query($sql, $messages_count)->result();
+
+		foreach($result as $message)
+			$this->db->insert('ssg_chat', $message);
 	}
 }
