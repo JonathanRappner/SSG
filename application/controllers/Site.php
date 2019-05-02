@@ -74,6 +74,7 @@ class Site extends CI_Controller
 		if($this->member->id != 1655) //Smorfty only
 			show_404();
 		
-		
+		$this->load->model('site/chat');
+		$this->chat->import_shouts();
 	}
 }

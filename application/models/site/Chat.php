@@ -341,4 +341,43 @@ class Chat extends CI_Model
 
 		$this->db->insert('ssg_chat', $data);
 	}
+
+	/**
+	 * Tar bort gamla meddelanden från ssg_chat.
+	 * Ser till att det inte finns mer än $max_messages i databasen.
+	 *
+	 * @return void
+	 */
+	public function prune_messages()
+	{
+		$max_messages = 512; //idunno, justera värdet om du vill
+
+		$sql =
+			'SELECT created FROM ssg_chat
+			ORDER BY created DESC
+			LIMIT ?, 1';
+		$row = $this->db->query($sql, $max_messages)->row();
+
+		//no pruning needed
+		if(!$row)
+			return;
+		
+		//datum för nyaste meddelandet som ligger utanför "pruning range" och ska tas bort
+		$first_message_to_prune = $row->created;
+
+		$sql =
+			'DELETE FROM ssg_chat
+			WHERE created <= ?';
+		$this->db->query($sql, $first_message_to_prune);
+	}
+
+	/**
+	 * Importerar meddelanden från smf-chat/shout/scummbar
+	 *
+	 * @return void
+	 */
+	public function import_shouts()
+	{
+		
+	}
 }

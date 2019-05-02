@@ -8,15 +8,15 @@ $this->current_page = 'news';
 
 	<!-- CSS/JS -->
 	<?php $this->load->view('site/sub-views/head');?>
-	<link rel="stylesheet" href="<?php echo base_url('css/site/signup-box.css');?>">
-	<link rel="stylesheet" href="<?php echo base_url('css/site/chat.css');?>">
-	<script src="<?php echo base_url('js/deadline.js');?>"></script>
-	<script src="<?php echo base_url('js/site/chat.js');?>"></script>
+	<link rel="stylesheet" href="<?=base_url('css/site/signup-box.css')?>">
+	<link rel="stylesheet" href="<?=base_url('css/site/chat.css')?>">
+	<script src="<?=base_url('js/deadline.js')?>"></script>
+	<script src="<?=base_url('js/site/chat.js')?>"></script>
 
 	<title>Swedish Strategic Group</title>
 
 	<script>
-		var deadline_epoch = <?php echo $deadline_epoch;?>;
+		var deadline_epoch = <?=$deadline_epoch?>;
 		
 		$(document).ready(function()
 		{
@@ -35,7 +35,7 @@ $this->current_page = 'news';
 </head>
 <body>
 
-<div id="wrapper_login" class="container">
+<div id="wrapper_news" class="container">
 
 	<!-- Top -->
 	<?php $this->load->view('site/sub-views/top');?>
@@ -52,8 +52,8 @@ $this->current_page = 'news';
 		</div>
 		<?php endif;?>
 		
-		<!-- Left column -->
-		<div class="col-9">
+		<!-- Vänsterkolumn -->
+		<div class="col-lg-9">
 
 			<?php if($this->member->valid):?>
 			<!-- Chat -->
@@ -69,8 +69,8 @@ $this->current_page = 'news';
 
 		</div>
 
-		<!-- Right column -->
-		<div class="col-3">
+		<!-- Högerkolumn -->
+		<div class="col-lg-3">
 			<div class="row">
 				<?php $this->load->view('site/sub-views/signup_box');?>
 			</div>

@@ -10,7 +10,7 @@ $this->load->library("Permissions");
 ?><script>
 	var earliest_message_id = <?=$earliest_message_id?>;
 	var member_id = <?=$this->member->id?>;
-	var is_admin = <?=$this->permissions->has_permissions(array('super', 's1')) ? 'true' : 'false'?>; //No, this won't actually give you admin powers. It's just for cosmetic stuff.
+	var is_admin = <?=$this->permissions->has_permissions(array('super', 's0')) ? 'true' : 'false'?>; //No, this won't actually give you admin powers. It's just for cosmetic stuff.
 </script>
 
 <div class="status">
@@ -45,11 +45,14 @@ $this->load->library("Permissions");
 	<?php endif;?>
 </div>
 <div id="input_row" class="input-group">
-	<input type="text" id="message" maxlength="998" class="form-control mr-2">
+	<input type="text" id="message" maxlength="998" class="form-control mr-2" data-emojiable="true">
 	
-	<button id="btn_info" class="btn btn-primary mr-2"><i class="fas fa-info"></i></button>
-	
-	<button id="btn_emoji" class="btn btn-primary mr-2">🙂</button>
+	<button id="btn_info" class="btn btn-primary mr-2"
+		data-container="body" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-html="true"
+		data-title="Textformatering" data-content="<ul class='formatting_popover'><li>*fet text*</li><li>_understruken text_</li><li>{kursiv text}</li></ul>"
+	>
+		<i class="fas fa-info"></i>
+	</button>
 	
 	<button id="btn_send" class="btn btn-success">
 		Skicka

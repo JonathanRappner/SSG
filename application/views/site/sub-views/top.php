@@ -4,6 +4,8 @@
 */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+$this->load->library("permissions");
+
 ?><div id="wrapper_top" class="row mb-3 border-bottom">
 	
 	<!-- Navbar -->
@@ -34,8 +36,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				<a class="nav-link" href="<?=base_url('site/emblem')?>">Emblem</a>
 			</li>
 			
+			<?php if($this->permissions->has_permissions(array('s0', 's1', 's2', 's3', 's4', 'grpchef'))):?>
 			<li class="nav-item">
-				<a class="nav-link" href="<?=base_url('admin')?>">&gt;Admin&lt;</a>
+				<a class="nav-link" href="<?=base_url('admin')?>">Admin</a>
+			</li>
+			<?php endif;?>
+			
+			<li class="nav-item">
+				<a class="nav-link" href="<?=base_url('site/logout')?>">Logga ut</a>
 			</li>
 
 		</ul>

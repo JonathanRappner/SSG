@@ -50,11 +50,13 @@ class Intervals
 	{
 		//moduler
 		$this->CI->load->library('eventsignup');
+		$this->CI->load->model('site/chat');
 
 		//metoder
 		$this->CI->eventsignup->create_auto_events();
 		$this->archive_old_events();
 		$this->remove_outdated_recesses();
+		$this->CI->chat->prune_messages();
 
 		$this->update_interval();
 	}

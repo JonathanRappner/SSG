@@ -12,6 +12,9 @@ $(document).ready(function()
 	earliest_loaded_message_id = $("#chat-list div.chat_row:last").data("message_id");
 	is_loading = false; //true när ajax laddar någonting
 	var update_interval = 60000; //antal millisekunder mellan uppdateringar
+
+	//enable:a popovers för info-"knappen"
+	$('[data-toggle="popover"]').popover();
 	
 	//chat-lista skroll
 	$("#chat-list").scroll(function(event)
