@@ -20,7 +20,14 @@ class Chat extends CI_Model
 		$this->days_swe = array(1=>'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag', 'söndag');
 	}
 
-	
+	/**
+	 * Hjälpfunktion till icke-api-controllers.
+	 * Kallar på api_get_messages() med rätt parametrar.
+	 *
+	 * @param int $message_id
+	 * @param int $length
+	 * @return array
+	 */
 	public function get_messages($message_id, $length)
 	{
 		return $this->api_get_messages(array('message_id' => $message_id, 'length' => $length));
@@ -68,7 +75,12 @@ class Chat extends CI_Model
 		foreach($messages as $message)
 		{
 			$message->timespan_string = $this->timespan_string($message->created_timestamp, $message->last_edited_timestamp); //timespan-strängen
-			$message->text = $this->format_text($message->text); //text
+
+			$chunks = $this->chunkify($message->text);
+			foreach($chunks as $chunk)
+				$chunk->text = $this->format_text($chunk->text, $chunk->is_url);
+
+			$message->text = $this->dechunkify($chunks);
 		}
 
 		return $messages;
@@ -76,6 +88,7 @@ class Chat extends CI_Model
 
 	/**
 	 * Hämta data relaterat till ett meddelande.
+	 * Formaterar INTE texten.
 	 *
 	 * @param array $get GET_variabler
 	 * @return void
@@ -120,7 +133,7 @@ class Chat extends CI_Model
 
 		$text = $vars['text'];
 
-		//sanering kör inte htmlentities(), gör det på vägen ut
+		//enda gången texten ska trimmas!
 		$text = trim($text);
 
 		//skicka text som nuvarande inloggade person
@@ -211,11 +224,16 @@ class Chat extends CI_Model
 	 * @param string $text
 	 * @return string
 	 */
-	public function format_text($text)
+	public function format_text($text, $is_url)
 	{
+		//om länk: formatera och return:a
+		if($is_url)
+		{
+			$regex_url = '/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.,~#?&\/\/=]*)/i';
+			return  preg_replace($regex_url, '<span class="link">[<a href="$0" target="_blank">länk</a>]</span>', $text); //case insensitive replace
+		}
+
 		//variabler
-		$regex_url = '/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.,~#?&\/\/=]*)/i';
-		// $regex_url = '/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/i';
 		$smileys = 
 			array(
 				'/(?<!\w):\)/', // :)
@@ -234,17 +252,14 @@ class Chat extends CI_Model
 				'/(?<!\w)8\)/', // 8)
 				'/(?<!\w)\^\^/', // ^^
 				'/(?<!\w):X/i', // :X
-				'/(?<!http|https):\/(?!\/)/i', // :/
-				'/(?<!\w)(<|&lt;)3/' //<3
+				'/(?<!\w):\//i', // :/
+				'/(?<!\w)(<|&lt;)3/', //<3
+				'/(?<!\w)8-\)/', // 8-)
 			);
-		$emojis = array('🙂', '🙂', '😉', '🙁', '😋', '😜', '😋', '😀', '😁', '😮', '😢', '😂', '😣', '😎', '😊', '🤐', '😕', '❤');
+		$emojis = array('🙂', '🙂', '😉', '🙁', '😋', '😜', '😋', '😀', '😁', '😮', '😢', '😂', '😣', '😎', '😊', '🤐', '😕', '❤', '🤓');
 
-		//sanering (en del meddelanden kan vara "smutsiga" och städas upp även här såsom vid input)
-		$text = trim($text);
+		//hindra tags (strip_tags() tar bort allt efter "<" så den använder vi inte)
 		$text = str_replace(array('<', '>'), array('&lt;', '&gt;'), $text);
-
-		//länkar
-		$text = preg_replace($regex_url, '<span class="link">[<a href="$0" target="_blank">länk</a>]</span>', $text); //case insensitive replace
 
 		//ersätt smileys med emojis ":)" -> "🙂"
 		$text = preg_replace($smileys, $emojis, $text);
@@ -269,6 +284,101 @@ class Chat extends CI_Model
 		);
 
 		return $text;
+	}
+
+	/**
+	 * Delar upp texten i en array med text-chunks.
+	 * Varje chunk innehåller url:er och vanlig text vart om varandra.
+	 * Använd denna funktion för att behandla url:er och vanlig text separat med $this->format_text()
+	 *
+	 * @param string $text
+	 * @return array Objekt-array där objekten har attributen text och is_url
+	 */
+	public function chunkify($text)
+	{
+		//dela upp meddelande i chunks (url-chunks och icke-url chunks)
+		$regex_url = '/https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.,~#?&\/\/=]*)/i';
+
+		preg_match_all($regex_url, $text, $matches, PREG_OFFSET_CAPTURE);
+
+		//alla fulla url-matchningar ligger i $matches[0], i $matches[>0] finns undergrupperna som vi inte bryr oss om
+		$full_matches = $matches[0];
+
+		$chunks = array();
+
+		//om första chunk:en är en text-chunk, lägg till den före for-loopen
+		if(count($full_matches) > 0) //det finns url-chunk
+		{
+			$first_url_start = $full_matches[0][1];
+			if($first_url_start > 0) //det finns en text-chunk före första url-chunk:en
+			{
+				$chunk = new stdClass;
+				$chunk->text = substr($text, 0, $first_url_start);
+				$chunk->is_url = false;
+				$chunks[] = $chunk;
+			}
+		}
+		else //det finns inga url-chunks
+		{
+			$chunk = new stdClass;
+			$chunk->text = $text;
+			$chunk->is_url = false;
+
+			$chunks[] = $chunk;
+			return $chunks;
+		}
+		
+		foreach($full_matches as $i => $group)
+		{
+			//varje $group ska innehålla den matchade texten på index 0 och dess position på index 1
+			if(!is_array($group) || !count($group) == 2)
+				continue; //skippa
+
+			//url-chunk
+			$url_start = $group[1];
+			$url_length = strlen($group[0]);
+			$url_end = $url_start + $url_length;
+
+			//lägg till url-chunk
+			$chunk = new stdClass;
+			$chunk->text = $group[0];
+			$chunk->is_url = true;
+			$chunks[] = $chunk;
+
+			//följande text-chunk
+			$text_start = $url_start + $url_length;
+			$text_length = $i < (count($full_matches)-1) //finns det fler url-chunks?
+				? $full_matches[$i+1][1] - $url_end //text-chunk:en löper tillnästa url-chunk
+				: strlen($text) - $text_start; //text-chunk:en löper till texten tar slut
+			$text_chunk = substr($text, $text_start, $text_length);
+
+			//lägg till text-chunk
+			if(strlen($text_chunk) > 0)
+			{
+				$chunk = new stdClass;
+				$chunk->text = $text_chunk;
+				$chunk->is_url = false;
+
+				$chunks[] = $chunk;
+			}
+		}
+
+		return $chunks;
+	}
+
+	/**
+	 * Sätter ihop chunks till sträng igen.
+	 *
+	 * @param array $chunks
+	 * @return string
+	 */
+	public function dechunkify($chunks)
+	{
+		$output = '';
+		foreach($chunks as $chunk)
+			$output .= $chunk->text;
+
+		return $output;
 	}
 
 	/**
