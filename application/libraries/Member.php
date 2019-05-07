@@ -21,19 +21,20 @@ class Member
 		// Assign the CodeIgniter super-object
 		$this->CI =& get_instance();
 
+		//försök hämta phpbb session id
+		$this->phpbb_session_id = $this->get_phpbb_session_id();
 
 		//försök hitta inloggad användare genom phpbb-cookie eller session-variabel
-		if($id = $this->get_phpbb_session_member()) //hämta inloggad medlem från phpbb-session, via cookies (nya)
+		if($member_id = $this->get_phpbb_session_member()) //hämta inloggad medlem från phpbb-session, via cookies (nya)
 		{
-			$this->id = $id;
-			$this->CI->session->member_id = $id;
+			$this->id = $member_id;
+			$this->CI->session->member_id = $member_id;
 		}
 		else if(!empty($this->CI->session->member_id)) //hämta inloggad medlem från session-variabler (gamla standalone-session som autenticeras via loginform->smf-lösenord)
 			$this->id = $this->CI->session->member_id;
 		else //ingen session finns, låt $this->valid vara false så login-formuläret visas
 			return;
 		
-			
 		/*** Lyckad inloggning ***/
 		
 		// debugging
@@ -65,24 +66,12 @@ class Member
 	 * Försöker identifiera inloggad användare (ssg_member.id) med hjälp av phpbb-cookie.
 	 * Ger false om ingen är inloggad.
 	 *
-	 * @return int SSG-medlems-id om inloggad, annars null.
+	 * @return object Objekt med attribut: member_id och phpbb_session_id.
 	 */
 	private function get_phpbb_session_member()
 	{
-		$regex_pattern = '/phpbb3_(\w){5}_sid/'; //ex: phpbb3_jyup2_sid, phpbb3_r9r3j_sid
-		$phpbb_session_id = null;
-		$member_id = null;
-
-		//leta efter session-id-cookie:n och spara värdet
-		foreach($_COOKIE as $key => $value)
-			if(preg_match($regex_pattern, $key))
-			{
-				$phpbb_session_id = $value;
-				break;
-			}
-		
-		//avbryt om ingen cookie hittades
-		if(empty($phpbb_session_id))
+		//avbryt om ingen cookie finns
+		if(empty($this->phpbb_session_id))
 			return null;
 		
 		//kolla upp session i db
@@ -92,12 +81,29 @@ class Member
 			INNER JOIN ssg_members m
 				ON s.session_user_id = m.phpbb_user_id
 			WHERE session_id = ?';
-		$query = $this->CI->db->query($sql, $phpbb_session_id);
+		$query = $this->CI->db->query($sql, $this->phpbb_session_id);
 
 		if($query->num_rows() <= 0)
 			return null;
 
+		//return:a ssg-member_id
 		return $query->row()->id;
+	}
+
+	/**
+	 * Hämta phpbb-session-id om det finns
+	 *
+	 * @return string Är null om ingen session finns.
+	 */
+	private function get_phpbb_session_id()
+	{
+		$regex_pattern = '/phpbb3_(\w){5}_sid/'; //ex: phpbb3_jyup2_sid, phpbb3_r9r3j_sid
+
+		foreach($_COOKIE as $key => $value)
+		if(preg_match($regex_pattern, $key))
+			return $value;
+		
+		return null;
 	}
 
 	/**

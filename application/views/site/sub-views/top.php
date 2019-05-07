@@ -42,9 +42,11 @@ $this->load->library("permissions");
 			</li>
 			<?php endif;?>
 			
+			<?php if($this->member->valid):?>
 			<li class="nav-item">
 				<a class="nav-link" href="<?=base_url('site/logout')?>">Logga ut</a>
 			</li>
+			<?php endif;?>
 
 		</ul>
 	</nav>
@@ -79,8 +81,8 @@ $this->load->library("permissions");
 		</div>
 		<?php else:?>
 			<div class="mt-2">
-				<a class="btn btn-primary" href="<?=base_url('forum/ucp.php?mode=login');?>">Logga in</a>
-				<a class="btn btn-success" href="<?=base_url('forum/ucp.php?mode=register');?>">Registrera dig</a>
+				<button class="btn btn-success" data-toggle="modal" data-target="#login_form">Logga in</button>
+				<a class="btn btn-primary" href="<?=base_url('forum/ucp.php?mode=register');?>">Registrera dig</a>
 			</div>
 		<?php endif;?>
 
@@ -91,4 +93,8 @@ $this->load->library("permissions");
 <?php
 //Alerts
 $this->alerts->print_alerts();
+
+//Login form
+if(!$this->member->valid)
+	$this->load->view('site/sub-views/login_form');
 ?>

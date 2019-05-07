@@ -18,6 +18,11 @@ class Site extends CI_Controller
 
 	public function index()
 	{
+		$this->news();
+	}
+
+	public function news()
+	{
 		//moduler
 		$this->load->model('site/signup_box');
 		$this->load->model('site/chat');
@@ -67,6 +72,12 @@ class Site extends CI_Controller
 
 		//vy
 		$this->load->view('site/emblem'/*, array('streamers'=>$streamers)*/);
+	}
+
+	public function logout()
+	{
+		$this->session->sess_destroy(); //förstör codeigniter-session
+		redirect('forum/ucp.php?mode=logout&sid='. $this->member->phpbb_session_id);
 	}
 
 	public function test()

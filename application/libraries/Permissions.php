@@ -42,6 +42,10 @@ class Permissions
 		//input-sanering
 		assert(!empty($permissions_code));
 
+		//ska kolla rättigheter mot inloggade användaren men är inte inloggad
+		if($member_id == null && !$this->CI->member->valid)
+			return false;
+
 		//Om $permissions inte är en array, gör om den till en.
 		if(!is_array($permissions_code))
 			$permissions_code = array($permissions_code);
