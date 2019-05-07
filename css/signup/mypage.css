@@ -12,6 +12,17 @@ h6{
 	text-align: center;
 }
 
+/* visa data sedan */
+#since_date{
+    width: 180px;
+    display: inline;
+}
+
+#btn_since_date{
+	position: relative;
+    top: -2px;
+}
+
 /* charts */
 canvas{
 	margin-bottom: 12px;

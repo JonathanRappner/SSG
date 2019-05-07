@@ -13,7 +13,8 @@ class Mypage extends CI_Model
 		$deadline,
 		$groups,
 		$signups,
-		$page_data;
+		$page_data,
+		$since_date;
 	
 	public function __construct()
 	{
@@ -33,6 +34,7 @@ class Mypage extends CI_Model
 		$this->page_data = new stdClass;
 		$this->page_data->results_per_page = 20;
 		$this->page_data->page = $page;
+		$this->since_date = $this->input->get('since_date');
 		$attendance_colors = array(1=>'#28a745', '#285ca6', '#fea500', '#fc302b', '#848484', '#7B23A8');
 
 		//ladda annan medlem eller använd inloggade medlemen

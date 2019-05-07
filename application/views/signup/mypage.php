@@ -109,7 +109,7 @@ $admin_groups = implode(', ', $admin_groups_arr);
 if(isset($loaded_member->rank_date))
 {
 	$bump_date = strtotime($loaded_member->rank_date);
-	$timespan_epoch = date('U') - $bump_date;
+	$timespan_epoch = time() - $bump_date;
 	$timespan_days = floor($timespan_epoch / (3600 * 24));
 	$day_string = $timespan_days == 1
 		? 'dag'
@@ -124,10 +124,10 @@ if(isset($loaded_member->rank_date))
 	<?php $this->load->view('signup/sub-views/head');?>
 
 	<!-- Page-specific -->
-	<link rel="stylesheet" href="<?php echo base_url('css/signup/mypage.css');?>">
+	<link rel="stylesheet" href="<?=base_url('css/signup/mypage.css');?>">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
-	<script src="<?php echo base_url('js/signup/clickable_table.js');?>"></script>
-	<script src="<?php echo base_url('js/signup/mypage.js?0');?>"></script>
+	<script src="<?=base_url('js/signup/clickable_table.js');?>"></script>
+	<script src="<?=base_url('js/signup/mypage.js?0');?>"></script>
 
 	<title>Min sida</title>
 
@@ -135,6 +135,7 @@ if(isset($loaded_member->rank_date))
 		//js-variabler
 		echo 
 			'<script>
+				var member_id = '. $loaded_member->id .';
 				var attendance_total = '. json_encode($attendance_total) .';
 				var attendance_quarter = '. json_encode($attendance_quarter) .';
 				var event_types = '. json_encode($event_types) .';
@@ -154,38 +155,38 @@ if(isset($loaded_member->rank_date))
 
 	<h1>
 		Min sida
-		<small class="text-muted"><?php echo $loaded_member->name;?></small>
+		<small class="text-muted"><?=$loaded_member->name;?></small>
 	</h1>
 
 	<!-- Medlemsinfo -->
 	<div id="wrapper_info" class="row">
 		<dl class="col">
 			<dt>Namn:</dt>
-			<dd><?php echo isset($loaded_member->name) ? $loaded_member->name : '-';?></dd>
+			<dd><?=isset($loaded_member->name) ? $loaded_member->name : '-'?></dd>
 
 			<dt>Enhet:</dt>
-			<dd><?php echo isset($loaded_member->group_name) ? group_icon($loaded_member->group_code) . $loaded_member->group_name : '-';?></dd>
+			<dd><?=isset($loaded_member->group_name) ? group_icon($loaded_member->group_code) . $loaded_member->group_name : '-'?></dd>
 
 			<dt>Befattning:</dt>
-			<dd><?php echo isset($loaded_member->role_name) ? $loaded_member->role_name : '-';?></dd>
+			<dd><?=isset($loaded_member->role_name) ? $loaded_member->role_name : '-'?></dd>
 
 			<dt>Grad:</dt>
-			<dd><?php echo isset($loaded_member->rank_name) ? '<img class="rank_icon" src="'. base_url("images/rank_icons/$loaded_member->rank_icon") .'" />'. $loaded_member->rank_name : '-';?></dd>
+			<dd><?=isset($loaded_member->rank_name) ? '<img class="rank_icon" src="'. base_url("images/rank_icons/$loaded_member->rank_icon") .'" />'. $loaded_member->rank_name : '-'?></dd>
 
 			<dt>Senast bumpad:</dt>
-			<dd><?php echo isset($bump_string) ? $bump_string : '?';?></dd>
+			<dd><?=isset($bump_string) ? $bump_string : '?'?></dd>
 
 			<dt>Aktiv:</dt>
-			<dd><?php echo $loaded_member->is_active ? 'Ja': 'Nej';?></dd>
+			<dd><?=$loaded_member->is_active ? 'Ja': 'Nej'?></dd>
 
 			<dt>UID:</dt>
-			<dd><?php echo isset($loaded_member->uid) ? $loaded_member->uid : '-';?></dd>
+			<dd><?=isset($loaded_member->uid) ? $loaded_member->uid : '-'?></dd>
 
 			<dt>Registreringsdatum:</dt>
-			<dd><?php echo isset($loaded_member->registered_date) ? $loaded_member->registered_date : '-';?></dd>
+			<dd><?=isset($loaded_member->registered_date) ? $loaded_member->registered_date : '-'?></dd>
 
 			<dt>Admin-rättigheter:</dt>
-			<dd><?php echo count($admin_groups_arr) > 0 ? $admin_groups : 'Inga';?></dd>
+			<dd><?=count($admin_groups_arr) > 0 ? $admin_groups : 'Inga'?></dd>
 		</dl>
 	</div>
 
@@ -194,11 +195,18 @@ if(isset($loaded_member->rank_date))
 		<!-- Statistik-boxar -->
 		<div id="wrapper_stats" class="row">
 			
+			<!-- Rubrik -->
 			<div class="col-12">
 				<h3 class="d-inline" title="Data sedan november 2014." data-toggle="tooltip">
 					Statistik
 					<i class="fas fa-question-circle"></i>
 				</h3>
+			</div>
+
+			<div class="form-group col-12">
+				<label for="since_date" class="font-weight-bold">Visa data sedan:</label>
+				<input id="since_date" type="date" class="form-control ml-2" value="<?=$this->input->get('since_date')?>">
+				<button id="btn_since_date" class="btn btn-primary ml-2">Visa</button>
 			</div>
 
 			<!-- Anmälningar (totalt) -->
@@ -207,8 +215,8 @@ if(isset($loaded_member->rank_date))
 				<canvas id="chart_total"></canvas>
 				<dl>
 					<?php for($i=0; $i < count($attendance_total->labels); $i++):?>
-						<dt><?php echo '<span style="color: '. $attendance_total->colors[$i] .';">&#9632;</span> '. $attendance_total->labels[$i];?></strong>:</dt>
-						<dd><?php echo $attendance_total->counts[$i];?></dd>
+						<dt><?='<span style="color: '. $attendance_total->colors[$i] .';">&#9632;</span> '. $attendance_total->labels[$i];?></strong>:</dt>
+						<dd><?=$attendance_total->counts[$i]?></dd>
 					<?php endfor;?>
 				</dl>
 			</div>
@@ -228,17 +236,17 @@ if(isset($loaded_member->rank_date))
 				</dl>
 			</div>
 
-			<!-- Anmälningar OP:ar vs. Träningar -->
+			<!-- Anmälningar till eventtyper -->
 			<div class="statbox col-sm-6 col-lg-4">
-				<h6 title="Räknar inte med NOSHOWs" data-toggle="tooltip">
-					Anmälningar OP:ar vs. Träningar
+				<h6 title="Räknar bara med icke-NOSHOW-anmälningar till obligatoriska event." data-toggle="tooltip">
+					Anmälningar till eventtyper
 					<i class="fas fa-question-circle"></i>
 				</h6>
 				<canvas id="chart_event_types"></canvas>
 				<dl>
 				<?php for($i=0; $i < count($event_types->labels); $i++):?>
-						<dt><?php echo '<span style="color: '. $event_types->colors[$i] .';">&#9632;</span> '. $event_types->labels[$i];?></strong>:</dt>
-						<dd><?php echo $event_types->counts[$i];?></dd>
+						<dt><?='<span style="color: '. $event_types->colors[$i] .';">&#9632;</span> '. $event_types->labels[$i];?></strong>:</dt>
+						<dd><?=$event_types->counts[$i];?></dd>
 					<?php endfor;?>
 				</dl>
 			</div>
@@ -249,11 +257,11 @@ if(isset($loaded_member->rank_date))
 				<h6>Anmälningar efter deadline</h6>
 				<canvas id="chart_deadline"></canvas>
 				<dl>
-					<dt><span style='color: <?php echo $deadline->colors[0];?>'>&#9632;</span> Före deadline</strong>:</dt>
-					<dd><?php echo $deadline->counts[0];?></dd>
+					<dt><span style='color: <?=$deadline->colors[0];?>'>&#9632;</span> Före deadline</strong>:</dt>
+					<dd><?=$deadline->counts[0];?></dd>
 
-					<dt><span style='color: <?php echo $deadline->colors[1];?>'>&#9632;</span> Efter deadline</strong>:</dt>
-					<dd><?php echo $deadline->counts[1];?></dd>
+					<dt><span style='color: <?=$deadline->colors[1];?>'>&#9632;</span> Efter deadline</strong>:</dt>
+					<dd><?=$deadline->counts[1];?></dd>
 				</dl>
 			</div>
 
@@ -266,8 +274,8 @@ if(isset($loaded_member->rank_date))
 				<canvas id="chart_groups"></canvas>
 				<dl>
 					<?php for($i=0; $i < count($groups->labels); $i++):?>
-						<dt><?php echo '<span style="color: '. $groups->colors[$i] .';">&#9632;</span> '. $groups->labels[$i];?></strong>:</dt>
-						<dd><?php echo $groups->counts[$i];?></dd>
+						<dt><?='<span style="color: '. $groups->colors[$i] .';">&#9632;</span> '. $groups->labels[$i];?></strong>:</dt>
+						<dd><?=$groups->counts[$i];?></dd>
 					<?php endfor;?>
 				</dl>
 			</div>
@@ -281,8 +289,8 @@ if(isset($loaded_member->rank_date))
 				<canvas id="chart_roles"></canvas>
 				<dl>
 					<?php for($i=0; $i < count($roles->labels); $i++):?>
-						<dt><?php echo '<span style="color: '. $roles->colors[$i] .';">&#9632;</span> '. $roles->labels[$i];?></strong>:</dt>
-						<dd><?php echo $roles->counts[$i];?></dd>
+						<dt><?='<span style="color: '. $roles->colors[$i] .';">&#9632;</span> '. $roles->labels[$i];?></strong>:</dt>
+						<dd><?=$roles->counts[$i];?></dd>
 					<?php endfor;?>
 				</dl>
 			</div>

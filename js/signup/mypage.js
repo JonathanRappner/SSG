@@ -3,13 +3,25 @@
  */
 $(document).ready(function()
 {
+	setup_charts();
+
+	//"visa data sedan:"-click
+	$("#btn_since_date").click(function(){
+		change_date($("#since_date").val());
+	});
+});
+
+/**
+ * Skapar och konfigurerar pie charts
+ */
+function setup_charts()
+{
 	var options =
 	{
 		responsive: true,
 		animation: false,
 		legend: { display: false },
 	};
-
 
 	//chart_total
 	var params_total = {
@@ -94,4 +106,13 @@ $(document).ready(function()
 		options: options
 	};
 	new Chart($("#chart_roles"), params_roles);
-});
+}
+
+/**
+ * Ändra "visa data sedan"
+ * @param {string} date Ex: "2019-05-07"
+ */
+function change_date(date)
+{
+	window.location = base_url +"signup/mypage/"+ member_id +"?since_date="+ date;
+}
