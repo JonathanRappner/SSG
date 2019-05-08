@@ -5,9 +5,19 @@ $(document).ready(function()
 {
 	setup_charts();
 
+	//
+	$("#member_select").change(function(){
+		window.location = base_url +"signup/mypage/"+ $(this).val();
+	});
+
 	//"visa data sedan:"-click
 	$("#btn_since_date").click(function(){
-		change_date($("#since_date").val());
+		window.location = base_url +"signup/mypage/"+ member_id +"?since_date="+ $("#since_date").val();
+	});
+
+	//"Återställ"-click
+	$("#btn_date_reset").click(function(){
+		window.location = base_url +"signup/mypage/"+ member_id;
 	});
 });
 
@@ -16,6 +26,12 @@ $(document).ready(function()
  */
 function setup_charts()
 {
+	//skapa inga pie-charts om inga anmälningar har hittats
+	if(attendance_total.counts <= 0)
+	{
+		return;
+	}
+
 	var options =
 	{
 		responsive: true,
@@ -36,20 +52,6 @@ function setup_charts()
 		options: options
 	};
 	new Chart($("#chart_total"), params_total);
-
-	//chart_quarter
-	var params_quarter = {
-		type: 'pie',
-		data: {
-			datasets: [{
-				data: attendance_quarter.counts,
-				backgroundColor: attendance_quarter.colors,
-			}],
-			labels: attendance_quarter.labels
-		},
-		options: options
-	};
-	new Chart($("#chart_quarter"), params_quarter);
 
 	//chart_event_types
 	var params_event_types = {
@@ -106,13 +108,4 @@ function setup_charts()
 		options: options
 	};
 	new Chart($("#chart_roles"), params_roles);
-}
-
-/**
- * Ändra "visa data sedan"
- * @param {string} date Ex: "2019-05-07"
- */
-function change_date(date)
-{
-	window.location = base_url +"signup/mypage/"+ member_id +"?since_date="+ date;
 }

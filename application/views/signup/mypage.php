@@ -9,13 +9,13 @@ $this->current_page = 'mypage';
 $member_has_signups = isset($stats->attendance_total);
 $link_prefix = base_url("signup/mypage/$loaded_member->id/");
 $scroll_to_id = 'wrapper_signups';
-
+$members = $this->db->query('SELECT id, name FROM ssg_members ORDER BY name ASC')->result();
 
 //--Variabler till js--
 
 //närvaro total
 $attendance_total = new stdClass;
-$attendance_total->labels = array(); //fyll på senare om användare har > 0 anmälningar
+$attendance_total->labels = array(); //skapa tomma arrays och fyll på senare om användare har > 0 anmälningar
 $attendance_total->counts = array();
 $attendance_total->colors = array();
 
@@ -125,9 +125,11 @@ if(isset($loaded_member->rank_date))
 
 	<!-- Page-specific -->
 	<link rel="stylesheet" href="<?=base_url('css/signup/mypage.css');?>">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
 	<script src="<?=base_url('js/signup/clickable_table.js');?>"></script>
-	<script src="<?=base_url('js/signup/mypage.js?0');?>"></script>
+	<script src="<?=base_url('js/signup/mypage.js');?>"></script>
 
 	<title>Min sida</title>
 
@@ -153,10 +155,28 @@ if(isset($loaded_member->rank_date))
 	<!-- Top -->
 	<?php $this->load->view('signup/sub-views/top');?>
 
-	<h1>
-		Min sida
-		<small class="text-muted"><?=$loaded_member->name;?></small>
-	</h1>
+	<div class="row">
+
+		<div class="col-lg">
+			<h1>
+				Min sida
+				<small class="text-muted"><?=$loaded_member->name;?></small>
+			</h1>
+		</div>
+
+		<?php if($this->permissions->has_permissions(array('s0', 's1', 'grpchef'))):?>
+		<!-- Se annan medlem -->
+		<div class="wrapper_member_select col-lg text-lg-right">
+			<label for="member_select" class="font-weight-bold" data-toggle="tooltip" title="Endast administratörer kan se andra medlemmars sidor.">Välj medlem <i class="fas fa-question-circle"></i>:</label>
+			<select id="member_select" class="selectpicker ml-2 text-dark" data-live-search="true">
+				<?php foreach($members as $member):?>
+					<option value="<?=$member->id?>" <?=$member->id == $loaded_member->id ? 'selected' : null?>><?=$member->name?></option>
+				<?php endforeach;?>
+			</select>
+		</div>
+		<?php endif;?>
+
+	</div>
 
 	<!-- Medlemsinfo -->
 	<div id="wrapper_info" class="row">
@@ -190,28 +210,35 @@ if(isset($loaded_member->rank_date))
 		</dl>
 	</div>
 
-
-	<?php if($member_has_signups):?>
-		<!-- Statistik-boxar -->
-		<div id="wrapper_stats" class="row">
-			
+	<!-- Statistik-boxar -->
+	<div id="wrapper_stats">
+		
+		<div class="row">
 			<!-- Rubrik -->
-			<div class="col-12">
+			<div class="col-lg">
 				<h3 class="d-inline" title="Data sedan november 2014." data-toggle="tooltip">
 					Statistik
-					<i class="fas fa-question-circle"></i>
+					<?php if(!$since_date):?>
+						<i class="fas fa-question-circle"></i>
+					<?php else:?>
+						<small class="text-secondary">(sedan <?=$since_date?>)</small>
+					<?php endif;?>
 				</h3>
 			</div>
 
-			<div class="form-group col-12">
+			<div id="wrapper_since_date" class="form-group col-lg text-lg-right mt-2">
 				<label for="since_date" class="font-weight-bold">Visa data sedan:</label>
-				<input id="since_date" type="date" class="form-control ml-2" value="<?=$this->input->get('since_date')?>">
-				<button id="btn_since_date" class="btn btn-primary ml-2">Visa</button>
+				<input id="since_date" type="date" min="2014-11-01" max="<?=date('Y-m-d')?>" class="form-control ml-2" value="<?=$since_date?>">
+				<button id="btn_since_date" class="btn btn-primary ml-2">Visa <i class="fas fa-search"></i></button>
+				<?php if($since_date):?><button id="btn_date_reset" class="btn btn-danger ml-2">Återställ <i class="fas fa-times-circle"></i></button><?php endif;?>
 			</div>
+		</div>
 
+		<?php if($member_has_signups):?>
+		<div class="row">
 			<!-- Anmälningar (totalt) -->
 			<div class="statbox col-sm-6 col-lg-4">
-				<h6>Anmälningar (totalt)</h6>
+				<h6>Anmälningar</h6>
 				<canvas id="chart_total"></canvas>
 				<dl>
 					<?php for($i=0; $i < count($attendance_total->labels); $i++):?>
@@ -220,37 +247,6 @@ if(isset($loaded_member->rank_date))
 					<?php endfor;?>
 				</dl>
 			</div>
-
-			<!-- Anmälningar (senaste kvartalet) -->
-			<div class="statbox col-sm-6 col-lg-4">
-				<h6>Anmälningar (senaste kvartalet)</h6>
-				<canvas id="chart_quarter"></canvas>
-				<dl>
-					<?php
-					if(!empty($attendance_quarter))
-						for($i=0; $i < count($attendance_quarter->labels); $i++)
-							echo
-								'<dt><span style="color: '. $attendance_quarter->colors[$i] .';">&#9632;</span> '. $attendance_quarter->labels[$i] .'</strong>:</dt>
-								<dd>'. $attendance_quarter->counts[$i] .'</dd>';
-					?>
-				</dl>
-			</div>
-
-			<!-- Anmälningar till eventtyper -->
-			<div class="statbox col-sm-6 col-lg-4">
-				<h6 title="Räknar bara med icke-NOSHOW-anmälningar till obligatoriska event." data-toggle="tooltip">
-					Anmälningar till eventtyper
-					<i class="fas fa-question-circle"></i>
-				</h6>
-				<canvas id="chart_event_types"></canvas>
-				<dl>
-				<?php for($i=0; $i < count($event_types->labels); $i++):?>
-						<dt><?='<span style="color: '. $event_types->colors[$i] .';">&#9632;</span> '. $event_types->labels[$i];?></strong>:</dt>
-						<dd><?=$event_types->counts[$i];?></dd>
-					<?php endfor;?>
-				</dl>
-			</div>
-
 
 			<!-- Anmälningar efter deadline -->
 			<div class="statbox col-sm-6 col-lg-4">
@@ -262,6 +258,21 @@ if(isset($loaded_member->rank_date))
 
 					<dt><span style='color: <?=$deadline->colors[1];?>'>&#9632;</span> Efter deadline</strong>:</dt>
 					<dd><?=$deadline->counts[1];?></dd>
+				</dl>
+			</div>
+
+			<!-- Anmälningar till eventtyper -->
+			<div class="statbox col-sm-6 col-lg-4">
+				<h6 title="Räknar bara med positiva anmälningar till obligatoriska event." data-toggle="tooltip">
+					Anmälningar till eventtyper
+					<i class="fas fa-question-circle"></i>
+				</h6>
+				<canvas id="chart_event_types"></canvas>
+				<dl>
+				<?php for($i=0; $i < count($event_types->labels); $i++):?>
+						<dt><?='<span style="color: '. $event_types->colors[$i] .';">&#9632;</span> '. $event_types->labels[$i];?></strong>:</dt>
+						<dd><?=$event_types->counts[$i];?></dd>
+					<?php endfor;?>
 				</dl>
 			</div>
 
@@ -294,10 +305,13 @@ if(isset($loaded_member->rank_date))
 					<?php endfor;?>
 				</dl>
 			</div>
-			
 		</div>
-	<?php endif;?>
-
+		<?php else:?>
+			<div class="col text-center mb-4" style="font-size: 1.4rem;">&ndash; Inga anmälningar hittades 😢 &ndash;</div>
+		<?php endif;?>
+		
+	</div>
+	
 	
 	<!-- Anmälningar -->
 	<div id="wrapper_signups" class="table-responsive table-sm">

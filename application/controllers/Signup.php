@@ -155,6 +155,7 @@ class Signup extends CI_Controller
 			'loaded_member' => $this->Mypage->get_loaded_member(), //medlemen vars statistik visas på sidan
 			'stats' => $this->Mypage->get_stats(),
 			'page' => $page,
+			'since_date' => $this->Mypage->since_date,
 		));
 	}
 

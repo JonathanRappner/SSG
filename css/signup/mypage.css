@@ -12,13 +12,25 @@ h6{
 	text-align: center;
 }
 
+/* bättre rad-avstånd på mobil */
+#wrapper_info dl{
+	line-height: 1.3rem;
+}
+
+/* bättre rad-avstånd på mobil */
+#wrapper_since_date{
+	line-height: 2.5rem;
+}
+
 /* visa data sedan */
 #since_date{
     width: 180px;
     display: inline;
 }
 
-#btn_since_date{
+/* "Visa data sedan"-knappar */
+#btn_since_date,
+#btn_date_reset{
 	position: relative;
     top: -2px;
 }

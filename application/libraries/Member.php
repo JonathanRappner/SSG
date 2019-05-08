@@ -38,13 +38,11 @@ class Member
 		/*** Lyckad inloggning ***/
 		
 		// debugging
-		// $this->id = 237; ////////Bezz
-		// $this->id = 220; ////////NinjaNils
 		// $this->id = 1603; ////////Nehls
 		// $this->id = 1207; ////////Nabel
 		// $this->id = 136;  ////////Kalle
 		// $this->id = 23;   ////////Dudemeister
-		// $this->id = 1001; ////////Viktor
+		// $this->id = 1709; ////////Matez
 		// $this->id = 1713; ////////ThoKaWi
 		// $this->id = 1472; ////////Jonasson
 		// $this->id = 1441; ////////Insane_laughter

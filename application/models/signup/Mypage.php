@@ -13,7 +13,8 @@ class Mypage extends CI_Model
 		$deadline,
 		$groups,
 		$signups,
-		$page_data,
+		$page_data;
+	public
 		$since_date;
 	
 	public function __construct()
@@ -34,8 +35,10 @@ class Mypage extends CI_Model
 		$this->page_data = new stdClass;
 		$this->page_data->results_per_page = 20;
 		$this->page_data->page = $page;
-		$this->since_date = $this->input->get('since_date');
 		$attendance_colors = array(1=>'#28a745', '#285ca6', '#fea500', '#fc302b', '#848484', '#7B23A8');
+		$this->since_date = preg_match('/^([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$/', $this->input->get('since_date')) //visa pie-charts för ett specifikt datum
+			? $this->input->get('since_date')
+			: null;
 
 		//ladda annan medlem eller använd inloggade medlemen
 		if(isset($other_member_id) && $other_member_id != $this->member->id) //ladda inloggad medlem om $other_member_id är dennes egna id
@@ -55,23 +58,7 @@ class Mypage extends CI_Model
 			$this->loaded_member = $this->member;
 
 		//--Närvaro totalt--
-		$sql =
-			'SELECT
-				attendance-0 AS id,
-				attendance AS name,
-				COUNT(attendance) AS count
-			FROM ssg_signups
-			WHERE member_id = ?
-			GROUP BY attendance
-			ORDER BY attendance-0 ASC';
-		$query = $this->db->query($sql, $this->loaded_member->id);
-		foreach($query->result() as $row)
-		{
-			$row->color = $attendance_colors[$row->id];
-			$this->attendance_total[] = $row;
-		}
-		
-		//--Närvaro senaste kvartalet--
+		$where = $this->since_date ? 'AND ssg_events.start_datetime >= '. $this->db->escape($this->since_date) : null;
 		$sql =
 			'SELECT
 				attendance-0 AS id,
@@ -82,17 +69,44 @@ class Mypage extends CI_Model
 				ON ssg_signups.event_id = ssg_events.id
 			WHERE
 				member_id = ?
-				AND ssg_events.start_datetime >= DATE_SUB(NOW(), INTERVAL 3 MONTH) #senaste kvartalet
+				'. $where .'
 			GROUP BY attendance
 			ORDER BY attendance-0 ASC';
 		$query = $this->db->query($sql, $this->loaded_member->id);
 		foreach($query->result() as $row)
 		{
 			$row->color = $attendance_colors[$row->id];
-			$this->attendance_quarter[] = $row;
+			$this->attendance_total[] = $row;
+		}
+		
+		//--Anmälningar efter deadline--
+		$where = $this->since_date ? 'AND ssg_events.start_datetime >= '. $this->db->escape($this->since_date) : null;
+		$sql =
+			'SELECT
+				signed_datetime < DATE_FORMAT(ssg_events.start_datetime, "%Y-%m-%d 00:00:00") AS good_boy
+			FROM ssg_signups
+			INNER JOIN ssg_events
+				ON ssg_signups.event_id = ssg_events.id
+			INNER JOIN ssg_event_types
+				ON ssg_events.type_id = ssg_event_types.id
+			WHERE
+				member_id = ?
+				AND ssg_event_types.obligatory
+				'. $where;
+		$query = $this->db->query($sql, $this->loaded_member->id);
+		$this->deadline = new stdClass;
+		$this->deadline->good_boy = 0;
+		$this->deadline->bad_boy = 0;
+		foreach($query->result() as $row)
+		{
+			if($row->good_boy)
+				$this->deadline->good_boy++;
+			else
+				$this->deadline->bad_boy++;
 		}
 
 		//--Operation vs. Träning--
+		$where = $this->since_date ? 'AND ssg_events.start_datetime >= '. $this->db->escape($this->since_date) : null;
 		$sql =
 			'SELECT
 				ssg_event_types.title,
@@ -106,37 +120,15 @@ class Mypage extends CI_Model
 				member_id = ?
 				AND attendance < 4
 				AND ssg_event_types.obligatory
+				'. $where .'
 			GROUP BY ssg_events.type_id
 			ORDER BY attendance ASC';
 		$query = $this->db->query($sql, $this->loaded_member->id);
 		foreach($query->result() as $row)
 			$this->event_types[] = $row;
 		
-		//--Anmälningar efter deadline--
-		$sql =
-			'SELECT
-				signed_datetime < DATE_FORMAT(ssg_events.start_datetime, "%Y-%m-%d 00:00:00") AS good_boy
-			FROM ssg_signups
-			INNER JOIN ssg_events
-				ON ssg_signups.event_id = ssg_events.id
-			INNER JOIN ssg_event_types
-				ON ssg_events.type_id = ssg_event_types.id
-			WHERE
-				member_id = ?
-				AND ssg_event_types.obligatory';
-		$query = $this->db->query($sql, $this->loaded_member->id);
-		$this->deadline = new stdClass;
-		$this->deadline->good_boy = 0;
-		$this->deadline->bad_boy = 0;
-		foreach($query->result() as $row)
-		{
-			if($row->good_boy)
-				$this->deadline->good_boy++;
-			else
-				$this->deadline->bad_boy++;
-		}
-		
 		//--Anmälningar till grupp--
+		$where = $this->since_date ? 'AND ssg_events.start_datetime >= '. $this->db->escape($this->since_date) : null;
 		$sql =
 			'SELECT
 				COUNT(*) AS count,
@@ -152,6 +144,7 @@ class Mypage extends CI_Model
 				member_id = ?
 				AND ssg_event_types.obligatory
 				AND NOT ssg_groups.dummy
+				'. $where .'
 			GROUP BY ssg_signups.group_id
 			ORDER BY
 				count DESC';
@@ -160,7 +153,8 @@ class Mypage extends CI_Model
 		foreach($query->result() as $row)
 			$this->groups[] = $row;
 		
-		//--Anmälning med roll--
+		//--Anmälning till befattning--
+		$where = $this->since_date ? 'AND ssg_events.start_datetime >= '. $this->db->escape($this->since_date) : null;
 		$sql =
 			'SELECT
 				COUNT(*) AS count,
@@ -176,6 +170,7 @@ class Mypage extends CI_Model
 				member_id = ?
 				AND ssg_event_types.obligatory
 				AND NOT ssg_roles.dummy
+				'. $where .'
 			GROUP BY ssg_signups.role_id
 			ORDER BY
 				count DESC';
@@ -246,4 +241,3 @@ class Mypage extends CI_Model
 		return $this->loaded_member;
 	}
 }
-?>
