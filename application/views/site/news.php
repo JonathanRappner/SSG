@@ -8,10 +8,13 @@ $this->current_page = 'news';
 
 	<!-- CSS/JS -->
 	<?php $this->load->view('site/sub-views/head');?>
+	<link rel="stylesheet" href="<?=base_url('css/site/news.css')?>">
 	<link rel="stylesheet" href="<?=base_url('css/site/signup-box.css')?>">
 	<link rel="stylesheet" href="<?=base_url('css/site/chat.css')?>">
+	<link rel="stylesheet" href="<?=base_url('css/site/latest_posts.css')?>">
 	<script src="<?=base_url('js/deadline.js')?>"></script>
 	<script src="<?=base_url('js/site/chat.js')?>"></script>
+	<script src="<?=base_url('js/site/news.js')?>"></script>
 
 	<title>Swedish Strategic Group</title>
 
@@ -53,7 +56,7 @@ $this->current_page = 'news';
 		<?php endif;?>
 		
 		<!-- Vänsterkolumn -->
-		<div class="col-lg-9">
+		<div id="leftcol" class="col-lg-9">
 
 			<?php if($this->member->valid):?>
 			<!-- Chat -->
@@ -70,12 +73,10 @@ $this->current_page = 'news';
 		</div>
 
 		<!-- Högerkolumn -->
-		<div class="col-lg-3">
-			<div class="row">
-				<?php $this->load->view('site/sub-views/signup_box');?>
-			</div>
-			<div class="row bg-info text-light" style="height:200px;">Senaste forum-inlägg</div>
-			<div class="row bg-danger text-light" style="height:500px;">TS3-viewer</div>
+		<div id="rightcol" class="col-lg-3">
+			<?php $this->load->view('site/sub-views/signup_box');?>
+			<?php $this->load->view('site/sub-views/latest_posts');?>
+			<?php $this->load->view('site/sub-views/ts3_viewer');?>
 		</div>
 
 	</div>

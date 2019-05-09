@@ -1,25 +1,24 @@
 /* --Anmälningsrutan-- */
 
 /* titel */
-#signup_box h2 a{
-	color: #000;
-}
-#signup_box h2 a:hover{ text-decoration: none; }
+div.signup_box h2{ font-size: 1.3rem; }
+div.signup_box h2 a{ color: #000; }
+div.signup_box h2 a:hover{ text-decoration: none; }
 
 /* datum/tid */
-#signup_box p.date{
+div.signup_box p.date{
 	font-size: .8rem;
 	margin: 0;
 }
 
 /* antal anmälda, siffra */
-#signup_box h3 a{
+div.signup_box p.count{ margin: 0; line-height: normal; }
+div.signup_box p.count a{
 	color: #000;
     font-size: 4rem;
     font-weight: bold;
 }
-#signup_box h3{ margin: 0; }
-#signup_box h3 a:hover{ text-decoration: none; }
+div.signup_box p.count a:hover{ text-decoration: none; }
 
 /* deadline */
 .deadline{
@@ -28,9 +27,15 @@
 }
 
 /* Anmäl dig / Ändra anmälan-knapp */
-a.btn_signup{
-	width: 100%;
-	margin: 6px;
+div.signup_box a.btn_signup_new,
+div.signup_box a.btn_signup_edit{
+	margin: 6px auto;
 }
-a.signup_edit { font-size: 1.7rem; } /* redigera anmälan */
-a.signup_new { font-size: 2.3rem; } /* ny anmälan */
+div.signup_box a.btn_signup_new { font-size: 2.0rem; } /* ny anmälan */
+div.signup_box a.btn_signup_edit { font-size: 1.5rem; } /* redigera anmälan */
+
+/* Knappikon */
+div.signup_box a.btn_signup_new i,
+div.signup_box a.btn_signup_edit i{
+	font-size: 1.5rem;
+}

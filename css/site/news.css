@@ -1,0 +1,19 @@
+/* Stylesheet för nyhetssidan/huvudsidan */
+
+/* högerkolumnen */
+#rightcol{
+	padding: 0 0.4rem 0 0.4rem;
+}
+
+/* varje "box" i högerkolumnen */
+#rightcol div.card{
+	margin-bottom: 1.0rem;
+}
+
+/* card-heading */
+#rightcol div.card-header{ font-weight: bold; }
+
+/* card-body */
+#rightcol div.card-body{
+	padding: 0.5rem;
+}
