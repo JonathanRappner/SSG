@@ -11,7 +11,10 @@
 }
 
 /* card-heading */
-#rightcol div.card-header{ font-weight: bold; }
+#rightcol div.card-header{
+	font-weight: bold;
+	padding: 12px;
+}
 
 /* card-body */
 #rightcol div.card-body{

@@ -5,7 +5,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 //variabler
-$posts = array(0,1,2,3,4,5);
 
 ?><div class="latest_posts">
 
@@ -16,11 +15,22 @@ $posts = array(0,1,2,3,4,5);
 		</div>
 
 		<ul class="list-group list-group-flush">
-			<li class="list-group-item"><strong>One</strong><p class="m-0">and a half</p></li>
-			<li class="list-group-item">Two</li>
-			<li class="list-group-item">Three</li>
-			<li class="list-group-item">Four</li>
-			<li class="list-group-item">Five</li>
+			
+			<a href class="list-group-item">
+				<p>Forum-tråd titel</p>
+				<span style="color:blue;">Smorfty</span>
+				<small>(i onsdags 22:30)</small>
+			</a>
+			
+			<a href class="list-group-item">
+				<p>Jättelång jobbig titel so...</p>
+				<span style="color:purple;">Insane_laughter</span>
+				<small>(i tisdags 14:02)</small>
+			</a>
+
+			<a href class="list-group-item">Three</a>
+			<a href class="list-group-item">Four</a>
+			<a href class="list-group-item">Five</a>
 		</ul>
 
 	</div>

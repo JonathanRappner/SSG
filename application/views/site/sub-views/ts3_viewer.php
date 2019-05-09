@@ -7,7 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //variabler
 $posts = array(0,1,2,3,4,5);
 
-?><div class="latest_posts">
+?><div class="ts3_viewer">
 
 	<div class="card">
 

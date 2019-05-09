@@ -138,7 +138,8 @@ class Member
 				ssg_groups.name AS group_name,
 				ssg_groups.code AS group_code,
 				role_id,
-				ssg_roles.name AS role_name
+				ssg_roles.name AS role_name,
+				ssg_members.phpbb_user_id
 			FROM smf_members
 			INNER JOIN ssg_members
 				ON smf_members.id_member = ssg_members.id

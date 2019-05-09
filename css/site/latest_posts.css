@@ -1,20 +1,28 @@
-/* wrapper */
-/* div.latest_posts{
-	margin-top: 0.2rem;
+/* länk-effekter */
+div.latest_posts a{
+	text-decoration: none;
+	color: #000;
+}
+div.latest_posts .list-group-item:hover{ background-color: #EEE; }
+
+/* list items */
+div.latest_posts .list-group-item{
 	padding: 0.5rem;
-} */
+	font-size: 0.8rem;
+}
 
-/* huvudrubrik */
-/* div.latest_posts h2{
-	font-size: 1.4rem;
-} */
+/* topic title */
+div.latest_posts .list-group-item p{
+	font-weight: bold;
+	margin: 0;
+}
 
-/* forumtråd-rubrik */
-/* div.latest_posts h4{
-	font-size: 1rem;
-} */
+/* medlems-namn */
+div.latest_posts .list-group-item span{
+	font-weight: bold;
+}
 
-/* post-länk */
-/* div.latest_posts a{
-	padding: 0.5rem;
-} */
+/* timestamp */
+div.latest_posts .list-group-item small{
+	font-size: 0.7rem;
+}

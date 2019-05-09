@@ -75,7 +75,7 @@ $this->current_page = 'news';
 		<!-- Högerkolumn -->
 		<div id="rightcol" class="col-lg-3">
 			<?php $this->load->view('site/sub-views/signup_box');?>
-			<?php $this->load->view('site/sub-views/latest_posts');?>
+			<?php $this->load->view('site/sub-views/latest_posts', array('posts'=>$posts));?>
 			<?php $this->load->view('site/sub-views/ts3_viewer');?>
 		</div>
 

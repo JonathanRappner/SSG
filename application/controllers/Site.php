@@ -26,17 +26,24 @@ class Site extends CI_Controller
 		//moduler
 		$this->load->model('site/signup_box');
 		$this->load->model('site/chat');
+		$this->load->model('site/latest_posts');
 		$this->load->library('Attendance');
 
 		//data
 		$attendance_types = $this->attendance->get_all(); //till signupbox
 		$chat_messages = $this->chat->get_messages(null, 16);
 		$earliest_message_id = $this->chat->get_last_message_id(); //hämta tidigaste meddelandet i db så att js vet när den inte ska ladda fler
+		$posts = $this->latest_posts->get_latest_posts($this->member->phpbb_user_id);
 
 		//vy
 		$this->load->view('site/news',
 			array_merge((array)$this->signup_box->event,
-				array('attendance_types' => $attendance_types, 'chat_messages' => $chat_messages, 'earliest_message_id' => $earliest_message_id)
+				array(
+					'attendance_types' => $attendance_types,
+					'chat_messages' => $chat_messages,
+					'earliest_message_id' => $earliest_message_id,
+					'posts' => $posts,
+				)
 			)
 		);
 	}
