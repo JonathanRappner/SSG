@@ -9,11 +9,11 @@ class Site extends CI_Controller
 	{
 		parent::__construct();
 
-		$this->load->model('site/pm_alert');
+		$this->load->model('site/news'); //ladda alltid news-modellen för pm-alert
 
 		//antal olästa pm
 		if($this->member->valid)
-			$this->pm_count = $this->pm_alert->get_pm_count($this->member->id);
+			$this->pm_count = $this->news->get_pm_count($this->member->id);
 	}
 
 	public function index()
@@ -26,14 +26,13 @@ class Site extends CI_Controller
 		//moduler
 		$this->load->model('site/signup_box');
 		$this->load->model('site/chat');
-		$this->load->model('site/latest_posts');
 		$this->load->library('Attendance');
 
 		//data
 		$attendance_types = $this->attendance->get_all(); //till signupbox
 		$chat_messages = $this->chat->get_messages(null, 16);
 		$earliest_message_id = $this->chat->get_last_message_id(); //hämta tidigaste meddelandet i db så att js vet när den inte ska ladda fler
-		$posts = $this->latest_posts->get_latest_posts($this->member->phpbb_user_id);
+		$posts = $this->news->get_latest_posts();
 
 		//vy
 		$this->load->view('site/news',

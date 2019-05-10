@@ -429,7 +429,7 @@ class Chat extends CI_Model
 		else //mer än sex dagar sedan
 			$output = $date_string;
 
-		return "<span title='$date_string' data-toggle='tooltip'>({$edited_prefix}$output)</span>";
+		return "<span data-toggle='tooltip' title='$date_string'>({$edited_prefix}$output)</span>";
 	}
 
 	/**

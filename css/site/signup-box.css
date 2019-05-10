@@ -32,7 +32,7 @@ div.signup_box a.btn_signup_edit{
 	margin: 6px auto;
 }
 div.signup_box a.btn_signup_new { font-size: 2.0rem; } /* ny anmälan */
-div.signup_box a.btn_signup_edit { font-size: 1.5rem; } /* redigera anmälan */
+div.signup_box a.btn_signup_edit { font-size: 1.4rem; } /* redigera anmälan */
 
 /* Knappikon */
 div.signup_box a.btn_signup_new i,

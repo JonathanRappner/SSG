@@ -16,21 +16,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 		<ul class="list-group list-group-flush">
 			
-			<a href class="list-group-item">
-				<p>Forum-tråd titel</p>
-				<span style="color:blue;">Smorfty</span>
-				<small>(i onsdags 22:30)</small>
+			<?php foreach($posts as $post):?>
+			<a href="<?=$post->url?>" class="list-group-item" data-toggle="tooltip" title="<?=$post->text?>">
+				<p><?=$post->topic_title?></p>
+				<span style="color:#<?=$post->user_color?>;"><?=$post->name?></span>
+				<small>(<?=$post->relative_time_string?>)</small>
 			</a>
-			
-			<a href class="list-group-item">
-				<p>Jättelång jobbig titel so...</p>
-				<span style="color:purple;">Insane_laughter</span>
-				<small>(i tisdags 14:02)</small>
-			</a>
+			<?php endforeach;?>
 
-			<a href class="list-group-item">Three</a>
-			<a href class="list-group-item">Four</a>
-			<a href class="list-group-item">Five</a>
 		</ul>
 
 	</div>

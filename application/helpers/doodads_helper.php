@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+/*
+ * Generiska helper-funktioner till allt möjligt.
+ */
+
 /**
  * Skriver ut pagination-kontroller (Föregående, 1, 2, 3, Nästa)
  * Skriver två versioner, en för mobil med max 4 sidor listade och en för desktop med $max_pages sidor listade. 
@@ -117,3 +121,56 @@ function group_icon($group_code, $group_name = null, $big = false)
 		return '<i class="fas fa-question-circle"></i>';
 }
 
+/**
+ * Ta bort bbcode-tags.
+ * Ex: "[img]image.jpg[/img]" -> "image.jpg"
+ *
+ * @param string $text
+ * @return string
+ */
+function strip_bbcode($text)
+{
+	return preg_replace('/[[\/\!]*?[^\[\]]*?]/si', null, $text);
+}
+
+/**
+ * Ger formaterad, relativ tidssträng.
+ * Ex: '(2 timmar sedan)'
+ * '(i måndags 11:07)'
+ *
+ * @param int $date Datum (unix epoch)
+ * @return void
+ */
+function relative_time_string($date)
+{
+	//tidsspann i sekunder
+	$min = 60;
+	$hour = 3600;
+	$day = 86400;
+	$six_days = 518400;
+
+	//variabler
+	$days_swe = array(1=>'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag', 'söndag');
+	$now = time();
+	$diff = abs($now - $date);
+	$date_string = date('Y-m-d G:i', $date);
+
+	if($diff < $min) //mindre än en minut sedan
+		$output = 'nyss';
+	else if($diff < $hour) //mer än en minut sedan (ex: '35 minuter sedan')
+	{
+		$minutes = floor($diff / $min);
+		$units_string = $minutes == 1 ? 'minut' : 'minuter';
+		$output = "$minutes $units_string sedan";
+	}
+	else if($diff < $day) //mer än en timme sedan (ex: 'idag 20:05')
+		$output = 'idag '. date('G:i', $date);
+	else if($diff < ($day * 2)) //mer är en OCH mindre än två dagar sedan (ex: 'igår 0:22')
+		$output = 'igår '. date('G:i', $date);
+	else if($diff < $six_days) //mer är en dag sedan (ex: 'i fredags 13:49') (använd six_days so att det inte står "i fredags" på en fredag)
+		$output = 'i '. $days_swe[date('N', $date)] . 's '. date('G:i', $date);
+	else //mer än sex dagar sedan
+		$output = $date_string;
+
+	return $output;
+}
