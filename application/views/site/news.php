@@ -43,17 +43,10 @@ $this->current_page = 'news';
 	<!-- Top -->
 	<?php $this->load->view('site/sub-views/top');?>
 
-	<div class="row">
+	<!-- Alerts -->
+	<?php $this->load->view('site/sub-views/alert', array('alerts' => $alerts));?>
 
-		<?php if($this->member->valid):?>
-		<!-- Meddelanden -->
-		<div class="col-12 rounded bg-danger text-light mb-2">
-			Viktigt meddelande!
-		</div>
-		<div class="col-12 rounded bg-info text-light mb-2">
-			Inte lika viktigt meddelande.
-		</div>
-		<?php endif;?>
+	<div class="row">
 		
 		<!-- Vänsterkolumn -->
 		<div id="leftcol" class="col-lg-9">

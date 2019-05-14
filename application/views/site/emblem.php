@@ -21,6 +21,9 @@ $this->current_page = 'emblem';
 	<!-- Top -->
 	<?php $this->load->view('site/sub-views/top');?>
 
+	<!-- Alerts -->
+	<?php $this->load->view('site/sub-views/alert', array('alerts' => $alerts));?>
+
 	<h1>Emblem</h1>
 
 	<p>Fixa ditt ingame-emblem här.</p>

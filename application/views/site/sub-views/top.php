@@ -91,9 +91,6 @@ $this->load->library("permissions");
 </div>
 
 <?php
-//Alerts
-$this->alerts->print_alerts();
-
 //Login form
 if(!$this->member->valid)
 	$this->load->view('site/sub-views/login_form');

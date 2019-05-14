@@ -16,7 +16,11 @@ class Signup_box extends CI_Model
 			$this->event->member_signup = $this->get_member_signup($this->event->event_id, $this->member->id);
 	}
 
-	
+	/**
+	 * Hämta event
+	 *
+	 * @return object
+	 */
 	private function get_event()
 	{
 		$deadline_time = '00:00:00';
@@ -42,7 +46,12 @@ class Signup_box extends CI_Model
 		return $this->db->query($sql, $deadline_time)->row();
 	}
 
-	
+	/**
+	 * Hämta antal anmälningar till event
+	 *
+	 * @param int $event_id
+	 * @return int
+	 */
 	private function get_signups_count($event_id)
 	{
 		$sql =
@@ -55,7 +64,13 @@ class Signup_box extends CI_Model
 			return $this->db->query($sql, $event_id)->row()->count;
 	}
 
-
+	/**
+	 * Hämta anmälan
+	 *
+	 * @param int $event_id
+	 * @param int $member_id
+	 * @return object
+	 */
 	private function get_member_signup($event_id, $member_id)
 	{
 		$sql =

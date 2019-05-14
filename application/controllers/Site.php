@@ -3,17 +3,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Site extends CI_Controller
 {
-	public $pm_count;
+	public $pm_count, $alerts;
 	
 	public function __construct()
 	{
 		parent::__construct();
 
-		$this->load->model('site/news'); //ladda alltid news-modellen för pm-alert
+		$this->load->model('site/news'); //ladda alltid news-modellen för att kunna visa pm-alerts
+		$this->load->model('site/alert'); //ladda alltid alert-modellen för att kunna visa viktiga meddellande-raden
 
 		//antal olästa pm
 		if($this->member->valid)
 			$this->pm_count = $this->news->get_pm_count($this->member->id);
+
+		//hämta viktiga meddelanden
+		$this->alerts = array();////////////////////////////////////////////
 	}
 
 	public function index()
@@ -42,6 +46,7 @@ class Site extends CI_Controller
 					'chat_messages' => $chat_messages,
 					'earliest_message_id' => $earliest_message_id,
 					'posts' => $posts,
+					'alerts' => $this->alerts,
 				)
 			)
 		);
@@ -52,7 +57,7 @@ class Site extends CI_Controller
 		//moduler
 
 		//vy
-		$this->load->view('site/members');
+		$this->load->view('site/members', array('alerts' => $this->alerts));
 	}
 
 	public function streamers()
@@ -64,7 +69,7 @@ class Site extends CI_Controller
 		$streamers = $this->streamers->get_streamers();
 
 		//vy
-		$this->load->view('site/streamers', array('streamers'=>$streamers));
+		$this->load->view('site/streamers', array('streamers' => $streamers, 'alerts' => $this->alerts));
 	}
 
 	public function emblem()
@@ -76,7 +81,7 @@ class Site extends CI_Controller
 		// $streamers = $this->streamers->get_streamers();
 
 		//vy
-		$this->load->view('site/emblem'/*, array('streamers'=>$streamers)*/);
+		$this->load->view('site/emblem', array('alerts' => $this->alerts));
 	}
 
 	public function logout()

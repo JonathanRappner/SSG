@@ -24,6 +24,9 @@ $this->current_page = 'streamers';
 	<!-- Top -->
 	<?php $this->load->view('site/sub-views/top');?>
 
+	<!-- Alerts -->
+	<?php $this->load->view('site/sub-views/alert', array('alerts' => $alerts));?>
+
 	<h1>Streamers</h1>
 
 	<div id="intro" class="mb-4">

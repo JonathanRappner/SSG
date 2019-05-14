@@ -21,6 +21,9 @@ $this->current_page = 'members';
 	<!-- Top -->
 	<?php $this->load->view('site/sub-views/top');?>
 
+	<!-- Alerts -->
+	<?php $this->load->view('site/sub-views/alert', array('alerts' => $alerts));?>
+
 	<h1>Medlemmar</h1>
 
 	<p>SSG:s medlemmar</p>
