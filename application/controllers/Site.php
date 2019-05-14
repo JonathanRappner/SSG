@@ -50,7 +50,6 @@ class Site extends CI_Controller
 	public function members()
 	{
 		//moduler
-		$this->load->model('site/pm_alert');
 
 		//vy
 		$this->load->view('site/members');

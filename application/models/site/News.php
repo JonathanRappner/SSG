@@ -31,12 +31,7 @@ class News extends CI_Model
 
 	/**
 	 * Hämtar previews för de senaste foruminläggen.
-	 *
-	 * @return array
-	 */
-
-	/**
-	 * Hämtar previews för de senaste foruminläggen.
+	 * Visar enbart posts som den inloggade eller ej inloggade användaren haar tillgång till.
 	 *
 	 * @param int $length Antal posts (default: 5)
 	 * @return array
@@ -46,16 +41,13 @@ class News extends CI_Model
 		if(!is_numeric($length))
 			throw new Exception("\$length ogiltig: {$length}");
 
-
-
-
-		/////////permissions
-		/////////om phpbb_user inte finns, returna publika trådar
-		//////$this->member->valid ? $this->member->phpbb_user_id : null
-
-
-
-
+		//WHERE-sats:
+		//WHERE postens forum_id finns i denna lista:
+		//	lista med forum_id:s där group_id finns i denna lista:
+		//		lista med group_id:s för user_id = ? (lista med alla grupper som medlemmen är med i)
+		$where = $this->member->valid
+			? 'WHERE topics.forum_id IN (SELECT forum_id FROM phpbb_acl_groups WHERE group_id IN (SELECT group_id FROM phpbb_user_group WHERE user_id = '. $this->db->escape($this->member->phpbb_user_id) .'))'
+			: 'WHERE topics.forum_id IN (SELECT forum_id FROM phpbb_acl_groups WHERE group_id = 1)'; //group_id 2 = GUEST
 		$sql =
 			'SELECT
 				posts.post_id,
@@ -74,6 +66,7 @@ class News extends CI_Model
 				ON posts.topic_id = topics.topic_id
 			INNER JOIN phpbb_users users
 				ON posts.poster_id = users.user_id
+			'. $where .'
 			ORDER BY post_time DESC
 			LIMIT ?';
 		$posts = $this->db->query($sql, array($length))->result();
