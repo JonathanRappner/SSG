@@ -8,14 +8,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 ?><div id="alerts" class="row">
 
-	<?php if($this->member->valid && false):?>
-	<!-- Meddelanden -->
-	<div class="col-12 rounded bg-danger text-light mb-2">
-		Viktigt meddelande!xxxx
+	<?php if($this->member->valid && false/******************/): foreach($alerts as $alert):?>
+	<div class="alert alert-<?=$alert->class?> col-12 alert-dismissible fade show">
+		<?=$alert->text?>
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
 	</div>
-	<div class="col-12 rounded bg-info text-light mb-2">
-		Inte lika viktigt meddelande.
-	</div>
-	<?php endif;?>
+	<?php endforeach; endif;?>
 
 </div>

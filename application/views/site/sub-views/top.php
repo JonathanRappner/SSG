@@ -4,6 +4,7 @@
 */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+//moduler
 $this->load->library("permissions");
 
 ?><div id="wrapper_top" class="row mb-3 border-bottom">
@@ -11,10 +12,10 @@ $this->load->library("permissions");
 	<!-- Navbar -->
 	<nav class="col-sm navbar navbar-expand-sm navbar-light text-nowrap">
 		<ul class="navbar-nav">
-			
-			<li class="nav-item<?=$this->current_page == 'news' ? ' active' : null?>">
-				<a class="nav-link" href="<?=base_url()?>">Hem</a>
-			</li>
+
+			<a class="navbar-brand" href="<?=base_url()?>">
+				<img src="<?=base_url('images/ssg_160.png')?>" height="20" alt="Logo">
+			</a>
 			
 			<li class="nav-item">
 				<a class="nav-link" href="<?=base_url('forum')?>">Forum</a>

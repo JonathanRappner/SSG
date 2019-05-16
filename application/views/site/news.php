@@ -1,7 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+//variabler
 $this->current_page = 'news';
+$carousel_images = glob('images/carousel/*.jpg');
+$random_index = rand(0, count($carousel_images)-1);
+
 ?><!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -45,6 +49,10 @@ $this->current_page = 'news';
 
 	<!-- Alerts -->
 	<?php $this->load->view('site/sub-views/alert', array('alerts' => $alerts));?>
+
+	<div id="carousel" class="row" style="background-image:url('<?=base_url($carousel_images[$random_index])?>');"></div>
+
+	<hr class="row">
 
 	<div class="row">
 		

@@ -1,14 +1,21 @@
 /* Huvud-stylesheet för hemsidan */
 
-/*  */
-h1.right_col_heading{
-	font-size: 1rem;
+/* Navbar-logga */
+nav .navbar-brand{
+	margin-right: 4px;
+    position: relative;
+    top: -2px;
 }
 
 /* Olästa meddelanden */
-a.pm_alert{
-	color: #FFF;
+a.pm_alert{  color: #FFF; }
+a.pm_alert:hover{ text-decoration: none; }
+
+/* Alerts */
+#alerts div.alert{
+	padding: 0.25rem 0.5rem;
+	margin-bottom: .2rem;
 }
-a.pm_alert:hover{
-	text-decoration: none;
+#alerts div.alert button.close{
+	padding: .1rem 0.5rem;
 }

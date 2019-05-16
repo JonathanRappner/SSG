@@ -10,14 +10,13 @@ class Site extends CI_Controller
 		parent::__construct();
 
 		$this->load->model('site/news'); //ladda alltid news-modellen för att kunna visa pm-alerts
-		$this->load->model('site/alert'); //ladda alltid alert-modellen för att kunna visa viktiga meddellande-raden
 
 		//antal olästa pm
 		if($this->member->valid)
 			$this->pm_count = $this->news->get_pm_count($this->member->id);
 
 		//hämta viktiga meddelanden
-		$this->alerts = array();////////////////////////////////////////////
+		$this->alerts = $this->db->query('SELECT * FROM ssg_alerts WHERE expiration_date IS NULL OR expiration_date >= NOW() ORDER BY expiration_date IS NULL DESC, expiration_date DESC')->result();
 	}
 
 	public function index()

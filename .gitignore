@@ -17,3 +17,6 @@ application/logs
 *.code-workspace
 *.editorconfig
 .vscode
+
+#carousel
+images/carousel/

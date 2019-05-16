@@ -20,3 +20,23 @@
 #rightcol div.card-body{
 	padding: 0.5rem;
 }
+
+/* bildspelet */
+#carousel{
+	height: 80px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: 100%;
+}
+
+/* Layouts större än sm */
+@media (min-width: 576px) {
+	/* större storlek på medium */
+	#carousel{ height: 120px; }
+}
+
+/* Layouts större än md */
+@media (min-width: 768px) {
+	/* större storlek på desktop */
+	#carousel{ height: 200px; }
+}
