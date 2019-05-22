@@ -27,16 +27,26 @@
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: 100%;
+	cursor: pointer;
 }
 
-/* Layouts större än sm */
+#carousel img{
+    width: 40%;
+	opacity: 0.5;
+	margin-left: 2rem;
+}
+
+/* sm eller större */
 @media (min-width: 576px) {
-	/* större storlek på medium */
-	#carousel{ height: 120px; }
+	#carousel{ height: 95x; }
 }
 
-/* Layouts större än md */
+/* md */
 @media (min-width: 768px) {
-	/* större storlek på desktop */
-	#carousel{ height: 200px; }
+	#carousel{ height: 126px; }
+}
+
+/* lg */
+@media (min-width: 992px){
+	#carousel{ height: 168px; }
 }

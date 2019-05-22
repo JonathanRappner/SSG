@@ -19,4 +19,15 @@ function deadline_timer_init(deadline_epoch)
 	setInterval(function() {
 		$("#deadline_text").html(deadline_timer_tick(deadline_epoch));
 	}, 1000);
+
+	//carousel-klick
+	$("#carousel").click(function(event){
+		var index = Math.floor(Math.random() * (carousel_images.length));
+		$(this).css("background-image", "url("+ base_url + carousel_images[index] +")");
+	});
+
+	//click + drag markerar loggan
+	$("#carousel").mousedown(function(event){
+		event.preventDefault();
+	});
 }

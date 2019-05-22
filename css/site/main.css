@@ -19,3 +19,4 @@ a.pm_alert:hover{ text-decoration: none; }
 #alerts div.alert button.close{
 	padding: .1rem 0.5rem;
 }
+#alerts span.link { font-weight: bold; }

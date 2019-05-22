@@ -24,19 +24,7 @@ $random_index = rand(0, count($carousel_images)-1);
 
 	<script>
 		var deadline_epoch = <?=$deadline_epoch?>;
-		
-		$(document).ready(function()
-		{
-			var deadline_element = $("#signup_box .deadline span");
-
-			//kör medan vi väntar på första tick:en
-			$(deadline_element).html(deadline_timer_tick(deadline_epoch));
-
-			//starta ticks med 1000 ms fördröjning
-			setInterval(function() {
-				$(deadline_element).html(deadline_timer_tick(deadline_epoch));
-			}, 1000);
-		});
+		var carousel_images = <?=json_encode($carousel_images)?>;
 	</script>
 
 </head>
@@ -50,7 +38,9 @@ $random_index = rand(0, count($carousel_images)-1);
 	<!-- Alerts -->
 	<?php $this->load->view('site/sub-views/alert', array('alerts' => $alerts));?>
 
-	<div id="carousel" class="row" style="background-image:url('<?=base_url($carousel_images[$random_index])?>');"></div>
+	<div id="carousel" class="row" style="background-image:url('<?=base_url($carousel_images[$random_index])?>');">
+		<img src="<?=base_url('images/logga-vit.svg')?>">
+	</div>
 
 	<hr class="row">
 

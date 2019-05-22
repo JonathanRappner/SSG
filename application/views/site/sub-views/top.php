@@ -13,16 +13,20 @@ $this->load->library("permissions");
 	<nav class="col-sm navbar navbar-expand-sm navbar-light text-nowrap">
 		<ul class="navbar-nav">
 
-			<a class="navbar-brand" href="<?=base_url()?>">
-				<img src="<?=base_url('images/ssg_160.png')?>" height="20" alt="Logo">
-			</a>
+			<!-- <a class="navbar-brand" href="<?=base_url()?>">
+				<img src="<?=base_url('images/logga.svg')?>" height="20" alt="Logo">
+			</a> -->
+
+			<li class="nav-item<?=$this->current_page == 'news' ? ' active' : null?>">
+				<a class="nav-link" href="<?=base_url('site/news')?>">Hem</a>
+			</li>
 			
 			<li class="nav-item">
 				<a class="nav-link" href="<?=base_url('forum')?>">Forum</a>
 			</li>
 			
 			<li class="nav-item">
-				<a class="nav-link" href="<?=base_url('signup')?>">Anmälning</a>
+				<a class="nav-link" href="<?=base_url('signup')?>">Events</a>
 			</li>
 			
 			<li class="nav-item">

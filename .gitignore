@@ -18,5 +18,6 @@ application/logs
 *.editorconfig
 .vscode
 
-#carousel
+#stuff
 images/carousel/
+dokument/
