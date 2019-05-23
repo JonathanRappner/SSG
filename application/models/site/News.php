@@ -11,25 +11,6 @@ class News extends CI_Model
 	}
 
 	/**
-	 * Hämta antalet olästa PMs i phpbb-inkorgen.
-	 *
-	 * @param int $member_id SSG medlems-id.
-	 * @return int Antal olästa PMs
-	 */
-	public function get_pm_count($member_id)
-	{
-		$sql =
-			'SELECT COUNT(*) count
-			FROM phpbb_privmsgs_to pm
-			INNER JOIN ssg_members m
-				ON m.phpbb_user_id = pm.user_id
-			WHERE
-				m.id = ?
-				AND pm_unread';
-		return $this->db->query($sql, $member_id)->row()->count;
-	}
-
-	/**
 	 * Hämtar previews för de senaste foruminläggen.
 	 * Visar enbart posts som den inloggade eller ej inloggade användaren haar tillgång till.
 	 *

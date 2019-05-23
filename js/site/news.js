@@ -30,4 +30,12 @@ function deadline_timer_init(deadline_epoch)
 	$("#carousel").mousedown(function(event){
 		event.preventDefault();
 	});
+
+	//expandera kollapsat nyhetsflöde
+	$("#btn_news_expand").click(function(event){
+		$(this).remove();
+		$("#newsfeed div.bottom_fade").remove();
+		$("#newsfeed").css("max-height", "initial");
+		$("#newsfeed").css("margin-bottom", "20px");
+	});
 }

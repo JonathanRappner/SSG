@@ -9,12 +9,7 @@ class Site extends CI_Controller
 	{
 		parent::__construct();
 
-		$this->load->model('site/news'); //ladda alltid news-modellen för att kunna visa pm-alerts
-		$this->load->model('site/global_alerts'); 
-
-		//antal olästa pm
-		if($this->member->valid)
-			$this->pm_count = $this->news->get_pm_count($this->member->id);
+		$this->load->model('site/global_alerts');
 
 		//hämta viktiga meddelanden
 		$this->global_alerts = $this->global_alerts->get_alerts();
@@ -28,6 +23,7 @@ class Site extends CI_Controller
 	public function news()
 	{
 		//moduler
+		$this->load->model('site/news');
 		$this->load->model('site/signup_box');
 		$this->load->model('site/chat');
 		$this->load->library('Attendance');

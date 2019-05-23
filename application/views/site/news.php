@@ -56,10 +56,8 @@ $random_index = rand(0, count($carousel_images)-1);
 			</div>
 			<?php endif;?>
 
-			<!-- News -->
-			<div class="row bg-warning text-light text-center" style="height:600px;">
-				nyhets-feed
-			</div>
+			<!-- Nyhetsflöde -->
+			<?php $this->load->view('site/sub-views/newsfeed');?>
 
 		</div>
 

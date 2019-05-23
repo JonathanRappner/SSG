@@ -36,9 +36,36 @@
 	margin-left: 2rem;
 }
 
+/* nyhetsflödet */
+#newsfeed{
+	/* mindre storlek i xs */
+	max-height: 300px;
+	overflow: hidden;
+}
+
+/* vit fadeout-bar som syns längst ner när nyhetsflödet är kollapsat i xs */
+div.bottom_fade{
+	display: block;
+	width: 100%;
+	height: 300px;
+	position: absolute;
+	bottom: 0;
+	background: linear-gradient(rgba(255,255,255,0), rgba(255,255,255,1));
+}
+
+/* Expandera-knapp */
+div.bottom_fade div.button_wrapper{
+	width: 100%;
+	position: absolute;
+	bottom: 20px;
+	text-align: center;
+}
+
 /* sm eller större */
 @media (min-width: 576px) {
-	#carousel{ height: 95x; }
+	#carousel{ height: 72px; }
+	#newsfeed{ max-height: initial; margin-bottom: 20px; }
+	div.bottom_fade{ display: none; }
 }
 
 /* md */
