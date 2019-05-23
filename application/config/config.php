@@ -23,7 +23,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'https://www.ssg-clan.se/new/';
+
+if(strtolower(substr($_SERVER['HTTP_HOST'], 0, 3)) == 'www')
+	$config['base_url'] = 'https://www.ssg-clan.se/new/';
+else
+	$config['base_url'] = 'https://ssg-clan.se/new/';
 
 /*
 |--------------------------------------------------------------------------

@@ -44,4 +44,6 @@ $preview = $this->preview->get_data();
 <?php if(defined('APRIL_FOOLS')) echo $this->april_fools->style(); ?>
 
 <!-- JS-variabler -->
-<input id="base_url" value="<?=base_url();?>" type="hidden">
+<script>
+	var base_url = '<?=base_url()?>';
+</script>

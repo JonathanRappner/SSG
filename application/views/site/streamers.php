@@ -25,7 +25,7 @@ $this->current_page = 'streamers';
 	<?php $this->load->view('site/sub-views/top');?>
 
 	<!-- Alerts -->
-	<?php $this->load->view('site/sub-views/alert', array('alerts' => $alerts));?>
+	<?php $this->load->view('site/sub-views/global_alerts', array('global_alerts' => $global_alerts));?>
 
 	<h1>Streamers</h1>
 

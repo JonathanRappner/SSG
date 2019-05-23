@@ -141,7 +141,7 @@ function refresh_messages(length)
 	$("#loading-animation").fadeIn(50); //visa loading animation
 
 	//hämta data
-	var url = base_url +"api/messages/?length="+ length;
+	var url = base_url + "api/messages/?length="+ length;
 	$.get(url, function(data)
 	{
 		refresh_messages_response(data);
@@ -177,7 +177,7 @@ function append_messages(message_id, length)
 	$("#loading-animation").fadeIn(50); //visa loading animation
 
 	//hämta data
-	var url = base_url +"api/messages/?message_id="+ message_id +"&length="+ length;
+	var url = base_url + "api/messages/?message_id="+ message_id +"&length="+ length;
 	$.get(url, function(data){
 		append_messages_response(data);
 	});
@@ -253,7 +253,7 @@ function send_message(text)
 	$("#btn_send div.spinner-border").css("display", "inline-block"); //visa spinner-animationen
 	
 	$.post(
-		base_url +"api/message/", //url
+		base_url + "api/message/", //url
 		{text: text}, //data
 		function(data){ send_message_response(data); } //success function
 	);
@@ -290,7 +290,7 @@ function delete_message(message_id)
 	$("div.chat_row[data-message_id="+ message_id +"] button").prop("disabled", true);
 
 	$.ajax({
-		url: base_url +"api/message/?message_id="+ message_id,
+		url: base_url + "api/message/?message_id="+ message_id,
 		type: "DELETE",
 		success: function(data){ refresh_messages(message_count); }
 	});
@@ -311,7 +311,7 @@ function start_editing(message_id)
 	$("#loading-animation").fadeIn(50); //visa loading animation
 
 	//hämta data (ett meddelande)
-	var url = base_url +"api/message/?message_id="+ message_id;
+	var url = base_url + "api/message/?message_id="+ message_id;
 	$.get(url, function(data){
 		setup_editing(data);
 	});
@@ -371,7 +371,7 @@ function save_message(message_id, text)
 	$("#message").prop("disabled", true);
 
 	$.ajax({
-		url: base_url +"api/message/?message_id="+ message_id +"&text="+ text,
+		url: base_url + "api/message/?message_id="+ message_id +"&text="+ text,
 		type: "PUT",
 		success: function(data){ save_message_response(data); }
 	});

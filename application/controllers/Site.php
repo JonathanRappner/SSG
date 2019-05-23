@@ -17,7 +17,7 @@ class Site extends CI_Controller
 			$this->pm_count = $this->news->get_pm_count($this->member->id);
 
 		//hämta viktiga meddelanden
-		$this->alerts = $this->global_alerts->get_alerts();
+		$this->global_alerts = $this->global_alerts->get_alerts();
 	}
 
 	public function index()
@@ -46,7 +46,7 @@ class Site extends CI_Controller
 					'chat_messages' => $chat_messages,
 					'earliest_message_id' => $earliest_message_id,
 					'posts' => $posts,
-					'alerts' => $this->alerts,
+					'global_alerts' => $this->global_alerts,
 				)
 			)
 		);
@@ -57,7 +57,7 @@ class Site extends CI_Controller
 		//moduler
 
 		//vy
-		$this->load->view('site/members', array('alerts' => $this->alerts));
+		$this->load->view('site/members', array('global_alerts' => $this->global_alerts));
 	}
 
 	public function streamers()
@@ -69,7 +69,7 @@ class Site extends CI_Controller
 		$streamers = $this->streamers->get_streamers();
 
 		//vy
-		$this->load->view('site/streamers', array('streamers' => $streamers, 'alerts' => $this->alerts));
+		$this->load->view('site/streamers', array('streamers' => $streamers, 'global_alerts' => $this->global_alerts));
 	}
 
 	public function emblem()
@@ -81,7 +81,7 @@ class Site extends CI_Controller
 		// $streamers = $this->streamers->get_streamers();
 
 		//vy
-		$this->load->view('site/emblem', array('alerts' => $this->alerts));
+		$this->load->view('site/emblem', array('global_alerts' => $this->global_alerts));
 	}
 
 	public function logout()

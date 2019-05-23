@@ -36,7 +36,7 @@ $random_index = rand(0, count($carousel_images)-1);
 	<?php $this->load->view('site/sub-views/top');?>
 
 	<!-- Alerts -->
-	<?php $this->load->view('site/sub-views/alert', array('alerts' => $alerts));?>
+	<?php $this->load->view('site/sub-views/global_alerts', array('global_alerts' => $global_alerts));?>
 
 	<div id="carousel" class="row" style="background-image:url('<?=base_url($carousel_images[$random_index])?>');">
 		<img src="<?=base_url('images/logga-vit.svg')?>">

@@ -17,7 +17,7 @@ class Global_alerts extends CI_Model
 	{
 		$sql =
 			'SELECT *
-			FROM ssg_alerts
+			FROM ssg_global_alerts
 			WHERE
 				expiration_date IS NULL
 				OR expiration_date >= NOW()

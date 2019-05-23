@@ -57,6 +57,7 @@ class Intervals
 		$this->archive_old_events();
 		$this->remove_outdated_recesses();
 		$this->CI->chat->prune_messages();
+		$this->remove_old_global_alerts();
 
 		$this->update_interval();
 	}
@@ -112,8 +113,8 @@ class Intervals
 			{
 				//lägg till Oanmäld frånvaro för alla non_signups
 				$sql =
-				'INSERT INTO ssg_signups(event_id, member_id, group_id, role_id, attendance, signed_datetime, last_changed_datetime)
-				VALUES(?, ?, ?, ?, ?, NOW(), NOW())';
+					'INSERT INTO ssg_signups(event_id, member_id, group_id, role_id, attendance, signed_datetime, last_changed_datetime)
+					VALUES(?, ?, ?, ?, ?, NOW(), NOW())';
 				$query = $this->CI->db->query($sql, array(
 					$event_id,
 					$member->id,
@@ -140,7 +141,23 @@ class Intervals
 	 */
 	private function remove_outdated_recesses()
 	{
-		//TODO insert coad
+		$sql =
+			'DELETE FROM ssg_recesses
+			WHERE DATE_ADD(start_date, INTERVAL length_days DAY) < NOW()';
+		$this->CI->db->query($sql);
+	}
+
+	/**
+	 * Rensa gamla global alerts (ssg_alerts) vars datetime har passerat.
+	 *
+	 * @return void
+	 */
+	private function remove_old_global_alerts()
+	{
+		$sql =
+			'DELETE FROM ssg_global_alerts
+			WHERE expiration_date < NOW()';
+		$this->CI->db->query($sql);
 	}
 }
 ?>

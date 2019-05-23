@@ -47,6 +47,7 @@ class API extends CI_Controller
 		$data->streamers = site_url('GET api/streamers');
 		$data->message = site_url('GET, POST, PUT & DELETE api/message/?message_id={int}[&text={string}]');
 		$data->messages = site_url('GET api/messages/?length={int}[&message_id={int}] message_id = get messages after this message');
+		$data->global_alert_dismiss = site_url('POST api/global_alert_dismiss/?id={int}');
 
 		//skriv ut
 		$this->output($data);
@@ -238,5 +239,49 @@ class API extends CI_Controller
 				$this->output(null, 400); //bad request
 			break;
 		}
+	}
+
+	public function global_alert_dismiss()
+	{
+		//--input-sanering--
+
+		//endast inloggade medlemmar får hantera meddelanden
+		if(!$this->member->valid)
+		{
+			$this->output(null, 401); //unauthorized
+			return;
+		}
+
+		//endast post
+		if(!$this->method == 'post')
+		{
+			$this->output(null, 400); //bad request
+			return;
+		}
+
+		//saknar id eller inte numeriskt
+		if(!$this->input->get('id') || !is_numeric($this->input->get('id')))
+		{
+			$this->output(null, 400); //bad request
+			return;
+		}
+		$id = $this->input->get('id');
+
+
+		//--do the thingy--
+
+		//tilldela array om så behövs
+		if(empty($this->session->dismissed_global_alerts))
+			$this->session->dismissed_global_alerts = array();
+
+		$array = $this->session->dismissed_global_alerts;
+
+		//avbryt om id redan finns i array
+		if(in_array($id, $array))
+			return;
+
+		//måste göra det på det här dumma sättet because reasons
+		$array[] = $id;
+		$this->session->dismissed_global_alerts = $array;
 	}
 }

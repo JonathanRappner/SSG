@@ -41,4 +41,6 @@ $preview = $this->preview->get_data();
 <link rel="stylesheet" href="<?=base_url('css/site/main.css')?>">
 
 <!-- JS-variabler -->
-<input id="base_url" value="<?=base_url()?>" type="hidden">
+<script>
+	var base_url = '<?=base_url()?>';
+</script>
