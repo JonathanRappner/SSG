@@ -7,7 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //moduler
 $this->load->library("permissions");
 
-?><div id="wrapper_top" class="row mb-3 border-bottom">
+?><div id="wrapper_top" class="row border-bottom">
 	
 	<!-- Navbar -->
 	<nav class="col navbar navbar-expand-sm navbar-light text-nowrap">

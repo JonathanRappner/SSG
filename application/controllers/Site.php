@@ -20,7 +20,7 @@ class Site extends CI_Controller
 		$this->news();
 	}
 
-	public function news()
+	public function news($page = 0)
 	{
 		//moduler
 		$this->load->model('site/news');
@@ -29,6 +29,7 @@ class Site extends CI_Controller
 		$this->load->library('Attendance');
 
 		//data
+		$news = $this->news->get_news($page, 5);
 		$attendance_types = $this->attendance->get_all(); //till signupbox
 		$chat_messages = $this->chat->get_messages(null, 16);
 		$earliest_message_id = $this->chat->get_last_message_id(); //hämta tidigaste meddelandet i db så att js vet när den inte ska ladda fler
@@ -38,6 +39,8 @@ class Site extends CI_Controller
 		$this->load->view('site/news',
 			array_merge((array)$this->signup_box->event,
 				array(
+					'news' => $news,
+					'page' => $page,
 					'attendance_types' => $attendance_types,
 					'chat_messages' => $chat_messages,
 					'earliest_message_id' => $earliest_message_id,

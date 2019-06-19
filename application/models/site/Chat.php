@@ -297,7 +297,7 @@ class Chat extends CI_Model
 	public function chunkify($text)
 	{
 		//dela upp meddelande i chunks (url-chunks och icke-url chunks)
-		$regex_url = '/https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.,~#?&\/\/=]*)/i';
+		$regex_url = '/https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+\~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.,\~#?&\/\/=]*)/i';
 
 		preg_match_all($regex_url, $text, $matches, PREG_OFFSET_CAPTURE);
 

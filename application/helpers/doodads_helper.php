@@ -174,3 +174,39 @@ function relative_time_string($date)
 
 	return $output;
 }
+
+/**
+ * Tyder bbcode och omvlandlar till html.
+ * Kanske lite väl special-gjord för newsfeed.
+ *
+ * @param string $text
+ * @return string
+ */
+function bbcode_parse($text)
+{
+	$find = array(
+		'~\[b\](.*?)\[/b\]~s',
+		'~\[i\](.*?)\[/i\]~s',
+		'~\[u\](.*?)\[/u\]~s',
+		'~\[quote\](.*?)\[/quote\]~s',
+		'~\[size=(.*?)\](.*?)\[/size\]~s',
+		'~\[color=(.*?)\](.*?)\[/color\]~s',
+		'~\[url\]((?:ftp|https?)://.*?)\[/url\]~s',
+		'~\[url=(.+?)\](.+?)\[\/url\]~s',
+		'~\[img\](https?://.+?)\[/img\]~s'
+	);
+
+	$replace = array(
+		'<strong>$1</strong>',
+		'<i>$1</i>',
+		'<span style="text-decoration:underline;">$1</span>',
+		'<pre>$1</'.'pre>',
+		'<span style="font-size:$1px;">$2</span>',
+		'<span style="color:$1;">$2</span>',
+		'<a href="$1">$1</a>',
+		'<a href="$1">$2</a>',
+		'<a class="newsfeed_image" href="$1" data-toggle="lightbox"><img src="$1" alt /></a>' //bilder ska inte vara inline
+	);
+
+	return preg_replace($find, $replace, $text);
+}

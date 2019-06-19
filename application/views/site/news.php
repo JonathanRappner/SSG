@@ -32,17 +32,18 @@ $random_index = rand(0, count($carousel_images)-1);
 
 <div id="wrapper_news" class="container">
 
-	<!-- Top -->
+	<!-- Topp -->
 	<?php $this->load->view('site/sub-views/top');?>
 
 	<!-- Alerts -->
 	<?php $this->load->view('site/sub-views/global_alerts', array('global_alerts' => $global_alerts));?>
 
-	<div id="carousel" class="row" style="background-image:url('<?=base_url($carousel_images[$random_index])?>');">
+	<!-- Bildspel -->
+	<div id="carousel" class="row my-2" style="background-image:url('<?=base_url($carousel_images[$random_index])?>');">
 		<img src="<?=base_url('images/logga-vit.svg')?>">
 	</div>
 
-	<hr class="row">
+	<hr class="row mt-0">
 
 	<div class="row">
 		

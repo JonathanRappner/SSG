@@ -10,6 +10,61 @@ class News extends CI_Model
 		parent::__construct();
 	}
 
+
+	public function get_news($page = 0, $results_per_page = 5)
+	{
+		//variabler
+		$text_max_length = 1200;
+		$news = new stdClass;
+		$news->results_per_page = $results_per_page;
+
+		//where-sats, begränsa vilka forum som ska kollas
+		$where = 'WHERE forum_id = 5';
+
+		//topics
+		$sql =
+			'SELECT SQL_CALC_FOUND_ROWS
+				topics.topic_id AS id, #topic_id
+				topic_title AS title, #title
+				members.name AS poster_name, #poster_name
+				DATE_FORMAT(FROM_UNIXTIME(topic_time), "%Y-%m-%d %H:%i") AS date #date
+			FROM phpbb_topics topics
+			LEFT OUTER JOIN ssg_members members
+				ON topics.topic_poster = members.phpbb_user_id
+			'. $where .'
+			ORDER BY topics.topic_time DESC
+			LIMIT ?, ?';
+		$news->topics = $this->db->query($sql, array($results_per_page * $page, $results_per_page))->result();
+
+		//hämta totala antalet topics
+		$news->total_results = $this->db->query('SELECT FOUND_ROWS() as total_results')->row()->total_results;
+
+
+		//topic first post text
+		foreach($news->topics as $topic)
+		{
+			$sql =
+				'SELECT post_text AS text
+				FROM phpbb_posts
+				WHERE topic_id = ?
+				ORDER BY post_time ASC
+				LIMIT 1';
+			$topic->text = $this->db->query($sql, $topic->id)->row()->text;
+
+			//ta bort html, bbcode-text blir kvar
+			$topic->text = strip_tags($topic->text);
+			
+			//om text är för lång: kapa
+			if(strlen($topic->text) > $text_max_length)
+				$topic->text = mb_substr($topic->text, 0, $text_max_length) .'...';
+
+			//parse:a bbcode till html
+			$topic->text = bbcode_parse($topic->text); //helper-funktion
+		}
+
+		return $news;
+	}
+
 	/**
 	 * Hämtar previews för de senaste foruminläggen.
 	 * Visar enbart posts som den inloggade eller ej inloggade användaren haar tillgång till.
