@@ -63,12 +63,15 @@ class Chat extends CI_Model
 				UNIX_TIMESTAMP(created) AS created_timestamp,
 				UNIX_TIMESTAMP(last_edited) AS last_edited_timestamp,
 				m.name, m.phpbb_user_id,
-				u.user_colour user_color
+				u.user_colour user_color,
+				r.rank_title user_title
 			FROM ssg_chat c
 			INNER JOIN ssg_members m
 				ON c.member_id = m.id
 			INNER JOIN phpbb_users u
 				ON m.phpbb_user_id = u.user_id
+			INNER JOIN phpbb_ranks r
+				ON u.user_rank = r.rank_id
 			'. $where_clause .'
 			ORDER BY c.created DESC
 			LIMIT 0, '. $this->db->escape($length);
