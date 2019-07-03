@@ -96,7 +96,7 @@ class Site extends CI_Controller
 			show_404();
 		
 		// importera chat
-		// $this->load->model('site/chat');
-		// $this->chat->import_shouts();
+		$this->load->model('site/chat');
+		$this->chat->import_shouts('2019-05-02 12:29');
 	}
 }

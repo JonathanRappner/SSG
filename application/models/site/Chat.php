@@ -486,13 +486,14 @@ class Chat extends CI_Model
 
 	/**
 	 * Importerar meddelanden från smf-chat/shout/scummbar.
-	 * !!!!Se till att rensa ssg_chat först!!!!
 	 *
+	 * @param string $after Mysql datetime-sträng
 	 * @return void
 	 */
-	public function import_shouts()
+	public function import_shouts($after)
 	{
-		$messages_count = 512;
+		if(!$after)
+			throw new Exception('import_shouts() saknar $after');
 
 		$sql =
 			'SELECT
@@ -502,9 +503,9 @@ class Chat extends CI_Model
 			FROM smf_sp_shouts
 			INNER JOIN ssg_members
 				ON smf_sp_shouts.id_member = ssg_members.id
-			ORDER BY log_time DESC
-			LIMIT ?';
-		$result = $this->db->query($sql, $messages_count)->result();
+			WHERE log_time > UNIX_TIMESTAMP(?)
+			ORDER BY log_time DESC';
+		$result = $this->db->query($sql, array($after))->result();
 
 		foreach($result as $message)
 			$this->db->insert('ssg_chat', $message);
