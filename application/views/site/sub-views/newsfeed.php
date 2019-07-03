@@ -15,13 +15,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	
 	<!-- Nyhets-posts -->
 	<?php foreach($news->topics as $topic):?>
+	<?php $article_link = base_url('forum/viewtopic.php?t='. $topic->id)?>
 		<div class="news_topic col-12 px-0 pb-4 mb-4">
 			
-			<h3><a href="<?=base_url('forum/viewtopic.php?t='. $topic->id)?>"><?=$topic->title?></a></h3>
+			<h3><a href="<?=$article_link?>"><?=$topic->title?></a></h3>
 			
 			<small><?=($topic->poster_name ? "postat av $topic->poster_name, " : null)?><?=$topic->date?></small>
 			
 			<div class="body"><?=$topic->text?></div>
+
+			<a href="<?=$article_link?>" class="mt-2 d-inline-block font-weight-bold">Läs mer &raquo;</a>
 
 		</div>
 
