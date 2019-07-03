@@ -9,11 +9,6 @@ class Signup_box extends CI_Model
 	public function __construct()
 	{
 		parent::__construct();
-
-		$this->event = $this->get_event();
-		$this->event->signups_count = $this->get_signups_count($this->event->event_id);
-		if($this->member->valid)
-			$this->event->member_signup = $this->get_member_signup($this->event->event_id, $this->member->id);
 	}
 
 	/**
@@ -21,9 +16,11 @@ class Signup_box extends CI_Model
 	 *
 	 * @return object
 	 */
-	private function get_event()
+	public function get_upcomming_event()
 	{
+		//variabler
 		$deadline_time = '00:00:00';
+		$event = new stdClass;
 
 		//event
 		$sql =
@@ -43,7 +40,20 @@ class Signup_box extends CI_Model
 				AND ssg_event_types.display
 			ORDER BY start_datetime ASC
 			LIMIT 1';
-		return $this->db->query($sql, $deadline_time)->row();
+		$event = $this->db->query($sql, $deadline_time)->row();
+
+		//arbryt om inget nytt event hittats
+		if($event == null)
+			return null;
+
+		//antal anmälda
+		$event->signups_count = $this->get_signups_count($event->event_id);
+
+		//inloggad medlems anmälan
+		if($this->member->valid)
+			$event->member_signup = $this->get_member_signup($event->event_id, $this->member->id);
+
+		return $event;
 	}
 
 	/**

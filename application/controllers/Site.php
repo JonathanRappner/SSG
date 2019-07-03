@@ -36,17 +36,18 @@ class Site extends CI_Controller
 		$posts = $this->news->get_latest_posts();
 
 		//vy
-		$this->load->view('site/news',
-			array_merge((array)$this->signup_box->event,
-				array(
-					'news' => $news,
-					'page' => $page,
-					'attendance_types' => $attendance_types,
-					'chat_messages' => $chat_messages,
-					'earliest_message_id' => $earliest_message_id,
-					'posts' => $posts,
-					'global_alerts' => $this->global_alerts,
-				)
+		$this->load->view(
+			'site/news',
+			array
+			(
+				'news' => $news,
+				'page' => $page,
+				'next_event' => $this->signup_box->get_upcomming_event(),
+				'attendance_types' => $attendance_types,
+				'chat_messages' => $chat_messages,
+				'earliest_message_id' => $earliest_message_id,
+				'posts' => $posts,
+				'global_alerts' => $this->global_alerts,
 			)
 		);
 	}

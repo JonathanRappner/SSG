@@ -26,10 +26,6 @@ class Admin_recesses implements Adminpanel
 		{
 			$this->recesses = $this->get_recesses();
 		}
-		else if($this->view == 'new')
-		{
-
-		}
 		else if($this->view == 'edit')
 		{
 			$this->recess_id = $var2;
@@ -200,10 +196,10 @@ class Admin_recesses implements Adminpanel
 	{
 		$sql =
 			'SELECT
-				id, start_date, length_days, NOW(),
-				TIME_FORMAT(DATE_ADD(start_date, INTERVAL length_days DAY), "%Y-%m-%d") AS end_date
+				id, start_date, length_days,
+				DATE_FORMAT(DATE_ADD(start_date, INTERVAL length_days DAY), "%Y-%m-%d") AS end_date
 			FROM ssg_recesses
-			WHERE start_date >= TIME_FORMAT(NOW(), "%Y-%m-%d")
+			WHERE start_date >= DATE_FORMAT(NOW(), "%Y-%m-%d")
 			ORDER BY start_date ASC';
 		return $this->CI->db->query($sql)->result();
 	}

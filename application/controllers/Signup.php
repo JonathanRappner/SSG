@@ -35,16 +35,27 @@ class Signup extends CI_Controller
 		$this->load->library('eventsignup');
 		$this->load->model('signup/Events');
 
+		//nästa event
 		$next_event_id = $this->Events->get_next_event_id();
-		$next_event = $this->eventsignup->get_event($next_event_id);
-		$next_event->member_attendance = $this->eventsignup->get_member_attendance($next_event_id, $this->member->id); //nuvarande inloggadde medlem närvaro
-		$upcoming_events = $this->Events->get_upcoming_events();
 
-		//ladda vy
-		$this->load->view('signup/events', array(
-			'next_event' => $next_event,
-			'upcoming_events' => $upcoming_events
-		));
+		//om det inte finns ett nästa event
+		if($next_event_id)
+		{
+			$next_event = $this->eventsignup->get_event($next_event_id);
+			$next_event->member_attendance = $this->eventsignup->get_member_attendance($next_event_id, $this->member->id); //nuvarande inloggadde medlem närvaro
+			$upcoming_events = $this->Events->get_upcoming_events();
+
+			//ladda vy
+			$this->load->view('signup/events', array(
+				'next_event' => $next_event,
+				'upcoming_events' => $upcoming_events
+			));
+		}
+		else
+		{
+			//ladda vy
+			$this->load->view('signup/events_empty');
+		}
 	}
 
 	/**

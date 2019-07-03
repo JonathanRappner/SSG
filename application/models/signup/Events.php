@@ -15,7 +15,7 @@ class Events extends CI_Model
 	/**
 	 * Hitta event_id för nästa obligatoriska event.
 	 *
-	 * @return void
+	 * @return int Null om inget framtida event hittats.
 	 */
 	public function get_next_event_id()
 	{
@@ -29,8 +29,9 @@ class Events extends CI_Model
 				AND ssg_event_types.display
 			ORDER BY start_datetime ASC
 			LIMIT 1';
+		$row = $this->db->query($sql)->row();
 		
-		return $this->db->query($sql)->row()->id;
+		return $row ? $row->id : null;
 	}
 
 	/**

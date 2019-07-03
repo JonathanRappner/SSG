@@ -587,11 +587,11 @@ class Eventsignup
 		$sql =
 			'SELECT
 				id, title, start_day, type_id,
-				TIME_FORMAT(start_time, "%H:%i") AS start_time,
-				TIME_FORMAT(ADDTIME(start_time, length_time), "%H:%i") AS end_time,
+				DATE_FORMAT(start_time, "%H:%i") AS start_time,
+				DATE_FORMAT(ADDTIME(start_time, length_time), "%H:%i") AS end_time,
 				length_time,
-				TIME_FORMAT(length_time, "%H") AS length_hours,
-				TIME_FORMAT(length_time, "%i") AS length_minutes
+				DATE_FORMAT(length_time, "%H") AS length_hours,
+				DATE_FORMAT(length_time, "%i") AS length_minutes
 			FROM ssg_auto_events';
 		$query = $this->CI->db->query($sql);
 		foreach ($query->result() as $template)
