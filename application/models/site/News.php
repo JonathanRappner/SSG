@@ -19,12 +19,13 @@ class News extends CI_Model
 		$news->results_per_page = $results_per_page;
 
 		//where-sats, begränsa vilka forum som ska kollas
-		$where = 'WHERE forum_id = 5';
+		$where = 'WHERE forum_id = 5 OR forum_id = 34';
 
 		//topics
 		$sql =
 			'SELECT SQL_CALC_FOUND_ROWS
 				topics.topic_id AS id, #topic_id
+				forum_id,
 				topic_title AS title, #title
 				members.name AS poster_name, #poster_name
 				DATE_FORMAT(FROM_UNIXTIME(topic_time), "%Y-%m-%d %H:%i") AS date #date
