@@ -96,7 +96,8 @@ class Site extends CI_Controller
 			show_404();
 		
 		// importera chat
-		$this->load->model('site/chat');
-		$this->chat->import_shouts('2019-05-02 12:29');
+		// $this->load->model('site/chat');
+		// $latest_chat = $this->db->query('SELECT created FROM ssg_chat ORDER BY created DESC LIMIT 1')->row()->created;
+		// $this->chat->import_shouts($latest_chat);
 	}
 }

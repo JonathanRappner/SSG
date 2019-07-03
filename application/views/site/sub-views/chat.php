@@ -6,7 +6,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 $this->load->library("Permissions");
 
-
 ?><script>
 	var earliest_message_id = <?=$earliest_message_id?>;
 	var member_id = <?=$this->member->id?>;
@@ -30,7 +29,7 @@ $this->load->library("Permissions");
 		<?php foreach($chat_messages as $message):?>
 			<div class="row chat_row" data-message_id="<?=$message->id?>">
 				<div class="message_left col">
-					<a href="<?=base_url('forum/memberlist.php?mode=viewprofile&u='. $message->phpbb_user_id)?>" target="_blank"><?=$message->name?></a>:
+					<a href="<?=base_url('forum/memberlist.php?mode=viewprofile&u='. $message->phpbb_user_id)?>" target="_blank" style="color:#<?=$message->user_color?>"><?=$message->name?></a>:
 					<?=$message->text?>
 					<p class="timespan"><?=$message->timespan_string?></p>
 				</div>
