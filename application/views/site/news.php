@@ -23,7 +23,7 @@ $random_index = rand(0, count($carousel_images)-1);
 	<title>Swedish Strategic Group</title>
 
 	<script>
-		var deadline_epoch = <?=$deadline_epoch?>;
+		var deadline_epoch = <?=$next_event->deadline_epoch?>;
 		var carousel_images = <?=json_encode($carousel_images)?>;
 	</script>
 
