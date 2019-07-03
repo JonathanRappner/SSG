@@ -77,17 +77,11 @@ $this->load->library("permissions");
 		</div>
 		<?php else:?>
 			<div class="mt-2 mb-2 mb-lg-0">
-				<button class="btn btn-success" data-toggle="modal" data-target="#login_form">Logga in</button>
-				<a class="btn btn-primary" href="<?=base_url('forum/ucp.php?mode=register');?>">Registrera dig</a>
+				<a class="btn btn-success" href="<?=base_url('forum/ucp.php?mode=login&redirect=../')?>">Logga in</a>
+				<a class="btn btn-primary" href="<?=base_url('forum/ucp.php?mode=register')?>">Registrera dig</a>
 			</div>
 		<?php endif;?>
 
 	</div>
 
 </div>
-
-<?php
-//Login form
-if(!$this->member->valid)
-	$this->load->view('site/sub-views/login_form');
-?>

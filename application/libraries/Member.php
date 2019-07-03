@@ -95,13 +95,13 @@ class Member
 	 */
 	private function get_phpbb_session_id()
 	{
-		$regex_pattern = '/phpbb3_(\w){5}_sid/'; //ex: phpbb3_jyup2_sid, phpbb3_r9r3j_sid
-
-		foreach($_COOKIE as $key => $value)
-		if(preg_match($regex_pattern, $key))
-			return $value;
+		//lista ut cookie-namn
+		$cookie_pre = $this->CI->db->query('SELECT config_value FROM phpbb_config WHERE config_name = "cookie_name"')->row()->config_value;
+		$cookie_name = $cookie_pre .'_sid';
 		
-		return null;
+		return key_exists($cookie_name, $_COOKIE)
+			? $_COOKIE[$cookie_name]
+			: null;
 	}
 
 	/**
