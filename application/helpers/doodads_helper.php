@@ -185,6 +185,7 @@ function relative_time_string($date)
 function bbcode_parse($text)
 {
 	$find = array(
+		'/\n/',
 		'~\[b\](.*?)\[/b\]~s',
 		'~\[i\](.*?)\[/i\]~s',
 		'~\[u\](.*?)\[/u\]~s',
@@ -197,11 +198,12 @@ function bbcode_parse($text)
 	);
 
 	$replace = array(
+		'<br>',
 		'<strong>$1</strong>',
 		'<i>$1</i>',
 		'<span style="text-decoration:underline;">$1</span>',
 		'<pre>$1</'.'pre>',
-		'<span style="font-size:$1px;">$2</span>',
+		'<span style="font-size:2rem;">$2</span>', //alt: '<span style="font-size:$1px;">$2</span>'
 		'<span style="color:$1;">$2</span>',
 		'<a href="$1">$1</a>',
 		'<a href="$1">$2</a>',

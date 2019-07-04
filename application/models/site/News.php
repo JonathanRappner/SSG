@@ -10,7 +10,13 @@ class News extends CI_Model
 		parent::__construct();
 	}
 
-
+	/**
+	 * Hämta nyhetsartiklar.
+	 *
+	 * @param int $page Sida (börjar på 0, default: 0)
+	 * @param int $results_per_page Resultat per sida (default: 5)
+	 * @return array Objektarray
+	 */
 	public function get_news($page = 0, $results_per_page = 5)
 	{
 		//variabler
@@ -41,7 +47,7 @@ class News extends CI_Model
 		$news->total_results = $this->db->query('SELECT FOUND_ROWS() as total_results')->row()->total_results;
 
 
-		//topic first post text
+		//hitta första posten i varje topic och hämta texten
 		foreach($news->topics as $topic)
 		{
 			$sql =

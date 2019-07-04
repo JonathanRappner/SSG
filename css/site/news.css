@@ -70,13 +70,13 @@ div.news_topic small{
 div.news_topic div.body img{
 	max-width: 100%;
 	max-height: 400px;
-	margin: .5rem 0 1rem 0;
+	/* margin: .5rem 0 1rem 0; */
 }
 
 /* klick-bar lightbox-bild */
 div.news_topic a.newsfeed_image{
-	display: block;
-	text-align: center;
+	/* display: block;
+	text-align: center; */
 	display: none; /* visa inte bilder på mobil */
 }
 
