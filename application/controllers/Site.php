@@ -90,7 +90,7 @@ class Site extends CI_Controller
 		redirect('forum/ucp.php?mode=logout&sid='. $this->member->phpbb_session_id);
 	}
 
-	public function test()
+	public function debug()
 	{
 		if($this->member->id != 1655) //Smorfty only
 			show_404();
@@ -105,7 +105,7 @@ class Site extends CI_Controller
 
 
 		//--kolla SMF-topics som även finns i phpBB och har nyare posts än phpBB-varianten, efter specifikt datum--
-		// $date_limit = strtotime('2019-02-16 12:27');
+		// $date_limit = strtotime('2019-07-09 17:15');
 		// $smf_topics = $this->db->query('SELECT t.id_topic, first.subject, first.poster_time AS first_poster_time, last.poster_time AS last_poster_time FROM smf_topics t INNER JOIN smf_messages last ON t.id_last_msg = last.id_msg INNER JOIN smf_messages first ON t.id_first_msg = first.id_msg WHERE last.poster_time > ? ORDER BY t.id_board', array($date_limit))->result();
 		// foreach($smf_topics as $smf_topic)
 		// {
@@ -113,5 +113,11 @@ class Site extends CI_Controller
 		// 	if($phpbb_topic && $smf_topic->last_poster_time > $phpbb_topic->post_time)
 		// 		echo "$smf_topic->subject (SMF-topic-id: $smf_topic->id_topic) (phpBB-topic-id: $phpbb_topic->topic_id) (forum-id: $phpbb_topic->forum_id)<br>"; // (smf: $smf_topic->last_poster_time phpBB: $phpbb_topic->post_time)
 		// }
+
+		//--kolla vilka topics som postades efter specifierat datum--
+		// $date_limit = strtotime('2019-07-09 17:15');
+		// $new_topics = $this->db->query('SELECT subject, poster_time, t.id_board AS board_id FROM smf_topics t INNER JOIN smf_messages m ON t.id_first_msg = m.id_msg LEFT OUTER JOIN phpbb_topics ON m.poster_time = phpbb_topics.topic_time WHERE poster_time > ? AND phpbb_topics.topic_id IS NULL ORDER BY t.id_board ASC, poster_time ASC', array($date_limit))->result();
+		// foreach($new_topics as $topic)
+		// 	echo "$topic->subject (Board: $topic->board_id)<br>";
 	}
 }
