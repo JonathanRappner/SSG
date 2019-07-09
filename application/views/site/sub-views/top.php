@@ -37,9 +37,17 @@ $this->load->library("permissions");
 				<a class="nav-link" href="<?=base_url('site/streamers')?>">Streamers</a>
 			</li>
 			
-			<li class="nav-item<?=$this->current_page == 'emblem' ? ' active' : null?>">
-				<a class="nav-link" href="<?=base_url('site/emblem')?>">Emblem</a>
-			</li>
+			<?php if($this->member->valid):?>
+				<li class="nav-item<?=$this->current_page == 'emblem' ? ' active' : null?>">
+					<a class="nav-link" href="<?=base_url('site/emblem')?>">Emblem</a>
+				</li>
+			<?php endif;?>
+			
+			<?php if($this->member->valid):?>
+				<li class="nav-item">
+					<a class="nav-link" href="<?=base_url('forum/viewtopic.php?f=3&t=1000')?>">Modline</a>
+				</li>
+			<?php endif;?>
 			
 			<?php if($this->permissions->has_permissions(array('s0', 's1', 's2', 's3', 's4', 'grpchef'))):?>
 			<li class="nav-item">
@@ -48,9 +56,9 @@ $this->load->library("permissions");
 			<?php endif;?>
 			
 			<?php if($this->member->valid):?>
-			<li class="nav-item">
-				<a class="nav-link" href="<?=base_url('site/logout')?>">Logga ut</a>
-			</li>
+				<li class="nav-item">
+					<a class="nav-link" href="<?=base_url('site/logout')?>">Logga ut</a>
+				</li>
 			<?php endif;?>
 
 		</ul>
