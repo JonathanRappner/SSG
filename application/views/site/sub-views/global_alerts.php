@@ -4,7 +4,7 @@
 */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-?><?php if($this->member->valid && count($global_alerts) > 0):?>
+if($this->member->valid && count($global_alerts) > 0):?>
 <div id="alerts" class="row">
 
 	<?php foreach($global_alerts as $alert):?>

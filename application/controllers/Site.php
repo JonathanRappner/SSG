@@ -95,9 +95,23 @@ class Site extends CI_Controller
 		if($this->member->id != 1655) //Smorfty only
 			show_404();
 		
-		// importera chat
+		//--importera chat--
 		// $this->load->model('site/chat');
 		// $latest_chat = $this->db->query('SELECT created FROM ssg_chat ORDER BY created DESC LIMIT 1')->row()->created;
 		// $this->chat->import_shouts($latest_chat);
+
+
+		//--använd /forum/import.php för forum-imports--
+
+
+		//--kolla SMF-topics som även finns i phpBB och har nyare posts än phpBB-varianten, efter specifikt datum--
+		// $date_limit = strtotime('2019-02-16 12:27');
+		// $smf_topics = $this->db->query('SELECT t.id_topic, first.subject, first.poster_time AS first_poster_time, last.poster_time AS last_poster_time FROM smf_topics t INNER JOIN smf_messages last ON t.id_last_msg = last.id_msg INNER JOIN smf_messages first ON t.id_first_msg = first.id_msg WHERE last.poster_time > ? ORDER BY t.id_board', array($date_limit))->result();
+		// foreach($smf_topics as $smf_topic)
+		// {
+		// 	$phpbb_topic = $this->db->query('SELECT t.topic_id, last.post_time, t.forum_id FROM phpbb_topics t INNER JOIN phpbb_posts last ON t.topic_last_post_id = last.post_id WHERE t.topic_time = ?', array($smf_topic->first_poster_time))->row();
+		// 	if($phpbb_topic && $smf_topic->last_poster_time > $phpbb_topic->post_time)
+		// 		echo "$smf_topic->subject (SMF-topic-id: $smf_topic->id_topic) (phpBB-topic-id: $phpbb_topic->topic_id) (forum-id: $phpbb_topic->forum_id)<br>"; // (smf: $smf_topic->last_poster_time phpBB: $phpbb_topic->post_time)
+		// }
 	}
 }
