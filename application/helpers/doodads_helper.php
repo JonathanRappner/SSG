@@ -122,6 +122,21 @@ function group_icon($group_code, $group_name = null, $big = false)
 }
 
 /**
+ * Skriver ut gradikon.
+ *
+ * @param string $rank_icon Gradens ikons filnamn.
+ * @param string $rank_name Gradtitel. Ex: "Menig Klass I"
+ * @return string HTML-kod
+ */
+function rank_icon($rank_icon, $rank_name)
+{
+	if(!$rank_icon) $rank_icon = 'inaktiv.png';
+	if(!$rank_name) $rank_name = 'Inaktiv';
+
+	return '<img class="rank_icon" src="'. base_url('images/rank_icons/'. $rank_icon) .'" title="'. $rank_name .'" data-toggle="tooltip" />';
+}
+
+/**
  * Ta bort bbcode-tags.
  * Ex: "[img]image.jpg[/img]" -> "image.jpg"
  *

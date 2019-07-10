@@ -65,7 +65,7 @@ $this->load->library("permissions");
 	</nav>
 
 
-	<!-- Inloggad som... -->
+	<!-- Inloggning -->
 	<div class="col-lg-4 text-lg-right pr-0 pl-sm-4 pl-lg-0">
 		
 		<?php if($this->member->valid):?>
@@ -74,7 +74,7 @@ $this->load->library("permissions");
 			<?php
 			//grad-ikon
 			if(isset($this->member->rank_id))
-				echo '<img class="rank_icon" src="'. base_url('images/rank_icons/'. $this->member->rank_icon) .'" title="'. $this->member->rank_name .'" data-toggle="tooltip" />';
+				echo rank_icon($this->member->rank_icon, $this->member->rank_name);
 
 			//avatar
 			$avatar = !empty($this->member->avatar_url)

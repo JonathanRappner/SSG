@@ -55,9 +55,18 @@ class Site extends CI_Controller
 	public function members()
 	{
 		//moduler
+		$this->load->model('site/members');
+
+		//data
+		$groups_skytte = $this->members->get_groups(false);
+		$groups_enablers = $this->members->get_groups(true);
 
 		//vy
-		$this->load->view('site/members', array('global_alerts' => $this->global_alerts));
+		$this->load->view('site/members', array(
+			'global_alerts' => $this->global_alerts,
+			'groups_skytte' => $groups_skytte,
+			'groups_enablers' => $groups_enablers,
+		));
 	}
 
 	public function streamers()
