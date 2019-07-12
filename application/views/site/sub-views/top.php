@@ -51,7 +51,7 @@ $this->load->library("permissions");
 			
 			<?php if($this->permissions->has_permissions(array('s0', 's1', 's2', 's3', 's4', 'grpchef'))):?>
 			<li class="nav-item">
-				<a class="nav-link" href="<?=base_url('admin')?>">Admin</a>
+				<a class="nav-link" href="<?=base_url('signup/admin')?>">Admin</a>
 			</li>
 			<?php endif;?>
 			
