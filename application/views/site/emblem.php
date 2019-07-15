@@ -26,7 +26,7 @@ $this->current_page = 'emblem';
 
 	<h1>Emblem</h1>
 
-	<p>Fixa ditt ingame-emblem här.</p>
+	<p>Fixa ditt ingame-emblem (även kallat XML) här.<br>Inte färdigt ännu!</p>
 
 
 

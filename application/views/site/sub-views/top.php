@@ -37,7 +37,7 @@ $this->load->library("permissions");
 				<a class="nav-link" href="<?=base_url('site/streamers')?>">Streamers</a>
 			</li>
 			
-			<?php if($this->member->valid):?>
+			<?php if(false /****temp*****/ && $this->member->valid):?>
 				<li class="nav-item<?=$this->current_page == 'emblem' ? ' active' : null?>">
 					<a class="nav-link" href="<?=base_url('site/emblem')?>">Emblem</a>
 				</li>
