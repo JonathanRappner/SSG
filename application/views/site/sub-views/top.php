@@ -69,20 +69,20 @@ $this->load->library("permissions");
 	<div class="col-lg-4 text-lg-right pr-0 pl-sm-4 pl-lg-0">
 		
 		<?php if($this->member->valid):?>
-		<div id="userbox" class="mt-lg-1 mb-2 mb-lg-0">
-			<span class="text-nowrap"><strong><?=$this->member->name;?></strong></span>
-			<?php
-			//grad-ikon
-			if(isset($this->member->rank_id))
-				echo rank_icon($this->member->rank_icon, $this->member->rank_name);
+			<a href="<?=base_url('forum/memberlist.php?mode=viewprofile&u='. $this->member->phpbb_user_id)?>" id="userbox" class="mt-lg-1 mb-2 mb-lg-0">
+				<span class="text-nowrap"><strong><?=$this->member->name;?></strong></span>
+				<?php
+				//grad-ikon
+				if(isset($this->member->rank_id))
+					echo rank_icon($this->member->rank_icon, $this->member->rank_name);
 
-			//avatar
-			$avatar = !empty($this->member->avatar_url)
-				? $this->member->avatar_url
-				: base_url('images/unknown.png');
-			echo "<img class='avatar rounded' src='$avatar' alt='Avatar'>"
-			?>
-		</div>
+				//avatar
+				$avatar = !empty($this->member->avatar_url)
+					? $this->member->avatar_url
+					: base_url('images/unknown.png');
+				echo "<img class='avatar rounded' src='$avatar' alt='Avatar'>"
+				?>
+			</a>
 		<?php else:?>
 			<div class="mt-2 mb-2 mb-lg-0">
 				<a class="btn btn-success" href="<?=base_url('forum/ucp.php?mode=login&redirect=../')?>">Logga in</a>

@@ -9,6 +9,7 @@ h6 { font-size: 1rem; }
 #userbox{
 	color: #000;
 	text-decoration: none;
+	display: block;
 }
 
 /* Gradikon i toppraden */
