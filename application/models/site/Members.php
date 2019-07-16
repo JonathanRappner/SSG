@@ -51,7 +51,7 @@ class Members extends CI_Model
 		$sql =
 			'SELECT
 				m.id, m.name, m.phpbb_user_id, m.is_active,
-				IF(r.name_long IS NULL, r.name, r.name_long)  AS role_name
+				IF(r.name_long IS NULL, r.name, r.name_long) AS role_name
 			FROM ssg_members m
 			LEFT OUTER JOIN ssg_roles r
 				ON m.role_id = r.id
@@ -63,6 +63,11 @@ class Members extends CI_Model
 				r.sorting ASC,
 				m.id ASC';
 		$members = $this->db->query($sql, array($group_id))->result();
+
+		//sätt inaktiva medlemmars roll till "Supporter"
+		foreach($members as $member)
+			if(!$member->is_active)
+				$member->role_name = 'Supporter';
 
 		//hämta medlemsgrader
 		foreach($members as $member)
