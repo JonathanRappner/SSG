@@ -128,5 +128,18 @@ class Site extends CI_Controller
 		// $new_topics = $this->db->query('SELECT subject, poster_time, t.id_board AS board_id FROM smf_topics t INNER JOIN smf_messages m ON t.id_first_msg = m.id_msg LEFT OUTER JOIN phpbb_topics ON m.poster_time = phpbb_topics.topic_time WHERE poster_time > ? AND phpbb_topics.topic_id IS NULL ORDER BY t.id_board ASC, poster_time ASC', array($date_limit))->result();
 		// foreach($new_topics as $topic)
 		// 	echo "$topic->subject (Board: $topic->board_id)<br>";
+
+		//sätt phpBB_ranks efter ssg_promotions
+		// $members = $this->db->query('SELECT id, phpbb_user_id FROM ssg_members WHERE phpbb_user_id IS NOT NULL')->result();
+		// foreach($members as $member)
+		// {
+		// 	$row = $this->db->query('SELECT p.rank_id FROM ssg_promotions p WHERE member_id = ? ORDER BY p.date DESC LIMIT 1', array($member->id))->row();
+		// 	if($row)
+		// 	{
+		// 		$this->db
+		// 			->where('user_id', $member->phpbb_user_id)
+		// 			->update('phpbb_users', array('user_rank' => $row->rank_id));
+		// 	}
+		// }
 	}
 }
