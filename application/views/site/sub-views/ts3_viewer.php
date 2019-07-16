@@ -4,7 +4,7 @@
 */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-if($this->member->valid):?>
+//if($this->member->valid):?>
 <div class="card ts3_viewer">
 
 	<div class="card-header">
@@ -25,4 +25,4 @@ if($this->member->valid):?>
 	</div>
 
 </div>
-<?php endif;?>
+<?php //endif;?>
