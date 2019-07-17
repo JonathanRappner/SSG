@@ -114,7 +114,7 @@ class News extends CI_Model
 			LIMIT ?';
 		$posts = $this->db->query($sql, array($length))->result();
 		
-		$posts_per_page = 25;
+		$posts_per_page = $this->db->query('SELECT config_value FROM phpbb_config WHERE config_name = "posts_per_page"')->row()->config_value;
 		foreach($posts as $post)
 		{
 			//lista ut vilken sida posten ligger på
