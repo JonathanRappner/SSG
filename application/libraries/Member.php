@@ -23,14 +23,23 @@ class Member
 
 		//försök hämta phpbb session id
 		$this->phpbb_session_id = $this->get_phpbb_session_id();
+		$phpbb_user_id = $this->get_phpbb_session_user_id($this->phpbb_session_id); //hitta phpbb_user_id
+		$member_id = $this->get_phpbb_session_member($phpbb_user_id); //hitta SSG-member-id via phpBB-session
 
-		//försök hitta inloggad användare genom phpbb-cookie eller session-variabel
-		if($member_id = $this->get_phpbb_session_member()) //hämta inloggad medlem från phpbb-session, via cookies (nya)
+
+		//--försök hitta inloggad användare genom phpbb-cookie eller session-variabel--
+		if($member_id) //medlem hittades via phpBB-session
 		{
 			$this->id = $member_id;
 			$this->CI->session->member_id = $member_id;
 		}
-		else if(!empty($this->CI->session->member_id)) //hämta inloggad medlem från session-variabler (gamla standalone-session som autenticeras via loginform->smf-lösenord)
+		else if($phpbb_user_id) //phpBB-session finns men det finns ingen ssg_member hittades   
+		{
+			$member_id = $this->create_ssg_member($phpbb_user_id);
+			$this->id = $member_id;
+			$this->CI->session->member_id = $member_id;
+		}
+		else if($this->CI->session->member_id) //phpBB-session hittades inte heller, kolla server-session efter member_id-variabeln (dvs. signup-sidan-login)
 			$this->id = $this->CI->session->member_id;
 		else //ingen session finns, låt $this->valid vara false så login-formuläret visas
 			return;
@@ -64,25 +73,23 @@ class Member
 	 * Försöker identifiera inloggad användare (ssg_member.id) med hjälp av phpbb-cookie.
 	 * Ger false om ingen är inloggad.
 	 *
-	 * @return object Objekt med attribut: member_id och phpbb_session_id.
+	 * @param int $phpbb_user_id phpBB-user id
+	 * @return int SSG-id-nummer.
 	 */
-	private function get_phpbb_session_member()
+	private function get_phpbb_session_member($phpbb_user_id)
 	{
-		//avbryt om ingen cookie finns
-		if(empty($this->phpbb_session_id))
-			return null;
-		
+		if(!$phpbb_user_id)
+			return;
+
 		//kolla upp session i db
 		$sql =
-			'SELECT m.id
-			FROM phpbb_sessions s
-			INNER JOIN ssg_members m
-				ON s.session_user_id = m.phpbb_user_id
-			WHERE session_id = ?';
-		$query = $this->CI->db->query($sql, $this->phpbb_session_id);
+			'SELECT id
+			FROM ssg_members
+			WHERE phpbb_user_id = ?';
+		$query = $this->CI->db->query($sql, $phpbb_user_id);
 
 		if($query->num_rows() <= 0)
-			return null;
+			return;
 
 		//return:a ssg-member_id
 		return $query->row()->id;
@@ -102,6 +109,53 @@ class Member
 		return key_exists($cookie_name, $_COOKIE)
 			? $_COOKIE[$cookie_name]
 			: null;
+	}
+
+	/**
+	 * Hämta phpbb_user_id från phpbb_sessions
+	 *
+	 * @param string $phpbb_session_id
+	 * @return int phpBB-user-id
+	 */
+	private function get_phpbb_session_user_id($phpbb_session_id)
+	{
+		if(!$phpbb_session_id)
+			return;
+
+		$row = $this->CI->db->query('SELECT session_user_id FROM phpbb_sessions WHERE session_id = ?', array($phpbb_session_id))->row();
+
+		return $row && $row->session_user_id > 1 //user_id = 1 är oinloggad användare
+			? $row->session_user_id
+			: null;
+	}
+
+	/**
+	 * Skapa ny medlem i ssg_members med data från
+	 *
+	 * @param [type] $phpbb_user_id
+	 * @return void
+	 */
+	private function create_ssg_member($phpbb_user_id)
+	{
+		if(!$phpbb_user_id)
+			return;
+
+		//hitta medlemmens namn
+		$member_name = $this->CI->db->query('SELECT username FROM phpbb_users WHERE user_id = ?', array($phpbb_user_id))->row()->username;
+
+		//lista ut medlemmens nya id (auto increment funkar inte p.g.a. key constraints i databasen)
+		$member_id = $this->CI->db->query('SELECT MAX(id) max_id FROM ssg_members')->row()->max_id + 1;
+
+		//skapa nya användaren
+		$data = array(
+			'id'=>$member_id,
+			'name'=>$member_name,
+			'phpbb_user_id'=>$phpbb_user_id,
+			'registered_date'=>date('Y-m-d')
+		);
+		$this->CI->db->insert('ssg_members', $data); 
+
+		return $member_id;
 	}
 
 	/**
@@ -133,21 +187,21 @@ class Member
 		$sql =
 			'SELECT
 				registered_date, uid, is_active, group_id,
-				id_member AS id,
+				ssg_members.id,
 				ssg_members.name AS name,
 				ssg_groups.name AS group_name,
 				ssg_groups.code AS group_code,
 				role_id,
 				ssg_roles.name AS role_name,
 				ssg_members.phpbb_user_id
-			FROM smf_members
-			INNER JOIN ssg_members
-				ON smf_members.id_member = ssg_members.id
+			FROM ssg_members
+			LEFT JOIN smf_members
+				ON ssg_members.id = smf_members.id_member
 			LEFT JOIN ssg_groups
 				ON ssg_members.group_id = ssg_groups.id
 			LEFT JOIN ssg_roles
 				ON ssg_members.role_id = ssg_roles.id
-			WHERE id_member = ?';
+			WHERE ssg_members.id = ?';
 		$query = $this->CI->db->query($sql, $member_id);
 
 		//felkoll
@@ -217,7 +271,11 @@ class Member
 	public function get_smf_avatar($member_id)
 	{
 		//försök hämta avatar-url från db
-		$avatar_url = $this->CI->db->query('SELECT avatar FROM smf_members WHERE id_member = ?', $member_id)->row()->avatar;
+		$query = $this->CI->db->query('SELECT avatar FROM smf_members WHERE id_member = ?', $member_id);
+		if(!$query->num_rows())
+			return null;
+
+		$avatar_url = $query->row()->avatar;
 		
 		if(empty($avatar_url)) //avatar-fältet är tomt, leta efter avatar-fil på servern
 		{
