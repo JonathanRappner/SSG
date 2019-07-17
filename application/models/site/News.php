@@ -135,4 +135,18 @@ class News extends CI_Model
 
 		return $posts;
 	}
+
+
+	// private function is_post_new($user_id, $post_id)
+	// {
+	// 	//post info
+	// 	$row = $this->db->query('SELECT topic_id, post_time FROM phpbb_posts WHERE post_id = ?', array($post_id))->row();
+	// 	$post_time = $row->post_time;
+	// 	$topic_id = $row->topic_id;
+		
+	// 	//jämför tracking
+	// 	$query = $this->db->query('SELECT 0 FROM phpbb_topics_track WHERE user_id = ? AND topic_id = ? AND mark_time >= ?', array($user_id, $topic_id, $post_time));
+
+	// 	return $query->num_rows() == 0;
+	// }
 }
