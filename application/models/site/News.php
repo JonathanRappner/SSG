@@ -89,26 +89,24 @@ class News extends CI_Model
 		//	lista med forum_id:s där group_id finns i denna lista:
 		//		lista med group_id:s för user_id = ? (lista med alla grupper som medlemmen är med i)
 		$where = $this->member->valid
-			? 'WHERE topics.forum_id IN (SELECT forum_id FROM phpbb_acl_groups WHERE group_id IN (SELECT group_id FROM phpbb_user_group WHERE user_id = '. $this->db->escape($this->member->phpbb_user_id) .'))'
-			: 'WHERE topics.forum_id IN (SELECT forum_id FROM phpbb_acl_groups WHERE group_id = 1)'; //group_id 2 = GUEST
+			? 'WHERE topic.forum_id IN (SELECT forum_id FROM phpbb_acl_groups WHERE group_id IN (SELECT group_id FROM phpbb_user_group WHERE user_id = '. $this->db->escape($this->member->phpbb_user_id) .'))'
+			: 'WHERE topic.forum_id IN (SELECT forum_id FROM phpbb_acl_groups WHERE group_id = 1)'; //group_id 2 = GUEST
 		$sql =
 			'SELECT
-				posts.post_id,
-				posts.topic_id,
-				members.name,
+				topic.topic_id,
+				topic.topic_title,
+				latest_post.post_id,
+				users.username name,
 				users.user_colour AS user_color,
-				topics.topic_title,
-				posts.post_text AS text,
-				posts.post_time AS post_timestamp,
-				FROM_UNIXTIME(posts.post_time) AS post_datetime,
-				(SELECT COUNT(*) FROM phpbb_posts WHERE topic_id = posts.topic_id AND post_time < posts.post_time) AS no_of_earlier_posts
-			FROM phpbb_posts posts
-			INNER JOIN ssg_members members
-				ON posts.poster_id = members.phpbb_user_id
-			INNER JOIN phpbb_topics topics
-				ON posts.topic_id = topics.topic_id
-			INNER JOIN phpbb_users users
-				ON posts.poster_id = users.user_id
+				'. ($this->member->valid ? 'latest_post.post_text' : 'null') .' AS text,
+				latest_post.post_time AS post_timestamp,
+				FROM_UNIXTIME(latest_post.post_time) AS post_datetime,
+				(SELECT COUNT(*) FROM phpbb_posts WHERE topic_id = topic.topic_id AND post_time < latest_post.post_time) AS no_of_earlier_posts
+			FROM phpbb_topics topic
+			INNER JOIN phpbb_posts latest_post #latest_post
+				ON topic.topic_last_post_id = latest_post.post_id
+			INNER JOIN phpbb_users users #users
+				ON latest_post.poster_id = users.user_id
 			'. $where .'
 			ORDER BY post_time DESC
 			LIMIT ?';
@@ -119,7 +117,7 @@ class News extends CI_Model
 		{
 			//lista ut vilken sida posten ligger på
 			//(egentligen vilken nummerordning första posten har på den sida som gäller)
-			//ex: post 17 ska ha start 10, post 31 ska ha start 30
+			//ex: post 17 ska ha start 10, post 31 ska ha start 30 (om 10 post_per_page dvs.)
 			$post->start = floor($post->no_of_earlier_posts / $posts_per_page) * $posts_per_page; //avrunda ner till närmsta tiotal
 
 			//länk till post (ex: "/forum/viewtopic.php?t=105&start=10#p549")
@@ -134,7 +132,6 @@ class News extends CI_Model
 			//relativ tidssträng
 			$post->relative_time_string = relative_time_string($post->post_timestamp);
 		}
-
 
 		return $posts;
 	}
