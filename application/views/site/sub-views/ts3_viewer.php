@@ -3,9 +3,7 @@
  * Teamspeak 3 viewer
 */
 defined('BASEPATH') OR exit('No direct script access allowed');
-
-//if($this->member->valid):?>
-<div class="card ts3_viewer">
+?><div class="card ts3_viewer">
 
 	<div class="card-header">
 		Teamspeak 3
@@ -25,4 +23,3 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	</div>
 
 </div>
-<?php //endif;?>

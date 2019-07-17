@@ -58,6 +58,7 @@ shuffle($carousel_images);
 			<?php endif;?>
 
 			<!-- Nyhetsflöde -->
+			<?php if(!$this->member->valid) $this->load->view('site/sub-views/new_member_welcome.php');?>
 			<?php $this->load->view('site/sub-views/newsfeed');?>
 
 		</div>
