@@ -84,13 +84,6 @@ class News extends CI_Model
 		if(!is_numeric($length))
 			throw new Exception("\$length ogiltig: {$length}");
 
-		//WHERE-sats:
-		//WHERE postens forum_id finns i denna lista:
-		//	lista med forum_id:s där group_id finns i denna lista:
-		//		lista med group_id:s för user_id = ? (lista med alla grupper som medlemmen är med i)
-		$where = $this->member->valid
-			? 'WHERE topic.forum_id IN (SELECT forum_id FROM phpbb_acl_groups WHERE group_id IN (SELECT group_id FROM phpbb_user_group WHERE user_id = '. $this->db->escape($this->member->phpbb_user_id) .'))'
-			: 'WHERE topic.forum_id IN (SELECT forum_id FROM phpbb_acl_groups WHERE group_id = 1)'; //group_id 2 = GUEST
 		$sql =
 			'SELECT
 				topic.topic_id,
@@ -98,7 +91,7 @@ class News extends CI_Model
 				latest_post.post_id,
 				users.username name,
 				users.user_colour AS user_color,
-				'. ($this->member->valid ? 'latest_post.post_text' : 'null') .' AS text,
+				latest_post.post_text AS text,
 				latest_post.post_time AS post_timestamp,
 				FROM_UNIXTIME(latest_post.post_time) AS post_datetime,
 				(SELECT COUNT(*) FROM phpbb_posts WHERE topic_id = topic.topic_id AND post_time < latest_post.post_time) AS no_of_earlier_posts
@@ -107,46 +100,80 @@ class News extends CI_Model
 				ON topic.topic_last_post_id = latest_post.post_id
 			INNER JOIN phpbb_users users #users
 				ON latest_post.poster_id = users.user_id
-			'. $where .'
-			ORDER BY post_time DESC
+			WHERE topic.forum_id IN (SELECT forum_id FROM phpbb_acl_groups WHERE group_id IN (SELECT group_id FROM phpbb_user_group WHERE user_id = ?))
+			ORDER BY latest_post.post_time DESC
 			LIMIT ?';
-		$posts = $this->db->query($sql, array($length))->result();
+		$topics = $this->db->query($sql, array($this->member->phpbb_user_id, $length))->result();
 		
 		$posts_per_page = $this->db->query('SELECT config_value FROM phpbb_config WHERE config_name = "posts_per_page"')->row()->config_value;
-		foreach($posts as $post)
+		foreach($topics as $topic)
 		{
 			//lista ut vilken sida posten ligger på
 			//(egentligen vilken nummerordning första posten har på den sida som gäller)
 			//ex: post 17 ska ha start 10, post 31 ska ha start 30 (om 10 post_per_page dvs.)
-			$post->start = floor($post->no_of_earlier_posts / $posts_per_page) * $posts_per_page; //avrunda ner till närmsta tiotal
+			$topic->start = floor($topic->no_of_earlier_posts / $posts_per_page) * $posts_per_page; //avrunda ner till närmsta tiotal
 
 			//länk till post (ex: "/forum/viewtopic.php?t=105&start=10#p549")
-			$post->url = base_url("forum/viewtopic.php?t={$post->topic_id}". ($post->start > 0 ? "&start={$post->start}": null) ."#p{$post->post_id}");
+			$topic->url = base_url("forum/viewtopic.php?t={$topic->topic_id}". ($topic->start > 0 ? "&start={$topic->start}": null) ."#p{$topic->post_id}");
 
 			//sanera text-preview
-			$post->text = preg_replace('/\n|<br \/>/', ' ', $post->text); //byta ut newlines mot mellanrum
-			$post->text = strip_tags($post->text); //ta bort html-tags
-			$post->text = strip_bbcode($post->text); //ta bort bbcode-tags
-			$post->text = strlen($post->text) > 128 ? mb_substr($post->text, 0, 128) .'...' : $post->text; //korta ner lång text
+			$topic->text = preg_replace('/\n|<br \/>/', ' ', $topic->text); //byta ut newlines mot mellanrum
+			$topic->text = strip_tags($topic->text); //ta bort html-tags
+			$topic->text = strip_bbcode($topic->text); //ta bort bbcode-tags
+			$topic->text = strlen($topic->text) > 128 ? mb_substr($topic->text, 0, 128) .'...' : $topic->text; //korta ner lång text
 
 			//relativ tidssträng
-			$post->relative_time_string = relative_time_string($post->post_timestamp);
+			$topic->relative_time_string = relative_time_string($topic->post_timestamp);
+
+			//kolla om senaste posten är läst
+			$topic->has_unread_post = $this->is_post_new($this->member->phpbb_user_id, $topic->post_id);
 		}
 
-		return $posts;
+		return $topics;
 	}
 
+	/**
+	 * Är specifierad post ny/oläst för specifierad user?
+	 *
+	 * @param int $user_id phpBB user-id
+	 * @param int $post_id
+	 * @return boolean
+	 */
+	private function is_post_new($user_id, $post_id)
+	{
+		//user lastmark (tiden där "Markera alla trådar som lästa"-länken klickades)
+		$lastmark = $this->db->query('SELECT user_lastmark FROM phpbb_users WHERE user_id = ?', array($user_id))->row()->user_lastmark;
 
-	// private function is_post_new($user_id, $post_id)
-	// {
-	// 	//post info
-	// 	$row = $this->db->query('SELECT topic_id, post_time FROM phpbb_posts WHERE post_id = ?', array($post_id))->row();
-	// 	$post_time = $row->post_time;
-	// 	$topic_id = $row->topic_id;
-		
-	// 	//jämför tracking
-	// 	$query = $this->db->query('SELECT 0 FROM phpbb_topics_track WHERE user_id = ? AND topic_id = ? AND mark_time >= ?', array($user_id, $topic_id, $post_time));
+		//post info
+		$row = $this->db->query('SELECT forum_id, topic_id, post_time FROM phpbb_posts WHERE post_id = ?', array($post_id))->row();
+		$post_time = $row->post_time;
+		$forum_id = $row->forum_id;
+		$topic_id = $row->topic_id;
 
-	// 	return $query->num_rows() == 0;
-	// }
+		//----kolla om posten är oläst----
+
+		//om posten gjordes före $lastmark så är den inte ny
+		//$lastmark sätts antingen när användaren trycker på "Markera alla trådar som lästa"
+		//eller automatiskt av phpBB när man läst alla posts
+		if($post_time < $lastmark)
+			return false;
+
+		//ligger posten i en track:ad topic?
+		$query = $this->db->query(
+			'SELECT 0 FROM phpbb_topics_track WHERE user_id = ? AND topic_id = ? AND mark_time >= ?',
+			array($user_id, $topic_id, $post_time)
+		);
+		if($query->num_rows() > 0)
+			return false; //ja det gör den, då är den inte ny
+
+		//ligger posten i ett track:at forum?
+		$query = $this->db->query(
+			'SELECT 0 FROM phpbb_forums_track WHERE user_id = ? AND forum_id = ? AND mark_time >= ?',
+			array($user_id, $forum_id, $post_time)
+		);
+		if($query->num_rows() > 0)
+			return false; //ja det gör den, då är den inte ny
+
+		return true; //den är inte trackad någonstans och efter $lastmark, då är den ny!
+	}
 }

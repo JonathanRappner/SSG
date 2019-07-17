@@ -104,6 +104,17 @@ div.bottom_fade div.button_wrapper{
 	text-align: center;
 }
 
+/* Ny post!-bubbla */
+div.latest_posts small.new_post{
+	font-size: 0.6rem !important;
+    font-weight: bold;
+    color: #FFF;
+    background-color: #F00;
+    border-radius: 4px;
+	padding: 2px 4px;
+	white-space: nowrap;
+}
+
 /* sm eller större */
 @media (min-width: 576px) {
 	#carousel{ height: 72px; }
