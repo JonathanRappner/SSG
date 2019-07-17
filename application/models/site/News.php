@@ -114,7 +114,7 @@ class News extends CI_Model
 			LIMIT ?';
 		$posts = $this->db->query($sql, array($length))->result();
 		
-		$posts_per_page = 10;
+		$posts_per_page = 25;
 		foreach($posts as $post)
 		{
 			//lista ut vilken sida posten ligger på
