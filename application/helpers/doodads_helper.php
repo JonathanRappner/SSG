@@ -169,6 +169,7 @@ function relative_time_string($date)
 	$now = time();
 	$diff = abs($now - $date);
 	$date_string = date('Y-m-d G:i', $date);
+	$date_day_nbr = date('d', $date);
 
 	if($diff < $min) //mindre än en minut sedan
 		$output = 'nyss';
@@ -178,7 +179,7 @@ function relative_time_string($date)
 		$units_string = $minutes == 1 ? 'minut' : 'minuter';
 		$output = "$minutes $units_string sedan";
 	}
-	else if($diff < $day) //mer än en timme sedan (ex: 'idag 20:05')
+	else if($diff < $day && $date_day_nbr == date('d')) //mer än en timme sedan OCH samma datum-dag (ex: 'idag 20:05')
 		$output = 'idag '. date('G:i', $date);
 	else if($diff < ($day * 2)) //mer är en OCH mindre än två dagar sedan (ex: 'igår 0:22')
 		$output = 'igår '. date('G:i', $date);
