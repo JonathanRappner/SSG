@@ -19,10 +19,10 @@ $this->current_page = 'streamers';
 </head>
 <body>
 
-<div id="wrapper_streamers" class="container">
+<!-- Top -->
+<?php $this->load->view('site/sub-views/top');?>
 
-	<!-- Top -->
-	<?php $this->load->view('site/sub-views/top');?>
+<div id="wrapper_streamers" class="container">
 
 	<!-- Alerts -->
 	<?php $this->load->view('site/sub-views/global_alerts', array('global_alerts' => $global_alerts));?>

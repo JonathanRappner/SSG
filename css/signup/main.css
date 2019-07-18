@@ -30,3 +30,10 @@ tr.grayed:hover { color: white; background-color: #858585 !important; }
 tr.new_group_row{
 	border-top:2px solid #CECECE;
 }
+
+/* Avatar i toppraden */
+#userbox .avatar{
+	width: 48px;
+	height: 48px;
+	margin-left: 6px;
+}

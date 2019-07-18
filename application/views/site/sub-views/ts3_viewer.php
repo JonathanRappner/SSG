@@ -3,13 +3,13 @@
  * Teamspeak 3 viewer
 */
 defined('BASEPATH') OR exit('No direct script access allowed');
-?><div class="card ts3_viewer">
+?><div class="card ts3_viewer border-0 shadow-sm">
 
-	<div class="card-header">
+	<div class="card-header bg-dark text-white">
 		Teamspeak 3
 	</div>
 
-	<div class="card-body">
+	<div class="card-body p-2">
 
 		<div id="ts3viewer_1066823"> </div>
 

@@ -8,9 +8,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 ?><div class="latest_posts">
 
-	<div class="card">
+	<div class="card border-0 shadow-sm">
 
-		<div class="card-header">
+		<div class="card-header bg-dark text-white">
 			Senaste foruminläggen
 		</div>
 

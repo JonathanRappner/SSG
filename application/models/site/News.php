@@ -141,10 +141,10 @@ class News extends CI_Model
 	 */
 	private function is_post_new($user_id, $post_id)
 	{
-		//user lastmark (tiden där "Markera alla trådar som lästa"-länken klickades)
+		//$lastmark (tiden där "Markera alla trådar som lästa"-länken klickades)
 		$lastmark = $this->db->query('SELECT user_lastmark FROM phpbb_users WHERE user_id = ?', array($user_id))->row()->user_lastmark;
 
-		//post info
+		//post ang. posten
 		$row = $this->db->query('SELECT forum_id, topic_id, post_time FROM phpbb_posts WHERE post_id = ?', array($post_id))->row();
 		$post_time = $row->post_time;
 		$forum_id = $row->forum_id;
@@ -154,7 +154,7 @@ class News extends CI_Model
 
 		//om posten gjordes före $lastmark så är den inte ny
 		//$lastmark sätts antingen när användaren trycker på "Markera alla trådar som lästa"
-		//eller automatiskt av phpBB när man läst alla posts
+		//eller automatiskt av phpBB när man manuellt har läst alla posts
 		if($post_time < $lastmark)
 			return false;
 

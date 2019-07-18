@@ -4,9 +4,9 @@
 */
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?><link rel="stylesheet" href="<?=base_url('css/site/new_member_welcome.css')?>">
-<div id="new_member_welcome" class="row">
+<div id="new_member_welcome" class="row mb-4 p-0 pr-1">
 
-	<div class="col-12">
+	<div class="card mr-4 bg-white border-0 shadow-sm">
 
 		<h1>Välkommen till SSG</h1>
 		<h1>Welcome to SSG</h1>
@@ -25,13 +25,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		<p>Vi spelar ofta i komplexa och krävande situationer. För att bäst lösa de uppgifterna tränar vi varje onsdag personlig färdighet, stridsteknik, kommunikation och samarbete med hjälp av våra instruktörer och chefer. Dessa träningar syftar till att utveckla oss både på spelar-, grupp-, plutons- och kompaninivå.</p>
 		<p>Vi använder ett hierarkiskt system både i spelet och utanför. Det är dock inte samma personer som styr i spelet och utanför - Plutonledning och Klanledning är särskilda ansvarsområden. Vi har ansvar uppdelat på ett flertal grupper som jobbar mot att förbättra spelupplevelsen och driva klanen framåt. Det är dock fritt för varje medlem att komma med förbättringsförslag till gagn för klanen både i spelsätt, utrustning och addons - vi uppmuntrar engagemang.</p>
 		<p>Vi brukar övervägande använda svensk utrustning och material men är inte ovana till att även nyttja material från andra länder om vi bedömer att detta är positivt för spelupplevelsen.</p>
-		<p class="font-weight-bold">Vill du spela med oss?</p>
-		<p>[ <a href="<?=base_url('forum/viewtopic.php?f=4&t=1789')?>">Klicka här</a> ]</p>
-		<p class="font-weight-bold">för att komma till ansökan.</p>
-		<p>OBS! Du måste ha en fungerande epost-adress.</p>
+		
+		<div class="mt-4">
+			<p class="font-weight-bold">Vill du spela med oss?</p>
+			<p>[ <a href="<?=base_url('forum/viewtopic.php?f=4&t=1789')?>">Klicka här</a> ]</p>
+			<p class="font-weight-bold">för att komma till ansökan.</p>
+			<p>OBS! Du måste ha en fungerande epost-adress.</p>
+		</div>
 
 	</div>
 
 </div>
-
-<hr>

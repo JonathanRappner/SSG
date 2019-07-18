@@ -19,15 +19,15 @@ if(isset($event_id))
 
 ?><div class="signup_box">
 
-	<div class="card">
+	<div class="card border-0 shadow-sm">
 
 		<!-- Header -->
-		<div class="card-header">
+		<div class="card-header bg-dark text-white">
 			Nästa event
 		</div>
 
 		<!-- Body -->
-		<div class="card-body text-center">
+		<div class="card-body text-center p-3 pb-4">
 
 			<?php if(isset($event_id)):?>
 

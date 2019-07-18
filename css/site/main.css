@@ -1,10 +1,26 @@
 /* Huvud-stylesheet för hemsidan */
 
-/* Navbar-logga */
-nav .navbar-brand{
-	margin-right: 4px;
-    position: relative;
-    top: -2px;
+body{
+	background-color: #f8f8f8;
+}
+
+/* navbar items */
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255,255,255,.8);
+}
+.navbar-dark .navbar-nav .nav-link:hover{
+    color: #212529;
+}
+
+/* topp höger rank_icon */
+#wrapper_top img.rank_icon{
+	margin-right: 0;
+}
+
+/* Avatar i toppraden */
+#userbox .avatar{
+	width: 42px;
+	height: 42px;
 }
 
 /* Olästa meddelanden */
@@ -12,11 +28,11 @@ a.pm_alert{  color: #FFF; }
 a.pm_alert:hover{ text-decoration: none; }
 
 /* Alerts */
-#alerts div.alert{
+#global_alerts div.alert{
 	padding: 0.25rem 0.5rem;
 	margin-bottom: .2rem;
 }
-#alerts div.alert button.close{
+#global_alerts div.alert button.close{
 	padding: .1rem 0.5rem;
 }
-#alerts span.link { font-weight: bold; }
+#global_alerts span.link { font-weight: bold; }

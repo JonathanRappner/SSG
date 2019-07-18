@@ -30,31 +30,27 @@ shuffle($carousel_images);
 </head>
 <body>
 
-<div id="wrapper_news" class="container">
+<!-- Topp -->
+<?php $this->load->view('site/sub-views/top');?>
 
-	<!-- Topp -->
-	<?php $this->load->view('site/sub-views/top');?>
+<div id="wrapper_news" class="container">
 
 	<!-- Alerts -->
 	<?php $this->load->view('site/sub-views/global_alerts', array('global_alerts' => $global_alerts));?>
 
 	<!-- Bildspel -->
-	<div id="carousel" class="row my-2" style="background-image:url('<?=base_url($carousel_images[0])?>');">
+	<div id="carousel" class="row mb-4 rounded shadow-sm" style="background-image:url('<?=base_url($carousel_images[0])?>');">
 		<img src="<?=base_url('images/logga-vit.svg')?>">
 	</div>
-
-	<hr class="row mt-0">
 
 	<div class="row">
 		
 		<!-- Vänsterkolumn -->
-		<div id="leftcol" class="col-lg-9">
+		<div id="leftcol" class="col-lg-9 pr-0">
 
 			<?php if($this->member->valid):?>
 			<!-- Chat -->
-			<div id="chat" class="row">
-				<?php $this->load->view('site/sub-views/chat', array('chat_messages' => $chat_messages));?>
-			</div>
+			<?php $this->load->view('site/sub-views/chat', array('chat_messages' => $chat_messages));?>
 			<?php endif;?>
 
 			<!-- Nyhetsflöde -->
@@ -64,7 +60,7 @@ shuffle($carousel_images);
 		</div>
 
 		<!-- Högerkolumn -->
-		<div id="rightcol" class="col-lg-3">
+		<div id="rightcol" class="col-lg-3 p-0">
 			<?php $this->load->view('site/sub-views/signup_box', (array)$next_event);?>
 			<?php if($this->member->valid) $this->load->view('site/sub-views/latest_posts', array('posts'=>$posts));?>
 			<?php $this->load->view('site/sub-views/ts3_viewer');?>

@@ -31,9 +31,15 @@ class Site extends CI_Controller
 		//data
 		$news = $this->news->get_news($page, 5);
 		$attendance_types = $this->attendance->get_all(); //till signupbox
-		$chat_messages = $this->chat->get_messages(null, 16);
-		$earliest_message_id = $this->chat->get_last_message_id(); //hämta tidigaste meddelandet i db så att js vet när den inte ska ladda fler
-		$posts = $this->news->get_latest_posts();
+
+		if($this->member->valid)
+		{
+			$chat_messages = $this->chat->get_messages(null, 16);
+			$earliest_message_id = $this->chat->get_last_message_id(); //hämta tidigaste meddelandet i db så att js vet när den inte ska ladda fler
+			$posts = $this->news->get_latest_posts();
+		}
+		else
+			$chat_messages = $earliest_message_id = $posts = null;
 
 		//vy
 		$this->load->view(

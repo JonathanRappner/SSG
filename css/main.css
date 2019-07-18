@@ -18,13 +18,6 @@ h6 { font-size: 1rem; }
 	margin-left: 0;
 }
 
-/* Avatar i toppraden */
-#userbox .avatar{
-	width: 48px;
-	height: 48px;
-	margin-left: 6px;
-}
-
 /* Enhetsikoner 16px */
 img.group_icon_16{
 	width: 16px;

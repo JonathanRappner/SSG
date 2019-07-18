@@ -4,7 +4,7 @@
 */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-?><div id="newsfeed" class="collapsible row pt-2 pr-4">
+?><div id="newsfeed" class="collapsible row mr-1">
 
 	<!-- Kollaps-fade-effekt till mobil -->
 	<div class="bottom_fade">
@@ -18,31 +18,30 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<?php
 		$allow_links = $topic->forum_id != 34; //skapa inte "läs mer"-länkar till "Nyhetsflödet"-forumet
 		$article_link = base_url('forum/viewtopic.php?t='. $topic->id);
+		
+		$heading_small = $topic->poster_name
+			? "<small>postat av {$topic->poster_name}, {$topic->date}</small>"
+			: null;
+		$heading = $allow_links
+			? "<h3 class='card-header bg-dark'><a href='{$article_link}' class='text-white'>{$topic->title}</a>{$heading_small}</h3>"
+			: "<h3 class='card-header bg-dark text-white'>{$topic->title}{$heading_small}</h3>";
 	?>
-		<div class="news_topic col-12 px-0 pb-4 mb-4">
+		<div class="news_topic card mb-4 bg-white border-0 shadow-sm">
 			
-			<?php if($allow_links):?>
-				<h3><a href="<?=$article_link?>"><?=$topic->title?></a></h3>
-			<?php else:?>
-				<h3><?=$topic->title?></h3>
-			<?php endif;?>
+			<?=$heading?>
 			
-			<small><?=($topic->poster_name ? "postat av $topic->poster_name, " : null)?><?=$topic->date?></small>
-			
-			<div class="body"><?=$topic->text?></div>
+			<div class="card-body px-4 py-2 pb-4"><?=$topic->text?></div>
 
 			<?php if($allow_links):?>
-				<a href="<?=$article_link?>" class="mt-2 d-inline-block font-weight-bold">Läs mer &raquo;</a>
+				<a href="<?=$article_link?>" class="card-footer bg-white border-0 font-weight-bold">Läs mer &raquo;</a>
 			<?php endif;?>
 
 		</div>
-
-		<hr>
 	<?php endforeach;?>
 
 </div><!-- end #newsfeed -->
 
 <!-- Pagination -->
-<div id="news_pagination" class="row">
+<div id="news_pagination" class="row pr-4">
 	<?=pagination($page, $news->total_results, $news->results_per_page, base_url('site/news/'), 'newsfeed', 15)?>
 </div>
