@@ -27,7 +27,7 @@ $this->load->library("permissions");
 					<a class="nav-link" href="<?=base_url('signup')?>">Events</a>
 				</li>
 				
-				<li class="nav-item">
+				<li class="nav-item<?=$this->current_page == 'members' ? ' active' : null?>">
 					<a class="nav-link" href="<?=base_url('site/members')?>">Medlemmar</a>
 				</li>
 				
