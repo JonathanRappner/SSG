@@ -201,6 +201,7 @@ function relative_time_string($date)
 function bbcode_parse($text)
 {
 	$find = array(
+		'/\n{3,}/', //tre eller fler newlines blir en <br>
 		'/\n/',
 		'~\[b\](.*?)\[/b\]~s',
 		'~\[i\](.*?)\[/i\]~s',
@@ -214,6 +215,7 @@ function bbcode_parse($text)
 	);
 
 	$replace = array(
+		'<br>',
 		'<br>',
 		'<strong>$1</strong>',
 		'<i>$1</i>',
