@@ -15,7 +15,7 @@ $(document).ready(function()
 	});
 
 	//spara vilka global_alerts som har stängts, i sessions
-	$("#alerts button.close").click(function(){
+	$("#global_alerts button.close").click(function(){
 		var global_alert_id = $(this).parent('div.alert').data("id");
 		
 		$.ajax({
