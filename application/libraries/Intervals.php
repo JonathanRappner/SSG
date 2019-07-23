@@ -170,7 +170,20 @@ class Intervals
 	{
 		$now = time();
 		$seconds_in_year = 365 * 24 * 3600;
-		$medals = array(1 => 11, 3 => 12, 5 => 13, 7 => 14, 10 => 15); //key: år, value = medalj-id
+		$medals = array(
+			1 => 11,
+			2 => 16,
+			3 => 12,
+			4 => 17,
+			5 => 13,
+			6 => 18,
+			7 => 14,
+			8 => 19,
+			9 => 20,
+			10 => 15,
+			11 => 21,
+			12 => 22,
+		); //key: år, value = medalj-id
 
 		//hämta users
 		$sql =
@@ -182,6 +195,7 @@ class Intervals
 				m.is_active #endast aktiva medlemmar
 				AND u.group_id != 6 #inga bots
 				AND u.user_id != 1 #inte annonymous-användaren
+				AND u.user_id != 48 #inte SSG-användaren
 			ORDER BY user_regdate ASC';
 		$users = $this->CI->db->query($sql)->result();
 		
@@ -192,27 +206,17 @@ class Intervals
 			$user->years = floor($seconds / $seconds_in_year);
 
 			//lista ut lämplig medalj
-			if($user->years >= 10)
-				$user->medal = $medals[10];
-			else if($user->years >= 7)
-				$user->medal = $medals[7];
-			else if($user->years >= 5)
-				$user->medal = $medals[5];
-			else if($user->years >= 3)
-				$user->medal = $medals[3];
-			else if($user->years >= 1)
-				$user->medal = $medals[1];
+			foreach($medals as $years => $medal)
+				if($user->years >= $years)
+					$user->medal = $medal;
 		}
 
 		//rensa gamla års-flairs
 		$sql =
 			'DELETE FROM phpbb_flair_users
-			WHERE
-				flair_id = 11
-				OR flair_id = 12
-				OR flair_id = 13
-				OR flair_id = 14
-				OR flair_id = 15';
+			WHERE false';
+		foreach($medals as $medal)
+			$sql .= ' OR flair_id = '. $medal;
 		$this->CI->db->query($sql);
 
 		//lägg till i phpbb_flair_users
