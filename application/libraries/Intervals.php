@@ -58,6 +58,7 @@ class Intervals
 		$this->remove_outdated_recesses();
 		$this->CI->chat->prune_messages();
 		$this->remove_old_global_alerts();
+		$this->set_yearly_flairs();
 
 		$this->update_interval();
 	}
@@ -158,6 +159,73 @@ class Intervals
 			'DELETE FROM ssg_global_alerts
 			WHERE expiration_date < NOW()';
 		$this->CI->db->query($sql);
+	}
+
+	/**
+	 * Delat ut forum-flairs efter medlemsår.
+	 *
+	 * @return void
+	 */
+	private function set_yearly_flairs()
+	{
+		$now = time();
+		$seconds_in_year = 365 * 24 * 3600;
+		$medals = array(1 => 11, 3 => 12, 5 => 13, 7 => 14, 10 => 15); //key: år, value = medalj-id
+
+		//hämta users
+		$sql =
+			'SELECT u.user_id, u.username, u.user_regdate
+			FROM phpbb_users u
+			INNER JOIN ssg_members m
+				ON u.user_id = m.phpbb_user_id
+			WHERE
+				m.is_active #endast aktiva medlemmar
+				AND u.group_id != 6 #inga bots
+				AND u.user_id != 1 #inte annonymous-användaren
+			ORDER BY user_regdate ASC';
+		$users = $this->CI->db->query($sql)->result();
+		
+		foreach($users as $user)
+		{
+			//lista ut år sedan registrering (floored)
+			$seconds = $now- $user->user_regdate;
+			$user->years = floor($seconds / $seconds_in_year);
+
+			//lista ut lämplig medalj
+			if($user->years >= 10)
+				$user->medal = $medals[10];
+			else if($user->years >= 7)
+				$user->medal = $medals[7];
+			else if($user->years >= 5)
+				$user->medal = $medals[5];
+			else if($user->years >= 3)
+				$user->medal = $medals[3];
+			else if($user->years >= 1)
+				$user->medal = $medals[1];
+		}
+
+		//rensa gamla års-flairs
+		$sql =
+			'DELETE FROM phpbb_flair_users
+			WHERE
+				flair_id = 11
+				OR flair_id = 12
+				OR flair_id = 13
+				OR flair_id = 14
+				OR flair_id = 15';
+		$this->CI->db->query($sql);
+
+		//lägg till i phpbb_flair_users
+		foreach($users as $user)
+		{
+			//skippa de som inte får någon medalj (varit medlem i < 1 år)
+			if(!isset($user->medal))
+				continue;
+
+			//insert
+			$data = array('user_id' => $user->user_id, 'flair_id' => $user->medal);
+			$this->CI->db->insert('phpbb_flair_users', $data);
+		}
 	}
 }
 ?>
