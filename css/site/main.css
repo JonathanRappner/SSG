@@ -23,6 +23,13 @@ body{
 	height: 42px;
 }
 
+/* länk till forum-profil */
+#userbox a{
+	color: #FFF;
+	text-decoration: none;
+	display: inline-block;
+}
+
 /* Olästa meddelanden */
 a.pm_alert{  color: #FFF; }
 a.pm_alert:hover{ text-decoration: none; }

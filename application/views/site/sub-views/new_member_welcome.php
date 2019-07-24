@@ -16,7 +16,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		<p>Hi! Nice to see you here. We would love it if you registered an account for this page. This will give you access to what is going on, and also give you access to the forums.</p>
 		<p>If you want to contact us in anyway, please register and <a href="<?=base_url('forum/ucp.php?i=pm&mode=compose&u=65')?>">send a PM to Kalle</a>.</p>
 		<p>Tack!</p>
-		<img src="https://www.ssg-clan.se/gallery/ssg_2019_frontpage.jpg" alt="Welcome">
+		<img src="https://www.ssg-clan.se/images/ssg_2019_frontpage.jpg" alt="Welcome">
 
 		<h2>Vilka är SSG?</h2>
 		<p>SSG grundades 2009 och är en stabil och väletablerad ArmA-klan med båda fötterna på jorden. Vi är inriktade på taktisk realism med ett stenhårt gameface under operationerna men med en välkomnande och avslappnad stämning utanför spel.</p>

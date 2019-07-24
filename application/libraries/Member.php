@@ -29,18 +29,12 @@ class Member
 
 		//--försök hitta inloggad användare genom phpbb-cookie eller session-variabel--
 		if($member_id) //medlem hittades via phpBB-session
-		{
 			$this->id = $member_id;
-			$this->CI->session->member_id = $member_id;
-		}
 		else if($phpbb_user_id) //phpBB-session finns men det finns ingen ssg_member hittades   
 		{
 			$member_id = $this->create_ssg_member($phpbb_user_id);
 			$this->id = $member_id;
-			$this->CI->session->member_id = $member_id;
 		}
-		else if($this->CI->session->member_id) //phpBB-session hittades inte heller, kolla server-session efter member_id-variabeln (dvs. signup-sidan-login)
-			$this->id = $this->CI->session->member_id;
 		else //ingen session finns, låt $this->valid vara false så login-formuläret visas
 			return;
 		
@@ -58,9 +52,6 @@ class Member
 		// $this->id = 1337; ////////Cowboy
 		// if($this->id == 1655)
 		// 	$this->id = 1675; ////////Gibby
-		
-		//kolla om användaren har rad i ssg_members, om inte: skapa en
-		$this->has_member_row($this->id);
 
 		//sätt laddad medlemsdata till $this
 		$this->set_member_data($this->id);
@@ -195,8 +186,6 @@ class Member
 				ssg_roles.name AS role_name,
 				ssg_members.phpbb_user_id
 			FROM ssg_members
-			LEFT JOIN smf_members
-				ON ssg_members.id = smf_members.id_member
 			LEFT JOIN ssg_groups
 				ON ssg_members.group_id = ssg_groups.id
 			LEFT JOIN ssg_roles
@@ -209,8 +198,7 @@ class Member
 			show_error("Hittade inte medlem med id: $member_id i databasen.");
 
 		//--Avatar--
-		$member_data->avatar_url = $this->get_smf_avatar($member_id);
-		// $member_data->avatar_url = $this->get_phpbb_avatar($member_id);
+		$member_data->avatar_url = $this->get_phpbb_avatar($member_id);
 
 		//--Permission Groups--
 		$sql =
@@ -261,62 +249,6 @@ class Member
 	}
 
 	/**
-	 * Hitta medlemmens SMF-avatar.
-	 * Lokal eller extern.
-	 * Om ingen hittades, returnera unknown.png-bilden.
-	 *
-	 * @param int $member_id
-	 * @return string Avatarens fulla url.
-	 */
-	public function get_smf_avatar($member_id)
-	{
-		//försök hämta avatar-url från db
-		$query = $this->CI->db->query('SELECT avatar FROM smf_members WHERE id_member = ?', $member_id);
-		if(!$query->num_rows())
-			return null;
-
-		$avatar_url = $query->row()->avatar;
-		
-		if(empty($avatar_url)) //avatar-fältet är tomt, leta efter avatar-fil på servern
-		{
-			// leta i avs-mappen efter en avatar:
-			// /avs/avatar_<member_id>_<unix_date>.jpeg
-			// ex: /avs/avatar_1655_1516569554.jpeg
-			$pattern_avatar = "/(?<=avatar_)$member_id/";
-			$local_avatars = array(); //filnamn för denna användarens avatarer (kan finnas flera)
-
-			//kolla genom all avatarer och leta efter match
-			foreach(scandir('../avs') as $file_name)
-			{
-				$matches = array();
-				preg_match($pattern_avatar, $file_name, $matches);
-				if(count($matches) > 0)
-					$local_avatars[] = $file_name;
-			}
-
-			//lokal(a) avatar(er) hittades
-			if(count($local_avatars) > 0) //lokal avatar(er) hittades
-			{
-				sort($local_avatars); //sortera, stigande ordning
-				return base_url('../avs/'. end($local_avatars)); //hämta högsta (sista) avataren, lägg till lokal-url
-			}
-			else //medlemmen har ingen avatar
-				return base_url('images/unknown.png');
-		}
-		else //avatar är extern
-			return $avatar_url;
-
-
-		// //om ingen extern avatar är angiven: kolla om medlem har avatar liggande på servern
-		// if(empty($member_data->avatar))
-		// {
-			
-
-			
-		// }
-	}
-
-	/**
 	 * Hitta medlemmens phpbb3-avatar.
 	 * Lokal, extern eller gravatar.
 	 * Om ingen hittades, returnera unknown.png-bilden. 
@@ -349,41 +281,8 @@ class Member
 	}
 
 	/**
-	 * Kollar om inloggningsuppgifter är korrekt.
-	 * Sätter session-variabel och returnerar true.
-	 *
-	 * @param string $username Användarnamn
-	 * @param string $password Lösenord
-	 * @return bool
-	 */
-	public function validate_smf_login($username, $password)
-	{
-		//variabler
-		$salt = sha1(strtolower($username) . strip_tags($password));
-
-		$sql =
-			'SELECT id_member AS id
-			FROM smf_members
-			WHERE
-				member_name = ? &&
-				passwd = ?';
-		$query = $this->CI->db->query($sql, array($username, $salt));
-		
-		$row = $query->row();
-
-		if($query->num_rows() > 0) //success
-		{
-			$this->CI->session->member_id = $row->id;
-			return true;
-		}
-		else
-			return false;
-	}
-
-	/**
 	 * Hämta medlemmars nick och id.
 	 * Hämtar bara medlemmar från ssg_members.
-	 * Hämtar nick från smf_members.
 	 *
 	 * @return array Key: id, Value: nick
 	 */
@@ -393,54 +292,14 @@ class Member
 		$members = array();
 
 		$sql =
-			'SELECT id, real_name
+			'SELECT id, name
 			FROM ssg_members
-			INNER JOIN smf_members
-				ON ssg_members.id = smf_members.id_member
-			ORDER BY real_name ASC';
+			ORDER BY name ASC';
 		$query = $this->CI->db->query($sql);
 		foreach($query->result() as $row)
-			$members[$row->id] = $row->real_name;
+			$members[$row->id] = $row->name;
 		
 		return $members;
-	}
-
-	/**
-	 * Har medlemmen en rad i ssg_members?
-	 * Om inte; skapa en.
-	 *
-	 * @param int $member_id
-	 * @return void
-	 */
-	private function has_member_row($member_id)
-	{
-		//--se om användaren har en rad--
-		$sql =
-			'SELECT id
-			FROM ssg_members
-			WHERE id = ?';
-		$query = $this->CI->db->query($sql, $member_id);
-
-		//om rad finns, fortsätt
-		if($query->num_rows() > 0)
-			return;
-
-		//--hämta data från smf_members--
-		$sql =
-			'SELECT
-				real_name AS name,
-				FROM_UNIXTIME(date_registered, "%Y-%m-%d") AS registered_date
-			FROM smf_members
-			WHERE id_member = ?';
-		$query = $this->CI->db->query($sql, $member_id);
-		$name = $query->row()->name;
-		$registered_date = $query->row()->registered_date;
-
-		//--skapa ny rad--
-		$sql =
-			'INSERT INTO ssg_members(id, name, registered_date)
-			VALUES (?, ?, ?)';
-		$query = $this->CI->db->query($sql, array($member_id, $name, $registered_date));
 	}
 
 	/**

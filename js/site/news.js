@@ -23,11 +23,9 @@ $(document).ready(function()
 		$("#newsfeed").css("margin-bottom", "20px");
 	});
 
-	//kör medan vi väntar på första tick:en
-	$("#deadline_text").html(deadline_timer_tick(deadline_epoch));
-
-	//starta ticks med 1000 ms fördröjning
-	setInterval(function() {
+	//signupbox deadline countdown
+	$("#deadline_text").html(deadline_timer_tick(deadline_epoch)); //kör medan vi väntar på första tick:en
+	setInterval(function() { //starta ticks med 1000 ms fördröjning
 		$("#deadline_text").html(deadline_timer_tick(deadline_epoch));
 	}, 1000);
 });

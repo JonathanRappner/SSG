@@ -24,8 +24,9 @@
 #carousel img{
     width: 40%;
 	opacity: 0.5;
-	margin-left: 2rem;
+	margin-left: 3%;
 }
+#carousel:hover img{ opacity: 0.6; }
 
 /* nyhetsflödet */
 #newsfeed{
@@ -33,6 +34,12 @@
 	max-height: 300px;
 	overflow: hidden;
 	padding-right: 10px;
+}
+
+/* inbäddad youtube-video */
+#newsfeed iframe.youtube{
+	width: 430px;
+	height: 242px;
 }
 
 /* nyhets-artiklar rubrik-undertext */
@@ -103,19 +110,24 @@ div.latest_posts small.new_post{
 	#newsfeed{ max-height: initial; margin-bottom: 20px; }
 	div.bottom_fade{ display: none; }
 	div.news_topic a.newsfeed_image{ display: block; }
+	#newsfeed iframe.youtube{ width: 476px; height: 268px; }
 }
 
 /* md */
 @media (min-width: 768px) {
 	#carousel{ height: 113px; } /* bredd: 720px */
+	#newsfeed iframe.youtube{ width: 656px; height: 369px; }
 }
 
 /* lg */
 @media (min-width: 992px){
 	#carousel{ height: 151px; } /* bredd: 960px */
+	#newsfeed iframe.youtube{ width: 656px; height: 369px; }
 }
 
 /* xl */
 @media (min-width: 1200px){
 	#carousel{ height: 180px; } /* bredd: 1140px */
+	/* inbäddad youtube-video */
+	#newsfeed iframe.youtube{ width: 790px; height: 444px; }
 }

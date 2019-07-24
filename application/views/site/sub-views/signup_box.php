@@ -15,8 +15,6 @@ if(isset($event_id))
 		? '<span class="'.  $attendance_types[$member_signup->attendance_id]->class .'">'.  $attendance_types[$member_signup->attendance_id]->text .'</span>'
 		: null;
 }
-
-
 ?><div class="signup_box">
 
 	<div class="card border-0 shadow-sm">
@@ -27,7 +25,7 @@ if(isset($event_id))
 		</div>
 
 		<!-- Body -->
-		<div class="card-body text-center p-3 pb-4">
+		<div class="card-body text-center p-3">
 
 			<?php if(isset($event_id)):?>
 
@@ -56,7 +54,7 @@ if(isset($event_id))
 					<p class="mb-1">Din anmälan: <?=$attendance_string?></p>
 				<?php endif;?>
 				
-				<div class="row">
+				<div class="row mb-2">
 
 					<?php if($signed):?>
 						<a class="btn_signup_edit btn btn-primary" href="<?=base_url("signup/event/{$event_id}/showform")?>">Ändra anmälan <i class="fas fa-edit"></i></a>
@@ -65,6 +63,10 @@ if(isset($event_id))
 					<?php endif;?>
 
 				</div>
+
+				<?php if($logged_in):?>
+					<small><a class="text-dark" href="<?=base_url('signup')?>">Anmäl dig till ett annat event.</a></small>
+				<?php endif;?>
 
 			<?php else:?>
 

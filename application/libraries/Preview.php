@@ -21,9 +21,9 @@ class Preview
 		//sätt default-värden
 		$this->title = 'Swedish Strategic Group';
 		$this->description = 'Swedish Strategic Group';
-		$this->domain = 'http://www.ssg-clan.se/';
-		$this->url = $this->domain .'new/'. uri_string();
-		$this->image_url = 'http://www.ssg-clan.se/new/images/preview_ssg.png';
+		$this->domain = 'https://www.ssg-clan.se/';
+		$this->url = $this->domain . uri_string();
+		$this->image_url = 'https://www.ssg-clan.se/images/preview_ssg.png';
 	}
 
 	/**

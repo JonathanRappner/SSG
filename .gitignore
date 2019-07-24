@@ -2,6 +2,7 @@
 _stuff/
 tests/
 forum/
+old/
 todo.txt
 application/config/development
 index.live.php
@@ -21,4 +22,5 @@ application/logs
 #stuff
 images/carousel/
 images/rank_icons/
-dokument/
+images/arma3_sync_manual/
+docs/

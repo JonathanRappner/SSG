@@ -240,30 +240,6 @@ class Signup extends CI_Controller
 	}
 
 	/**
-	 * Visar dialogruta ang. utloggning
-	 *
-	 * @param string $redirect Redirect-url om svaret var nej.
-	 */
-	public function logout_confirm($redirect = null)
-	{
-		if(!$this->check_login()) return;
-		
-		//ladda vy
-		$this->load->view('signup/logout', array('redirect'=>$redirect));
-	}
-
-	/**
-	 * Loggar ut användaren.
-	 *
-	 * @return void
-	 */
-	public function logout()
-	{
-		$this->session->sess_destroy();
-		redirect('signup');
-	}
-
-	/**
 	 * Ny eller redigerad anmälan ska sparas.
 	 *
 	 * @return void
@@ -277,34 +253,6 @@ class Signup extends CI_Controller
 	}
 
 	/**
-	 * Inloggningsuppgifter har skickats
-	 */
-	public function login()
-	{
-		//variabler
-		$username = $this->input->post('username');
-		$password = $this->input->post('password');
-		$redirect = $this->input->post('redirect');
-
-		if(!empty($username) && !empty($password)) //variabler finns
-		{
-			//försök logga in användare, om det inte går: visa login_form
-			if($this->member->validate_smf_login($username, $password))
-			{
-				//kopiera medlemsdata från sfm-forumet till phpbb-forumet (ta bort när smf är nerlagt)
-				$this->load->library('phpbb');
-				$this->phpbb->add_user_from_smf($this->session->member_id, $password); //gör ingenting om medlemmen redan är kopierad
-				
-				header("location: $redirect"); //använd inte redirect()
-			}
-			else
-				$this->load->view('login_form', array('fail' => true));
-		}
-		else //post-variabler finns inte
-			redirect('signup');
-	}
-
-	/**
 	 * Kolla om användaren är inloggad.
 	 * Om inte, ladda inloggningssidan.
 	 *
@@ -314,7 +262,7 @@ class Signup extends CI_Controller
 	{
 		if(!$this->member->valid)
 		{
-			$this->load->view('login_form');
+			$this->load->view('signup/login_form');
 			return false;
 		}
 

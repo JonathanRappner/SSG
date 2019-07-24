@@ -86,4 +86,4 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 //Version
 define('SSG_VERSION', '1.0.0');
-define('SSG_BUILD_DATE', '2019-07-18');
+define('SSG_BUILD_DATE', '2019-07-24');

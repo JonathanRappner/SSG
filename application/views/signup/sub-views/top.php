@@ -32,7 +32,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			<?php endif;?>
 
 			<li class="nav-item">
-				<a class="nav-link" href="<?php echo base_url('signup/logout_confirm?redirect='. current_url()); ?>">Logga ut</a>
+				<a class="nav-link" href="<?php echo base_url('site/logout'); ?>">Logga ut</a>
 			</li>
 		</ul>
 	</nav>

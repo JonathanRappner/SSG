@@ -211,7 +211,8 @@ function bbcode_parse($text)
 		'~\[color=(.*?)\](.*?)\[/color\]~s',
 		'~\[url\]((?:ftp|https?)://.*?)\[/url\]~s',
 		'~\[url=(.+?)\](.+?)\[\/url\]~s',
-		'~\[img\](https?://.+?)\[/img\]~s'
+		'~\[img\](https?://.+?)\[/img\]~s',
+		'~\[media\](?:https:\/\/www.youtube.com\/watch\?v=)(.+)\[/media\]~s',
 	);
 
 	$replace = array(
@@ -225,7 +226,8 @@ function bbcode_parse($text)
 		'<span style="color:$1;">$2</span>',
 		'<a href="$1">$1</a>',
 		'<a href="$1">$2</a>',
-		'<a class="newsfeed_image" href="$1" data-toggle="lightbox"><img src="$1" alt /></a>' //bilder ska inte vara inline
+		'<a class="newsfeed_image" href="$1" data-toggle="lightbox"><img src="$1" alt /></a>', //bilder ska inte vara inline
+		'<iframe class="youtube" frameborder="0" src="https://www.youtube.com/embed/$1"></iframe>',
 	);
 
 	return preg_replace($find, $replace, $text);
