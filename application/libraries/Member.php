@@ -29,11 +29,21 @@ class Member
 
 		//--försök hitta inloggad användare genom phpbb-cookie eller session-variabel--
 		if($member_id) //medlem hittades via phpBB-session
+		{
 			$this->id = $member_id;
+			$this->CI->session->member_id = $member_id;
+		}
+		else if(isset($this->CI->session->member_id)) //om ssg_session finns, använd den
+		{
+			//använd ssg_session samtidigt som phpbb-sessions eftersom phpbb-sessions tar slut fort och måste regenereras
+			//medan ssg_sessions varar i typ två dagar
+			$this->id = $this->CI->session->member_id;
+		}
 		else if($phpbb_user_id) //phpBB-session finns men det finns ingen ssg_member hittades   
 		{
 			$member_id = $this->create_ssg_member($phpbb_user_id);
 			$this->id = $member_id;
+			$this->CI->session->member_id = $member_id;
 		}
 		else //ingen session finns, låt $this->valid vara false så login-formuläret visas
 			return;
