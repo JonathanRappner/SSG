@@ -172,7 +172,7 @@ class Chat extends CI_Model
 		
 		//får medlemmen ta bort detta meddelande?
 		$this->load->library("Permissions");
-		if(!$this->permissions->has_permissions(array('super', 's1')) || !$row->member_id == $this->member->id) //är inte admin eller är inte skaparen av meddelandet
+		if(!$this->permissions->has_permissions(array('super', 's1')) && $row->member_id != $this->member->id) //är admin: fail:a if-satsen direkt, är inte admin: kolla att inloggade medlemen är samma som skrev posten
 			return 401; //unauthorized
 
 		$this->db->delete('ssg_chat', array('id' => $message_id));
@@ -207,7 +207,7 @@ class Chat extends CI_Model
 		
 		//får medlemmen uppdatera detta meddelande?
 		$this->load->library("Permissions");
-		if(!$this->permissions->has_permissions(array('super', 's1')) || !$row->member_id == $this->member->id) //är inte admin eller är inte skaparen av meddelandet
+		if(!$this->permissions->has_permissions(array('super', 's1')) && $row->member_id != $this->member->id) //är admin: fail:a if-satsen direkt, är inte admin: kolla att inloggade medlemen är samma som skrev posten
 			return 401; //unauthorized
 
 		
