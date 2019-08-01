@@ -19,8 +19,8 @@ body{
 
 /* Avatar i toppraden */
 #userbox .avatar{
-	width: 42px;
-	height: 42px;
+	max-width: 42px;
+	max-height: 42px;
 }
 
 /* länk till forum-profil */
