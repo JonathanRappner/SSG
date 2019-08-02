@@ -6,73 +6,74 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Permissions
 {
 	protected $CI;
-	private $permission_groups;
+	private $permission_groups, $permission_codes;
 
 	public function __construct()
 	{
 		// Assign the CodeIgniter super-object
 		$this->CI =& get_instance();
 
-		$this->load_permissions();
-	}
+		//hämta rättighetsgrupper
+		$this->permission_groups = $this->CI->db->query('SELECT group_id id, group_name title FROM phpbb_groups')->result();
 
-	/**
-	 * Ladda och spara rättighetsgrupper från databasen.
-	 *
-	 * @return void
-	 */
-	private function load_permissions()
-	{
-		$sql =
-			'SELECT *
-			FROM ssg_permission_groups';
-		$query = $this->CI->db->query($sql);
-		$this->permission_groups = $query->result();
+		//sätt snabbkoder
+		$this->get_by_id(2)->code = 'reg';
+		$this->get_by_id(5)->code = 'super';
+		$this->get_by_id(8)->code = 's0';
+		$this->get_by_id(9)->code = 's1';
+		$this->get_by_id(10)->code = 's2';
+		$this->get_by_id(11)->code = 's3';
+		$this->get_by_id(12)->code = 's4';
+		$this->get_by_id(17)->code = 's5';
+		$this->get_by_id(13)->code = 'medlem';
+		$this->get_by_id(14)->code = 'rekryt';
+		$this->get_by_id(15)->code = 'inaktiv';
+		$this->get_by_id(16)->code = 'grpchef';
 	}
 
 	/**
 	 * Kolla rättighetsgrupper med koder.
 	 *
-	 * @param mixed $permissions_code Sträng eller sträng-array med rättighetsgruppskoder.
+	 * @param mixed $permission_codes Sträng eller sträng-array med rättighetsgruppskoder.
 	 * @param int $member_id Användare att kolla. Lämna blank för att kolla inloggade medlemmen.
 	 * @return boolean
 	 */
-	public function has_permissions($permissions_code, $member_id = null)
+	public function has_permissions($permission_codes, $member_id = null)
 	{
 		//input-sanering
-		assert(!empty($permissions_code));
+		assert(!empty($permission_codes));
+
+		//variabler
+		$administrator_permission_id = 5;
 
 		//ska kolla rättigheter mot inloggade användaren men är inte inloggad
 		if($member_id == null && !$this->CI->member->valid)
 			return false;
 
 		//Om $permissions inte är en array, gör om den till en.
-		if(!is_array($permissions_code))
-			$permissions_code = array($permissions_code);
+		if(!is_array($permission_codes))
+			$permission_codes = array($permission_codes);
 		
 		//gå igenom alla koder och översätt till id-nummer
-		foreach($permissions_code as $perm)
-		{
-			//försök att ladda permission-objekt med kod
-			$loaded_perm = $this->get_by_code($perm);
-			
-			//assert:a att det lyckades
-			assert(isset($loaded_perm->id), "Inkorrekt permission-group-kod: $perm");
-			
-			//stoppa in id i lista
-			$permissions_id[] =  $loaded_perm->id;
-		}
+		$permission_ids = array();
+		foreach($permission_codes as $code)
+			$permission_ids[] = $this->get_by_code($code)->id;
 
 		//hämta medlems rättighetsgrupper
-		$member_permissions = empty($member_id)
-			? $this->CI->member->permission_groups //ladda inloggade medlemmens data
-			: $this->CI->member->get_member_data($member_id)->permission_groups; //ladda specifierade medlemmens data
-		
-		//om super-admin, avbryt och ge true
-		if(in_array(1, $member_permissions))
-			return true;
+		$member_permissions = $member_id //är medlemen specifierad?
+			? $this->CI->member->get_member_data($member_id)->permission_groups
+			: $this->CI->member->permission_groups; //ladda inloggade medlemmens data
 
-		return !empty(array_intersect($permissions_id, $member_permissions));
+		//iterera genom alla medlemmens permission groups
+		foreach($member_permissions as $member_permission)
+		{
+			if($member_permission->id == $administrator_permission_id) //om admin = alltid true
+				return true;
+			else if(in_array($member_permission->id, $permission_ids)) //kolla om behörighetsgrupp-id:t finns bland $permission_ids
+				return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -97,7 +98,7 @@ class Permissions
 	public function get_by_code($code)
 	{
 		foreach($this->permission_groups as $permission_group)
-			if($permission_group->code == $code)
+			if(isset($permission_group->code) && $permission_group->code == $code)
 				return $permission_group;
 	}
 

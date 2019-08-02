@@ -9,6 +9,7 @@ if(isset($event_id))
 {
 	$days_swe = array(1=>'Söndag', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag');
 	$logged_in = $this->member->valid;
+	$user_is_member = $this->permissions->has_permissions(array('rekryt', 'medlem', 'inaktiv'));
 	$signed = isset($member_signup);
 	$litteral_day = $days_swe[$day_of_week]; //'Söndag' / 'Onsdag'
 	$attendance_string = $signed
@@ -43,7 +44,7 @@ if(isset($event_id))
 				</p>
 				<p class="mb-1"><strong>Anmälda</strong></p>
 
-				<?php if(!$signed && $logged_in):?>
+				<?php if($logged_in && $user_is_member && !$signed):?>
 					<!-- deadline -->
 					<div class="deadline" title="Du kan fortfarande anmäla dig efter deadline:n har runnit ut." data-toggle="tooltip">
 						Deadline: <span id="deadline_text"></span>
@@ -58,13 +59,13 @@ if(isset($event_id))
 
 					<?php if($signed):?>
 						<a class="btn_signup_edit btn btn-primary" href="<?=base_url("signup/event/{$event_id}/showform")?>">Ändra anmälan <i class="fas fa-edit"></i></a>
-					<?php elseif($logged_in):?>
+					<?php elseif($logged_in && $user_is_member):?>
 						<a class="btn_signup_new btn btn-success" href="<?=base_url("signup/event/{$event_id}/showform")?>">Anmäl dig <i class="fas fa-chevron-right"></i></a>
 					<?php endif;?>
 
 				</div>
 
-				<?php if($logged_in):?>
+				<?php if($logged_in && $user_is_member):?>
 					<small><a class="text-dark" href="<?=base_url('signup')?>">Anmäl dig till ett annat event.</a></small>
 				<?php endif;?>
 

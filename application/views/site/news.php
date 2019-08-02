@@ -3,6 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 //variabler
 $this->current_page = 'news';
+$user_is_member = $this->permissions->has_permissions(array('rekryt', 'medlem', 'inaktiv'));
 $carousel_images = glob('images/carousel/*.jpg');
 shuffle($carousel_images);
 
@@ -16,14 +17,18 @@ shuffle($carousel_images);
 	<link rel="stylesheet" href="<?=base_url('css/site/signup-box.css')?>">
 	<link rel="stylesheet" href="<?=base_url('css/site/chat.css')?>">
 	<link rel="stylesheet" href="<?=base_url('css/site/latest_posts.css')?>">
-	<script src="<?=base_url('js/deadline.js')?>"></script>
-	<script src="<?=base_url('js/site/chat.js')?>"></script>
 	<script src="<?=base_url('js/site/news.js')?>"></script>
+
+	<?php if($user_is_member):?>
+		<script src="<?=base_url('js/deadline.js')?>"></script>
+		<script src="<?=base_url('js/site/chat.js')?>"></script>
+	<?php endif;?>
+	
 
 	<title>Swedish Strategic Group</title>
 
 	<script>
-		var deadline_epoch = <?=$next_event->deadline_epoch?>;
+		<?php if($user_is_member):?>var deadline_epoch = <?=$next_event->deadline_epoch?>;<?php endif;?>
 		var carousel_images = <?=json_encode($carousel_images)?>;
 	</script>
 
@@ -48,9 +53,9 @@ shuffle($carousel_images);
 		<!-- Vänsterkolumn -->
 		<div id="leftcol" class="col-lg-9 pr-0">
 
-			<?php if($this->member->valid):?>
-			<!-- Chat -->
-			<?php $this->load->view('site/sub-views/chat', array('chat_messages' => $chat_messages));?>
+			<?php if($this->member->valid && $user_is_member):?>
+				<!-- Chat -->
+				<?php $this->load->view('site/sub-views/chat', array('chat_messages' => $chat_messages));?>
 			<?php endif;?>
 
 			<!-- Nyhetsflöde -->

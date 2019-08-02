@@ -8,9 +8,9 @@ $this->load->library("Permissions");
 
 ?><div id="chat" class="row px-2 py-2 mb-3 bg-white rounded shadow-sm">
 	<script>
-		var earliest_message_id = <?=$earliest_message_id?>;
-		var member_id = <?=$this->member->id?>;
-		var is_admin = <?=$this->permissions->has_permissions(array('super', 's0')) ? 'true' : 'false'?>; //No, this won't actually give you admin powers. It's just for cosmetic stuff.
+		var earliest_message_id = <?=json_encode($earliest_message_id)?>;
+		var member_id = <?=json_encode($this->member->id)?>;
+		var is_admin = <?=json_encode($this->permissions->has_permissions(array('super', 's0')))?>; //No, this won't actually give you admin powers. It's just for cosmetic stuff.
 	</script>
 
 	<div class="status">

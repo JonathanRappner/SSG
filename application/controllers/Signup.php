@@ -260,9 +260,14 @@ class Signup extends CI_Controller
 	 */
 	private function check_login()
 	{
-		if(!$this->member->valid)
+		if(!$this->member->valid) //användaren är ej inloggad
 		{
 			$this->load->view('signup/login_form');
+			return false;
+		}
+		else if(!$this->permissions->has_permissions(array('rekryt', 'medlem', 'inaktiv'))) //användaren är inloggad men inte med i klanen
+		{
+			$this->load->view('signup/only_members');
 			return false;
 		}
 

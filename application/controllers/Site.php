@@ -32,10 +32,19 @@ class Site extends CI_Controller
 		$news = $this->news->get_news($page, 5);
 		$attendance_types = $this->attendance->get_all(); //till signupbox
 
-		if($this->member->valid)
+		if($this->member->valid) //data för inloggade användare
 		{
-			$chat_messages = $this->chat->get_messages(null, 16);
-			$earliest_message_id = $this->chat->get_last_message_id(); //hämta tidigaste meddelandet i db så att js vet när den inte ska ladda fler
+			//data för antagna medlemmar
+			if($this->permissions->has_permissions(array('rekryt', 'medlem', 'inaktiv')))
+			{
+				//chat
+				$chat_messages = $this->chat->get_messages(null, 16);
+				$earliest_message_id = $this->chat->get_last_message_id(); //hämta tidigaste meddelandet i db så att js vet när den inte ska ladda fler
+			}
+			else
+				$chat_messages = $earliest_message_id = null;
+
+			//data för inloggade användare
 			$posts = $this->news->get_latest_posts();
 		}
 		else

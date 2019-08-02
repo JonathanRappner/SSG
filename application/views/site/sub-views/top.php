@@ -23,9 +23,11 @@ $this->load->library("permissions");
 					<a class="nav-link" href="<?=base_url('forum')?>">Forum</a>
 				</li>
 				
-				<li class="nav-item">
-					<a class="nav-link" href="<?=base_url('signup')?>">Events</a>
-				</li>
+				<?php if($this->member->valid && $this->permissions->has_permissions(array('rekryt', 'medlem', 'inaktiv'))):?>
+					<li class="nav-item">
+						<a class="nav-link" href="<?=base_url('signup')?>">Events</a>
+					</li>
+				<?php endif;?>
 				
 				<li class="nav-item<?=$this->current_page == 'members' ? ' active' : null?>">
 					<a class="nav-link" href="<?=base_url('site/members')?>">Medlemmar</a>
@@ -35,13 +37,13 @@ $this->load->library("permissions");
 					<a class="nav-link" href="<?=base_url('site/streamers')?>">Streamers</a>
 				</li>
 				
-				<?php if(false /****temp*****/ && $this->member->valid):?>
+				<?php if(false /****temp*****/ && $this->member->valid && $this->permissions->has_permissions(array('rekryt', 'medlem', 'inaktiv'))):?>
 					<li class="nav-item<?=$this->current_page == 'emblem' ? ' active' : null?>">
 						<a class="nav-link" href="<?=base_url('site/emblem')?>">Emblem</a>
 					</li>
 				<?php endif;?>
 				
-				<?php if($this->member->valid):?>
+				<?php if($this->member->valid && $this->permissions->has_permissions(array('rekryt', 'medlem', 'inaktiv'))):?>
 					<li class="nav-item">
 						<a class="nav-link" href="<?=base_url('forum/viewtopic.php?f=3&t=1000')?>">Modline</a>
 					</li>

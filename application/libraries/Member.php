@@ -25,6 +25,8 @@ class Member
 		$this->phpbb_session_id = $this->get_phpbb_session_id();
 		$phpbb_user_id = $this->get_phpbb_session_user_id($this->phpbb_session_id); //hitta phpbb_user_id
 		$member_id = $this->get_phpbb_session_member($phpbb_user_id); //hitta SSG-member-id via phpBB-session
+		if($member_id && !$phpbb_user_id) //om ingen phpbb-session finns men en ssg-session gör det
+			$phpbb_user_id = $this->CI->db->query('SELECT phpbb_user_id FROM ssg_members WHERE id = ?', array($member_id))->row()->phpbb_user_id;
 
 
 		//--försök hitta inloggad användare genom phpbb-cookie eller session-variabel--
@@ -41,9 +43,12 @@ class Member
 		}
 		else if($phpbb_user_id) //phpBB-session finns men det finns ingen ssg_member hittades   
 		{
-			$member_id = $this->create_ssg_member($phpbb_user_id);
-			$this->id = $member_id;
-			$this->CI->session->member_id = $member_id;
+			if($member_id = $this->create_ssg_member($phpbb_user_id))
+			{
+				//medlemen skapades
+				$this->id = $member_id;
+				$this->CI->session->member_id = $member_id;
+			}
 		}
 		else //ingen session finns, låt $this->valid vara false så login-formuläret visas
 			return;
@@ -60,13 +65,17 @@ class Member
 		// $this->id = 1472; ////////Jonasson
 		// $this->id = 1441; ////////Insane_laughter
 		// $this->id = 1337; ////////Cowboy
-		// if($this->id == 1655)
+		// if($this->id == 1655) //om Smorfty
 		// 	$this->id = 1675; ////////Gibby
 
-		//sätt laddad medlemsdata till $this
-		$this->set_member_data($this->id);
-
-		//valid
+		//ladda medlemsdata och sätt dess attribut till $this
+		//men bara om inloggad användare har post i ssg_members
+		$member_data = isset($this->id)
+			? $this->get_member_data($this->id) //hämta data från ssg_members
+			: $this->get_member_data_phpbb($phpbb_user_id); //varken ssg_member eller ssg-session finns, bara phpbb-session (användare som bara är registrerade men inte antagna i klanen)
+		$this->set_member_data($member_data); //sätt hämtad data till $this
+		
+		//valid (true om phpbb-data eller ssg-data finns, false om man är helt och hållet utloggad)
 		$this->valid = true;
 	}
 
@@ -131,14 +140,20 @@ class Member
 	}
 
 	/**
-	 * Skapa ny medlem i ssg_members med data från
+	 * Skapa ny medlem i ssg_members med data från phpbb.
+	 * Skapa endast om medlemen är "Medlem", "Rekryt", eller "Inaktiv Medlem"
 	 *
-	 * @param [type] $phpbb_user_id
-	 * @return void
+	 * @param int $phpbb_user_id
+	 * @return int SSG-medlems-id
 	 */
 	private function create_ssg_member($phpbb_user_id)
 	{
 		if(!$phpbb_user_id)
+			return;
+		
+		//kolla om medlemen är "Medlem", "Rekryt", eller "Inaktiv Medlem"
+		$query = $this->CI->db->query('SELECT user_id FROM phpbb_user_group WHERE user_id = ? AND group_id IN (13, 14, 15)', array($phpbb_user_id));
+		if(!$query->num_rows())
 			return;
 
 		//hitta medlemmens namn
@@ -162,19 +177,18 @@ class Member
 	/**
 	 * Hämtar och sätter medlemsdata till publika variabler i denna modell.
 	 * 
-	* @param int $member_id
+	* @param object $member_data
 	* @return void
 	*/
-	private function set_member_data($member_id)
+	private function set_member_data($member_data)
 	{
-		$member = $this->get_member_data($member_id);
-
-		foreach($member as $attr_name => $attr_value)
+		foreach($member_data as $attr_name => $attr_value)
 			$this->$attr_name = $attr_value;
 	}
 
 	/**
 	 * Hämtar medlems-attribut såsom smeknamn och avatar.
+	 * Används för medlemmar som finns i ssg_members.
 	 *
 	 * @param int $member_id Medlems-id
 	 * @return object
@@ -182,8 +196,10 @@ class Member
 	public function get_member_data($member_id)
 	{
 		//parameter-sanering, yo
-		assert(!empty($member_id));
-		assert(is_numeric($member_id));
+		if(!$member_id || !is_numeric($member_id))
+			return;
+
+		$member_data = new stdClass;
 
 		$sql =
 			'SELECT
@@ -201,27 +217,16 @@ class Member
 			LEFT JOIN ssg_roles
 				ON ssg_members.role_id = ssg_roles.id
 			WHERE ssg_members.id = ?';
-		$query = $this->CI->db->query($sql, $member_id);
+		$row = $this->CI->db->query($sql, $member_id)->row();
+		foreach($row as $attribute_name => $attribute_value)
+			$member_data->$attribute_name = $attribute_value;
 
-		//felkoll
-		if(!$member_data = $query->row())
-			show_error("Hittade inte medlem med id: $member_id i databasen.");
+		//ladda behörighet från forum
+		$member_data->permission_groups = $this->get_member_permissions($row->phpbb_user_id);
 
 		//--Avatar--
-		$member_data->avatar_url = $this->get_phpbb_avatar($member_id);
-
-		//--Permission Groups--
-		$sql =
-			'SELECT ssg_permission_groups.id AS persmission_id
-			FROM ssg_permission_groups_members
-			INNER JOIN ssg_permission_groups
-				ON ssg_permission_groups_members.permission_group_id = ssg_permission_groups.id
-			WHERE member_id = ?';
-		$query = $this->CI->db->query($sql, $member_id);
-		$member_data->permission_groups = array();
-		foreach($query->result() as $row)
-			$member_data->permission_groups[] = $row->persmission_id;
-
+		$member_data->avatar_url = $this->get_phpbb_avatar($row->phpbb_user_id);
+		
 		//--Rank--
 
 		//tomma värden
@@ -259,25 +264,67 @@ class Member
 	}
 
 	/**
-	 * Hitta medlemmens phpbb3-avatar.
-	 * Lokal, extern eller gravatar.
-	 * Om ingen hittades, returnera unknown.png-bilden. 
+	 * Alternativ till get_member_data()
+	 * Används om användaren inte har en post i ssg_members.
+	 * Hämtar användarnamn, avatar och behörighetsgrupper.
+	 * Hämtar inte grad, grupp, osv.
 	 *
-	 * @param int $member_id
+	 * @param int $phpbb_user_id
+	 * @return object Medlemsdata
+	 */
+	public function get_member_data_phpbb($phpbb_user_id)
+	{
+		$member_data = new stdClass;
+
+		//phpbb user id
+		$member_data->phpbb_user_id = $phpbb_user_id;
+
+		//namn och registreringsdatum
+		$row = $this->CI->db->query('SELECT username, user_regdate FROM phpbb_users WHERE user_id = ?', array($phpbb_user_id))->row();
+		$member_data->name = $row->username;
+		$member_data->registered_date = $row->user_regdate;
+
+		//ladda behörighet från forum
+		$member_data->permission_groups = $this->get_member_permissions($phpbb_user_id);
+
+		//avatar
+		$member_data->avatar_url = $this->get_phpbb_avatar($phpbb_user_id);
+
+		//null-värden
+		$member_data->id = 
+		$member_data->rank_id = 
+		$member_data->rank_name = 
+		$member_data->rank_icon = 
+		$member_data->rank_date = 
+		$member_data->uid = 
+		$member_data->group_id = 
+		$member_data->group_name = 
+		$member_data->group_code = 
+		$member_data->role_id = 
+		$member_data->role_name = null;
+		$member_data->is_active = false;
+
+		return $member_data;
+	}
+
+	/**
+	 * Hitta medlemmens phpbb-avatar.
+	 * Lokal, extern eller gravatar.
+	 * Om ingen hittades, returnera unknown.png-bilden.
+	 *
+	 * @param int $phpbb_user_id
 	 * @return string Avatarens fulla url.
 	 */
-	public function get_phpbb_avatar($member_id)
+	public function get_phpbb_avatar($phpbb_user_id)
 	{
 		$sql =
 			'SELECT
-				phpbb.user_avatar,
-				phpbb.user_avatar_type,
-				phpbb.user_avatar_width
-			FROM ssg_members m
-			LEFT OUTER JOIN phpbb_users phpbb
-				ON m.phpbb_user_id = phpbb.user_id
-			WHERE m.id = ?';
-		$row = $this->CI->db->query($sql, $member_id)->row();
+				user_avatar,
+				user_avatar_type,
+				user_avatar_width #gravatar behöver detta
+			FROM phpbb_users
+			WHERE user_id = ?';
+		$row = $this->CI->db->query($sql, $phpbb_user_id)->row();
 
 		//avatar-länk
 		if(empty($row->user_avatar_type)) //ingen avatar
@@ -288,6 +335,25 @@ class Member
 			return $row->user_avatar;
 		else if($row->user_avatar_type == 'avatar.driver.gravatar') //gravatar
 			return 'https://secure.gravatar.com/avatar/'. md5($row->user_avatar) .'?s='. $row->user_avatar_width;
+	}
+
+	/**
+	 * Hämtar behörighetsgrupper för angiven användare.
+	 *
+	 * @param int $phpbb_user_id
+	 * @return array Objekt-array
+	 */
+	private function get_member_permissions($phpbb_user_id)
+	{
+		$sql =
+			'SELECT
+				g.group_id id,
+				g.group_name name
+			FROM phpbb_user_group ug
+			INNER JOIN phpbb_groups g
+				ON ug.group_id = g.group_id
+			WHERE ug.user_id = ?';
+		return $this->CI->db->query($sql, array($phpbb_user_id))->result();
 	}
 
 	/**

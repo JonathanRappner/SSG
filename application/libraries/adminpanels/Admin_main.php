@@ -21,11 +21,11 @@ class Admin_main implements Adminpanel
 	public function view()
 	{
 		echo '<h5>Välj en admin-panel till vänster.</h5>';
-		echo '<p>Din(a) rättighetsgrupp(er):</p>';
+		echo '<p>Din(a) rättighetsgrupp(er) från forumet:</p>';
 		echo '<ul>';
-
-		foreach($this->CI->member->permission_groups as $perm_id)
-			echo '<li>'. $this->CI->permissions->get_by_id($perm_id)->title .'</li>';
+		
+		foreach($this->CI->member->permission_groups as $perm)
+			echo '<li>'. $this->CI->permissions->get_by_id($perm->id)->title .'</li>';
 
 		echo '</ul>';
 	}

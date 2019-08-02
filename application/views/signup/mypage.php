@@ -102,7 +102,7 @@ if($member_has_signups)
 $admin_groups_arr = array();
 $admin_groups = null;
 foreach($loaded_member->permission_groups as $grp)
-	$admin_groups_arr[] = $this->permissions->get_by_id($grp)->title;
+	$admin_groups_arr[] = $this->permissions->get_by_id($grp->id)->title;
 $admin_groups = implode(', ', $admin_groups_arr);
 
 //tid sedan senaste bumpning

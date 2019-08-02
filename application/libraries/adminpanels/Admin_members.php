@@ -394,12 +394,6 @@ class Admin_members implements Adminpanel
 			echo '<input type="hidden" name="member_id" value="'. $this->loaded_member->id .'">';
 				
 				echo '<div class="col-md-6 col-lg-4">';
-
-					//Namn
-					echo '<div class="form-group row">';
-						echo '<label for="name">Namn</label>';
-						echo '<input type="text" id="name" name="name" value="'. $this->loaded_member->name .'" class="form-control" required>';
-					echo '</div>';
 					
 					//Grupp
 					echo '<div class="form-group row">';
@@ -426,21 +420,6 @@ class Admin_members implements Adminpanel
 							echo 'Aktiv <i class="fas fa-question-circle"></i>';
 						echo '</label>';
 					echo '</div>';
-
-
-					//Rättighetsgrupper
-					if($this->CI->permissions->has_permissions('s0'))
-					{
-						echo '<h5 class="row" title="Endast S0 och Super Admins kan sätta rättigheter." data-toggle="tooltip">Rättighetsgrupper&nbsp;<i class="fas fa-question-circle"></i></h5>';
-
-						foreach($this->CI->permissions->get_permissions() as $perm)
-						{
-							echo '<div class="form-group form-check row">';
-								echo '<input class="form-check-input" type="checkbox" '. (in_array($perm->id, $this->loaded_member->permission_groups) ? 'checked' : null) .' id="permission_'. $perm->code .'" name="permission[]" value="'. $perm->id .'">';
-								echo '<label class="form-check-label" for="permission_'. $perm->code .'">'. $perm->title .'</label>';
-							echo '</div>';
-						}
-					}
 
 				echo '</div>'; //end div.col
 
@@ -721,7 +700,6 @@ class Admin_members implements Adminpanel
 	{
 		//--ssg_member--
 		$data = array(
-			'name' => $vars->name,
 			'group_id' => $vars->group_id > 0 ? $vars->group_id : null,
 			'role_id' => $vars->role_id > 0 ? $vars->role_id : null,
 			'uid' => $vars->uid,
