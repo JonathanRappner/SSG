@@ -205,7 +205,7 @@ if(isset($loaded_member->rank_date))
 			<dt>Registreringsdatum:</dt>
 			<dd><?=isset($loaded_member->registered_date) ? $loaded_member->registered_date : '-'?></dd>
 
-			<dt>Admin-rättigheter:</dt>
+			<dt>Behörighetsgrupper:</dt>
 			<dd><?=count($admin_groups_arr) > 0 ? $admin_groups : 'Inga'?></dd>
 		</dl>
 	</div>
