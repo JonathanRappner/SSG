@@ -104,6 +104,18 @@ div.latest_posts small.new_post{
 	white-space: nowrap;
 }
 
+/* community-länkar */
+div.links a{
+	width: 72px;
+	height: 72px;
+	margin-left: 20px;
+	display: block;
+	float: left;
+	border-radius: 5px;
+}
+div.links a img { width: 100%; }
+div.links a:hover { text-decoration: none; }
+
 /* sm eller större */
 @media (min-width: 576px) {
 	#carousel{ height: 85px; } /* bredd: 540px */
@@ -111,6 +123,7 @@ div.latest_posts small.new_post{
 	div.bottom_fade{ display: none; }
 	div.news_topic a.newsfeed_image{ display: block; }
 	#newsfeed iframe.youtube{ width: 476px; height: 268px; }
+	div.links a{ width: 48px; height: 48px; margin-left: 8px; }
 }
 
 /* md */

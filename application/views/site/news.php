@@ -68,6 +68,7 @@ shuffle($carousel_images);
 		<div id="rightcol" class="col-lg-3 p-0">
 			<?php $this->load->view('site/sub-views/signup_box', (array)$next_event);?>
 			<?php if($this->member->valid) $this->load->view('site/sub-views/latest_posts', array('posts'=>$posts));?>
+			<?php $this->load->view('site/sub-views/links');?>
 			<?php $this->load->view('site/sub-views/ts3_viewer');?>
 		</div>
 
