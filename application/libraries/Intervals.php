@@ -192,8 +192,8 @@ class Intervals
 			INNER JOIN ssg_members m
 				ON u.user_id = m.phpbb_user_id
 			WHERE
-				m.is_active #endast aktiva medlemmar
-				AND u.group_id != 6 #inga bots
+				#m.is_active #endast aktiva medlemmar
+				u.group_id != 6 #inga bots
 				AND u.user_id != 1 #inte annonymous-användaren
 				AND u.user_id != 48 #inte SSG-användaren
 			ORDER BY user_regdate ASC';

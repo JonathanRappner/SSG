@@ -100,7 +100,7 @@ class News extends CI_Model
 				ON topic.topic_last_post_id = latest_post.post_id
 			INNER JOIN phpbb_users users #users
 				ON latest_post.poster_id = users.user_id
-			WHERE topic.forum_id IN (SELECT forum_id FROM phpbb_acl_groups WHERE group_id IN (SELECT group_id FROM phpbb_user_group WHERE user_id = ?))
+			WHERE topic.forum_id IN (SELECT forum_id FROM phpbb_acl_groups WHERE auth_role_id != 16 AND group_id IN (SELECT group_id FROM phpbb_user_group WHERE user_id = ?))
 			ORDER BY latest_post.post_time DESC
 			LIMIT ?';
 		$topics = $this->db->query($sql, array($this->member->phpbb_user_id, $length))->result();
