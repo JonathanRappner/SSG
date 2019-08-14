@@ -181,7 +181,7 @@ function relative_time_string($date)
 	}
 	else if($diff < $day && $date_day_nbr == date('d')) //mer än en timme sedan OCH samma datum-dag (ex: 'idag 20:05')
 		$output = 'idag '. date('G:i', $date);
-	else if($diff < ($day * 2)) //mer är en OCH mindre än två dagar sedan (ex: 'igår 0:22')
+	else if($diff < ($day * 2)) //mer är en timme OCH mindre än två dagar sedan (ex: 'igår 0:22')
 		$output = 'igår '. date('G:i', $date);
 	else if($diff < $six_days) //mer är en dag sedan (ex: 'i fredags 13:49') (använd six_days so att det inte står "i fredags" på en fredag)
 		$output = 'i '. $days_swe[date('N', $date)] . 's '. date('G:i', $date);

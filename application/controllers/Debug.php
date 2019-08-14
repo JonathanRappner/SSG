@@ -15,6 +15,9 @@ class Debug extends CI_Controller
 	public function index()
 	{
 		echo '<p><a href="debug/import_chat">Importera chat</a></p>';
+		echo '<hr>';
+
+		
 	}
 
 	/**

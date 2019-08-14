@@ -214,7 +214,7 @@ function add_messages(messages)
 			'<div class="row chat_row" data-message_id="'+ message.id +'">'+
 				
 				'<div class="message_left col-10">'+
-					"<a href='"+ base_url +"forum/memberlist.php?mode=viewprofile&u="+ message.phpbb_user_id +"' target='_blank' style='color:#"+ message.user_color +"' title='"+ message.user_title +"'>"+
+					"<a href='"+ base_url +"forum/ucp.php?i=pm&mode=compose&u="+ message.phpbb_user_id +"' target='_blank' style='color:#"+ message.user_color +"' title='"+ message.user_title +"'>"+
 						message.name+
 					"</a>: "+
 					message.text+
