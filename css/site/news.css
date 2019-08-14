@@ -123,7 +123,7 @@ div.links a:hover { text-decoration: none; }
 	div.bottom_fade{ display: none; }
 	div.news_topic a.newsfeed_image{ display: block; }
 	#newsfeed iframe.youtube{ width: 476px; height: 268px; }
-	div.links a{ width: 48px; height: 48px; margin-left: 8px; }
+	div.links a{ width: 48px; height: 48px; margin-left: 12px; }
 }
 
 /* md */
