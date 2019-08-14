@@ -84,9 +84,6 @@ class News extends CI_Model
 		if(!is_numeric($length))
 			throw new Exception("\$length ogiltig: {$length}");
 
-		//variabler
-		$forum_name_max_len = 20;
-
 		$sql =
 			'SELECT
 				forum.forum_name,
@@ -118,10 +115,6 @@ class News extends CI_Model
 			//(egentligen vilken nummerordning första posten har på den sida som gäller)
 			//ex: post 17 ska ha start 10, post 31 ska ha start 30 (om 10 post_per_page dvs.)
 			$topic->start = floor($topic->no_of_earlier_posts / $posts_per_page) * $posts_per_page; //avrunda ner till närmsta tiotal
-
-			//korta ner långa forum-namn
-			if(strlen($topic->forum_name) > $forum_name_max_len)
-				$topic->forum_name = mb_substr($topic->forum_name, 0, $forum_name_max_len) .'.';
 
 			//länk till post (ex: "/forum/viewtopic.php?t=105&start=10#p549")
 			$topic->url = base_url("forum/viewtopic.php?t={$topic->topic_id}". ($topic->start > 0 ? "&start={$topic->start}": null) ."#p{$topic->post_id}");

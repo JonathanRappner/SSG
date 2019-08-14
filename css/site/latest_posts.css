@@ -26,3 +26,7 @@ div.latest_posts .list-group-item span{
 div.latest_posts .list-group-item small{
 	font-size: 0.7rem;
 }
+
+i.fa-caret-right{
+	color: #9c9c9c;
+}
