@@ -46,6 +46,7 @@ $(document).ready(function()
 	{
 		$("#chat-list").scrollTop(0); //skrolla upp
 		$(this).hide(); //göm knappen (görs redan i $("#chat-list").scroll()-eventet men är lite för långsamt)
+		$("#message").val(null);
 		refresh_messages(message_count);
 	});
 
@@ -114,7 +115,9 @@ function get_scroll_ratio()
 	return $(chat_list).scrollTop() / ($(chat_list).prop("scrollHeight") - $(chat_list).height());
 }
 
-
+/**
+ * Sätter edit/delete events för edit/delete-knapparna.
+ */
 function set_edit_delete_events()
 {
 	//redigera
@@ -343,7 +346,6 @@ function setup_editing(message)
  */
 function stop_editing()
 {
-	$("#message").val(null);
 	$("#message").data("message_id", null);
 	$("#btn_send").show();
 	$("#btn_save").hide();
