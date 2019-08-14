@@ -37,7 +37,7 @@ $this->load->library("permissions");
 					<a class="nav-link" href="<?=base_url('site/streamers')?>">Streamers</a>
 				</li>
 				
-				<?php if(false /****temp*****/ && $this->member->valid && $this->permissions->has_permissions(array('rekryt', 'medlem', 'inaktiv'))):?>
+				<?php if(false /****diabled*****/ && $this->member->valid && $this->permissions->has_permissions(array('rekryt', 'medlem', 'inaktiv'))):?>
 					<li class="nav-item<?=$this->current_page == 'emblem' ? ' active' : null?>">
 						<a class="nav-link" href="<?=base_url('site/emblem')?>">Emblem</a>
 					</li>
@@ -46,6 +46,9 @@ $this->load->library("permissions");
 				<?php if($this->member->valid && $this->permissions->has_permissions(array('rekryt', 'medlem', 'inaktiv'))):?>
 					<li class="nav-item">
 						<a class="nav-link" href="<?=base_url('forum/viewtopic.php?f=3&t=1000')?>">Modline</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="<?=base_url('forum/viewtopic.php?f=14&t=626')?>">Server-info</a>
 					</li>
 				<?php endif;?>
 				
