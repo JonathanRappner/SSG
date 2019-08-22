@@ -169,7 +169,8 @@ function relative_time_string($date)
 	$now = time();
 	$diff = abs($now - $date);
 	$date_string = date('Y-m-d G:i', $date);
-	$date_day_nbr = date('d', $date);
+	$unix_day = floor(($date + date('Z')) / 86400); //dagar sedan 1970-01-01, justerat efter tidzon
+	$unix_day_now = floor(($now + date('Z')) / 86400);
 
 	if($diff < $min) //mindre än en minut sedan
 		$output = 'nyss';
@@ -179,9 +180,9 @@ function relative_time_string($date)
 		$units_string = $minutes == 1 ? 'minut' : 'minuter';
 		$output = "$minutes $units_string sedan";
 	}
-	else if($diff < $day && $date_day_nbr == date('d')) //mer än en timme sedan OCH samma datum-dag (ex: 'idag 20:05')
+	else if($diff < $day && $unix_day == $unix_day_now) //mer än en timme sedan OCH samma datum-dag (ex: 'idag 20:05')
 		$output = 'idag '. date('G:i', $date);
-	else if($diff < ($day * 2)) //mer är en timme OCH mindre än två dagar sedan (ex: 'igår 0:22')
+	else if($unix_day_now - $unix_day == 1) //mer är en timme OCH förra dagen (ex: 'igår 0:22')
 		$output = 'igår '. date('G:i', $date);
 	else if($diff < $six_days) //mer är en dag sedan (ex: 'i fredags 13:49') (använd six_days so att det inte står "i fredags" på en fredag)
 		$output = 'i '. $days_swe[date('N', $date)] . 's '. date('G:i', $date);
