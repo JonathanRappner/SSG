@@ -413,27 +413,9 @@ class Chat extends CI_Model
 		if($edited)
 			$date = $last_edited; //använd last_edited om meddelandet har blivit redigerat
 
-		$now = time();
-		$diff = abs($now - $date);
 		$date_string = date('Y-m-d G:i', $date);
+		$output = relative_time_string($date);
 		$edited_prefix = $edited ? 'redigerad: ' : null;
-
-		if($diff < $this->min) //mindre än en minut sedan
-			$output = 'nyss';
-		else if($diff < $this->hour) //mer än en minut sedan (ex: '35 minuter sedan')
-		{
-			$minutes = floor($diff / $this->min);
-			$units_string = $minutes == 1 ? 'minut' : 'minuter';
-			$output = "$minutes $units_string sedan";
-		}
-		else if($diff < $this->day) //mer än en timme sedan (ex: 'idag 20:05')
-			$output = 'idag '. date('G:i', $date);
-		else if($diff < ($this->day * 2)) //mer är en OCH mindre än två dagar sedan (ex: 'igår 0:22')
-			$output = 'igår '. date('G:i', $date);
-		else if($diff < $this->six_days) //mer är en dag sedan (ex: 'i fredags 13:49') (använd six_days so att det inte står "i fredags" på en fredag)
-			$output = 'i '. $this->days_swe[date('N', $date)] . 's '. date('G:i', $date);
-		else //mer än sex dagar sedan
-			$output = $date_string;
 
 		return "<span data-toggle='tooltip' title='$date_string'>({$edited_prefix}$output)</span>";
 	}
