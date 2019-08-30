@@ -169,7 +169,7 @@ function relative_time_string($date)
 	$now = time();
 	$diff = abs($now - $date);
 	$date_string = date('Y-m-d G:i', $date);
-	$unix_day = floor(($date + date('Z')) / 86400); //dagar sedan 1970-01-01, justerat efter tidzon
+	$unix_day = floor(($date + date('Z')) / 86400); //dagar sedan 1970-01-01, justerat efter tidszon
 	$unix_day_now = floor(($now + date('Z')) / 86400);
 
 	if($diff < $min) //mindre än en minut sedan
@@ -207,6 +207,7 @@ function bbcode_parse($text)
 		'~\[b\](.*?)\[/b\]~s',
 		'~\[i\](.*?)\[/i\]~s',
 		'~\[u\](.*?)\[/u\]~s',
+		'~\[hr\]\[\/hr\]~s',
 		'~\[quote\](.*?)\[/quote\]~s',
 		'~\[size=(.*?)\](.*?)\[/size\]~s',
 		'~\[color=(.*?)\](.*?)\[/color\]~s',
@@ -222,6 +223,7 @@ function bbcode_parse($text)
 		'<strong>$1</strong>',
 		'<i>$1</i>',
 		'<span style="text-decoration:underline;">$1</span>',
+		'<hr>',
 		'<pre>$1</'.'pre>',
 		'<span style="font-size:2rem;">$2</span>', //alt: '<span style="font-size:$1px;">$2</span>'
 		'<span style="color:$1;">$2</span>',
