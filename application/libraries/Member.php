@@ -218,7 +218,7 @@ class Member
 				ON ssg_members.role_id = ssg_roles.id
 			WHERE ssg_members.id = ?';
 		$row = $this->CI->db->query($sql, $member_id)->row();
-		if($row)
+		if(isset($row))
 			foreach($row as $attribute_name => $attribute_value)
 				$member_data->$attribute_name = $attribute_value;
 
