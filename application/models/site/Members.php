@@ -50,11 +50,13 @@ class Members extends CI_Model
 	{
 		$sql =
 			'SELECT
-				m.id, m.name, m.phpbb_user_id, m.is_active,
+				m.id, u.username AS name, m.phpbb_user_id, m.is_active,
 				IF(r.name_long IS NULL, r.name, r.name_long) AS role_name
 			FROM ssg_members m
 			LEFT OUTER JOIN ssg_roles r
 				ON m.role_id = r.id
+			LEFT OUTER JOIN phpbb_users u
+				ON m.phpbb_user_id = u.user_id
 			WHERE 
 				m.group_id = ?
 			ORDER BY

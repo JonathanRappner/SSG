@@ -62,7 +62,7 @@ class Chat extends CI_Model
 				c.text AS text_plain,
 				UNIX_TIMESTAMP(created) AS created_timestamp,
 				UNIX_TIMESTAMP(last_edited) AS last_edited_timestamp,
-				m.name, m.phpbb_user_id,
+				u.username AS name, m.phpbb_user_id,
 				u.user_colour user_color,
 				g.group_name user_title
 			FROM ssg_chat c

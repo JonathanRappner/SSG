@@ -182,7 +182,7 @@ class Streamers extends CI_Model
 				#s.youtube_video_id IS NOT NULL AS youtube_online,
 				#twitch_online,
 				s.prefered,
-				m.name AS name,
+				u.username AS name,
 				m.id AS member_id,
 				g.name AS group_name,
 				g.code AS group_code,
@@ -196,6 +196,8 @@ class Streamers extends CI_Model
 				ON m.group_id = g.id
 			LEFT JOIN ssg_roles r
 				ON m.role_id = r.id
+			LEFT JOIN phpbb_users u
+				ON m.phpbb_user_id = u.user_id
 			ORDER BY
 				#online_youtube DESC,
 				#online_twitch DESC,

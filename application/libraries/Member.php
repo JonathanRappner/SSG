@@ -203,9 +203,9 @@ class Member
 
 		$sql =
 			'SELECT
-				registered_date, uid, is_active, group_id,
+				registered_date, uid, is_active, ssg_members.group_id,
 				ssg_members.id,
-				ssg_members.name AS name,
+				phpbb_users.username AS name,
 				ssg_groups.name AS group_name,
 				ssg_groups.code AS group_code,
 				role_id,
@@ -216,6 +216,8 @@ class Member
 				ON ssg_members.group_id = ssg_groups.id
 			LEFT JOIN ssg_roles
 				ON ssg_members.role_id = ssg_roles.id
+			LEFT JOIN phpbb_users
+				ON ssg_members.phpbb_user_id = phpbb_users.user_id
 			WHERE ssg_members.id = ?';
 		$row = $this->CI->db->query($sql, $member_id)->row();
 		if(isset($row))
