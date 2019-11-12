@@ -108,6 +108,15 @@ class Site extends CI_Controller
 		$this->load->view('site/emblem', array('global_alerts' => $this->global_alerts));
 	}
 
+	public function carousel()
+	{
+		//data
+		$data = array('carousel_images' => glob('images/carousel/*.jpg'));
+
+		//vy
+		$this->load->view('site/carousel', $data);
+	}
+
 	public function logout()
 	{
 		$this->session->sess_destroy(); //förstör codeigniter-session
