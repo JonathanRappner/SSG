@@ -1,0 +1,13 @@
+User-agent: *
+# Inaktiva ställen som bots ofta försöker komma åt
+Disallow: /robotstxt/
+Disallow: /new/
+Disallow: /old/
+Disallow: /gallery/
+Disallow: /ssg-clansql/
+
+# Undersidor som inte behöver indexeras
+Disallow: /images/
+Disallow: /signup/
+Disallow: /admin/
+Disallow: /api/
