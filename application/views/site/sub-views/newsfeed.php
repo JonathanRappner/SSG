@@ -13,20 +13,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		</div>
 	</div>
 	
-	<!-- Nyhets-posts -->
-	<?php foreach($news->topics as $topic):?>
-	<?php
-		$allow_links = $topic->forum_id != 34; //skapa inte "läs mer"-länkar till "Nyhetsflödet"-forumet
-		$article_link = base_url('forum/viewtopic.php?t='. $topic->id);
-		
-		$heading_small = $topic->poster_name
-			? "<small>postat av {$topic->poster_name}, {$topic->date}</small>"
-			: null;
-		$heading = $allow_links
-			? "<h3 class='card-header bg-dark'><a href='{$article_link}' class='text-white'>{$topic->title}</a>{$heading_small}</h3>"
-			: "<h3 class='card-header bg-dark text-white'>{$topic->title}{$heading_small}</h3>";
-	?>
-		<div class="news_topic card mb-4 bg-white border-0 shadow-sm">
+		<!-- Nyhets-posts -->
+		<?php foreach($news->topics as $topic):?>
+		<?php
+			$allow_links = $topic->forum_id != 34; //skapa inte "läs mer"-länkar till "Nyhetsflödet"-forumet
+			$article_link = base_url('forum/viewtopic.php?t='. $topic->id);
+			
+			$heading_small = $topic->poster_name
+				? "<small>postat av {$topic->poster_name}, {$topic->date}</small>"
+				: null;
+			$heading = $allow_links
+				? "<h3 class='card-header bg-dark'><a href='{$article_link}' class='text-white'>{$topic->title}</a>{$heading_small}</h3>"
+				: "<h3 class='card-header bg-dark text-white'>{$topic->title}{$heading_small}</h3>";
+		?>
+		<div class="news_topic card mb-4 bg-white border-0 shadow-sm w-100">
 			
 			<?=$heading?>
 			
