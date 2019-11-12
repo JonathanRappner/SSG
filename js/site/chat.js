@@ -346,7 +346,9 @@ function setup_editing(message)
  */
 function stop_editing()
 {
-	$("#message").data("message_id", null);
+	$("#message")
+		.val(null)
+		.data("message_id", null);
 	$("#btn_send").show();
 	$("#btn_save").hide();
 	$("#btn_abort").hide();
