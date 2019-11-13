@@ -205,7 +205,7 @@ class Member
 			'SELECT
 				registered_date, uid, is_active, ssg_members.group_id,
 				ssg_members.id,
-				phpbb_users.username AS name,
+				IF(phpbb_users.username, phpbb_users.username, ssg_members.name) AS name,
 				ssg_groups.name AS group_name,
 				ssg_groups.code AS group_code,
 				role_id,
