@@ -669,6 +669,9 @@ class Admin_members implements Adminpanel
 			'DELETE FROM ssg_promotions
 			WHERE id = ?';
 		$query = $this->CI->db->query($sql, $promotion_id);
+
+		//uppdatera forum-grad
+		$this->update_forum_rank($member_id);
 	}
 
 	/**
@@ -688,6 +691,34 @@ class Admin_members implements Adminpanel
 			'rank_id' => $vars->rank_id
 		);
 		$query = $this->CI->db->insert('ssg_promotions', $data);
+
+		//uppdatera forum-grad
+		$this->update_forum_rank($vars->member_id);
+	}
+
+	/**
+	 * Uppdaterar forum-grad enligt medlemmens senaste bumbning.
+	 *
+	 * @param int $member_id
+	 * @return void
+	 */
+	private function update_forum_rank($member_id)
+	{
+		//hämta senaste bumpningsgrad
+		$query = $this->CI->db->query('SELECT rank_id FROM ssg_promotions WHERE member_id = ? ORDER BY date DESC LIMIT 1', $member_id);
+		if(!$query->row()) //avbryt om inga bumpningar finns kvar
+			return;
+		$rank_id = $query->row()->rank_id;
+
+		//hämta medlemmens phpbb_user_id
+		$query = $this->CI->db->query('SELECT phpbb_user_id FROM ssg_members WHERE id = ?', $member_id);
+		if(!$query->row()) //avbryt om medlemmen inte finns i forumet
+			return;
+		$phpbb_user_id = $query->row()->phpbb_user_id;
+
+		//sätt forum-grad
+		$this->CI->db->where('user_id', $phpbb_user_id);
+		$this->CI->db->update('phpbb_users', array('user_rank'=>$rank_id));
 	}
 
 	/**
