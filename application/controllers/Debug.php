@@ -16,8 +16,7 @@ class Debug extends CI_Controller
 	{
 		echo '<p><a href="debug/import_chat">Importera chat</a></p>';
 		echo '<hr>';
-
-		
+		echo '<p><a href="debug/update_forum_ranks">Uppdatera forum-grader</a></p>';
 	}
 
 	/**
@@ -32,6 +31,25 @@ class Debug extends CI_Controller
 		$this->chat->import_shouts($latest_chat);
 
 		echo "<p>Importerade chat från {$latest_chat} och frammåt</p>";
+	}
+
+	/**
+	 * Uppdaterar medlemmars grader från ssg_promotions till phpbb_users.user_rank
+	 *
+	 * @return void
+	 */
+	public function update_forum_ranks()
+	{
+		//hämta alla medlemmars member_id och phpbb_user_id som finns i forumet
+		$members = $this->db->query('SELECT id AS member_id, phpbb_user_id FROM ssg_members WHERE phpbb_user_id IS NOT NULL')->result();
+
+		foreach($members as $member)
+		{
+			$member->rank_id = $this->db->query('SELECT rank_id FROM ssg_promotions WHERE member_id = ? ORDER BY date DESC LIMIT 1', $member->member_id)->row('rank_id');
+
+			$this->db->where('user_id', $member->phpbb_user_id);
+			$this->db->update('phpbb_users', array('user_rank'=>$member->rank_id));
+		}
 	}
 
 	public function foobar()
