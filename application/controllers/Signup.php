@@ -191,6 +191,7 @@ class Signup extends CI_Controller
 		$this->load->library('adminpanels/Admin_main');
 		$this->load->library('adminpanels/Admin_events');
 		$this->load->library('adminpanels/Admin_signups');
+		$this->load->library('adminpanels/Admin_global_alerts');
 		$this->load->library('adminpanels/Admin_groups');
 		$this->load->library('adminpanels/Admin_grouproles');
 		$this->load->library('adminpanels/Admin_members');
@@ -202,6 +203,7 @@ class Signup extends CI_Controller
 		$adminpanels[] = new Admin_main();
 		$adminpanels[] = new Admin_events();
 		$adminpanels[] = new Admin_signups();
+		$adminpanels[] = new Admin_global_alerts();
 		$adminpanels[] = new Admin_groups();
 		$adminpanels[] = new Admin_grouproles();
 		$adminpanels[] = new Admin_members();

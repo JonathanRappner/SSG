@@ -91,7 +91,7 @@ class Admin_event_types implements Adminpanel
 
 	private function view_main()
 	{
-		echo '<p>Här administerar event-typerna samt deras attribut.</p>';
+		echo '<p>Här administerar du event-typerna samt deras attribut.</p>';
 
 		echo '<a href="'. base_url('signup/admin/eventtypes/new/') .'" class="btn btn-success">Skapa ny event-typ <i class="fas fa-plus-circle"></i></a>';
 
