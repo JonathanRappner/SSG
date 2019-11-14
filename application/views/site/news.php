@@ -18,7 +18,10 @@ shuffle($carousel_images);
 	<link rel="stylesheet" href="<?=base_url('css/site/chat.css')?>">
 	<link rel="stylesheet" href="<?=base_url('css/site/latest_posts.css')?>">
 	<script src="<?=base_url('js/site/news.js')?>"></script>
-	
+	<?php if(XMAS):?>
+		<link rel="stylesheet" href="<?=base_url('css/holidays/xmas.css')?>">
+		<script src="<?=base_url('js/holidays/xmas.js')?>"></script>
+	<?php endif;?>
 
 	<?php if($user_is_member):?>
 		<script src="<?=base_url('js/deadline.js')?>"></script>

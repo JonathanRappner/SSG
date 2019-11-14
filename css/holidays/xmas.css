@@ -1,0 +1,9 @@
+div.snowflake{
+	width: 100px;
+	height: 95px;
+	position: absolute;
+	z-index: -1;
+	background-color: red;
+	background-image: url('../../images/holidays/snowflake.svg'); /* 512x488px */
+	background-repeat: no-repeat;
+}
