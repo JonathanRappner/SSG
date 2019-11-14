@@ -8,11 +8,8 @@ class Signup extends CI_Controller
 		parent::__construct();
 
 		//första april
-		if(date('n') == 4 && date('j') == 1)
-		{
-			define('APRIL_FOOLS', true);
+		if(APRIL_FOOLS)
 			$this->load->library('april_fools');
-		}
 	}
 
 	/**

@@ -73,7 +73,7 @@ class Events extends CI_Model
 			$row->current_member_attendance = $this->eventsignup->get_member_attendance($row->id, $this->member->id);
 
 			//första april
-			if(defined('APRIL_FOOLS')) $row->title .= ' '. $this->april_fools->random_emojis($row->title);
+			if(APRIL_FOOLS) $row->title .= ' '. $this->april_fools->random_emojis($row->title);
 
 			$events[] = $row;
 		}

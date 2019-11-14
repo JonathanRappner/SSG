@@ -54,7 +54,7 @@ class Eventsignup
 		$event->signups = $this->get_signups_counts($event->id);
 
 		//första april
-		if(defined('APRIL_FOOLS'))
+		if(APRIL_FOOLS)
 			$event->title .= ' '. $this->CI->april_fools->random_emojis($event->title);
 
 		return $event;
@@ -100,7 +100,7 @@ class Eventsignup
 			$event->current_member_attendance = $this->get_member_attendance($event->id, $this->CI->member->id);
 
 			//första april
-			if(defined('APRIL_FOOLS')) $event->title .= ' '. $this->CI->april_fools->random_emojis($event->title);
+			if(APRIL_FOOLS) $event->title .= ' '. $this->CI->april_fools->random_emojis($event->title);
 
 			$events[] = $event;
 		}
@@ -236,7 +236,7 @@ class Eventsignup
 			$row->message = trim(strip_tags($row->message));
 
 			//första april
-			if(defined('APRIL_FOOLS') && !empty($row->message)) $row->message .= ' '. $this->CI->april_fools->random_emojis($row->message);
+			if(APRIL_FOOLS && !empty($row->message)) $row->message .= ' '. $this->CI->april_fools->random_emojis($row->message);
 
 			$signups[] = $row;
 		}
