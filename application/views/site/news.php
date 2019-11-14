@@ -18,6 +18,7 @@ shuffle($carousel_images);
 	<link rel="stylesheet" href="<?=base_url('css/site/chat.css')?>">
 	<link rel="stylesheet" href="<?=base_url('css/site/latest_posts.css')?>">
 	<script src="<?=base_url('js/site/news.js')?>"></script>
+	
 
 	<?php if($user_is_member):?>
 		<script src="<?=base_url('js/deadline.js')?>"></script>

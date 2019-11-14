@@ -9,7 +9,7 @@ class Signup extends CI_Controller
 
 		//första april
 		if(APRIL_FOOLS)
-			$this->load->library('april_fools');
+			$this->load->library('holidays/april_fools');
 	}
 
 	/**
