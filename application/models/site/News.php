@@ -38,7 +38,10 @@ class News extends CI_Model
 			FROM phpbb_topics topics
 			LEFT OUTER JOIN ssg_members members
 				ON topics.topic_poster = members.phpbb_user_id
-			'. $where .'
+			WHERE
+				(forum_id = 5
+				OR forum_id = 34)
+				AND topic_delete_time = 0
 			ORDER BY topics.topic_time DESC
 			LIMIT ?, ?';
 		$news->topics = $this->db->query($sql, array($results_per_page * $page, $results_per_page))->result();
