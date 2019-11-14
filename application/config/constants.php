@@ -100,6 +100,7 @@ define(
 	time() > $first_advent && time() < $eight_jan
 );
 
+
 //--Version--
 define('SSG_VERSION', '1.0.4');
 define('SSG_BUILD_DATE', '2019-11-12');
