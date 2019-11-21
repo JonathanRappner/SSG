@@ -77,10 +77,12 @@ foreach($signups as $s)
 				<a href="<?$event->forum_link;?>" class="btn btn-primary">Läs mer <i class="fas fa-search"></i></a>
 			<?php endif;?>
 
-			<!-- Anmälningslänk -->
-			<a href="<?=base_url("signup/event/{$event->id}/showform")?>" class="btn btn-info" data-toggle="tooltip" title="Kopiera mig!">
-				Anmälningslänk <i class="fas fa-link"></i>
-			</a>
+			<?php if(!$event->is_old):?>
+				<!-- Anmälningslänk -->
+				<a href="<?=base_url("signup/event/{$event->id}/showform")?>" class="btn btn-info" data-toggle="tooltip" title="Kopiera mig!">
+					Anmälningslänk <i class="fas fa-link"></i>
+				</a>
+			<?php endif;?>
 		</div>
 
 		<!-- Statistik -->
