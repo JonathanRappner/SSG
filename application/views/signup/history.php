@@ -26,6 +26,9 @@ $this->current_page = 'history';
 	<!-- Top -->
 	<?php $this->load->view('signup/sub-views/top');?>
 
+	<!-- Global Alerts -->
+	<?php $this->load->view('site/sub-views/global_alerts', array('global_alerts' => $global_alerts))?>
+
 	<h1>Historik</h1>
 
 	<p>Här kan du se gamla events. Klicka på ett event i listan för att se fler detaljer.</p>

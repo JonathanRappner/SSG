@@ -44,7 +44,11 @@ foreach($signups as $s)
 
 <div id="main_wrapper" class="container">
 
+	<!-- Menyrad -->
 	<?php $this->load->view('signup/sub-views/top');?>
+
+	<!-- Global Alerts -->
+	<?php $this->load->view('site/sub-views/global_alerts', array('global_alerts' => $global_alerts))?>
 
 	<div id="row_event_top" class="row">
 		
@@ -72,17 +76,20 @@ foreach($signups as $s)
 				<?php endif;?>
 			<?php endif;?>
 
-			<?php if(!empty($event->forum_link)):?>
-				<!-- Läs mer -->
-				<a href="<?$event->forum_link;?>" class="btn btn-primary">Läs mer <i class="fas fa-search"></i></a>
-			<?php endif;?>
+			<div><!-- newline -->
+				<?php if(!empty($event->forum_link)):?>
+					<!-- Läs mer -->
+					<a href="<?$event->forum_link;?>" class="btn btn-primary">Läs mer <i class="fas fa-search"></i></a>
+				<?php endif;?>
 
-			<?php if(!$event->is_old):?>
-				<!-- Anmälningslänk -->
-				<a href="<?=base_url("signup/event/{$event->id}/showform")?>" class="btn btn-info" data-toggle="tooltip" title="Kopiera mig!">
-					Anmälningslänk <i class="fas fa-link"></i>
-				</a>
-			<?php endif;?>
+				<?php if(!$event->is_old):?>
+					<!-- Anmälningslänk -->
+					<a href="<?=base_url("signup/event/{$event->id}/showform")?>" class="btn btn-info" data-toggle="tooltip" title="Kopiera mig!">
+						Anmälningslänk <i class="fas fa-link"></i>
+					</a>
+				<?php endif;?>
+			</div>
+
 		</div>
 
 		<!-- Statistik -->

@@ -13,4 +13,14 @@ $(document).ready(function()
 		event.preventDefault();
 		$(this).ekkoLightbox();
 	});
+
+	//spara vilka global_alerts som har stängts, i sessions
+	$("#global_alerts button.close").click(function(){
+		var global_alert_id = $(this).parent('div.alert').data("id");
+		
+		$.ajax({
+			url: base_url + "api/global_alert_dismiss/?id="+ global_alert_id,
+			type: "POST"
+		});
+	});
 });

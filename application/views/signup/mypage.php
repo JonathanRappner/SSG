@@ -155,6 +155,9 @@ if(isset($loaded_member->rank_date))
 	<!-- Top -->
 	<?php $this->load->view('signup/sub-views/top');?>
 
+	<!-- Global Alerts -->
+	<?php $this->load->view('site/sub-views/global_alerts', array('global_alerts' => $global_alerts))?>
+
 	<div class="row">
 
 		<div class="col-lg">

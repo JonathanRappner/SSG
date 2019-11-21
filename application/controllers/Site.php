@@ -9,9 +9,8 @@ class Site extends CI_Controller
 	{
 		parent::__construct();
 
+		//hämta globala meddelanden
 		$this->load->model('site/global_alerts');
-
-		//hämta viktiga meddelanden
 		$this->global_alerts = $this->global_alerts->get_alerts();
 	}
 

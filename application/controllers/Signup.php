@@ -7,6 +7,10 @@ class Signup extends CI_Controller
 	{
 		parent::__construct();
 
+		//hämta globala meddelanden
+		$this->load->model('site/global_alerts');
+		$this->global_alerts = $this->global_alerts->get_alerts();
+
 		//första april
 		if(APRIL_FOOLS)
 			$this->load->library('holidays/april_fools');
@@ -45,7 +49,8 @@ class Signup extends CI_Controller
 			//ladda vy
 			$this->load->view('signup/events', array(
 				'next_event' => $next_event,
-				'upcoming_events' => $upcoming_events
+				'upcoming_events' => $upcoming_events,
+				'global_alerts' => $this->global_alerts,
 			));
 		}
 		else
@@ -96,6 +101,7 @@ class Signup extends CI_Controller
 				'groups' => $groups,
 				'non_signups' => $non_signups,
 				'advanced_stats' => $advanced_stats,
+				'global_alerts' => $this->global_alerts,
 			)
 		);
 	}
@@ -136,6 +142,7 @@ class Signup extends CI_Controller
 			'page' => $page,
 			'total_events' => $total_events,
 			'results_per_page' => $results_per_page,
+			'global_alerts' => $this->global_alerts,
 		));
 	}
 
@@ -164,6 +171,7 @@ class Signup extends CI_Controller
 			'stats' => $this->Mypage->get_stats(),
 			'page' => $page,
 			'since_date' => $this->Mypage->since_date,
+			'global_alerts' => $this->global_alerts,
 		));
 	}
 
