@@ -14,6 +14,10 @@ $this->current_page = 'streamers';
 	<!-- Custom CSS/JS -->
 	<link rel="stylesheet" href="<?php echo base_url('css/site/streamers.css');?>">
 
+	<?php if(XMAS):?>
+		<link rel="stylesheet" href="<?=base_url('css/holidays/xmas.css')?>">
+	<?php endif;?>
+
 	<title>Swedish Strategic Group - Streamers</title>
 
 </head>

@@ -22,6 +22,7 @@ if(isset($event_id))
 
 		<!-- Header -->
 		<div class="card-header bg-dark text-white">
+			<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>🎄<?php endif;?>
 			Nästa event
 		</div>
 

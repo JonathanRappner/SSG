@@ -28,6 +28,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		?>
 		<div class="news_topic card mb-4 bg-white border-0 shadow-sm w-100">
 			
+			<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div><?php endif;?>
+			
 			<?=$heading?>
 			
 			<div class="card-body px-4 py-2 pb-4"><?=$topic->text?></div>

@@ -11,6 +11,10 @@ $this->current_page = 'members';
 	<?php $this->load->view('site/sub-views/head');?>
 	<link rel="stylesheet" href="<?=base_url('css/site/members.css')?>">
 
+	<?php if(XMAS):?>
+		<link rel="stylesheet" href="<?=base_url('css/holidays/xmas.css')?>">
+	<?php endif;?>
+
 	<title>Swedish Strategic Group - Medlemmar</title>
 
 </head>

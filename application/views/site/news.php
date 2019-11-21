@@ -18,6 +18,7 @@ shuffle($carousel_images);
 	<link rel="stylesheet" href="<?=base_url('css/site/chat.css')?>">
 	<link rel="stylesheet" href="<?=base_url('css/site/latest_posts.css')?>">
 	<script src="<?=base_url('js/site/news.js')?>"></script>
+	
 	<?php if(XMAS):?>
 		<link rel="stylesheet" href="<?=base_url('css/holidays/xmas.css')?>">
 		<script src="<?=base_url('js/holidays/xmas.js')?>"></script>
@@ -44,13 +45,21 @@ shuffle($carousel_images);
 
 <div id="wrapper_news" class="container">
 
+	<?php if(XMAS):?>
+		<!-- Juleljus -->
+		<div class="xmas_lights_wrapper">
+			<img src="<?=base_url("images/holidays/xmas_lights_0.png")?>" class="xmas_lights stage_0">
+			<img src="<?=base_url("images/holidays/xmas_lights_1.png")?>" class="xmas_lights stage_1">
+		</div>
+	<?php endif;?>
+
 	<!-- Alerts -->
 	<?php $this->load->view('site/sub-views/global_alerts', array('global_alerts' => $global_alerts));?>
 
 	<!-- Bildspel -->
 	<div id="carousel" class="row mb-4 rounded shadow-sm" style="background-image:url('<?=base_url($carousel_images[0])?>');">
 		<img src="<?=base_url('images/logga-vit.svg')?>">
-	</div>
+	</div><!--end #carousel-->
 
 	<div class="row">
 		

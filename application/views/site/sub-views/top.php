@@ -15,6 +15,8 @@ $this->load->library("permissions");
 			<!-- Navbar -->
 			<nav class="col navbar navbar-expand-sm navbar-dark text-nowrap">
 				<ul class="navbar-nav">
+					
+					<?php if(XMAS):?><li class="nav-item xmas_icon">🎄</li><?php endif;?>
 
 					<li class="nav-item<?=$this->current_page == 'news' ? ' active' : null?>">
 						<a class="nav-link" href="<?=base_url('site/news')?>">Hem</a>
@@ -64,6 +66,8 @@ $this->load->library("permissions");
 							<a class="nav-link" href="<?=base_url('site/logout')?>">Logga ut</a>
 						</li>
 					<?php endif;?>
+					
+					<?php if(XMAS):?><li class="nav-item xmas_icon">🎁</li><?php endif;?>
 
 				</ul>
 			</nav>
