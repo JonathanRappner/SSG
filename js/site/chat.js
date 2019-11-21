@@ -46,7 +46,6 @@ $(document).ready(function()
 	{
 		$("#chat-list").scrollTop(0); //skrolla upp
 		$(this).hide(); //göm knappen (görs redan i $("#chat-list").scroll()-eventet men är lite för långsamt)
-		$("#message").val(null);
 		refresh_messages(message_count);
 	});
 
@@ -342,17 +341,20 @@ function setup_editing(message)
 }
 
 /**
- * Återställer input till send-mode
+ * Återställer input till send-mode om den var i edit-mode.
  */
 function stop_editing()
 {
-	$("#message")
-		.val(null)
-		.data("message_id", null);
-	$("#btn_send").show();
-	$("#btn_save").hide();
-	$("#btn_abort").hide();
-	edit_mode = false;
+	if(edit_mode)
+	{
+		$("#message")
+			.val(null)
+			.data("message_id", null);
+		$("#btn_send").show();
+		$("#btn_save").hide();
+		$("#btn_abort").hide();
+		edit_mode = false;
+	}
 }
 
 /**
