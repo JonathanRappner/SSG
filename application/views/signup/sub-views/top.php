@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<nav class="col-sm navbar navbar-expand-sm navbar-light text-nowrap">
 		<ul class="navbar-nav">
 			<li class="nav-item">
-				<a class="nav-link" href="<?php echo base_url();?>"><i class="fas fa-chevron-circle-left"></i></i> SSG</a>
+				<a class="nav-link" href="<?php echo base_url();?>"><i class="fas fa-home"></i> SSG</a>
 			</li>
 
 			<li class="nav-item<?php echo $this->current_page == 'events' ? ' active' : null;?>">
