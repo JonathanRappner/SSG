@@ -26,18 +26,18 @@ foreach($signups as $s)
 	<?php $this->load->view('signup/sub-views/head');?>
 
 	<!-- Page-specific -->
-	<link rel="stylesheet" href="<?php echo base_url('css/signup/event.css');?>">
-	<link rel="stylesheet" href="<?php echo base_url('css/signup/event_stats.css');?>">
-	<link rel="stylesheet" href="<?php echo base_url('css/signup/form.css');?>">
-	<script src="<?php echo base_url('js/signup/clickable_table.js');?>"></script>
-	<script src="<?php echo base_url('js/signup/event.js');?>"></script>
+	<link rel="stylesheet" href="<?=base_url('css/signup/event.css');?>">
+	<link rel="stylesheet" href="<?=base_url('css/signup/event_stats.css');?>">
+	<link rel="stylesheet" href="<?=base_url('css/signup/form.css');?>">
+	<script src="<?=base_url('js/signup/clickable_table.js');?>"></script>
+	<script src="<?=base_url('js/signup/event.js');?>"></script>
 
 	<?php
 		//visa formulär on load
 		echo '<script>var show_form = '. ($show_form ? 'true' : 'false') .';</script>';
 	?>
 
-	<title><?php echo $title;?></title>
+	<title><?=$title;?></title>
 
 </head>
 <body>
@@ -52,12 +52,12 @@ foreach($signups as $s)
 		<div class="col-lg mb-4">
 			<!-- Heading -->
 			<h1>
-				<?php echo $title;?>
+				<?=$title;?>
 				<?php if(!empty($event->author_id)): ?>
-				<small class="text-muted text-nowrap"><?php echo "av $event->author_name";?></small>
+				<small class="text-muted text-nowrap"><?="av $event->author_name";?></small>
 				<?php endif; ?>
 			</h1>
-			<h4 class="ml-2 text-muted"><?php echo $date_and_time;?></h4>
+			<h4 class="ml-2 text-muted"><?=$date_and_time;?></h4>
 
 			<!-- Anmälningsknapp -->
 			<?php if(!$event->is_old):?>
@@ -74,8 +74,13 @@ foreach($signups as $s)
 
 			<?php if(!empty($event->forum_link)):?>
 				<!-- Läs mer -->
-				<div><a href='<?php echo $event->forum_link;?>' class='btn btn-primary'>Läs mer <i class='fas fa-search'></i></a></div>
+				<a href="<?$event->forum_link;?>" class="btn btn-primary">Läs mer <i class="fas fa-search"></i></a>
 			<?php endif;?>
+
+			<!-- Anmälningslänk -->
+			<a href="<?=base_url("signup/event/{$event->id}/showform")?>" class="btn btn-info" data-toggle="tooltip" title="Kopiera mig!">
+				Anmälningslänk <i class="fas fa-link"></i>
+			</a>
 		</div>
 
 		<!-- Statistik -->
@@ -89,7 +94,7 @@ foreach($signups as $s)
 	<!-- Anmälningar -->
 	<h3 class="mt-2">Anmälningar</h3>
 	<div id="wrapper_signup_table" class="table-responsive table-sm">
-		<table class="table table-hover<?php echo $is_admin ? ' clickable' : null ?>">
+		<table class="table table-hover<?=$is_admin ? ' clickable' : null ?>">
 			<thead class="table-borderless">
 				<tr>
 					<th scope="col">Namn</th>
@@ -168,7 +173,7 @@ foreach($signups as $s)
 			<!-- Ej anmälda, aktiva medlemmar -->
 			<div id="wrapper_not_signed_table" class="table-responsive table-sm">
 				<h3 class="mt-4 d-inline-block" title="Endast admins ser listan" data-toggle="tooltip">Aktiva medlemmar som inte anmält sig <i class='fas fa-question-circle'></i></h3>
-				<table class="table table-hover<?php echo $is_admin ? ' clickable' : null ?>">
+				<table class="table table-hover<?=$is_admin ? ' clickable' : null ?>">
 					<thead class="table-borderless">
 						<tr>
 							<th scope="col" class="column_non_signed_name">Namn</th>
@@ -192,7 +197,7 @@ foreach($signups as $s)
 								else //samma grupp som förra raden
 									echo '<tr'. ($is_admin ? " data-url='$clickable_url'" : null) .'>';
 							?>
-								<th scope="row"><?php echo $member->name;?></th>
+								<th scope="row"><?=$member->name;?></th>
 								<td><?php
 									echo group_icon($member->group_code);
 									echo isset($member->group_name)
@@ -217,9 +222,9 @@ foreach($signups as $s)
 					<div class="modal-header">
 						<!-- Heading -->
 						<div>
-							<h5 class="modal-title"><?php echo $this->member_not_signed ? 'Ny anmälan' : 'Redigera anmälan';?> till</h5>
-							<h4 class="modal-title"><?php echo "$event->title";?></h4>
-							<h5 class="text-muted text-nowrap"><?php echo "($event->start_date)";?></h5>
+							<h5 class="modal-title"><?=$this->member_not_signed ? 'Ny anmälan' : 'Redigera anmälan';?> till</h5>
+							<h4 class="modal-title"><?="$event->title";?></h4>
+							<h5 class="text-muted text-nowrap"><?="($event->start_date)";?></h5>
 						</div>
 
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
