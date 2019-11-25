@@ -1,4 +1,10 @@
-/* Gemensam stylesheet för hela anmälningssidan */
+/*
+ * Gemensam stylesheet för hela anmälningssidan
+ */
+
+body{
+	background-color: #f8f8f8;
+}
 
 /* gör btn-primary lite ljusare */
 .btn-primary{
