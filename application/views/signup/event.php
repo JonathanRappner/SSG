@@ -79,7 +79,7 @@ foreach($signups as $s)
 			<div><!-- newline -->
 				<?php if(!empty($event->forum_link)):?>
 					<!-- Läs mer -->
-					<a href="<?$event->forum_link;?>" class="btn btn-primary">Läs mer <i class="fas fa-search"></i></a>
+					<a href="<?=$event->forum_link?>" class="btn btn-primary">Läs mer <i class="fas fa-search"></i></a>
 				<?php endif;?>
 
 				<?php if(!$event->is_old):?>
