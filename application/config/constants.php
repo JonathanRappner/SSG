@@ -84,17 +84,6 @@ defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
-//--Helger--
-//Första april
-define('APRIL_FOOLS', date('n') == 4 && date('j') == 1);
-
-//Jul 🎅🎁🎄
-$earliest_first_advent = strtotime('27 november'); //tidigaste möjliga första advent är 27/11 (https://sv.wikipedia.org/wiki/Advent)
-$first_advent = strtotime('sunday', $earliest_first_advent); //hitta första söndagen på, eller efter 27/11
-$eight_jan = mktime(0, 0, 0, 1, 8, (date('Y')+1)); //åttonde januari nästa år (en vecka efter nyårsdagen)
-define('XMAS', time() >= $first_advent && time() < $eight_jan);
-
-
 //--Version--
-define('SSG_VERSION', '1.0.4');
-define('SSG_BUILD_DATE', '2019-11-12');
+define('SSG_VERSION', '1.0.5');
+define('SSG_BUILD_DATE', '2019-11-21');
