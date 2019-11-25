@@ -13,6 +13,7 @@ $this->current_page = 'members';
 
 	<?php if(XMAS):?>
 		<link rel="stylesheet" href="<?=base_url('css/holidays/xmas.css')?>">
+		<script src="<?=base_url('js/holidays/xmas.js')?>"></script>
 	<?php endif;?>
 
 	<title>Swedish Strategic Group - Medlemmar</title>

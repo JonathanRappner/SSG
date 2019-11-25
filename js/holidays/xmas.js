@@ -1,8 +1,11 @@
 $(document).ready(function()
 {
 	//juleljus
-	$(".stage_1").hide();
-	setInterval(xmas_lights_update, 1000);
+	if($(".xmas_lights_wrapper").length > 0) //kör bara om ljus-wrapper finns
+	{
+		$(".stage_1").hide();
+		setInterval(xmas_lights_update, 1000);
+	}
 
 	//tomten flyby
 	$("body").append("<img id='tomten' src='"+ base_url +"images/holidays/tomten.png' />");
