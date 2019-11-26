@@ -21,10 +21,10 @@ $this->current_page = 'history';
 </head>
 <body>
 
-<div id="wrapper" class="container">
+<!-- Top -->
+<?php $this->load->view('signup/sub-views/top');?>
 
-	<!-- Top -->
-	<?php $this->load->view('signup/sub-views/top');?>
+<div id="wrapper" class="container">
 
 	<!-- Global Alerts -->
 	<?php $this->load->view('site/sub-views/global_alerts', array('global_alerts' => $global_alerts))?>

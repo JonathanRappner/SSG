@@ -4,9 +4,6 @@
 */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-//moduler
-$this->load->library("permissions");
-
 ?><div id="wrapper_top" class="bg-dark mb-3 shadow-sm">
 
 	<div class="container">

@@ -1,6 +1,11 @@
 /* --Events-sidan-- */
 
 /*  */
+#wrapper_next_event .card-header{
+	padding: 0.7rem;
+}
+
+/*  */
 #wrapper_next_event p strong{
 	margin-right: 4px;
 }

@@ -42,10 +42,10 @@ foreach($signups as $s)
 </head>
 <body>
 
-<div id="main_wrapper" class="container">
+<!-- Menyrad -->
+<?php $this->load->view('signup/sub-views/top');?>
 
-	<!-- Menyrad -->
-	<?php $this->load->view('signup/sub-views/top');?>
+<div id="main_wrapper" class="container">
 
 	<!-- Global Alerts -->
 	<?php $this->load->view('site/sub-views/global_alerts', array('global_alerts' => $global_alerts))?>

@@ -22,10 +22,10 @@ $this->current_page = 'admin';
 </head>
 <body>
 
-<div id="wrapper" class="container">
+<!-- Topp -->
+<?php $this->load->view('signup/sub-views/top');?>
 
-	<!-- Top -->
-	<?php $this->load->view('signup/sub-views/top');?>
+<div id="wrapper" class="container">
 
 	<h1>Admin</h1>
 

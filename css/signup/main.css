@@ -6,6 +6,14 @@ body{
 	background-color: #f8f8f8;
 }
 
+/* navbar items */
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255,255,255,.8);
+}
+.navbar-dark .navbar-nav .nav-link:hover{
+    color: #212529;
+}
+
 /* gör btn-primary lite ljusare */
 .btn-primary{
 	background-color: #3A99FC !important;
@@ -39,7 +47,23 @@ tr.new_group_row{
 
 /* Avatar i toppraden */
 #userbox .avatar{
-	max-width: 48px;
-	max-height: 48px;
-	margin-left: 6px;
+	max-width: 42px;
+	max-height: 42px;
 }
+
+/* länk till forum-profil */
+#userbox a{
+	color: #FFF;
+	text-decoration: none;
+	display: inline-block;
+}
+
+/* Globala meddelanden */
+#global_alerts div.alert{
+	padding: 0.25rem 0.5rem;
+	margin-bottom: .2rem;
+}
+#global_alerts div.alert button.close{
+	padding: .1rem 0.5rem;
+}
+#global_alerts span.link { font-weight: bold; }

@@ -3,11 +3,8 @@
  */
 $(document).ready(function()
 {
-	//hämta variabler från PHP
-	var deadline_epoch = $("#deadline_epoch").remove().val();
-
 	//starta deadline-timer
-	deadline_timer_init(deadline_epoch);
+	deadline_timer_init(deadline_epoch); //deadline_epoch instansieras av php
 });
 
 /**

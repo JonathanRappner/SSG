@@ -23,96 +23,83 @@ $this->current_page = 'events';
 </head>
 <body>
 
+<!-- Top -->
+<?php $this->load->view('signup/sub-views/top')?>
 
 <!-- Huvud-wrapper -->
 <div id="wrapper" class="container">
 
-	<!-- Top -->
-	<?php $this->load->view('signup/sub-views/top')?>
-
 	<!-- Global Alerts -->
 	<?php $this->load->view('site/sub-views/global_alerts', array('global_alerts' => $global_alerts))?>
 
-	<!-- Rubrik + frianmälan -->
-	<div class="row mt-4 mb-2">
+	<!-- Rubriker -->
+	<h2>Nästa event:</h2>
 
-		<!-- Titel -->
-		<div class="col-sm">
-			<h1 class="mt-1">SSG Anmälning</h1>
-		</div>
-
-	</div>
+	<div id="wrapper_next_event" class="card mb-4 bg-white border-0 shadow-sm<?=empty($next_event->preview_image) ? ' next_event_no_img' : null?>">
+		
+			<h4 class="card-header bg-dark text-white">
+				<?=$next_event->title?>
+				<?php if(!empty($next_event->author_id)):?>
+				<small class="text-muted text-nowrap"><?="av $next_event->author_name"?></small>
+				<?php endif;?>
+			</h4>
+				
+			<div class="card-body row">
+				<div class="col">
+					<p>
+						<script>var deadline_epoch = <?=$next_event->deadline_epoch?>;</script>
+						<strong>Datum:</strong>
+						<?="{$next_event->start_date} ({$next_event->start_time} - {$next_event->end_time})"?>
+					</p>
+					
+					<p>
+						<strong>Närvaro:</strong>
+						<span class="<?=$next_event->member_attendance->class?>"><?=$next_event->member_attendance->text?></span>
+					</p>
+					
+					<p>
+						<strong>Anmälnings-deadline:</strong>
+						<span id='deadline' class="text-nowrap">&nbsp;</span>
+					</p>
+					
+					<p>
+						<strong>Antal anmälda:</strong>
+						<?=$this->attendance->count_signed($next_event->signups)?>
+					</p>
+				
+					<!-- Se anmälningar & Anmäl/Redigera anmälan -->
+					<div>
+						<a href="<?=base_url('signup/event/'. $next_event->id)?>" class="btn btn-primary">Se anmälningar <i class="fas fa-list-ul"></i></i></a>
+						<?php
+							echo $next_event->member_attendance->id != $this->attendance->get_type_by_code('notsigned')->id //anmälan finns redan
+								? '<a href="'. base_url("signup/event/{$next_event->id}/showform") .'" class="btn btn-primary">Redigera anmälan <i class="fas fa-edit"></i></a>'
+								: '<a href="'. base_url("signup/event/{$next_event->id}/showform") .'" class="btn btn-success">Anmäl dig <i class="fas fa-arrow-circle-right"></i></a>';
+						?>
+					</div>
+			
+					<?php if(!empty($next_event->forum_link)):?>
+						<!-- Läs mer -->
+						<div><a href='<?=$next_event->forum_link?>' class='btn btn-primary'>Läs mer <i class='fas fa-search'></i></a></div>
+					<?php endif?>
+				</div><!-- end div.col (vänsterkolumn) -->
 	
+				<!-- Förhandsbild-kolumn -->
+				<?php if(!empty($next_event->preview_image)): ?>
+					<div class="col-12 col-md-7">
+						<a href="<?=$next_event->preview_image?>" data-toggle="lightbox">
+							<img class="img-thumbnail rounded float-right m-2" src="<?=$next_event->preview_image?>" alt="Förhandsbild">
+						</a>
+					</div><!-- end div.col (högerkolumn) -->
+				<?php endif;?>
 
-	<!-- Nästa event -->
-	<h3>Nästa event:</h3>
-	<div id="wrapper_next_event" class="container border rounded p-4 mb-4<?=empty($next_event->preview_image) ? ' next_event_no_img' : null?>">
+			</div><!-- end div.card-body -->
 
-		<input id="deadline_epoch" value="<?=$next_event->deadline_epoch?>" type="hidden">
-		
-		<div class="row">
-
-			<div class="col">
-				<h4>
-					<?=$next_event->title?>
-					<?php if(!empty($next_event->author_id)): ?>
-					<small class="text-muted text-nowrap"><?="av $next_event->author_name"?></small>
-					<?php endif; ?>
-				</h4>
-				
-				<p>
-					<strong>Datum:</strong>
-					<?="$next_event->start_date ($next_event->start_time - $next_event->end_time)"?>
-				</p>
-				
-				<p>
-					<strong>Närvaro:</strong>
-					<span class="<?=$next_event->member_attendance->class?>"><?=$next_event->member_attendance->text?></span>
-				</p>
-				
-				<p>
-					<strong>Anmälnings-deadline:</strong>
-					<span id='deadline' class="text-nowrap">&nbsp;</span>
-				</p>
-				
-				<p>
-					<strong>Antal anmälda:</strong>
-					<?=$this->attendance->count_signed($next_event->signups)?>
-				</p>
-		
-				<!-- Se anmälningar & Anmäl/Redigera anmälan -->
-				<div class="mb-2">
-					<a href="<?=base_url('signup/event/'. $next_event->id)?>" class="btn btn-primary">Se anmälningar <i class="fas fa-list-ul"></i></i></a>
-					<?php
-						echo $next_event->member_attendance->id != $this->attendance->get_type_by_code('notsigned')->id //anmälan finns redan
-							? '<a href="'. base_url("signup/event/$next_event->id/showform") .'" class="btn btn-primary">Redigera anmälan <i class="fas fa-edit"></i></a>'
-							: '<a href="'. base_url("signup/event/$next_event->id/showform") .'" class="btn btn-success">Anmäl dig <i class="fas fa-arrow-circle-right"></i></a>';
-					?>
-				</div>
-
-				<?php if(!empty($next_event->forum_link)):?>
-					<!-- Läs mer -->
-					<div><a href='<?=$next_event->forum_link?>' class='btn btn-primary'>Läs mer <i class='fas fa-search'></i></a></div>
-				<?php endif?>
-
-			</div>
-
-			<!-- Förhandsbild-kolumn -->
-			<?php if(!empty($next_event->preview_image)): ?>
-			<div class="col-md-7">
-				<a href="<?=$next_event->preview_image?>" data-toggle="lightbox">
-					<img class="img-thumbnail rounded float-right m-2" src="<?=$next_event->preview_image?>" alt="Förhandsbild">
-				</a>
-			</div>
-			<?php endif; ?>
-
-		</div>
-	</div>
+	</div><!-- end #wrapper_next_event -->
 
 	
 	<!--Events-->
 	<h3>Andra events:</h3>
-	<div id="wrapper_events_table" class="table-responsive table-sm">
+	<div id="wrapper_events_table" class="table-responsive table-sm rounded bg-white border-0 p-2 shadow-sm">
 		<table class="table table-hover clickable">
 			<thead class="table-borderless">
 				<tr>
