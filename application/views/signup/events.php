@@ -16,7 +16,7 @@ $this->current_page = 'events';
 	<script src="<?=base_url('js/deadline.js')?>"></script>
 	<script src="<?=base_url('js/signup/events.js')?>"></script>
 	<script src="<?=base_url('js/signup/clickable_table.js')?>"></script>
-	<link rel="stylesheet" href="<?=base_url('css/signup/events.css')?>">
+	<link rel="stylesheet" href="<?=base_url('css/signup/events.css?0')?>">
 
 	<?php if(XMAS):?>
 		<link rel="stylesheet" href="<?=base_url('css/holidays/xmas.css')?>">

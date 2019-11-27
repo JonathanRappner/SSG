@@ -28,7 +28,7 @@ foreach($signups as $s)
 	<?php $this->load->view('signup/sub-views/head')?>
 
 	<!-- Page-specific -->
-	<link rel="stylesheet" href="<?=base_url('css/signup/event.css')?>">
+	<link rel="stylesheet" href="<?=base_url('css/signup/event.css?0')?>">
 	<link rel="stylesheet" href="<?=base_url('css/signup/event_stats.css')?>">
 	<link rel="stylesheet" href="<?=base_url('css/signup/form.css')?>">
 	<script src="<?=base_url('js/signup/clickable_table.js')?>"></script>

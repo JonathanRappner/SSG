@@ -10,11 +10,14 @@ $this->current_page = 'history';
 ?><!DOCTYPE html>
 <html lang="sv">
 <head>
-	<?php $this->load->view('signup/sub-views/head');?>
+	<?php $this->load->view('signup/sub-views/head')?>
 
 	<!-- Page-specific -->
-	<link rel="stylesheet" href="<?php echo base_url('css/signup/admin.css');?>">
-	<script src="<?php echo base_url('js/signup/clickable_table.js');?>"></script>
+	<script src="<?=base_url('js/signup/clickable_table.js')?>"></script>
+
+	<?php if(XMAS):?>
+		<link rel="stylesheet" href="<?=base_url('css/holidays/xmas.css')?>">
+	<?php endif?>
 
 	<title>Historik</title>
 
@@ -22,7 +25,7 @@ $this->current_page = 'history';
 <body>
 
 <!-- Top -->
-<?php $this->load->view('signup/sub-views/top');?>
+<?php $this->load->view('signup/sub-views/top')?>
 
 <div id="wrapper" class="container">
 
@@ -34,29 +37,31 @@ $this->current_page = 'history';
 	<p>Här kan du se gamla events. Klicka på ett event i listan för att se fler detaljer.</p>
 
 	<div id="wrapper_events_table" class="table-responsive table-sm">
-		<table class="table table-hover clickable">
-			<thead class="table-borderless">
-				<tr>
-					<th scope="col" style="width:50%;">Titel</th>
-					<th scope="col">Typ</th>
-					<th scope="col">Datum</th>
-					<th scope="col">Anmälda</th>
-					<th scope="col">Din närvaro</th>
-				</tr>
-			</thead>
-			<tbody>
-			<?php foreach($events as $event):?>
-				<tr data-url='<?php echo base_url("signup/event/$event->id");?>'>
-					<th scope='row'><?php echo $event->title;?></th>
-					<td><?php echo $event->type_name;?></td>
-					<td><abbr title='<?php echo "$event->start_time - $event->end_time";?>' data-toggle='tooltip'><?php echo $event->start_date;?></abbr></td>
-					<td><?php echo $event->signed_sum;?></td>
-					<td><span class="text-<?php echo $event->current_member_attendance->code;?>"><?php echo $event->current_member_attendance->text;?></span></td>
-				</tr>
-			<?php endforeach;?>
-			</tbody>
-		</table>
-	</div>
+		<div class="px-3 py-2 mb-3 bg-white rounded shadow-sm">
+			<table class="table table-hover clickable">
+				<thead class="table-borderless">
+					<tr>
+						<th scope="col" style="width:50%;">Titel</th>
+						<th scope="col">Typ</th>
+						<th scope="col">Datum</th>
+						<th scope="col">Anmälda</th>
+						<th scope="col">Din närvaro</th>
+					</tr>
+				</thead>
+				<tbody>
+				<?php foreach($events as $event):?>
+					<tr data-url='<?=base_url("signup/event/$event->id")?>'>
+						<th scope='row'><?=$event->title?></th>
+						<td><?=$event->type_name?></td>
+						<td><abbr title='<?="$event->start_time - $event->end_time"?>' data-toggle='tooltip'><?=$event->start_date?></abbr></td>
+						<td><?=$event->signed_sum?></td>
+						<td><span class="text-<?=$event->current_member_attendance->code?>"><?=$event->current_member_attendance->text?></span></td>
+					</tr>
+				<?php endforeach?>
+				</tbody>
+			</table>
+		</div>
+	</div><!-- end #wrapper_events_table -->
 
 	<?php
 	//pagination
@@ -64,7 +69,7 @@ $this->current_page = 'history';
 	?>
 
 	<!-- Footer -->
-	<?php $this->load->view('signup/sub-views/footer');?>
+	<?php $this->load->view('signup/sub-views/footer')?>
 
 </div>
 

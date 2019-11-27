@@ -121,37 +121,37 @@ if(isset($loaded_member->rank_date))
 ?><!DOCTYPE html>
 <html lang="sv">
 <head>
-	<?php $this->load->view('signup/sub-views/head');?>
+	<?php $this->load->view('signup/sub-views/head')?>
 
 	<!-- Page-specific -->
-	<link rel="stylesheet" href="<?=base_url('css/signup/mypage.css');?>">
+	<link rel="stylesheet" href="<?=base_url('css/signup/mypage.css?0')?>">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
-	<script src="<?=base_url('js/signup/clickable_table.js');?>"></script>
-	<script src="<?=base_url('js/signup/mypage.js');?>"></script>
+	<script src="<?=base_url('js/signup/clickable_table.js')?>"></script>
+	<script src="<?=base_url('js/signup/mypage.js')?>"></script>
+
+	<?php if(XMAS):?>
+		<link rel="stylesheet" href="<?=base_url('css/holidays/xmas.css')?>">
+	<?php endif?>
 
 	<title>Min sida</title>
 
-	<?php
-		//js-variabler
-		echo 
-			'<script>
-				var member_id = '. $loaded_member->id .';
-				var attendance_total = '. json_encode($attendance_total) .';
-				var attendance_quarter = '. json_encode($attendance_quarter) .';
-				var event_types = '. json_encode($event_types) .';
-				var deadline = '. json_encode($deadline) .';
-				var groups = '. json_encode($groups) .';
-				var roles = '. json_encode($roles) .';
-			</script>';
-	?>
+	<script>
+		var member_id = <?=$loaded_member->id?>;
+		var attendance_total = <?=json_encode($attendance_total)?>;
+		var attendance_quarter = <?=json_encode($attendance_quarter)?>;
+		var event_types = <?=json_encode($event_types)?>;
+		var deadline = <?=json_encode($deadline)?>;
+		var groups = <?=json_encode($groups)?>;
+		var roles = <?=json_encode($roles)?>;
+	</script>
 
 </head>
 <body>
 
 <!-- Topp -->
-<?php $this->load->view('signup/sub-views/top');?>
+<?php $this->load->view('signup/sub-views/top')?>
 
 <div id="wrapper" class="container">
 
@@ -163,7 +163,7 @@ if(isset($loaded_member->rank_date))
 		<div class="col-lg">
 			<h1>
 				Min sida
-				<small class="text-muted"><?=$loaded_member->name;?></small>
+				<small class="text-muted"><?=$loaded_member->name?></small>
 			</h1>
 		</div>
 
@@ -174,10 +174,10 @@ if(isset($loaded_member->rank_date))
 			<select id="member_select" class="selectpicker ml-2 text-dark" data-live-search="true">
 				<?php foreach($members as $member):?>
 					<option value="<?=$member->id?>" <?=$member->id == $loaded_member->id ? 'selected' : null?>><?=$member->name?></option>
-				<?php endforeach;?>
+				<?php endforeach?>
 			</select>
 		</div>
-		<?php endif;?>
+		<?php endif?>
 
 	</div>
 
@@ -225,7 +225,7 @@ if(isset($loaded_member->rank_date))
 						<i class="fas fa-question-circle"></i>
 					<?php else:?>
 						<small class="text-secondary">(sedan <?=$since_date?>)</small>
-					<?php endif;?>
+					<?php endif?>
 				</h3>
 			</div>
 
@@ -233,7 +233,7 @@ if(isset($loaded_member->rank_date))
 				<label for="since_date" class="font-weight-bold">Visa data sedan:</label>
 				<input id="since_date" type="date" min="2014-11-01" max="<?=date('Y-m-d')?>" class="form-control ml-2" value="<?=$since_date?>">
 				<button id="btn_since_date" class="btn btn-primary ml-2">Visa <i class="fas fa-search"></i></button>
-				<?php if($since_date):?><button id="btn_date_reset" class="btn btn-danger ml-2">Återställ <i class="fas fa-times-circle"></i></button><?php endif;?>
+				<?php if($since_date):?><button id="btn_date_reset" class="btn btn-danger ml-2">Återställ <i class="fas fa-times-circle"></i></button><?php endif?>
 			</div>
 		</div>
 
@@ -245,9 +245,9 @@ if(isset($loaded_member->rank_date))
 				<canvas id="chart_total"></canvas>
 				<dl>
 					<?php for($i=0; $i < count($attendance_total->labels); $i++):?>
-						<dt><?='<span style="color: '. $attendance_total->colors[$i] .';">&#9632;</span> '. $attendance_total->labels[$i];?></strong>:</dt>
+						<dt><?='<span style="color: '. $attendance_total->colors[$i] .';">&#9632;</span> '. $attendance_total->labels[$i]?></strong>:</dt>
 						<dd><?=$attendance_total->counts[$i]?></dd>
-					<?php endfor;?>
+					<?php endfor?>
 				</dl>
 			</div>
 
@@ -256,11 +256,11 @@ if(isset($loaded_member->rank_date))
 				<h6>Anmälningar efter deadline</h6>
 				<canvas id="chart_deadline"></canvas>
 				<dl>
-					<dt><span style='color: <?=$deadline->colors[0];?>'>&#9632;</span> Före deadline</strong>:</dt>
-					<dd><?=$deadline->counts[0];?></dd>
+					<dt><span style='color: <?=$deadline->colors[0]?>'>&#9632;</span> Före deadline</strong>:</dt>
+					<dd><?=$deadline->counts[0]?></dd>
 
-					<dt><span style='color: <?=$deadline->colors[1];?>'>&#9632;</span> Efter deadline</strong>:</dt>
-					<dd><?=$deadline->counts[1];?></dd>
+					<dt><span style='color: <?=$deadline->colors[1]?>'>&#9632;</span> Efter deadline</strong>:</dt>
+					<dd><?=$deadline->counts[1]?></dd>
 				</dl>
 			</div>
 
@@ -273,9 +273,9 @@ if(isset($loaded_member->rank_date))
 				<canvas id="chart_event_types"></canvas>
 				<dl>
 				<?php for($i=0; $i < count($event_types->labels); $i++):?>
-						<dt><?='<span style="color: '. $event_types->colors[$i] .';">&#9632;</span> '. $event_types->labels[$i];?></strong>:</dt>
-						<dd><?=$event_types->counts[$i];?></dd>
-					<?php endfor;?>
+						<dt><?='<span style="color: '. $event_types->colors[$i] .';">&#9632;</span> '. $event_types->labels[$i]?></strong>:</dt>
+						<dd><?=$event_types->counts[$i]?></dd>
+					<?php endfor?>
 				</dl>
 			</div>
 
@@ -288,9 +288,9 @@ if(isset($loaded_member->rank_date))
 				<canvas id="chart_groups"></canvas>
 				<dl>
 					<?php for($i=0; $i < count($groups->labels); $i++):?>
-						<dt><?='<span style="color: '. $groups->colors[$i] .';">&#9632;</span> '. $groups->labels[$i];?></strong>:</dt>
-						<dd><?=$groups->counts[$i];?></dd>
-					<?php endfor;?>
+						<dt><?='<span style="color: '. $groups->colors[$i] .';">&#9632;</span> '. $groups->labels[$i]?></strong>:</dt>
+						<dd><?=$groups->counts[$i]?></dd>
+					<?php endfor?>
 				</dl>
 			</div>
 
@@ -303,15 +303,15 @@ if(isset($loaded_member->rank_date))
 				<canvas id="chart_roles"></canvas>
 				<dl>
 					<?php for($i=0; $i < count($roles->labels); $i++):?>
-						<dt><?='<span style="color: '. $roles->colors[$i] .';">&#9632;</span> '. $roles->labels[$i];?></strong>:</dt>
-						<dd><?=$roles->counts[$i];?></dd>
-					<?php endfor;?>
+						<dt><?='<span style="color: '. $roles->colors[$i] .';">&#9632;</span> '. $roles->labels[$i]?></strong>:</dt>
+						<dd><?=$roles->counts[$i]?></dd>
+					<?php endfor?>
 				</dl>
 			</div>
 		</div>
 		<?php else:?>
 			<div class="col text-center mb-4" style="font-size: 1.4rem;">&ndash; Inga anmälningar hittades 😢 &ndash;</div>
-		<?php endif;?>
+		<?php endif?>
 		
 	</div>
 	
@@ -381,7 +381,7 @@ if(isset($loaded_member->rank_date))
 	</div>
 
 	<!-- Footer -->
-	<?php $this->load->view('signup/sub-views/footer');?>
+	<?php $this->load->view('signup/sub-views/footer')?>
 
 </div>
 
