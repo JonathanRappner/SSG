@@ -1,16 +1,11 @@
 /* --Events-sidan-- */
 
-/*  */
-#wrapper_next_event .card-header{
-	padding: 0.7rem;
-}
-
-/*  */
+/* nästa event-rubriker */
 #wrapper_next_event p strong{
 	margin-right: 4px;
 }
 
-/* next-event-knappar */
+/* nästa event-knappar */
 #wrapper_next_event .btn{
 	margin: 0 4px 4px 0;
 }
@@ -35,7 +30,5 @@
 /* Layouts större än sm */
 @media (min-width: 576px) {
 	/* Större text i tabellen i desktop-versionen */
-	#wrapper_events_table{
-		font-size:1rem;
-	}
+	#wrapper_events_table{ font-size:1rem; }
 }

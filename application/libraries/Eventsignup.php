@@ -393,7 +393,7 @@ class Eventsignup
 		$sql =
 			'SELECT
 				name,
-				DATE_FORMAT(last_changed_datetime, "%Y-%m-%d - %H:%i") AS date
+				DATE_FORMAT(last_changed_datetime, "%Y-%m-%d %H:%i") AS date
 			FROM ssg_signups
 			INNER JOIN ssg_members
 				ON ssg_signups.member_id = ssg_members.id

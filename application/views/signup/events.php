@@ -18,6 +18,10 @@ $this->current_page = 'events';
 	<script src="<?=base_url('js/signup/clickable_table.js')?>"></script>
 	<link rel="stylesheet" href="<?=base_url('css/signup/events.css')?>">
 
+	<?php if(XMAS):?>
+		<link rel="stylesheet" href="<?=base_url('css/holidays/xmas.css')?>">
+	<?php endif;?>
+
 	<title>SSG Anmälning</title>
 
 </head>
@@ -32,17 +36,20 @@ $this->current_page = 'events';
 	<!-- Global Alerts -->
 	<?php $this->load->view('site/sub-views/global_alerts', array('global_alerts' => $global_alerts))?>
 
-	<!-- Rubriker -->
+	<!-- Rubrik -->
 	<h2>Nästa event:</h2>
 
+	<!-- Nästa event -->
 	<div id="wrapper_next_event" class="card mb-4 bg-white border-0 shadow-sm<?=empty($next_event->preview_image) ? ' next_event_no_img' : null?>">
 		
-			<h4 class="card-header bg-dark text-white">
-				<?=$next_event->title?>
-				<?php if(!empty($next_event->author_id)):?>
-				<small class="text-muted text-nowrap"><?="av $next_event->author_name"?></small>
-				<?php endif;?>
-			</h4>
+			<h3 class="card-header bg-dark text-white">
+				<a href="<?=base_url("signup/event/{$next_event->id}")?>">
+					<?=$next_event->title?>
+					<?php if(!empty($next_event->author_id)):?>
+						<small class="text-nowrap"><?="av $next_event->author_name"?></small>
+					<?php endif;?>
+				</a>
+			</h3>
 				
 			<div class="card-body row">
 				<div class="col">
@@ -97,41 +104,46 @@ $this->current_page = 'events';
 	</div><!-- end #wrapper_next_event -->
 
 	
-	<!--Events-->
-	<h3>Andra events:</h3>
-	<div id="wrapper_events_table" class="table-responsive table-sm rounded bg-white border-0 p-2 shadow-sm">
-		<table class="table table-hover clickable">
-			<thead class="table-borderless">
-				<tr>
-					<th scope="col">Titel</th>
-					<th scope="col">Typ</th>
-					<th scope="col">Datum</th>
-					<th scope="col">Anmälda</th>
-					<th scope="col" class="text-nowrap">Din närvaro</th>
-				</tr>
-			</thead>
-			<tbody>
+	<!--Andra events-->
+	<div id="wrapper_events_table" class="card bg-white border-0 shadow-sm">
+		
+		<h4 class="card-header bg-dark text-white">Andra events</h4>
 
-				<?php
-				//andra events-tabell-rader
-				foreach($upcoming_events as $event)
-				{
-					//variabler
-					$att = $event->current_member_attendance; //närvaro-objekt
-					$signed_count = $this->attendance->count_signed($event->signups); //antal anmälda
+		<div class="card-body p-2 table-responsive table-sm">
+			<table class="table table-hover clickable">
+				<thead class="table-borderless">
+					<tr>
+						<th scope="col">Titel</th>
+						<th scope="col">Typ</th>
+						<th scope="col">Datum</th>
+						<th scope="col">Anmälda</th>
+						<th scope="col" class="text-nowrap">Din närvaro</th>
+					</tr>
+				</thead>
+				<tbody>
 
-					echo '<tr data-url="'. base_url("signup/event/$event->id") .'">';
-					echo "	<th scope=\"row\">$event->title</th>"; //titel
-					echo "	<td>$event->type_name</td>"; //typ
-					echo "	<td><abbr title=\"$event->start_time - $event->end_time\" data-toggle=\"tooltip\">$event->start_date</abbr></td>"; //datum
-					echo "	<td>$signed_count</td>"; //anmälda
-					echo "	<td><span class=\"$att->class\">$att->text</span></td>"; //din anmälan
-					echo '</tr>';
-				}
-				?>
-			</tbody>
-		</table>
-	</div>
+					<?php
+					//andra events-tabell-rader
+					foreach($upcoming_events as $event)
+					{
+						//variabler
+						$att = $event->current_member_attendance; //närvaro-objekt
+						$signed_count = $this->attendance->count_signed($event->signups); //antal anmälda
+
+						echo '<tr data-url="'. base_url("signup/event/$event->id") .'">';
+						echo "	<th scope=\"row\">$event->title</th>"; //titel
+						echo "	<td>$event->type_name</td>"; //typ
+						echo "	<td><abbr title=\"$event->start_time - $event->end_time\" data-toggle=\"tooltip\">$event->start_date</abbr></td>"; //datum
+						echo "	<td>$signed_count</td>"; //anmälda
+						echo "	<td><span class=\"$att->class\">$att->text</span></td>"; //din anmälan
+						echo '</tr>';
+					}
+					?>
+				</tbody>
+			</table>
+		</div><!-- end div.card-body -->
+
+	</div><!-- end div.card -->
 
 </div>
 

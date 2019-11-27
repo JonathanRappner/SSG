@@ -2,7 +2,7 @@
  * Gemensam stylesheet för hela anmälningssidan
  */
 
-body{
+body {
 	background-color: #f8f8f8;
 }
 
@@ -14,25 +14,35 @@ body{
     color: #212529;
 }
 
+/* mindre padding i card headers */
+h3.card-header { padding: 0.7rem 1rem; }
+h4.card-header { padding: 0.5rem 0.8rem; }
+
+/* header-länkar */
+.card-header a{ color: #FFF; }
+
+/* Nästa event-title "av Nisse"-text */
+h1 small, h2 small, h3 small, h4 small, h5 small{ color: #d4d4d4 !important; }
+
 /* gör btn-primary lite ljusare */
-.btn-primary{
+.btn-primary {
 	background-color: #3A99FC !important;
 	border-color: #3A99FC !important;
 }
-.btn-primary:hover{
+.btn-primary:hover {
 	background-color: #007DFF !important;
 	border-color: #007DFF !important;
 }
 
 /* celler som ska kortas ner om de innehåller för mycket text */
-.truncate{
+.truncate {
 	white-space: nowrap;
     overflow: hidden;
 	text-overflow: ellipsis;
 }
 
 /* muspekar-ikon för tabellrader */
-table.clickable tbody tr:hover{
+table.clickable tbody tr:hover {
 	cursor: pointer;
 }
 

@@ -41,8 +41,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			</nav>
 
 			<!-- Inloggad som... -->
-			<div class="col-lg-4 text-xl-right pr-0 pl-sm-4 pl-xl-0 pb-2 pb-xl-0">
-				<div id="userbox" class="mt-lg-1 mb-2 mb-lg-0">
+			<div class="col-md-4 text-md-right pr-0 pl-sm-4 pl-xl-0 pb-2 pb-xl-0">
+				<div id="userbox" class="mt-md-1 mb-2 mb-md-0">
 					<a href="<?=base_url('forum/memberlist.php?mode=viewprofile&u='. $this->member->phpbb_user_id)?>">
 						<!-- Namn -->
 						<span class="text-nowrap"><strong><?=$this->member->name;?></strong></span>

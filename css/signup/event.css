@@ -1,7 +1,12 @@
 /* --Event-sidan-- */
 
+/* vit glow runt text så den syns mot bakgrunden */
+#event_title, #event_info dl{
+	text-shadow: 0 0 10px white;
+}
+
 /* Anmäl dig-knappen */
-.btn_signup{
+.btn_signup, .btn_edit{
 	font-size: 2rem;
 }
 
@@ -11,13 +16,19 @@
 }
 
 /* Mindre text i tabellen i mobilversionen */
-#wrapper_signup_table{
+div.wrapper_signups_table{
 	font-size:0.7rem;
 }
 
 /* ingen overflow-scrollbar tillåten */
-#wrapper_signup_table table{
+div.wrapper_signups_table table{
 	table-layout:fixed;
+}
+
+/* event förhandsvisningsbild */
+#event_info div.card-body{
+	background-size: 100%;
+	background-repeat: no-repeat;
 }
 
 /* ?-ikon ska vara lika stor i mobil som desktop */
@@ -25,11 +36,10 @@ table i.fas{
 	font-size: 1.0rem;
 }
 
-
 /* Layouts större än sm */
 @media (min-width: 576px) {
 	/* Större text i tabellen i desktop-versionen */
-	#wrapper_signup_table{
+	div.wrapper_signups_table{
 		font-size:1rem;
 	}
 }
@@ -38,7 +48,7 @@ table i.fas{
 @media (min-width: 992px){
 	
 	/* tabell */
-	#wrapper_signup_table{
+	div.wrapper_signups_table{
 		font-size:0.8rem;
 	}
 	

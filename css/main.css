@@ -96,6 +96,9 @@ abbr{
 	text-decoration: none !important;
 }
 
+/* description lists */
+dl { line-height: 1.1rem; }
+
 /* signup-färger */
 .text-jip, .text-qip, .text-noshow, .text-signed, .text-notsigned, .text-awol{font-weight: bold; margin: 0 2px;}
 .text-signed{color: #28a745;}
@@ -115,8 +118,8 @@ abbr{
 
 	/* större headings i > sm */
 	h1 { font-size: 3rem; }
-	h4 { font-size: 2rem; }
-	h6 { font-size: 1.5rem; }
+	h4 { font-size: 1.5rem; }
+	h6 { font-size: 1rem; }
 
 	/* Alerts */
 	.alert{
