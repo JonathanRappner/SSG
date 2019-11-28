@@ -2,7 +2,7 @@
 
 /* vit glow runt text så den syns mot bakgrunden */
 #event_title, #event_info dl{
-	text-shadow: 0 0 10px white;
+	text-shadow: 1px 1px white;
 }
 
 /* Anmäl dig-knappen */

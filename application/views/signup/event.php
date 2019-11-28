@@ -28,7 +28,7 @@ foreach($signups as $s)
 	<?php $this->load->view('signup/sub-views/head')?>
 
 	<!-- Page-specific -->
-	<link rel="stylesheet" href="<?=base_url('css/signup/event.css?0')?>">
+	<link rel="stylesheet" href="<?=base_url('css/signup/event.css?2')?>">
 	<link rel="stylesheet" href="<?=base_url('css/signup/event_stats.css?0')?>">
 	<link rel="stylesheet" href="<?=base_url('css/signup/form.css')?>">
 	<script src="<?=base_url('js/signup/clickable_table.js')?>"></script>
@@ -69,7 +69,7 @@ foreach($signups as $s)
 					<style>
 						#event_info div.card-body{
 							background-image:
-								linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.9), white 65%),
+								linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.85), white 75%),
 								url('<?=$event->preview_image?>');
 						}
 					</style>
