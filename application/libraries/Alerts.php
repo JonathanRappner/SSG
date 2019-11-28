@@ -37,7 +37,7 @@ class Alerts
 	 */
 	public function print_alerts()
 	{
-		echo '<div id="alerts">';
+		echo '<div id="alerts" class="container p-0">';
 
 		foreach($this->CI->session->messages as $message)
 			echo 

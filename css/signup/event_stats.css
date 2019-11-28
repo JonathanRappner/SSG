@@ -4,12 +4,6 @@
 dt, dd { float: left; }
 dt { clear:both; margin-right: 8px; }
 
-/* wrapper */
-#event_stats{
-	overflow: auto;
-}
-
-
 /* Layouts större än sm */
 @media (min-width: 576px) {
 }

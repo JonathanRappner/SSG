@@ -25,7 +25,7 @@ $this->current_page = 'admin';
 <!-- Topp -->
 <?php $this->load->view('signup/sub-views/top');?>
 
-<div id="wrapper" class="container">
+<div id="wrapper" class="container p-0">
 
 	<h1>Admin</h1>
 

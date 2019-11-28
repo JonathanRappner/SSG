@@ -53,9 +53,6 @@ shuffle($carousel_images);
 		</div>
 	<?php endif;?>
 
-	<!-- Alerts -->
-	<?php $this->load->view('site/sub-views/global_alerts', array('global_alerts' => $global_alerts));?>
-
 	<!-- Bildspel -->
 	<div id="carousel" class="row mb-4 rounded shadow-sm" style="background-image:url('<?=base_url($carousel_images[0])?>');">
 		<img src="<?=base_url('images/logga-vit.svg')?>">

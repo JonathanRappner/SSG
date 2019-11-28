@@ -31,10 +31,7 @@ $this->current_page = 'events';
 <?php $this->load->view('signup/sub-views/top')?>
 
 <!-- Huvud-wrapper -->
-<div id="wrapper" class="container">
-
-	<!-- Global Alerts -->
-	<?php $this->load->view('site/sub-views/global_alerts', array('global_alerts' => $global_alerts))?>
+<div id="wrapper" class="container p-0">
 
 	<!-- Rubrik -->
 	<h2>Nästa event:</h2>
@@ -43,6 +40,7 @@ $this->current_page = 'events';
 	<div id="wrapper_next_event" class="card mb-4 bg-white border-0 shadow-sm<?=empty($next_event->preview_image) ? ' next_event_no_img' : null?>">
 		
 			<h3 class="card-header bg-dark text-white">
+				<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>🎄<?php endif;?>
 				<a href="<?=base_url("signup/event/{$next_event->id}")?>">
 					<?=$next_event->title?>
 					<?php if(!empty($next_event->author_id)):?>
@@ -107,7 +105,10 @@ $this->current_page = 'events';
 	<!--Andra events-->
 	<div id="wrapper_events_table" class="card bg-white border-0 shadow-sm">
 		
-		<h4 class="card-header bg-dark text-white">Andra events</h4>
+		<h4 class="card-header bg-dark text-white">
+			<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>🎅<?php endif;?>
+			Andra events
+		</h4>
 
 		<div class="card-body p-2 table-responsive table-sm">
 			<table class="table table-hover clickable">

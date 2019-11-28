@@ -11,6 +11,8 @@ class Member
 {
 	public
 		$valid = false; //Är en existerande användare inloggad?
+	private
+		$phpbb_user_groups_swe;
 
 	/**
 	 * Listar ut vem som är inloggad baserat på session.
@@ -20,6 +22,17 @@ class Member
 	{
 		// Assign the CodeIgniter super-object
 		$this->CI =& get_instance();
+
+		//phpbb-användar-grupper-översättnings-array <= världens längsta ord
+		$this->phpbb_user_groups_swe = array(
+			'GUESTS' => 'Gäst',
+			'REGISTERED' => 'Registrerad',
+			'REGISTERED_COPPA' => 'Registrerad COPPA',
+			'GLOBAL_MODERATORS' => 'Global Moderator',
+			'ADMINISTRATORS' => 'Administratör',
+			'BOTS' => 'Bot',
+			'NEWLY_REGISTERED' => 'Nyligen registrerad',
+		);
 
 		//försök hämta phpbb session id
 		$this->phpbb_session_id = $this->get_phpbb_session_id();
@@ -356,7 +369,14 @@ class Member
 			INNER JOIN phpbb_groups g
 				ON ug.group_id = g.group_id
 			WHERE ug.user_id = ?';
-		return $this->CI->db->query($sql, array($phpbb_user_id))->result();
+		$permission_groups = $this->CI->db->query($sql, array($phpbb_user_id))->result();
+
+		// byt ut grupp-namn som finnes i this->phpbb_user_groups_swe
+		foreach ($permission_groups as $group)
+			if(key_exists($group->name, $this->phpbb_user_groups_swe))
+				$group->name = $this->phpbb_user_groups_swe[$group->name];
+		
+		return $permission_groups;
 	}
 
 	/**

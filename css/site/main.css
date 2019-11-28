@@ -35,13 +35,3 @@ body{
 /* Olästa meddelanden */
 a.pm_alert{  color: #FFF; }
 a.pm_alert:hover{ text-decoration: none; }
-
-/* Globala meddelanden */
-#global_alerts div.alert{
-	padding: 0.25rem 0.5rem;
-	margin-bottom: .2rem;
-}
-#global_alerts div.alert button.close{
-	padding: .1rem 0.5rem;
-}
-#global_alerts span.link { font-weight: bold; }

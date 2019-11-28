@@ -24,10 +24,7 @@ $this->current_page = 'members';
 <!-- Top -->
 <?php $this->load->view('site/sub-views/top');?>
 
-<div id="wrapper_members" class="container">
-
-	<!-- Global Alerts -->
-	<?php $this->load->view('site/sub-views/global_alerts', array('global_alerts' => $global_alerts));?>
+<div id="wrapper_members" class="container p-0">
 
 	<h1>Medlemmar</h1>
 

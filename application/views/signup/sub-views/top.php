@@ -6,7 +6,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 ?><div id="wrapper_top" class="bg-dark mb-3 shadow-sm">
 
-	<div class="container">
+	<div class="container p-0">
 		<div class="row">
 	
 			<!-- Navbar -->
@@ -61,6 +61,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </div>
 
 <?php
-//Alerts
+//Globala Meddelanden (ex. "100 mb på syncen, tanka nu!")
+$this->load->view('site/sub-views/global_alerts', array('global_alerts' => $global_alerts));
+
+//Alerts (ex. "Ändringarna sparades utan problem")
 $this->alerts->print_alerts();
 ?>

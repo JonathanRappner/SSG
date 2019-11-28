@@ -26,7 +26,10 @@ if(!empty($stats->last_changed))
 
 ?><div id="event_stats" class="card border-0 shadow-sm">
 
-	<h4 class="card-header bg-dark text-white">Statistik</h4>
+	<h4 class="card-header bg-dark text-white">
+		<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>🎄<?php endif;?>
+		Statistik
+	</h4>
 
 	<div class="card-body pt-3 pb-2">
 		<div class="row">

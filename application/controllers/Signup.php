@@ -243,6 +243,7 @@ class Signup extends CI_Controller
 			'member' => $this->member,
 			'adminpanels' => $adminpanels,
 			'adminpanel' => $adminpanel,
+			'global_alerts' => $this->global_alerts,
 		));
 	}
 

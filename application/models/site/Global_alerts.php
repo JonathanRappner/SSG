@@ -28,7 +28,7 @@ class Global_alerts extends CI_Model
 
 		//formatera länkar
 		foreach($result as $row)
-			$row->text = preg_replace($this->regex_url, '<span class="link">[<a href="$0" target="_blank">länk</a>]</span>', $row->text); //case insensitive replace
+			$row->text = preg_replace($this->regex_url, '<span class="link">[<a href="$0" target="_blank">länk</a>]</span>', $row->text);
 		
 		//lägg till forum-pm-alert
 		if($this->member->valid)
@@ -39,11 +39,10 @@ class Global_alerts extends CI_Model
 			{
 				$pm_alert = new stdClass;
 				$pm_alert->id = 0;
-				$pm_alert->text =
-					'<a href="'. base_url('forum/ucp.php?i=pm&folder=inbox') .'" class="alert-link" target="_blank">'
-					.'<i class="fas fa-envelope mr-2"></i> Du har <strong>'. $pm_count .'</strong> '
-					.($pm_count == 1 ? 'oläst meddelande' : 'olästa meddelanden')
-					.'</a>';
+				$pm_alert->text = '<a href="'. base_url('forum/ucp.php?i=pm&folder=inbox') .'" class="alert-link" target="_blank">';
+					$pm_alert->text .='<i class="fas fa-envelope mr-2"></i> Du har <strong>'. $pm_count .'</strong> ';
+					$pm_alert->text .= ($pm_count == 1 ? 'oläst meddelande' : 'olästa meddelanden');
+				$pm_alert->text .='</a>';
 				$pm_alert->class = 'danger';
 
 				$result[] = $pm_alert;

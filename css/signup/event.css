@@ -6,9 +6,8 @@
 }
 
 /* Anmäl dig-knappen */
-.btn_signup, .btn_edit{
-	font-size: 2rem;
-}
+.btn_signup { font-size: 2rem; }
+.btn_edit { font-size: 1.6rem; }
 
 /* Meddelande-kolumnen */
 .column_message{

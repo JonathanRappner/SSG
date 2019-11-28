@@ -49,10 +49,7 @@ foreach($signups as $s)
 <!-- Topp -->
 <?php $this->load->view('signup/sub-views/top')?>
 
-<div id="main_wrapper" class="container">
-
-	<!-- Global Alerts -->
-	<?php $this->load->view('site/sub-views/global_alerts', array('global_alerts' => $global_alerts))?>
+<div id="main_wrapper" class="container p-0">
 
 	<!-- Titel & knappar + Statistik -->
 	<div id="row_event_top" class="row mb-4">
@@ -62,7 +59,10 @@ foreach($signups as $s)
 
 			<div class="card border-0 shadow-sm">
 
-				<h4 class="card-header bg-dark text-white">Event</h4>
+				<h4 class="card-header bg-dark text-white">
+					<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>❄<?php endif;?>
+					Event
+				</h4>
 
 				<?php if(!empty($event->preview_image)):?>
 					<!-- infobox background -->
@@ -144,7 +144,10 @@ foreach($signups as $s)
 	<!-- Anmälningar -->
 	<div class="wrapper_signups_table card border-0 shadow-sm">
 
-		<h4 class="card-header bg-dark text-white">Anmälningar</h4>
+		<h4 class="card-header bg-dark text-white">
+			<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>🎁<?php endif;?>
+			Anmälningar
+		</h4>
 
 		<div class="card-body table-responsive table-sm px-2 pt-1 pb-0">
 			<table class="table table-hover<?=$is_admin ? ' clickable' : null ?>">
@@ -228,6 +231,7 @@ foreach($signups as $s)
 	?>
 		<div class="wrapper_signups_table card border-0 shadow-sm mt-4">
 			<h4 class="card-header bg-dark text-white">
+				<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>🕯<?php endif;?>
 				<span title="Endast S0, S1 och gruppchefer ser listan." data-toggle="tooltip">Aktiva medlemmar som inte anmält sig <i class='fas fa-question-circle'></i></span>
 			</h4>
 
