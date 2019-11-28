@@ -16,7 +16,7 @@ $this->current_page = 'events';
 	<script src="<?=base_url('js/deadline.js')?>"></script>
 	<script src="<?=base_url('js/signup/events.js')?>"></script>
 	<script src="<?=base_url('js/signup/clickable_table.js')?>"></script>
-	<link rel="stylesheet" href="<?=base_url('css/signup/events.css?0')?>">
+	<link rel="stylesheet" href="<?=base_url('css/signup/events.css?2')?>">
 
 	<?php if(XMAS):?>
 		<link rel="stylesheet" href="<?=base_url('css/holidays/xmas.css')?>">
@@ -50,52 +50,52 @@ $this->current_page = 'events';
 			</h3>
 				
 			<div class="card-body row">
-				<div class="col">
-					<p>
+				<div class="col-lg">
+
+					<dl class="row">
 						<script>var deadline_epoch = <?=$next_event->deadline_epoch?>;</script>
-						<strong>Datum:</strong>
-						<?="{$next_event->start_date} ({$next_event->start_time} - {$next_event->end_time})"?>
-					</p>
-					
-					<p>
-						<strong>Närvaro:</strong>
-						<span class="<?=$next_event->member_attendance->class?>"><?=$next_event->member_attendance->text?></span>
-					</p>
-					
-					<p>
-						<strong>Anmälnings-deadline:</strong>
-						<span id='deadline' class="text-nowrap">&nbsp;</span>
-					</p>
-					
-					<p>
-						<strong>Antal anmälda:</strong>
-						<?=$this->attendance->count_signed($next_event->signups)?>
-					</p>
+						<dt class="col-5">Datum:</dt>
+						<dd class="col-7"><?="{$next_event->start_date} ({$next_event->start_time} - {$next_event->end_time})"?></dd>
+	
+						<dt class="col-5">Närvaro:</dt>
+						<dd class="col-7"><span class="<?=$next_event->member_attendance->class?>"><?=$next_event->member_attendance->text?></span></dd>
+
+						<dt class="col-5">Anmälnings-deadline:</dt>
+						<dd class="col-7" id="deadline">&nbsp;</dd>
+
+						<dt class="col-5">Antal anmälda:</dt>
+						<dd class="col-7"><?=$this->attendance->count_signed($next_event->signups)?></dd>
+					</dl>
 				
-					<!-- Se anmälningar & Anmäl/Redigera anmälan -->
-					<div>
-						<a href="<?=base_url('signup/event/'. $next_event->id)?>" class="btn btn-primary">Se anmälningar <i class="fas fa-list-ul"></i></i></a>
-						<?php
-							echo $next_event->member_attendance->id != $this->attendance->get_type_by_code('notsigned')->id //anmälan finns redan
-								? '<a href="'. base_url("signup/event/{$next_event->id}/showform") .'" class="btn btn-primary">Redigera anmälan <i class="fas fa-edit"></i></a>'
-								: '<a href="'. base_url("signup/event/{$next_event->id}/showform") .'" class="btn btn-success">Anmäl dig <i class="fas fa-arrow-circle-right"></i></a>';
-						?>
-					</div>
+					<!-- Anmäl/Redigera anmälan -->
+					<?php
+						echo $next_event->member_attendance->id != $this->attendance->get_type_by_code('notsigned')->id //anmälan finns redan
+							? '<a href="'. base_url("signup/event/{$next_event->id}/showform") .'" id="btn_edit" class="btn btn-primary">Redigera anmälan <i class="fas fa-edit"></i></a>'
+							: '<a href="'. base_url("signup/event/{$next_event->id}/showform") .'" id="btn_signup" class="btn btn-success">Anmäl dig <i class="fas fa-arrow-circle-right"></i></a>';
+					?>
 			
-					<?php if(!empty($next_event->forum_link)):?>
-						<!-- Läs mer -->
-						<div><a href='<?=$next_event->forum_link?>' class='btn btn-primary'>Läs mer <i class='fas fa-search'></i></a></div>
-					<?php endif?>
+					<!-- Se anmälningar & Läs mer -->
+					<div>
+						<a href="<?=base_url('signup/event/'. $next_event->id)?>" class="btn btn-secondary">
+							Se anmälningar
+							<i class="fas fa-list-ul"></i>
+						</a>
+
+						<?php if(!empty($next_event->forum_link)):?>
+							<!-- Läs mer -->
+							<a href='<?=$next_event->forum_link?>' class='btn btn-info'>Läs mer <i class='fas fa-search'></i></a>
+						<?php endif?>
+					</div>
 				</div><!-- end div.col (vänsterkolumn) -->
 	
 				<!-- Förhandsbild-kolumn -->
 				<?php if(!empty($next_event->preview_image)): ?>
-					<div class="col-12 col-md-7">
+					<div class="col-lg">
 						<a href="<?=$next_event->preview_image?>" data-toggle="lightbox">
 							<img class="img-thumbnail rounded float-right m-2" src="<?=$next_event->preview_image?>" alt="Förhandsbild">
 						</a>
 					</div><!-- end div.col (högerkolumn) -->
-				<?php endif;?>
+				<?php endif?>
 
 			</div><!-- end div.card-body -->
 

@@ -9,6 +9,9 @@
 .btn_signup { font-size: 2rem; }
 .btn_edit { font-size: 1.6rem; }
 
+/* anmälningslänk muspekare */
+#signup_link { cursor: pointer; }
+
 /* Meddelande-kolumnen */
 .column_message{
 	width: auto;

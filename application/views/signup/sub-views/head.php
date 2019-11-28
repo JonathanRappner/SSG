@@ -38,8 +38,8 @@ $preview = $this->preview->get_data();
 <!-- CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-<link rel="stylesheet" href="<?=base_url('css/main.css');?>">
-<link rel="stylesheet" href="<?=base_url('css/signup/main.css');?>">
+<link rel="stylesheet" href="<?=base_url('css/main.css?0');?>">
+<link rel="stylesheet" href="<?=base_url('css/signup/main.css?0');?>">
 <?php if(APRIL_FOOLS):?><link href='https://fonts.googleapis.com/css?family=Gochi%20Hand' rel='stylesheet'><?php endif;?>
 <?php if(APRIL_FOOLS) echo $this->april_fools->style(); ?>
 

@@ -29,10 +29,10 @@ foreach($signups as $s)
 
 	<!-- Page-specific -->
 	<link rel="stylesheet" href="<?=base_url('css/signup/event.css?0')?>">
-	<link rel="stylesheet" href="<?=base_url('css/signup/event_stats.css')?>">
+	<link rel="stylesheet" href="<?=base_url('css/signup/event_stats.css?0')?>">
 	<link rel="stylesheet" href="<?=base_url('css/signup/form.css')?>">
 	<script src="<?=base_url('js/signup/clickable_table.js')?>"></script>
-	<script src="<?=base_url('js/signup/event.js')?>"></script>
+	<script src="<?=base_url('js/signup/event.js?0')?>"></script>
 
 	<?php if(XMAS):?>
 		<link rel="stylesheet" href="<?=base_url('css/holidays/xmas.css')?>">
@@ -120,10 +120,12 @@ foreach($signups as $s)
 								<?php endif?>
 		
 								<?php if(!$event->is_old):?>
+
 									<!-- Anmälningslänk -->
-									<a href="<?=base_url("signup/event/{$event->id}/showform")?>" class="btn btn-danger" data-toggle="tooltip" title="Kopiera mig!">
+									<button id="signup_link" class="btn btn-danger" data-link="<?=base_url("signup/event/{$event->id}/showform")?>" title="Klicka på mig för att kopiera länken." role="button" data-toggle="tooltip">
 										Anmälningslänk <i class="fas fa-link"></i>
-									</a>
+									</button>
+
 								<?php endif?>
 							</div>
 						<?php endif?>
