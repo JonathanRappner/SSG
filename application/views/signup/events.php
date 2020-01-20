@@ -40,7 +40,7 @@ $this->current_page = 'events';
 	<div id="wrapper_next_event" class="card mb-4 bg-white border-0 shadow-sm<?=empty($next_event->preview_image) ? ' next_event_no_img' : null?>">
 		
 			<h3 class="card-header bg-dark text-white">
-				<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>🎄<?php endif;?>
+				<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>⛄<?php endif;?>
 				<a href="<?=base_url("signup/event/{$next_event->id}")?>">
 					<?=$next_event->title?>
 					<?php if(!empty($next_event->author_id)):?>
