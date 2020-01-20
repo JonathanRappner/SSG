@@ -3,7 +3,7 @@ Hemsida till SSG (Swedish Strategic Group) http://www.ssg-clan.se/
 
 Webpage for SSG (Swedish Strategic Group) http://www.ssg-clan.se/
 
-All instructions, comments and text in this projects is written in Swedish.
+All instructions, comments and text in this projects are written in Swedish.
 
 ## Installation
 1. Redigera index.php. Ändra konstanten ENVIRONMENT till **development** eller **production**.
