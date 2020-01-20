@@ -39,7 +39,7 @@ $this->current_page = 'members';
 		</div>
 
 		<?php foreach($groups_skytte as $group):?>
-			<div class="col-sm-6 mb-sm-2">
+			<div class="col-md-4 mb-sm-2">
 				<h3><?=group_icon($group->code, null, true). $group->name?><?=($group->description ? " <small>({$group->description})</small>" : null)?></h3>
 				<ul class="member_list">
 					<?php print_members($group->members)?>
@@ -60,7 +60,7 @@ $this->current_page = 'members';
 		</div>
 
 		<?php foreach($groups_enablers as $group):?>
-			<div class="col-sm-6">
+			<div class="col-md-6">
 				<h3><?=group_icon($group->code, null, true). $group->name?><?=($group->description ? " <small>({$group->description})</small>" : null)?></h3>
 				<ul class="member_list">
 					<?php print_members($group->members)?>
