@@ -130,10 +130,6 @@ if(isset($loaded_member->rank_date))
 	<script src="<?=base_url('js/signup/clickable_table.js')?>"></script>
 	<script src="<?=base_url('js/signup/mypage.js')?>"></script>
 
-	<?php if(XMAS):?>
-		<link rel="stylesheet" href="<?=base_url('css/holidays/xmas.css')?>">
-	<?php endif?>
-
 	<title>Min sida</title>
 
 	<script>

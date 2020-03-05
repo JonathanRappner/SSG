@@ -12,6 +12,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 		<div class="card-header bg-dark text-white">
 			<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>🎅<?php endif;?>
+			<?php if(CAKE):?>🎂<?php endif;?>
 			Senaste foruminläggen
 		</div>
 

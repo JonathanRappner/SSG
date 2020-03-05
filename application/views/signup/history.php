@@ -15,10 +15,6 @@ $this->current_page = 'history';
 	<!-- Page-specific -->
 	<script src="<?=base_url('js/signup/clickable_table.js')?>"></script>
 
-	<?php if(XMAS):?>
-		<link rel="stylesheet" href="<?=base_url('css/holidays/xmas.css')?>">
-	<?php endif?>
-
 	<title>Historik</title>
 
 </head>

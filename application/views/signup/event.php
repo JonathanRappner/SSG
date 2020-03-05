@@ -34,10 +34,6 @@ foreach($signups as $s)
 	<script src="<?=base_url('js/signup/clickable_table.js')?>"></script>
 	<script src="<?=base_url('js/signup/event.js?0')?>"></script>
 
-	<?php if(XMAS):?>
-		<link rel="stylesheet" href="<?=base_url('css/holidays/xmas.css')?>">
-	<?php endif;?>
-
 	<!-- visa formulär on load -->
 	<script>var show_form = <?=json_encode($show_form)?>;</script>
 

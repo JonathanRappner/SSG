@@ -43,6 +43,16 @@ $preview = $this->preview->get_data();
 <?php if(APRIL_FOOLS):?><link href='https://fonts.googleapis.com/css?family=Gochi%20Hand' rel='stylesheet'><?php endif;?>
 <?php if(APRIL_FOOLS) echo $this->april_fools->style(); ?>
 
+<?php if(XMAS):?>
+	<!-- Jul-tema -->
+	<link rel="stylesheet" href="<?=base_url('css/holidays/xmas.css')?>">
+<?php endif;?>
+
+<?php if(CAKE):?>
+	<!-- Första torsdagen i mars -->
+	<link rel="stylesheet" href="<?=base_url('css/holidays/cake.css')?>">
+<?php endif;?>
+
 <!-- JS-variabler -->
 <script>
 	var base_url = '<?=base_url()?>';

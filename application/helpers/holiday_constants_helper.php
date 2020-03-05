@@ -12,6 +12,15 @@ $earliest_first_advent = strtotime('27 november'); //tidigaste möjliga första 
 $first_advent = strtotime('sunday', $earliest_first_advent); //hitta första söndagen på, eller efter 27/11
 $sixth_jan = strtotime('6 january'); //åttonde januari (en vecka efter nyårsdagen)
 define('XMAS', time() >= $first_advent || time() < $sixth_jan); //efter första advent eller före 6:e jan
-
-
 ///////////////lista ut när treddondagen är
+
+// Första torsdagen i mars
+// Hitta första mars, sedan hitta tidigaste torsdagen
+$first_march = mktime(
+	0, 0, 0, // h, m, s
+	3, // mars
+	1, // första
+	date('Y') // detta året
+);
+$first_thursday = date('Y-m-d', strtotime('thursday', $first_march));
+define('CAKE', date('Y-m-d') == $first_thursday); // är årets första torsdag i mars, idag?

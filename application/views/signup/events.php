@@ -18,10 +18,6 @@ $this->current_page = 'events';
 	<script src="<?=base_url('js/signup/clickable_table.js')?>"></script>
 	<link rel="stylesheet" href="<?=base_url('css/signup/events.css?2')?>">
 
-	<?php if(XMAS):?>
-		<link rel="stylesheet" href="<?=base_url('css/holidays/xmas.css')?>">
-	<?php endif;?>
-
 	<title>SSG Anmälning</title>
 
 </head>

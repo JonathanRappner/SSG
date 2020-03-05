@@ -40,6 +40,17 @@ $preview = $this->preview->get_data();
 <link rel="stylesheet" href="<?=base_url('css/main.css')?>">
 <link rel="stylesheet" href="<?=base_url('css/site/main.css')?>">
 
+<?php if(XMAS):?>
+<!-- Jul-tema -->
+	<link rel="stylesheet" href="<?=base_url('css/holidays/xmas.css')?>">
+	<script src="<?=base_url('js/holidays/xmas.js')?>"></script>
+<?php endif;?>
+
+<?php if(CAKE):?>
+	<!-- Första torsdagen i mars -->
+	<link rel="stylesheet" href="<?=base_url('css/holidays/cake.css')?>">
+<?php endif;?>
+
 <!-- JS-variabler -->
 <script>
 	var base_url = '<?=base_url()?>';
