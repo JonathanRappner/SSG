@@ -1,21 +1,21 @@
-/* --Admin-sidan-- */
+// --Admin-sidan--
 
-/* --Adminpanel Events-- */
+// --Adminpanel Events--
 
-/* events-tabellen */
+// events-tabellen
 #wrapper_events_table{
 	font-size: 0.8rem;
 }
 
-/* redigera & ta bort-knappar */
+// redigera & ta bort-knappar
 .btn_manage a{
 	padding: 0.2rem 0.4rem;
 	font-size: 0.6rem;
 }
 
-/* --Adminpanel Medlemmar-- */
+// --Adminpanel Medlemmar--
 
-/* grupp-box */
+// grupp-box
 #wrapper_members .group_box{
 	text-decoration: none;
 	color: #000;
@@ -23,17 +23,17 @@
 	margin-bottom: 8px;
 }
 
-/* gruppikon rubrik */
+// gruppikon rubrik
 #wrapper_members h6{
 	font-size: 1.2rem;
 }
 
-/* gruppikoner: medlemmar -> huvud-vy */
+// gruppikoner: medlemmar -> huvud-vy
 #wrapper_members img.group_icon{
 	width: 100%;
 }
 
-/* rubrik-ikon: medlemmar -> grupp-vy */
+// rubrik-ikon: medlemmar -> grupp-vy
 img.group_heading_icon{
 	width: 32px;
 	margin-right: 8px;
@@ -41,26 +41,26 @@ img.group_heading_icon{
 	bottom: 4px;
 }
 
-/* rank-ikon override eftersom den ligger till höger om texten här */
+// rank-ikon override eftersom den ligger till höger om texten här
 img.rank_icon{
 	margin: 0 0 0 4px;
 }
 
-/* Globala meddelanden preview-alert */
+// Globala meddelanden preview-alert
 #wrapper_global_alerts_table .alert{
 	padding: .2rem .4rem;
 	margin: 0;
 }
 
-/* Globala meddelanden länkar i preview:n */
+// Globala meddelanden länkar i preview:n
 #wrapper_global_alerts_form div.preview span{
 	font-weight: bold;
 }
 
 
-/* Layouts större än sm */
+// Layouts större än sm
 @media (min-width: 576px) {
-	/* Större text i tabellen i desktop-versionen */
+	// Större text i tabellen i desktop-versionen
 	#wrapper_events_table{
 		font-size: 1rem;
 	}

@@ -6,7 +6,7 @@ body {
 	background-color: #f8f8f8;
 }
 
-/* navbar items */
+// navbar items 
 .navbar-dark .navbar-nav .nav-link {
     color: rgba(255,255,255,.8);
 }
@@ -14,17 +14,17 @@ body {
     color: #212529;
 }
 
-/* mindre padding i card headers */
+// mindre padding i card headers 
 h3.card-header { padding: 0.7rem 1rem; }
 h4.card-header { padding: 0.5rem 0.8rem; }
 
-/* header-länkar */
+// header-länkar 
 .card-header a{ color: #FFF; }
 
-/* Nästa event-title "av Nisse"-text */
+// Nästa event-title "av Nisse"-text 
 h1 small, h2 small, h3 small, h4 small, h5 small{ color: #d4d4d4 !important; }
 
-/* gör btn-primary lite ljusare */
+// gör btn-primary lite ljusare 
 .btn-primary {
 	background-color: #3A99FC !important;
 	border-color: #3A99FC !important;
@@ -34,34 +34,34 @@ h1 small, h2 small, h3 small, h4 small, h5 small{ color: #d4d4d4 !important; }
 	border-color: #007DFF !important;
 }
 
-/* celler som ska kortas ner om de innehåller för mycket text */
+// celler som ska kortas ner om de innehåller för mycket text 
 .truncate {
 	white-space: nowrap;
     overflow: hidden;
 	text-overflow: ellipsis;
 }
 
-/* muspekar-ikon för tabellrader */
+// muspekar-ikon för tabellrader 
 table.clickable tbody tr:hover {
 	cursor: pointer;
 }
 
-/* Tabell grå */
+// Tabell grå 
 tr.grayed{ background-color: #B0B0B0; }
 tr.grayed:hover { color: white; background-color: #858585 !important; }
 
-/* Första raden i en ny grupp */
+// Första raden i en ny grupp 
 tr.new_group_row{
 	border-top:2px solid #CECECE;
 }
 
-/* Avatar i toppraden */
+// Avatar i toppraden 
 #userbox .avatar{
 	max-width: 42px;
 	max-height: 42px;
 }
 
-/* länk till forum-profil */
+// länk till forum-profil 
 #userbox a{
 	color: #FFF;
 	text-decoration: none;

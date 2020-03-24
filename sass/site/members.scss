@@ -1,25 +1,25 @@
-/* text med förklarande tooltip
-abbr är upptagen så vi kör med .hint istället */
+// text med förklarande tooltip
+abbr är upptagen så vi kör med .hint istället 
 .hint{
 	text-decoration: underline dashed gray;
 	cursor: help;
 }
 
-/* subtext till grupp-rubriker */
+// subtext till grupp-rubriker 
 h3 small{
 	font-size: 1rem;
 	color: gray;
 }
 
-/* medlemslista */
+// medlemslista 
 ul.member_list{
-	/* list-style-type: disc; */
+	// list-style-type: disc; 
 	list-style-type: none;
 	padding: 0;
 	margin-left: 1.5rem;
 }
 
-/* medlemmar i medlemslistan */
+// medlemmar i medlemslistan 
 ul.member_list li{
 	
 	font-weight: bold;

@@ -1,26 +1,26 @@
-/* Stylesheet för nyhetssidan/huvudsidan */
+// Stylesheet för nyhetssidan/huvudsidan 
 
-/* varje "box" i högerkolumnen */
+// varje "box" i högerkolumnen 
 #rightcol div.card{
 	margin-bottom: 1.0rem;
 }
 
-/* högerkolumn card-heading */
+// högerkolumn card-heading 
 #rightcol div.card-header{
 	font-weight: bold;
 	padding: 12px;
 }
 
-/* bildspelet */
+// bildspelet 
 #carousel{
-	height: 64px; /* bredd: 411px */
+	height: 64px; // bredd: 411px 
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: 100%;
 	cursor: pointer;
 }
 
-/* vita ssg-loggan */
+// vita ssg-loggan 
 #carousel img{
     width: 40%;
 	opacity: 0.5;
@@ -28,21 +28,21 @@
 }
 #carousel:hover img{ opacity: 0.6; }
 
-/* nyhetsflödet */
+// nyhetsflödet 
 #newsfeed{
-	/* mindre storlek i xs */
+	// mindre storlek i xs 
 	max-height: 300px;
 	overflow: hidden;
 	padding-right: 10px;
 }
 
-/* inbäddad youtube-video */
+// inbäddad youtube-video 
 #newsfeed iframe.youtube{
 	width: 430px;
 	height: 242px;
 }
 
-/* nyhets-artiklar rubrik-undertext */
+// nyhets-artiklar rubrik-undertext 
 div.news_topic .card-header small{
 	color: #FFF;
 	display: block;
@@ -50,31 +50,31 @@ div.news_topic .card-header small{
     font-size: 0.7rem;
 }
 
-/* news topic header */
+// news topic header 
 div.news_topic .card-header{
 	padding: 0.7rem;
 }
 
-/* bilder i nyhets-artiklar */
+// bilder i nyhets-artiklar 
 div.news_topic .card-body img{
 	max-width: 100%;
 	max-height: 400px;
-	/* margin: .5rem 0 1rem 0; */
+	// margin: .5rem 0 1rem 0; 
 }
 
-/* klick-bar lightbox-bild */
+// klick-bar lightbox-bild 
 div.news_topic a.newsfeed_image{
-	/* display: block;
-	text-align: center; */
-	display: none; /* visa inte bilder på mobil */
+	// display: block;
+	text-align: center; 
+	display: none; // visa inte bilder på mobil 
 }
 
-/* pagination för nyhets-artiklar */
+// pagination för nyhets-artiklar 
 #news_pagination nav{
 	margin: 0 auto;
 }
 
-/* vit fadeout-bar som syns längst ner när nyhetsflödet är kollapsat i xs */
+// vit fadeout-bar som syns längst ner när nyhetsflödet är kollapsat i xs 
 div.bottom_fade{
 	display: block;
 	width: 100%;
@@ -85,7 +85,7 @@ div.bottom_fade{
 	z-index: 10;
 }
 
-/* Expandera-knapp */
+// Expandera-knapp 
 div.bottom_fade div.button_wrapper{
 	width: 100%;
 	position: absolute;
@@ -93,7 +93,7 @@ div.bottom_fade div.button_wrapper{
 	text-align: center;
 }
 
-/* Ny post!-bubbla */
+// Ny post!-bubbla 
 div.latest_posts small.new_post{
 	font-size: 0.6rem !important;
     font-weight: bold;
@@ -104,7 +104,7 @@ div.latest_posts small.new_post{
 	white-space: nowrap;
 }
 
-/* community-länkar */
+// community-länkar 
 div.links a{
 	width: 72px;
 	height: 72px;
@@ -116,9 +116,9 @@ div.links a{
 div.links a img { width: 100%; }
 div.links a:hover { text-decoration: none; }
 
-/* sm eller större */
+// sm eller större 
 @media (min-width: 576px) {
-	#carousel{ height: 85px; } /* bredd: 540px */
+	#carousel{ height: 85px; } // bredd: 540px 
 	#newsfeed{ max-height: initial; margin-bottom: 20px; }
 	div.bottom_fade{ display: none; }
 	div.news_topic a.newsfeed_image{ display: block; }
@@ -126,21 +126,21 @@ div.links a:hover { text-decoration: none; }
 	div.links a{ width: 48px; height: 48px; margin-left: 12px; }
 }
 
-/* md */
+// md 
 @media (min-width: 768px) {
-	#carousel{ height: 113px; } /* bredd: 720px */
+	#carousel{ height: 113px; } // bredd: 720px 
 	#newsfeed iframe.youtube{ width: 656px; height: 369px; }
 }
 
-/* lg */
+// lg 
 @media (min-width: 992px){
-	#carousel{ height: 151px; } /* bredd: 960px */
+	#carousel{ height: 151px; } // bredd: 960px 
 	#newsfeed iframe.youtube{ width: 656px; height: 369px; }
 }
 
-/* xl */
+// xl 
 @media (min-width: 1200px){
-	#carousel{ height: 180px; } /* bredd: 1140px */
-	/* inbäddad youtube-video */
+	#carousel{ height: 180px; } // bredd: 1140px 
+	// inbäddad youtube-video 
 	#newsfeed iframe.youtube{ width: 790px; height: 444px; }
 }
