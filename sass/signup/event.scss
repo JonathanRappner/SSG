@@ -29,7 +29,8 @@ div.wrapper_signups_table table{
 
 // event förhandsvisningsbild 
 #event_info div.card-body{
-	background-size: 100%;
+	background-size: cover;
+	background-position: top center;
 	background-repeat: no-repeat;
 }
 

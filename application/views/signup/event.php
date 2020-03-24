@@ -61,12 +61,12 @@ foreach($signups as $s)
 				</h4>
 
 				<?php if(!empty($event->preview_image)):?>
-					<!-- infobox background -->
 					<style>
+						/* infobox bakgrund */
 						#event_info div.card-body{
 							background-image:
 								linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.85), white 75%),
-								url('<?=$event->preview_image?>');
+								url('<?=$event->preview_image_safe?>');
 						}
 					</style>
 				<?php endif?>

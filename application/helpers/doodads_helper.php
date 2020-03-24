@@ -234,7 +234,7 @@ function bbcode_parse($text)
 		'<a href="$1">$2</a>',
 		'<a class="newsfeed_image" href="$1" data-toggle="lightbox"><img src="$1" alt /></a>', //bilder ska inte vara inline
 		'<iframe class="youtube" frameborder="0" src="https://www.youtube.com/embed/$1"></iframe>',
-		'<video autoplay="true" loop="true"><source src="$1" type="video/mp4">Din webbläsare stödjer inte videos.</video>',
+		'<video autoplay loop muted><source src="$1" type="video/mp4">Din webbläsare stödjer inte videos.</video>',
 	);
 
 	return preg_replace($find, $replace, $text);

@@ -22,7 +22,7 @@ class Eventsignup
 	 */
 	public function get_event($event_id)
 	{
-		//variabler
+		// variabler
 		$deadline_time = '00:00:00';
 
 		$sql =
@@ -53,7 +53,12 @@ class Eventsignup
 		$event = $query->row();
 		$event->signups = $this->get_signups_counts($event->id);
 
-		//första april
+		// Gör om imgur-mp4/gif-länkar till thumbnail-jpg:s
+		// "https://i.imgur.com/U5hgCAn.mp4" -> "https://i.imgur.com/U5hgCAnb.jpg"
+		$event->preview_image_safe = preg_replace(array('/(\.mp4)$/i', '/(\.gif)$/i'), 'b.jpg', $event->preview_image);
+
+		
+		// första april
 		if(APRIL_FOOLS)
 			$event->title .= ' '. $this->CI->april_fools->random_emojis($event->title);
 

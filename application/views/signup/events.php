@@ -87,9 +87,13 @@ $this->current_page = 'events';
 				<!-- Förhandsbild-kolumn -->
 				<?php if(!empty($next_event->preview_image)): ?>
 					<div class="col-lg">
-						<a href="<?=$next_event->preview_image?>" data-toggle="lightbox">
-							<img class="img-thumbnail rounded float-right m-2" src="<?=$next_event->preview_image?>" alt="Förhandsbild">
-						</a>
+						<?php if(preg_match('/(\.mp4)$/i', $next_event->preview_image)): // mp4-video?>
+							<video class="img-thumbnail rounded float-right m-2" autoplay loop muted><source src="<?=$next_event->preview_image?>" type="video/mp4"></video>
+						<?php else: // vanlig bild?>
+							<a href="<?=$next_event->preview_image?>" data-toggle="lightbox">
+								<img class="img-thumbnail rounded float-right m-2" src="<?=$next_event->preview_image?>" alt="Förhandsbild">
+							</a>
+						<?php endif;?>	
 					</div><!-- end div.col (högerkolumn) -->
 				<?php endif?>
 
