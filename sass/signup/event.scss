@@ -1,0 +1,66 @@
+/* --Event-sidan-- */
+
+/* vit glow runt text så den syns mot bakgrunden */
+#event_title, #event_info dl{
+	text-shadow: 1px 1px white;
+}
+
+/* Anmäl dig-knappen */
+.btn_signup { font-size: 2rem; }
+.btn_edit { font-size: 1.6rem; }
+
+/* anmälningslänk muspekare */
+#signup_link { cursor: pointer; }
+
+/* Meddelande-kolumnen */
+.column_message{
+	width: auto;
+}
+
+/* Mindre text i tabellen i mobilversionen */
+div.wrapper_signups_table{
+	font-size:0.7rem;
+}
+
+/* ingen overflow-scrollbar tillåten */
+div.wrapper_signups_table table{
+	table-layout:fixed;
+}
+
+/* event förhandsvisningsbild */
+#event_info div.card-body{
+	background-size: 100%;
+	background-repeat: no-repeat;
+}
+
+/* ?-ikon ska vara lika stor i mobil som desktop */
+table i.fas{
+	font-size: 1.0rem;
+}
+
+/* Layouts större än sm */
+@media (min-width: 576px) {
+	/* Större text i tabellen i desktop-versionen */
+	div.wrapper_signups_table{
+		font-size:1rem;
+	}
+}
+
+/* Layouts större än md */
+@media (min-width: 992px){
+	
+	/* tabell */
+	div.wrapper_signups_table{
+		font-size:0.8rem;
+	}
+	
+	/* Meddelande-kolumnen */
+	.column_message{
+		width: 45%;
+	}
+	
+	/* Namn-kolumnen i ej anmälda-tabellen */
+	.column_non_signed_name{
+		width: 15%
+	}
+}

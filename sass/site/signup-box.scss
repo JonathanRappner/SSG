@@ -1,0 +1,41 @@
+/* --Anmälningsrutan-- */
+
+/* titel */
+div.signup_box h2{ font-size: 1.3rem; }
+div.signup_box h2 a{ color: #000; }
+div.signup_box h2 a:hover{ text-decoration: none; }
+
+/* datum/tid */
+div.signup_box p.date{
+	font-size: .8rem;
+	margin: 0;
+}
+
+/* antal anmälda, siffra */
+div.signup_box p.count{ margin: 0; line-height: normal; }
+div.signup_box p.count a{
+	color: #000;
+    font-size: 4rem;
+    font-weight: bold;
+}
+div.signup_box p.count a:hover{ text-decoration: none; }
+
+/* deadline */
+.deadline{
+	font-weight: bold;
+	margin-bottom: 4px;
+}
+
+/* Anmäl dig / Ändra anmälan-knapp */
+div.signup_box a.btn_signup_new,
+div.signup_box a.btn_signup_edit{
+	margin: 6px auto;
+}
+div.signup_box a.btn_signup_new { font-size: 2.0rem; } /* ny anmälan */
+div.signup_box a.btn_signup_edit { font-size: 1.4rem; } /* redigera anmälan */
+
+/* Knappikon */
+div.signup_box a.btn_signup_new i,
+div.signup_box a.btn_signup_edit i{
+	font-size: 1.5rem;
+}

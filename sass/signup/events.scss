@@ -1,0 +1,39 @@
+/* --Events-sidan-- */
+
+/* Nästa event-info */
+#wrapper_next_event dl { font-size: 1.2rem; }
+
+/* Nästa event-rubriker */
+#wrapper_next_event p strong{ margin-right: 4px; }
+
+/* Nästa event-knappar */
+#wrapper_next_event .btn{
+	margin: 0 4px 4px 0;
+}
+
+/* Nästa event-box som inte har preview_image */
+.next_event_no_img{
+	max-width: 500px;
+	margin-left: 0;
+}
+
+/* Mindre text i tabellen i mobilversionen */
+#wrapper_events_table{
+	font-size:0.7rem;
+}
+
+/* Deadline-text */
+#deadline{
+	font-weight: bold;
+}
+
+/* anmälnings-knapparna */
+#btn_signup { font-size: 2rem; }
+#btn_edit { font-size: 1.6rem; }
+
+
+/* Layouts större än sm */
+@media (min-width: 576px) {
+	/* Större text i tabellen i desktop-versionen */
+	#wrapper_events_table{ font-size:1rem; }
+}

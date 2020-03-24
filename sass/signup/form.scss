@@ -1,0 +1,15 @@
+/* 
+ * Anmälningsformulär
+ * Kan även laddas på andra sidor som använder form-modal-popup:en.
+*/
+
+/* innre wrapper för form endast i form-vyn */
+#wrapper_form_inner{
+	max-width:600px;
+	margin: 0 auto;
+}
+
+/* radio button-rader */
+.ssg_form .custom-radio{
+	margin-bottom: 4px;
+}

@@ -1,0 +1,144 @@
+/* --Chat-rutan-- */
+
+/* Wrapper */
+#chat{
+	height: 220px;
+	margin-right: 14px;
+}
+
+/* top-right icons/buttons wrapper */
+#chat div.status{
+	position: absolute;
+	right: 18px;
+	top: 0;
+	z-index: 10;
+}
+
+/* ajax-loading-animation */
+#loading-animation{
+	width: 1.6rem;
+    height: 1.6rem;
+	display: none;
+}
+
+/* refresh-knappen som syns efter man skrollat ner */
+#btn_refresh{
+	display: none;
+	box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25);
+}
+
+
+/* meddelande-listan */
+div.chat-list{
+	width: 100%; /* behövs när chat-listan är tom */
+	height: 162px;
+	padding: 0 0 0 5px;
+	margin: 0;
+	overflow-y: scroll;
+	font-size: 0.8rem;
+}
+
+/* meddelande-rad */
+div.chat-list div.chat_row{
+	width: 100%;
+	border-bottom: 1px dashed rgb(216, 216, 216);
+	list-style-type: none;
+	padding: 3px 0;
+}
+div.chat-list div.chat_row:hover{ background-color:rgb(245, 245, 245); }
+
+/* namn-länk */
+div.chat-list div.chat_row a{
+	color: #000;
+	font-weight: bold;
+}
+
+/* datum-text */
+div.chat-list p.timespan{
+	color:rgb(167, 167, 167);
+	font-size: 0.6rem;
+	margin: 0 0 0 2px;
+}
+
+/* vänsterkolumnen i varje meddelanderad */
+div.chat_row div.message_left{
+}
+
+/* högerkolumnen i varje meddelanderad */
+div.chat_row div.message_right{
+	padding-right: 0;
+}
+
+/* edit/delete-knapparna */
+div.chat_row div.message_right button{
+	font-size: .6rem !important;
+	height: 22px !important;
+	padding: 2px 4px !important;
+}
+
+
+
+
+
+
+/* input-raden */
+#input_row{
+	height: 30px;
+	padding-top: 4px;
+}
+
+/* länk i chatmeddelande, hakparenteserna */
+#chat span.link{
+	font-weight: bold;
+}
+
+/* länk i chatmeddelande */
+#chat span.link a{ color: #007bff; }
+/* #chat span.link a:visited{ color: #00448B; } */
+
+
+/* font-storlek på input-raden */
+#chat .input-group input,
+#chat .btn{
+	font-size: .8rem;
+	padding: 4px 8px;
+	height: 30px;
+}
+
+/* text-input */
+#chat .input-group input{
+	height: 30px;
+}
+
+/* formatting-info-knappen */
+#btn_info{
+	width:32px;
+}
+
+/* emoji-picker-knappen */
+#btn_emoji{
+	font-size: 1rem !important;
+    padding: 0 8px !important;
+}
+
+/* skicka-knappen */
+/* #btn_send{
+} */
+
+/* skicka-knapp och spara-knapp loading animation */
+#btn_send div.spinner-border,
+#btn_save div.spinner-border{
+	display: none;
+}
+
+/* göm spara/avbryt-knapparna by default */
+#btn_save,
+#btn_abort{
+	display: none;
+}
+
+/* text-formaterings-tooltip */
+ul.formatting_popover{
+	padding-left: 12px;
+	margin: 0 8px 8px 8px;
+}
