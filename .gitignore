@@ -1,25 +1,27 @@
-#development
+# development
 _stuff/
 tests/
 forum/
-old/
 todo.txt
 application/config/development
-index.live.php
 
-#config files
+# config files
 application/config/database.php
 application/helpers/api_keys_helper.php
 
-#logs
+# logs
 application/logs
 
-#vscode
+# vscode
 *.code-workspace
 *.editorconfig
 .vscode
 
-#stuff
+# sass
+css/*
+*.map
+
+# stuff
 images/carousel/
 images/rank_icons/
 images/arma3_sync_manual/
