@@ -9,6 +9,7 @@ setlocale(LC_ALL, 'sv_SE'); //så att strftime() ger svenska strings
 $day_string = utf8_encode(strftime("%A", strtotime($event->start_date))); //måndag, tisdag, osv.
 $message_max_length = 50;
 $is_admin = $this->permissions->has_permissions(array('s0', 's1', 'grpchef')); //om true = gör tabeller clickable
+$is_gsu = $event->type_id == 5; // om event är GSU/ASU: visa annorlunda formulär
 
 //signup-variabler
 $this->member_not_signed = empty($signup); //har medlemmen anmält sig till detta event?
@@ -28,8 +29,8 @@ foreach($signups as $s)
 	<?php $this->load->view('signup/sub-views/head')?>
 
 	<!-- Page-specific -->
-	<link rel="stylesheet" href="<?=base_url('css/signup/event.css?2')?>">
-	<link rel="stylesheet" href="<?=base_url('css/signup/event_stats.css?0')?>">
+	<link rel="stylesheet" href="<?=base_url('css/signup/event.css')?>">
+	<link rel="stylesheet" href="<?=base_url('css/signup/event_stats.css')?>">
 	<link rel="stylesheet" href="<?=base_url('css/signup/form.css')?>">
 	<script src="<?=base_url('js/signup/clickable_table.js')?>"></script>
 	<script src="<?=base_url('js/signup/event.js?0')?>"></script>
@@ -51,7 +52,7 @@ foreach($signups as $s)
 	<div id="row_event_top" class="row mb-4">
 		
 		<!-- Titel & knappar -->
-		<div id="event_info" class="col-lg mb-3 mb-lg-0">
+		<div id="event_info" class="col-lg-6 mb-3 mb-lg-0">
 
 			<div class="card border-0 shadow-sm">
 
@@ -132,10 +133,12 @@ foreach($signups as $s)
 
 		</div>
 
+		<?php if(!$is_gsu):?>
 		<!-- Statistik -->
 		<div class="col-lg">
 			<?php $this->load->view('signup/sub-views/event_stats', array('stats'=>$advanced_stats, 'non_signed'=>count($non_signups), 'obligatory'=>$event->obligatory, 'is_old'=>$event->is_old))?>
 		</div>
+		<?php endif;?>
 
 	</div>
 
@@ -293,11 +296,10 @@ foreach($signups as $s)
 						</button>
 					</div>
 
-					
-						<div class="modal-body">
-							<!-- Formulär -->
-							<?php $this->load->view('signup/sub-views/form', array('event' => $event, 'signup' => $signup))?>
-						</div>
+					<div class="modal-body">
+						<!-- Formulär -->
+						<?php $this->load->view('signup/sub-views/form', array('event' => $event, 'signup' => $signup))?>
+					</div>
 				</div>
 			</div>
 		</div>
