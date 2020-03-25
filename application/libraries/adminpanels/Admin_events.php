@@ -117,10 +117,7 @@ class Admin_events implements Adminpanel
 		$member_options = null;
 		foreach($members as $id => $name)
 		{
-			if(
-				(!$is_new && $id == $this->event->author_id) //edit = select:a author_id
-				|| ($is_new && $id == $this->CI->member->id) //new = select:a inloggad medlem
-			)
+			if(!$is_new && $id == $this->event->author_id) //edit = select:a author_id
 				$selected = 'selected';
 			else
 				$selected = null;
@@ -440,4 +437,3 @@ class Admin_events implements Adminpanel
 		return array('s0', 's2', 's3', 's4');
 	}
 }
-?>
