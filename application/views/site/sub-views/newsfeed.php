@@ -23,8 +23,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				? "<small>postat av {$topic->poster_name}, {$topic->date}</small>"
 				: null;
 			$heading = $allow_links
-				? "<h3 class='card-header bg-dark'><a href='{$article_link}' class='text-white'>{$topic->title}</a>{$heading_small}</h3>"
-				: "<h3 class='card-header bg-dark text-white'>{$topic->title}{$heading_small}</h3>";
+				? "<h3 class='card-header bg-dark'><a href='{$article_link}' class='text-white'>{$topic->title}". (APRIL_FOOLS ? ' '.$this->april_fools->random_emojis(microtime()) : null) ."</a>{$heading_small}</h3>"
+				: "<h3 class='card-header bg-dark text-white'>{$topic->title}". (APRIL_FOOLS ? ' '. $this->april_fools->random_emojis(microtime()) : null) ."{$heading_small}</h3>";
 		?>
 		<div class="news_topic card mb-4 bg-white border-0 shadow-sm w-100">
 			

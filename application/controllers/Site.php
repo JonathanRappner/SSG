@@ -12,6 +12,10 @@ class Site extends CI_Controller
 		//hämta globala meddelanden
 		$this->load->model('site/global_alerts');
 		$this->global_alerts = $this->global_alerts->get_alerts();
+		
+		//första april
+		if(APRIL_FOOLS)
+			$this->load->library('holidays/april_fools');
 	}
 
 	public function index()

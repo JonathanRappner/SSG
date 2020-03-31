@@ -22,9 +22,9 @@ if(isset($event_id))
 
 		<!-- Header -->
 		<div class="card-header bg-dark text-white">
-			<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>🎄<?php endif;?>
-			<?php if(CAKE):?>🍰<?php endif;?>
-			Nästa event
+			<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>🎄
+			<?php elseif(CAKE):?>🍰<?php endif;?>
+			Nästa event <?php if(APRIL_FOOLS) echo $this->april_fools->random_emojis(microtime())?>
 		</div>
 
 		<!-- Body -->
@@ -60,9 +60,13 @@ if(isset($event_id))
 				<div class="row mb-2">
 
 					<?php if($signed):?>
-						<a class="btn_signup_edit btn btn-primary" href="<?=base_url("signup/event/{$event_id}/showform")?>">Ändra anmälan <i class="fas fa-edit"></i></a>
+						<a class="btn_signup_edit btn btn-primary" href="<?=base_url("signup/event/{$event_id}/showform")?>">
+							Ändra anmälan <?php if(APRIL_FOOLS) echo $this->april_fools->random_emojis(microtime(), 1)?><i class="fas fa-edit"></i>
+						</a>
 					<?php elseif($logged_in && $user_is_member):?>
-						<a class="btn_signup_new btn btn-success" href="<?=base_url("signup/event/{$event_id}/showform")?>">Anmäl dig <i class="fas fa-chevron-right"></i></a>
+						<a class="btn_signup_new btn btn-success" href="<?=base_url("signup/event/{$event_id}/showform")?>">
+							Anmäl dig <?php if(APRIL_FOOLS) echo $this->april_fools->random_emojis(microtime(), 1)?><i class="fas fa-chevron-right"></i>
+						</a>
 					<?php endif;?>
 
 				</div>

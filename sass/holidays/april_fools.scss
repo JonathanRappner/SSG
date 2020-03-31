@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Gochi+Hand');
+
+* {
+	font-family: "Gochi Hand";
+}
+
+a:hover {
+	color: red !important;
+	background: linear-gradient(to bottom right, orange , yellow, green, cyan, blue, violet) !important;
+}
+
+#chat .message_left,
+.latest_posts a{
+	font-size: 1.1rem !important;
+}

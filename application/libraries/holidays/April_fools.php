@@ -24,10 +24,7 @@ class April_fools
 	 */
 	public function style()
 	{
-		echo '<style>';
-			echo '* { font-size: 1.2rem; font-family: "Gochi Hand", "Comic Sans MS"; }';
-			echo 'a:hover { color: red !important; background: linear-gradient(to bottom right, orange , yellow, green, cyan, blue, violet) !important; }';
-		echo '</style>';
+		echo '<link rel="stylesheet" href="'. base_url('css/holidays/april_fools.css') .'">';
 	}
 
 	/**
