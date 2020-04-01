@@ -111,6 +111,16 @@ class Site extends CI_Controller
 		$this->load->view('site/emblem', array('global_alerts' => $this->global_alerts));
 	}
 
+	public function murkel()
+	{
+		$this->load->library('april_fools');
+		
+		echo '<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">';
+		echo '<h1>Murkels hörna</h1>';
+		echo '<h1>'. $this->april_fools->random_emojis(microtime(), 3) .'</h2>';
+		echo '<a href="murkel" class="btn btn-success mt-4">Ladda om</a>';
+	}
+
 	public function logout()
 	{
 		$this->session->sess_destroy(); //förstör codeigniter-session
