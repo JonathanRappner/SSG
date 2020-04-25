@@ -34,25 +34,31 @@
 	max-height: 300px;
 	overflow: hidden;
 	padding-right: 10px;
+
+	// inbäddad youtube-video 
+	iframe.youtube{
+		width: 430px;
+		height: 242px;
+	}
+
+	// embedded video
+	video{
+		width: 100%;
+	}
 }
 
-// inbäddad youtube-video 
-#newsfeed iframe.youtube{
-	width: 430px;
-	height: 242px;
-}
-
-// nyhets-artiklar rubrik-undertext 
-div.news_topic .card-header small{
-	color: #FFF;
-	display: block;
-	margin-left: .2rem;
-    font-size: 0.7rem;
-}
 
 // news topic header 
 div.news_topic .card-header{
 	padding: 0.7rem;
+	
+	// nyhets-artiklar rubrik-undertext 
+	small{
+		color: #FFF;
+		display: block;
+		margin-left: .2rem;
+		font-size: 0.7rem;
+	}
 }
 
 // bilder i nyhets-artiklar 
