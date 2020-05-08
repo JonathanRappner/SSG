@@ -77,7 +77,8 @@ class Admin_events implements Adminpanel
 		//js
 		echo 
 			'<script src="'. base_url('js/signup/form_validation.js') .'"></script>
-			<script src="'. base_url('js/signup/adminpanels/events.js') .'"></script>';
+			<script src="'. base_url('js/signup/adminpanels/events.js') .'"></script>
+			<script src="'. base_url('js/admin/events.js') .'"></script>';
 
 		if($this->view == 'delete_confirm') //delete confirmation-vy
 		{
