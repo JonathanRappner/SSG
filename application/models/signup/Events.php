@@ -15,10 +15,22 @@ class Events extends CI_Model
 	/**
 	 * Hitta event_id för nästa obligatoriska event.
 	 *
+	 * @param array $permission_groups Den inloggade medlemmns permission groups $member->permission_groups
 	 * @return int Null om inget framtida event hittats.
 	 */
-	public function get_next_event_id()
+	public function get_next_event_id($permission_groups = null)
 	{
+		// Variabler
+		$see_gsu = false;
+		if($permission_groups)
+			foreach($permission_groups as $group)
+				if($group->id == 12 || $group->id == 14)
+					$see_gsu = true;
+		$where_clause = $see_gsu
+			? 'AND (ssg_event_types.display OR ssg_events.type_id = 5)' // visa events med display = 1 eller av typen GSU/ASU
+			: 'AND ssg_event_types.display'; // visa endast events med display = 1
+
+		// Exekvera
 		$sql =
 			'SELECT ssg_events.id
 			FROM ssg_events
@@ -26,7 +38,7 @@ class Events extends CI_Model
 				ON ssg_events.type_id = ssg_event_types.id
 			WHERE
 				ADDTIME(start_datetime, length_time) >= NOW()
-				AND ssg_event_types.display
+				'. $where_clause .'
 			ORDER BY start_datetime ASC
 			LIMIT 1';
 		$row = $this->db->query($sql)->row();

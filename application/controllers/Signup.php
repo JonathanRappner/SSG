@@ -37,7 +37,7 @@ class Signup extends CI_Controller
 		$this->load->model('signup/Events');
 
 		//nästa event
-		$next_event_id = $this->Events->get_next_event_id();
+		$next_event_id = $this->Events->get_next_event_id($this->member->valid ? $this->member->permission_groups : null);
 
 		//om det inte finns ett nästa event
 		if($next_event_id)

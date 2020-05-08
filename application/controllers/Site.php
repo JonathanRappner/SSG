@@ -60,7 +60,7 @@ class Site extends CI_Controller
 			(
 				'news' => $news,
 				'page' => $page,
-				'next_event' => $this->signup_box->get_upcomming_event(),
+				'next_event' => $this->signup_box->get_upcomming_event($this->member->valid ? $this->member->permission_groups : null),
 				'attendance_types' => $attendance_types,
 				'chat_messages' => $chat_messages,
 				'earliest_message_id' => $earliest_message_id,
