@@ -31,20 +31,23 @@ class Signup extends CI_Controller
 	{
 		if(!$this->check_login()) return;
 
+		// Inloggade medlemmens permission groups
+		$permission_groups = $this->member->valid ? $this->member->permission_groups : null;
+
 		//moduler
 		$this->load->library('attendance');
 		$this->load->library('eventsignup');
 		$this->load->model('signup/Events');
 
 		//nästa event
-		$next_event_id = $this->Events->get_next_event_id($this->member->valid ? $this->member->permission_groups : null);
+		$next_event_id = $this->Events->get_next_event_id($permission_groups);
 
 		//om det inte finns ett nästa event
 		if($next_event_id)
 		{
 			$next_event = $this->eventsignup->get_event($next_event_id);
 			$next_event->member_attendance = $this->eventsignup->get_member_attendance($next_event_id, $this->member->id); //nuvarande inloggadde medlem närvaro
-			$upcoming_events = $this->Events->get_upcoming_events();
+			$upcoming_events = $this->Events->get_upcoming_events($next_event_id);
 
 			//ladda vy
 			$this->load->view('signup/events', array(

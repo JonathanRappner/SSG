@@ -49,13 +49,12 @@ class Events extends CI_Model
 	/**
 	 * Hämta framtida events (förutom nästa obligatoriska event)
 	 *
-	 * @param bool $include_next_event Inkludera nästa obligatoriska event?
+	 * @param bool $next_event_id Exkludera detta event från listan.
 	 * @return array Objekt-array.
 	 */
-	public function get_upcoming_events()
+	public function get_upcoming_events($next_event_id)
 	{
 		//variabler
-		$next_event_id = $this->get_next_event_id();
 		$max_results = 10;
 		
 		//hämta events
