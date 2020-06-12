@@ -68,13 +68,6 @@ class News extends CI_Model
 			if(strlen($topic->text) > $text_max_length)
 				$topic->text = mb_substr($topic->text, 0, $text_max_length) .'...';
 
-			//ta bort specifik bbcode
-			$topic->text = str_replace(
-				array('[center]', '[/center]'),
-				null,
-				$topic->text
-			);
-
 			//parse:a bbcode till html
 			$topic->text = bbcode_parse($topic->text); //helper-funktion
 		}

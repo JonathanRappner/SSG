@@ -212,11 +212,13 @@ function bbcode_parse($text)
 		'~\[size=(.*?)\](.*?)\[/size\]~s',
 		'~\[font="(.*?)"\](.*?)\[/font\]~s',
 		'~\[color=(.*?)\](.*?)\[/color\]~s',
+		'~\[center\](.*?)\[/center\]~s',
 		'~\[url\]((?:ftp|https?)://.*?)\[/url\]~s',
 		'~\[url=(.+?)\](.+?)\[\/url\]~s',
 		'~\[img\](https?://.+?)\[/img\]~s',
 		'~\[media\](?:https:\/\/www.youtube.com\/watch\?v=)(.+)\[/media\]~s',
 		'~\[video\](https?://.+?)\[/video\]~s',
+		'/8\)/',
 	);
 
 	$replace = array(
@@ -230,11 +232,13 @@ function bbcode_parse($text)
 		'<span style="font-size:2rem;">$2</span>', //alt: '<span style="font-size:$1px;">$2</span>'
 		'<span style="font-family:\'$1\'">$2</span>',
 		'<span style="color:$1;">$2</span>',
+		'<span style="display:inline-block;width:100%;text-align:center;">$1</span>',
 		'<a href="$1">$1</a>',
 		'<a href="$1">$2</a>',
 		'<a class="newsfeed_image" href="$1" data-toggle="lightbox"><img src="$1" alt /></a>', //bilder ska inte vara inline
 		'<iframe class="youtube" frameborder="0" src="https://www.youtube.com/embed/$1"></iframe>',
 		'<video autoplay loop muted><source src="$1" type="video/mp4">Din webbläsare stödjer inte videos.</video>',
+		'😎',
 	);
 
 	return preg_replace($find, $replace, $text);
