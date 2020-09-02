@@ -109,6 +109,7 @@ class Admin_ranks implements Adminpanel
 					echo '<tr>';
 						echo '<th scope="col">Namn</th>';
 						echo '<th scope="col">Ikon</th>';
+						echo '<th scope="col">Sortering</th>';
 						echo '<th scope="col">Antal bumpningar</th>';
 						echo '<th scope="col">Ta bort</th>';
 					echo '</tr>';
@@ -126,6 +127,11 @@ class Admin_ranks implements Adminpanel
 								//Ikon
 								echo '<td>';
 									echo '<img src="'. base_url('images/rank_icons/'. $rank->icon) .'" height="20">';
+								echo '</td>';
+							
+								//Sortering
+								echo '<td>';
+									echo $rank->sorting;
 								echo '</td>';
 							
 								//Antal bumpningar
@@ -217,7 +223,7 @@ class Admin_ranks implements Adminpanel
 	{
 		$sql =
 			'SELECT
-				r.id, name, icon,
+				r.id, name, icon, sorting,
 				COUNT(p.rank_id) AS promotions_count
 			FROM ssg_ranks r
 			LEFT OUTER JOIN ssg_promotions p
