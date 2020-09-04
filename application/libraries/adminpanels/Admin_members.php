@@ -53,7 +53,7 @@ class Admin_members implements Adminpanel
 		else if($this->view == 'member') //medlems-vy
 		{
 			assert(is_numeric($var2), "Inkorrekt medlems-id: $var2");
-			$this->ranks = $this->CI->db->query('SELECT id, name FROM ssg_ranks ORDER BY sorting ASC')->result();
+			$this->ranks = $this->CI->db->query('SELECT id, name FROM ssg_ranks WHERE NOT obsolete ORDER BY sorting ASC')->result();
 			$this->member_id = $var2;
 			$this->loaded_member = $this->CI->member->get_member_data($this->member_id);
 			$this->promotions = $this->get_promotions($this->member_id);
@@ -540,7 +540,7 @@ class Admin_members implements Adminpanel
 				FROM ssg_promotions proms
 				INNER JOIN ssg_ranks ranks
 					ON proms.rank_id = ranks.id
-				WHERE proms.member_id = ?
+				WHERE proms.member_id = ? AND
 				ORDER BY date DESC
 				LIMIT 1';
 			$query = $this->CI->db->query($sql, $member->id);

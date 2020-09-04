@@ -35,7 +35,7 @@ class Admin_ranks implements Adminpanel
 		else if($this->view == 'edit') //formulär: redigera
 		{
 			$this->rank_id = $var2;
-			$this->rank = $this->CI->db->query('SELECT id, name, icon, sorting FROM ssg_ranks WHERE id = ?', $this->rank_id)->row();
+			$this->rank = $this->CI->db->query('SELECT id, name, icon, obsolete, sorting FROM ssg_ranks WHERE id = ?', $this->rank_id)->row();
 			$this->icons = $this->get_icons();
 		}
 		else if($this->view == 'delete_confirm') //bekräfta borttagning
@@ -111,6 +111,7 @@ class Admin_ranks implements Adminpanel
 						echo '<th scope="col">Ikon</th>';
 						echo '<th scope="col">Sortering</th>';
 						echo '<th scope="col">Antal bumpningar</th>';
+						echo '<th scope="col">Förlegad</th>';
 						echo '<th scope="col">Ta bort</th>';
 					echo '</tr>';
 				echo '</thead><tbody>';
@@ -121,7 +122,9 @@ class Admin_ranks implements Adminpanel
 							
 								//Namn
 								echo '<td class="font-weight-bold" scope="row">';
-									echo $rank->name;
+									echo $rank->obsolete
+										? "<span class=\"text-secondary\">$rank->name</span>"
+										: $rank->name;
 								echo '</td>';
 							
 								//Ikon
@@ -137,6 +140,13 @@ class Admin_ranks implements Adminpanel
 								//Antal bumpningar
 								echo '<td>';
 									echo $rank->promotions_count;
+								echo '</td>';
+							
+								//Förlegad
+								echo '<td>';
+									echo $rank->obsolete
+										? '<span class="text-success font-weight-bold">Ja</span>'
+										: '<span class="text-danger font-weight-bold">Nej</span>';
 								echo '</td>';
 							
 								//Ta bort
@@ -209,6 +219,14 @@ class Admin_ranks implements Adminpanel
 					echo '<input type="number" id="input_sorting" name="sorting" class="form-control" value="'. ($is_new ? 0 : $this->rank->sorting) .'" min="0" required>';
 				echo '</div>';
 
+				//Förlegad
+				echo '<div class="form-group form-check row">';
+					echo '<input class="form-check-input" type="checkbox" value="1" '. (!$is_new && $this->rank->obsolete ? 'checked' : null) .' id="obsolete" name="obsolete">';
+					echo '<label class="form-check-label" for="obsolete" title="En förlegad grad används inte längre men måste finnas kvar i systemet eftersom den har använts i tidigare bumpningar." data-toggle="tooltip">';
+						echo 'Förlegad <i class="fas fa-question-circle"></i>';
+					echo '</label>';
+				echo '</div>';
+
 				//Tillbaka
 				echo '<a href="'. base_url('signup/admin/ranks') .'" class="btn btn-primary">&laquo; Tillbaka</a> ';
 
@@ -223,13 +241,15 @@ class Admin_ranks implements Adminpanel
 	{
 		$sql =
 			'SELECT
-				r.id, name, icon, sorting,
+				r.id, name, icon, sorting, obsolete,
 				COUNT(p.rank_id) AS promotions_count
 			FROM ssg_ranks r
 			LEFT OUTER JOIN ssg_promotions p
 				ON r.id = p.rank_id
 			GROUP BY r.id
-			ORDER BY sorting ASC';
+			ORDER BY
+				obsolete ASC,
+				sorting ASC';
 		return $this->CI->db->query($sql)->result();
 	}
 
@@ -241,7 +261,11 @@ class Admin_ranks implements Adminpanel
 		$icons = scandir($folder);
 
 		foreach($icons as $icon)
-			if(!is_dir($folder . $icon))
+			if(
+				!is_dir($folder . $icon)
+				&& $icon != 'index.php'
+				&& !preg_match('/^old_.*/', $icon) // ignorera bilder som börjar på "old_"
+			)
 				$output[] = $icon;
 		
 		return $output;
@@ -283,6 +307,7 @@ class Admin_ranks implements Adminpanel
 		$data = array(
 			'name' => $vars->name,
 			'icon' => $vars->icon,
+			'obsolete' => isset($vars->obsolete) && $vars->obsolete,
 			'sorting' => $vars->sorting,
 		);
 		$this->CI->db->insert('ssg_ranks', $data);
@@ -300,6 +325,7 @@ class Admin_ranks implements Adminpanel
 		$data = array(
 			'name' => $vars->name,
 			'icon' => $vars->icon,
+			'obsolete' => isset($vars->obsolete) && $vars->obsolete,
 			'sorting' => $vars->sorting,
 		);
 		$this->CI->db->where('id', $vars->id)->update('ssg_ranks', $data);
