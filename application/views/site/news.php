@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //variabler
 $this->current_page = 'news';
 $user_is_member = $this->permissions->has_permissions(array('rekryt', 'medlem', 'inaktiv'));
-$carousel_images = glob('images/carousel/*.jpg');
+$carousel_images = glob('images/carousel/*.webp');
 shuffle($carousel_images);
 
 ?><!DOCTYPE html>
