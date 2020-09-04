@@ -540,7 +540,7 @@ class Admin_members implements Adminpanel
 				FROM ssg_promotions proms
 				INNER JOIN ssg_ranks ranks
 					ON proms.rank_id = ranks.id
-				WHERE proms.member_id = ? AND
+				WHERE proms.member_id = ?
 				ORDER BY date DESC
 				LIMIT 1';
 			$query = $this->CI->db->query($sql, $member->id);
