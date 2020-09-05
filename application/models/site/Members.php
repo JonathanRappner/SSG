@@ -51,7 +51,18 @@ class Members extends CI_Model
 		$sql =
 			'SELECT
 				m.id, u.username AS name, m.phpbb_user_id, m.is_active,
-				IF(r.name_long IS NULL, r.name, r.name_long) AS role_name
+				IF(r.name_long IS NULL, r.name, r.name_long) AS role_name,
+				(
+					SELECT ssg_ranks.sorting
+					FROM ssg_promotions
+					INNER JOIN ssg_ranks
+						ON ssg_promotions.rank_id = ssg_ranks.id
+					WHERE member_id = m.id
+					ORDER BY
+						date DESC,
+						ssg_promotions.id DESC
+					LIMIT 1
+				) AS rank_sorting
 			FROM ssg_members m
 			LEFT OUTER JOIN ssg_roles r
 				ON m.role_id = r.id
@@ -61,7 +72,8 @@ class Members extends CI_Model
 				m.group_id = ?
 			ORDER BY
 				m.is_active DESC,
-				r.id IS NULL ASC, #medlemmar utan befattning hamnar sist
+				r.id = NULL ASC, #medlemmar utan befattning hamnar sist
+				rank_sorting DESC,
 				r.sorting ASC,
 				m.id ASC';
 		$members = $this->db->query($sql, array($group_id))->result();
