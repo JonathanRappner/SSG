@@ -81,7 +81,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							<span class="text-nowrap"><strong><?=$this->member->name;?></strong></span>
 
 							<!-- Grad -->
-							<?php if(isset($this->member->rank_id)) echo rank_icon($this->member->rank_icon, $this->member->rank_name)?>
+							<?php if(isset($this->member->rank_id)) echo rank_icon($this->member->rank_icon, $this->member->rank_name, true)?>
 
 							<!-- Avatar -->
 							<img class='avatar rounded' src='<?=($this->member->avatar_url ? $this->member->avatar_url : base_url('images/unknown.png'))?>' alt='Avatar'>

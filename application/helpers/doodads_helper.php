@@ -110,11 +110,11 @@ function group_icon($group_code, $group_name = null, $big = false)
 
 	if($group_code != null && !in_array($group_code, $no_icon))
 	{
-		if(!$big) //16px
+		if(!$big) // 16px
 			return
 				"<img class=\"group_icon_16 d-none d-md-inline\" src=\"{$icon_string_start}_16.png\" {$tooltip_string} />
 				<img class=\"group_icon_16 d-inline d-md-none\" src=\"{$icon_string_start}_32.png\" {$tooltip_string} />";
-		else //32px
+		else // 32px
 			return "<img class=\"group_icon_32 d-inline\" src=\"{$icon_string_start}_32.png\" {$tooltip_string} />";
 	}
 	else
@@ -128,14 +128,18 @@ function group_icon($group_code, $group_name = null, $big = false)
  * @param string $rank_name Gradtitel. Ex: "Menig Klass I"
  * @return string HTML-kod
  */
-function rank_icon($rank_icon, $rank_name)
+function rank_icon($rank_icon, $rank_name, $big = false)
 {
 	if(!$rank_icon) $rank_icon = 'inaktiv.png';
 	if(!$rank_name) $rank_name = 'Inaktiv';
 
-	return 
-		'<img class="rank_icon d-none d-md-inline" src="'. base_url('images/rank_icons/16/'. $rank_icon) .'" title="'. $rank_name .'" data-toggle="tooltip" />
-		<img class="rank_icon d-inline d-md-none" src="'. base_url('images/rank_icons/'. $rank_icon) .'" title="'. $rank_name .'" data-toggle="tooltip" />';
+	if(!$big) // 16px
+		return
+			'<img class="rank_icon_16 d-none d-md-inline" src="'. base_url('images/rank_icons/16/'. $rank_icon) .'" title="'. $rank_name .'" data-toggle="tooltip" />
+			<img class="rank_icon_16 d-inline d-md-none" src="'. base_url('images/rank_icons/'. $rank_icon) .'" title="'. $rank_name .'" data-toggle="tooltip" />';
+		else // 48px
+			return
+				'<img class="rank_icon_48 d-inline" src="'. base_url('images/rank_icons/'. $rank_icon) .'" title="'. $rank_name .'" data-toggle="tooltip" />';
 }
 
 /**
