@@ -14,7 +14,6 @@ h6 { font-size: 1rem; }
 
 // Gradikon i toppraden 
 #userbox img.rank_icon{
-	width: 40px;
 	margin-left: 0;
 }
 
@@ -22,8 +21,8 @@ h6 { font-size: 1rem; }
 img.group_icon_16{
 	width: 16px;
 	margin-right: 3px;
-    position: relative;
-    bottom: 2px;
+	position: relative;
+	bottom: 2px;
 	left: 0px;
 }
 
@@ -31,27 +30,24 @@ img.group_icon_16{
 img.group_icon_32{
 	width: 32px;
 	margin-right: 6px;
-    position: relative;
-    bottom: 2px;
+	position: relative;
+	bottom: 2px;
 	left: 0px;
 }
 
 // Gradikon 
 img.rank_icon_16{
 	height: 16px;
-    margin-right: 4px;
-    position: relative;
-    bottom: 2px;
-    left: 0px;
+	margin-left: 4px;
+	position: relative;
+	bottom: 2px;
+	left: 0px;
 }
 
 // Gradikon, stor 
 img.rank_icon_48{
-	width: 32px;
-    margin-left: 4px;
-    position: relative;
-    bottom: 4px;
-    left: 0px;
+	width: 40px;
+	margin-left: 4px;
 }
 
 // Alerts 

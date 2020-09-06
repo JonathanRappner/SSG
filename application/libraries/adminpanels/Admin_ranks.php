@@ -129,7 +129,7 @@ class Admin_ranks implements Adminpanel
 							
 								//Ikon
 								echo '<td>';
-									echo '<img src="'. base_url('images/rank_icons/'. $rank->icon) .'" height="20">';
+									echo rank_icon($rank->icon, null);
 								echo '</td>';
 							
 								//Sortering
@@ -208,7 +208,7 @@ class Admin_ranks implements Adminpanel
 						echo 'Förandsvisning';
 						echo ' <small>Ikoner ska placeras i '. base_url('images/rank_icons') .'</small>';
 					echo '</label>';
-					echo '<div><img id="rank_icon" src=""></div>';
+					echo '<div><img id="rank_icon_48" src=""><img id="rank_icon_16" src="" class="ml-1"></div>';
 				echo '</div>';
 				
 				//Sortering

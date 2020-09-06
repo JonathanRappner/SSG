@@ -12,6 +12,6 @@ $(document).ready(function()
 
 function update_rank_icon(icon)
 {
-	var icon_url = base_url + "images/rank_icons/" + icon;
-	$("#rank_icon").attr('src', icon_url);
+	$("#rank_icon_48").attr('src', base_url + "images/rank_icons/" + icon);
+	$("#rank_icon_16").attr('src', base_url + "images/rank_icons/16/" + icon);
 }

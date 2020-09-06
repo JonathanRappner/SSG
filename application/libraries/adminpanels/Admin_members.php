@@ -235,7 +235,7 @@ class Admin_members implements Adminpanel
 							echo '<td scope="row">';
 								echo "<strong>$member->name</strong>";
 								echo isset($member->rank_name)
-									? '<img class="rank_icon" src="'. base_url("images/rank_icons/$member->rank_icon") .'" title="'. $member->rank_name .'" data-toggle="tooltip" />'
+									? rank_icon($member->rank_icon, $member->rank_name)
 									: null;
 							echo '</td>';
 
