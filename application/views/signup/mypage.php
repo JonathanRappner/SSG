@@ -197,8 +197,8 @@ if(isset($loaded_member->rank_date))
 					<dd><?=isset($loaded_member->role_name) ? $loaded_member->role_name : '-'?></dd>
 	
 					<dt>Grad:</dt>
-					<dd><?=isset($loaded_member->rank_name) ? '<img class="rank_icon" src="'. base_url("images/rank_icons/$loaded_member->rank_icon") .'" />'. $loaded_member->rank_name : '-'?></dd>
-	
+					<dd><?=isset($loaded_member->rank_name) ? rank_icon($loaded_member->rank_icon, $loaded_member->rank_name). $loaded_member->rank_name : '-'?></dd>
+					
 					<dt>Senast bumpad:</dt>
 					<dd><?=isset($bump_string) ? $bump_string : '?'?></dd>
 	

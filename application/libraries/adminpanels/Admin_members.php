@@ -301,7 +301,7 @@ class Admin_members implements Adminpanel
 		echo '<h4>';
 			echo "$member->name";
 			echo isset($member->rank_name)
-				? '<img class="rank_icon_big" src="'. base_url("images/rank_icons/$member->rank_icon") .'" title="'. $member->rank_name .'" data-toggle="tooltip" />'
+				? rank_icon($member->rank_icon, $member->rank_name, true)
 				: null;
 		echo '</h4>';
 
@@ -330,7 +330,7 @@ class Admin_members implements Adminpanel
 									//grad-namn
 									echo '<td class="font-weight-bold" scope="row">';
 										echo $pro->name;
-										echo '<img class="rank_icon" src="'. base_url("images/rank_icons/$pro->icon") .'" title="'. $pro->name .'" data-toggle="tooltip" />';
+										echo rank_icon($member->rank_icon, $member->rank_name);
 									echo '</td>';
 
 									//datum
