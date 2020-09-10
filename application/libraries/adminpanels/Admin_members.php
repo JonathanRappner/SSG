@@ -330,7 +330,7 @@ class Admin_members implements Adminpanel
 									//grad-namn
 									echo '<td class="font-weight-bold" scope="row">';
 										echo $pro->name;
-										echo rank_icon($member->rank_icon, $member->rank_name);
+										echo rank_icon($pro->icon, $pro->name);
 									echo '</td>';
 
 									//datum
