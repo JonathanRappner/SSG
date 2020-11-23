@@ -9,11 +9,11 @@ $preview = $this->preview->get_data();
 
 ?><!-- Meta -->
 <meta charset="utf-8">
-<link rel="canonical" href="<?=$preview->domain?>">
-<link rel="icon" href="<?=base_url('favicon.ico')?>">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="<?=$preview->description?>">
-<meta name="keywords" content="arma 3, arma, swedish, svensk, svenska, milsim, förening, seriös">
+<meta name="keywords" content="arma 3, arma, swedish, svensk, svenska, sverige, milsim, spelförening, förening, gaming, seriös, gameface">
+<link rel="canonical" href="<?=$preview->domain?>">
+<link rel="icon" href="<?=base_url('favicon.ico')?>">
 
 <!-- Preview data -->
 <meta name="twitter:title" content="<?=$preview->title?>">
