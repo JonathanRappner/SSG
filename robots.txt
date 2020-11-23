@@ -11,3 +11,5 @@ Disallow: /images/
 Disallow: /signup/
 Disallow: /admin/
 Disallow: /api/
+
+Sitemap: http://www.ssg-clan.se/sitemap.xml
