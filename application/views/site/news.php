@@ -11,8 +11,10 @@ shuffle($carousel_images);
 <html lang="sv">
 <head>
 
-	<!-- CSS/JS -->
+	<!-- Generic head -->
 	<?php $this->load->view('site/sub-views/head');?>
+
+	<!-- Page-specific CSS/JS -->
 	<link rel="stylesheet" href="<?=base_url('css/site/news.css?0')?>">
 	<link rel="stylesheet" href="<?=base_url('css/site/signup-box.css')?>">
 	<link rel="stylesheet" href="<?=base_url('css/site/chat.css')?>">

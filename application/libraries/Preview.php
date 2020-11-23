@@ -20,7 +20,7 @@ class Preview
 
 		//sätt default-värden
 		$this->title = 'Swedish Strategic Group';
-		$this->description = 'Swedish Strategic Group';
+		$this->description = 'SSG grundades 2009 och är en stabil och väletablerad ArmA-klan. Vi är den största organiserade klanen i Sverige och är inriktade på taktisk realism.';
 		$this->domain = 'https://www.ssg-clan.se/';
 		$this->url = $this->domain . uri_string();
 		$this->image_url = 'https://www.ssg-clan.se/images/preview_ssg.png';
