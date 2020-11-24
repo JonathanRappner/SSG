@@ -26,8 +26,7 @@ shuffle($carousel_images);
 		<script src="<?=base_url('js/site/chat.js')?>"></script>
 	<?php endif;?>
 	
-
-	<title>Swedish Strategic Group</title>
+	<title>Swedish Strategic Group - Swedish Arma 3 Clan</title>
 
 	<script>
 		<?php if($user_is_member):?>var deadline_epoch = <?=$next_event->deadline_epoch?>;<?php endif;?>
