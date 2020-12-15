@@ -12,9 +12,29 @@ $this->current_page = 'streamers';
 	<?php $this->load->view('site/sub-views/head');?>
 
 	<!-- Custom CSS/JS -->
+	<script src="https://embed.twitch.tv/embed/v1.js"></script>
 	<link rel="stylesheet" href="<?php echo base_url('css/site/streamers.css');?>">
 
 	<title>Swedish Strategic Group - Streamers</title>
+
+	<script>
+		// skapa Twitch.Embed-objekt som fyller i .twitch_container-elementen
+		$(document).ready(function(){
+			<?php foreach($streamers as $streamer):?>
+				<?php if($streamer->prefered == 'twitch'):?>
+					new Twitch.Embed(
+						"twitch_<?=$streamer->member_id?>", {
+							width: "100%",
+							height: 170,
+							channel: "<?=$streamer->channel_twitch?>",
+							autoplay: false,
+							layout: "video"
+						}
+					);
+				<?php endif;?>
+			<?php endforeach;?>
+		});
+	</script>
 
 </head>
 <body>
@@ -37,7 +57,7 @@ $this->current_page = 'streamers';
 			<?php
 			foreach($streamers as $streamer)
 			{
-				echo '<div class="col-12 col-sm-6 col-md-4 col-xl-3">';
+				echo '<div class="col-12 col-sm-6 col-md-4">';
 				echo '<h3>';
 					echo '<a href="'. ($streamer->prefered == 'youtube' ? "https://www.youtube.com/channel/{$streamer->channel_youtube}/videos" : "https://www.twitch.tv/{$streamer->channel_twitch}/videos") .'" target="_blank">';
 						echo group_icon($streamer->group_code, $streamer->group_name, true) . $streamer->name;
@@ -48,6 +68,7 @@ $this->current_page = 'streamers';
 					echo
 					"<iframe
 						width='100%'
+						height='170'
 						src='https://www.youtube.com/embed/live_stream?channel={$streamer->channel_youtube}'
 						frameborder='0'
 						allowfullscreen>
@@ -55,14 +76,7 @@ $this->current_page = 'streamers';
 				}
 				else
 				{
-					echo
-					"<iframe
-						src='https://player.twitch.tv/?autoplay=false&channel={$streamer->channel_twitch}'
-						width='100%'
-						frameborder='0'
-						scrolling='no'
-						allowfullscreen='true'>
-					</iframe>";
+					echo "<div id=\"twitch_{$streamer->member_id}\" class=\"twitch_container\"></div>"; // skapa tom container, twitch js fyller i senare
 				}
 				echo '</div>';
 			}
