@@ -35,7 +35,7 @@
 		color: white;
 		opacity: 0.5;
 		font-family: "Forsvarsmakten-Stencil";
-		font-size: 1rem;
+		font-size: 1.5rem;
 	}
 }
 #carousel:hover{
@@ -139,10 +139,7 @@ div.links a:hover { text-decoration: none; }
 
 // sm eller större 
 @media (min-width: 576px) {
-	#carousel{ // bredd: 540px 
-		height: 85px;
-		h1{ font-size: 1.5rem; }
-	}
+	#carousel{ height: 85px; } // bredd: 540px
 	#newsfeed{ max-height: initial; margin-bottom: 20px; }
 	div.bottom_fade{ display: none; }
 	div.news_topic a.newsfeed_image{ display: block; }
