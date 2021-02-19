@@ -50,9 +50,10 @@ shuffle($carousel_images);
 	<?php endif;?>
 
 	<!-- Bildspel -->
-	<div id="carousel" class="row mb-4 rounded shadow-sm" style="background-image:url('<?=base_url($carousel_images[0])?>');">
-		<img src="<?=base_url('images/logga-vit.svg')?>">
-	</div><!--end #carousel-->
+	<div id="carousel" class="row px-3 py-2 px-md-4 py-md-3 mb-4 rounded shadow-sm d-flex align-items-center" style="background-image:url('<?=base_url($carousel_images[0])?>');">
+		<img src="<?=base_url('images/logo-gray.svg')?>">
+		<h1 class="m-0 ml-2 ml-sm-3 ml-lg-4">Swedish Strategic Group</h1>
+	</div>
 
 	<div class="row">
 		

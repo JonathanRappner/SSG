@@ -1,4 +1,9 @@
-// Stylesheet för nyhetssidan/huvudsidan 
+// Stylesheet för nyhetssidan/huvudsidan
+
+@font-face {
+	font-family: "Forsvarsmakten-Stencil";
+	src: url("/fonts/ForsvarsmaktenSans-Stencil.woff2") format("woff2");
+}
 
 // varje "box" i högerkolumnen 
 #rightcol div.card{
@@ -11,22 +16,32 @@
 	padding: 12px;
 }
 
-// bildspelet 
+// bildspelet  
 #carousel{
 	height: 64px; // bredd: 411px 
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: 100%;
 	cursor: pointer;
-}
+	
+	// logga
+	img{
+		height: 100%;
+		opacity: 0.5;
+	}
 
-// vita ssg-loggan 
-#carousel img{
-    width: 40%;
-	opacity: 0.5;
-	margin-left: 3%;
+	// rubrik
+	h1{
+		color: white;
+		opacity: 0.5;
+		font-family: "Forsvarsmakten-Stencil";
+		font-size: 1rem;
+	}
 }
-#carousel:hover img{ opacity: 0.6; }
+#carousel:hover{
+	img{ opacity: 0.6; }
+	h1{ opacity: 0.6; }
+}
 
 // nyhetsflödet 
 #newsfeed{
@@ -124,7 +139,10 @@ div.links a:hover { text-decoration: none; }
 
 // sm eller större 
 @media (min-width: 576px) {
-	#carousel{ height: 85px; } // bredd: 540px 
+	#carousel{ // bredd: 540px 
+		height: 85px;
+		h1{ font-size: 1.5rem; }
+	}
 	#newsfeed{ max-height: initial; margin-bottom: 20px; }
 	div.bottom_fade{ display: none; }
 	div.news_topic a.newsfeed_image{ display: block; }
@@ -134,19 +152,28 @@ div.links a:hover { text-decoration: none; }
 
 // md 
 @media (min-width: 768px) {
-	#carousel{ height: 113px; } // bredd: 720px 
+	#carousel{ // bredd: 720px 
+		height: 113px;
+		h1{ font-size: 2rem; }
+	}
 	#newsfeed iframe.youtube{ width: 656px; height: 369px; }
 }
 
 // lg 
 @media (min-width: 992px){
-	#carousel{ height: 151px; } // bredd: 960px 
+	#carousel{ // bredd: 960px 
+		height: 151px;
+		h1{ font-size: 3rem; }
+	}
 	#newsfeed iframe.youtube{ width: 656px; height: 369px; }
 }
 
 // xl 
 @media (min-width: 1200px){
-	#carousel{ height: 180px; } // bredd: 1140px 
+	#carousel{ // bredd: 1140px 
+		height: 180px;
+		h1{ font-size: 4rem; }
+	}
 	// inbäddad youtube-video 
 	#newsfeed iframe.youtube{ width: 790px; height: 444px; }
 }
