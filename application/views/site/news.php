@@ -15,7 +15,7 @@ shuffle($carousel_images);
 	<?php $this->load->view('site/sub-views/head');?>
 
 	<!-- Page-specific CSS/JS -->
-	<link rel="stylesheet" href="<?=base_url('css/site/news.css?0')?>">
+	<link rel="stylesheet" href="<?=base_url('css/site/news.css?1')?>">
 	<link rel="stylesheet" href="<?=base_url('css/site/signup-box.css')?>">
 	<link rel="stylesheet" href="<?=base_url('css/site/chat.css')?>">
 	<link rel="stylesheet" href="<?=base_url('css/site/latest_posts.css')?>">
