@@ -11,7 +11,7 @@ $preview = $this->preview->get_data();
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="noindex, nofollow">
-<link rel="icon" href="<?=base_url('favicon.ico');?>">
+<link rel="icon" href="<?=base_url('favicon.ico?0');?>">
 
 <!-- Preview data -->
 <meta name="twitter:title" content="<?=$preview->title;?>">
