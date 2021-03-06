@@ -14,7 +14,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<div class="card-body p-2">
 
 		<a title="YouTube" href="https://www.youtube.com/channel/UCvi4V2i_c1kVXr5ilsz3-xA" target="_blank">
-			<img src="<?=base_url('images/link_icons/youtube.svg')?>" class="mt-2">
+			<img src="<?=base_url('images/link_icons/youtube.svg')?>" class="mt-1">
 		</a>
 
 		<a title="Discord" href="https://discord.gg/fF4zXzw" target="_blank">
@@ -23,6 +23,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 		<a title="Facebook" href="https://www.facebook.com/swedishstrategicgroup/" target="_blank">
 			<img src="<?=base_url('images/link_icons/facebook.svg')?>">
+		</a>
+
+		<a title="Twitter" href="https://twitter.com/SSGOfficial4" target="_blank">
+			<img src="<?=base_url('images/link_icons/twitter.svg')?>" class="mt-1">
 		</a>
 
 		<a title="Instagram" href="https://www.instagram.com/swedish_strategic_group/" target="_blank">
