@@ -43,6 +43,16 @@ $preview = $this->preview->get_data();
 <link rel="stylesheet" href="<?=base_url('css/main.css')?>">
 <link rel="stylesheet" href="<?=base_url('css/site/main.css')?>">
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-192568364-1"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-192568364-1');
+</script>
+
 <?php if(XMAS):?>
 <!-- Jul-tema -->
 	<link rel="stylesheet" href="<?=base_url('css/holidays/xmas.css')?>">

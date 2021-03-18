@@ -43,6 +43,16 @@ $preview = $this->preview->get_data();
 <?php if(APRIL_FOOLS):?><link href='https://fonts.googleapis.com/css?family=Gochi%20Hand' rel='stylesheet'><?php endif;?>
 <?php if(APRIL_FOOLS) echo $this->april_fools->style(); ?>
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-192568364-1"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-192568364-1');
+</script>
+
 <?php if(XMAS):?>
 	<!-- Jul-tema -->
 	<link rel="stylesheet" href="<?=base_url('css/holidays/xmas.css')?>">
