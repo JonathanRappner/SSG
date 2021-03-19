@@ -236,8 +236,8 @@ class Chat extends CI_Model
 		if($is_url)
 		{
 			// Anti-Bezz-bus
-			$link_title = $text == 'https://www.youtube.com/watch?v=kfVsfOSbJY0' // Rebecca Rebecca Black - Friday
-				? 'Bezz länkar till Rebecca Black - Friday igen...'
+			$link_title = preg_match('/kfVsfOSbJY0/', $text) // Rebecca Rebecca Black - Friday
+				? 'Han länkar till Rebecca Black - Friday, igen...'
 				: 'länk';
 
 			$regex_url = '/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.,~#?&\/\/=]*)/i'; //case insensitive
