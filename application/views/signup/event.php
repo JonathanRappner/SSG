@@ -58,6 +58,7 @@ foreach($signups as $s)
 
 				<h4 class="card-header bg-dark text-white">
 					<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>❄<?php endif;?>
+					<?php if(EASTER):?>🌼<?php endif;?>
 					Event
 				</h4>
 
@@ -147,6 +148,7 @@ foreach($signups as $s)
 
 		<h4 class="card-header bg-dark text-white">
 			<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>🎁<?php endif;?>
+			<?php if(EASTER):?>🐇<?php endif;?>
 			Anmälningar
 		</h4>
 

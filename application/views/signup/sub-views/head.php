@@ -63,6 +63,11 @@ $preview = $this->preview->get_data();
 	<link rel="stylesheet" href="<?=base_url('css/holidays/cake.css')?>">
 <?php endif;?>
 
+<?php if(EASTER):?>
+	<!-- Påsk-tema -->
+	<link rel="stylesheet" href="<?=base_url('css/holidays/easter.css')?>">
+<?php endif;?>
+
 <!-- JS-variabler -->
 <script>
 	var base_url = '<?=base_url()?>';

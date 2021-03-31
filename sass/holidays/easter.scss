@@ -1,0 +1,16 @@
+body{
+	background-image: url("../../images/holidays/easter_bg.png");
+}
+
+// Påskikoner i menyraden
+#wrapper_top .holiday_icon{
+	font-size: 1.3rem;
+	visibility: hidden; // xs-storlek
+	height: 0;
+}
+li.nav-item{ margin-right: 0px; }
+
+// md
+@media (min-width: 768px) {
+	#wrapper_top .holiday_icon{ height: inherit; visibility: visible; }
+}

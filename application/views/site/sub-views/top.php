@@ -14,6 +14,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				<ul class="navbar-nav">
 					
 					<?php if(XMAS):?><li class="nav-item xmas_icon">🎄</li><?php endif;?>
+					<?php if(EASTER):?><li class="nav-item holiday_icon">🐣</li><?php endif;?>
 
 					<li class="nav-item<?=$this->current_page == 'news' ? ' active' : null?>">
 						<a class="nav-link" href="<?=base_url('site/news')?>">Hem</a>
@@ -65,6 +66,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					<?php endif;?>
 					
 					<?php if(XMAS):?><li class="nav-item xmas_icon">🎁</li><?php endif;?>
+					<?php if(EASTER):?><li class="nav-item holiday_icon">🌼</li><?php endif;?>
 
 				</ul>
 			</nav>

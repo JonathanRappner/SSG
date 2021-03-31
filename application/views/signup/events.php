@@ -37,6 +37,7 @@ $this->current_page = 'events';
 		
 			<h3 class="card-header bg-dark text-white">
 				<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>⛄<?php endif;?>
+				<?php if(EASTER):?>🐣<?php endif;?>
 				<a href="<?=base_url("signup/event/{$next_event->id}")?>">
 					<?=$next_event->title?>
 					<?php if(!empty($next_event->author_id)):?>
@@ -107,6 +108,7 @@ $this->current_page = 'events';
 		
 		<h4 class="card-header bg-dark text-white">
 			<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>🎅<?php endif;?>
+			<?php if(EASTER):?>🐇<?php endif;?>
 			Andra events
 		</h4>
 

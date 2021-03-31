@@ -182,6 +182,7 @@ if(isset($loaded_member->rank_date))
 	
 			<h4 class="card-header bg-dark text-white">
 				<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>⛄<?php endif;?>
+				<?php if(EASTER):?>🐤<?php endif;?>
 				Medlemsdata
 			</h4>
 	
@@ -373,6 +374,7 @@ if(isset($loaded_member->rank_date))
 
 		<h4 class="card-header bg-dark text-white">
 			<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>🎁<?php endif;?>
+			<?php if(EASTER):?>🌼<?php endif;?>
 			Anmälningar
 		</h4>
 
