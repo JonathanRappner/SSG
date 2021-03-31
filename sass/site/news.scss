@@ -37,10 +37,16 @@
 		font-family: "Forsvarsmakten-Stencil";
 		font-size: 1.5rem;
 	}
+
+	// Jul/Påsk-ikon höger om rubriken
+	.holiday_icon{
+		font-size: 1.5rem;
+		margin-left: 8px;
+		margin-bottom: 8px;
+	}
 }
 #carousel:hover{
-	img{ opacity: 0.6; }
-	h1{ opacity: 0.6; }
+	img, h1{ opacity: 0.6; }
 }
 
 // nyhetsflödet 
@@ -151,7 +157,7 @@ div.links a:hover { text-decoration: none; }
 @media (min-width: 768px) {
 	#carousel{ // bredd: 720px 
 		height: 113px;
-		h1{ font-size: 2rem; }
+		h1, .holiday_icon{ font-size: 2rem; }
 	}
 	#newsfeed iframe.youtube{ width: 656px; height: 369px; }
 }
@@ -160,7 +166,7 @@ div.links a:hover { text-decoration: none; }
 @media (min-width: 992px){
 	#carousel{ // bredd: 960px 
 		height: 151px;
-		h1{ font-size: 3rem; }
+		h1, .holiday_icon{ font-size: 3rem; }
 	}
 	#newsfeed iframe.youtube{ width: 656px; height: 369px; }
 }
@@ -169,7 +175,7 @@ div.links a:hover { text-decoration: none; }
 @media (min-width: 1200px){
 	#carousel{ // bredd: 1140px 
 		height: 180px;
-		h1{ font-size: 4rem; }
+		h1, .holiday_icon{ font-size: 4rem; }
 	}
 	// inbäddad youtube-video 
 	#newsfeed iframe.youtube{ width: 790px; height: 444px; }
