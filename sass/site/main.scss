@@ -17,21 +17,22 @@ body{
 	margin-right: 0;
 }
 
-// Avatar i toppraden 
-#userbox .avatar{
-	max-width: 42px;
-	max-height: 42px;
-}
-
-// länk till forum-profil 
-#userbox a{
-	color: #FFF;
-	text-decoration: none;
-	display: inline-block;
-}
-
 // Olästa meddelanden 
 a.pm_alert{
 	color: #FFF;
 	&:hover{ text-decoration: none; }
 }
+
+// >= sm 
+@media (min-width: 576px) {
+}
+
+//  >= md
+@media (min-width: 768px) {
+}
+
+// >= lg
+@media (min-width: 992px) {  }
+
+// >= xl
+@media (min-width: 1200px) {  }

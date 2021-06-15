@@ -54,7 +54,6 @@
 	// mindre storlek i xs 
 	max-height: 300px;
 	overflow: hidden;
-	padding-right: 10px;
 
 	// inbäddad youtube-video 
 	iframe.youtube{
@@ -167,6 +166,7 @@ div.links a:hover { text-decoration: none; }
 	#carousel{ // bredd: 960px 
 		height: 151px;
 		h1, .holiday_icon{ font-size: 3rem; }
+		border-radius: .25rem;
 	}
 	#newsfeed iframe.youtube{ width: 656px; height: 369px; }
 }

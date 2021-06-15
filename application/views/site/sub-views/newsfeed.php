@@ -4,7 +4,7 @@
 */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-?><div id="newsfeed" class="collapsible row mr-1">
+?><div id="newsfeed" class="collapsible col p-0">
 
 	<!-- Kollaps-fade-effekt till mobil -->
 	<div class="bottom_fade">
@@ -26,7 +26,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				? "<h3 class='card-header bg-dark'><a href='{$article_link}' class='text-white'>{$topic->title}". (APRIL_FOOLS ? ' '.$this->april_fools->random_emojis(microtime()) : null) ."</a>{$heading_small}</h3>"
 				: "<h3 class='card-header bg-dark text-white'>{$topic->title}". (APRIL_FOOLS ? ' '. $this->april_fools->random_emojis(microtime()) : null) ."{$heading_small}</h3>";
 		?>
-		<div class="news_topic card mb-4 bg-white border-0 shadow-sm w-100">
+		<div class="news_topic card mb-4 bg-white border-0 shadow-sm">
 			
 			<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div><?php endif;?>
 			
@@ -44,6 +44,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </div><!-- end #newsfeed -->
 
 <!-- Pagination -->
-<div id="news_pagination" class="row pr-4">
+<div id="news_pagination" class="col">
 	<?=pagination($page, $news->total_results, $news->results_per_page, base_url('site/news/'), 'newsfeed', 15)?>
 </div>

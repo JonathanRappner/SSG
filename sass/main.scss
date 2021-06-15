@@ -5,17 +5,46 @@ h1 { font-size: 2rem; }
 h4 { font-size: 1.5rem; }
 h6 { font-size: 1rem; }
 
+// användar-rutan xs och upp
+#userbox_wrapper{
+	position: absolute;
+	width: 80%;
+	right: 0;
+}
+
 // Medlemsnamn, grad-ikon och avatar-boxen 
 #userbox{
 	color: #000;
 	text-decoration: none;
 	display: block;
+
+	// Avatar i toppraden 
+	.avatar{
+		max-width: 42px;
+		max-height: 42px;
+	}
+
+	// Gradikon i toppraden 
+	img.rank_icon{
+		margin-left: 0;
+	}
+
+	// länk till forum-profil 
+	a {
+		color: #FFF;
+		text-decoration: none;
+		display: inline-block;
+	}
 }
 
-// Gradikon i toppraden 
-#userbox img.rank_icon{
-	margin-left: 0;
-}
+
+
+
+
+
+
+
+
 
 // Enhetsikoner 16px 
 img.group_icon_16{
@@ -66,19 +95,14 @@ select.invalid{
 	border: 1px solid red;
 }
 
-// påverkar endast mobilversionen 
-.navbar-nav{
-	width: 100%;
-}
-
 // borders på navbar sm-vy 
 .nav-link{
 	border-bottom: 1px solid #dee2e6;
+	padding-left: 8px !important; // appliceras endast när navbar:en listas vertikalt
 }
 
 // navbar länk hover 
 .nav-link:hover{
-	border-radius: 5px;
 	background-color: #FAFAFA;
 }
 
@@ -120,20 +144,52 @@ dl { line-height: 1.1rem; }
 .text-notsigned{color: #848484;}
 .text-awol{color: #fff; background-color: #7B23A8; padding:4px;}
 
-// Layouts större än sm 
+// >= sm 
 @media (min-width: 576px) {
-	// inga borders på navbar > sm 
-	.nav-link{
-		border: none;
-	}
-
+	
 	// större headings i > sm 
 	h1 { font-size: 3rem; }
 	h4 { font-size: 1.5rem; }
 	h6 { font-size: 1rem; }
 
+	// bredda hela sidan 100% i sm också
+	.container { max-width: none; }
+
 	// Alerts 
 	.alert{
 		padding: .75rem 1.25rem; // default padding 
 	}
+}
+
+//  >= md
+@media (min-width: 768px) {
+	// inga borders på navbar >= md 
+	.nav-link{
+		border: none;
+	}
+
+	// default-värde
+	.container { max-width: none; }
+
+	#userbox_wrapper{
+		position: inherit;
+		width: auto;
+	}
+}
+
+// >= lg
+@media (min-width: 992px) {
+	
+	// bara rundade kanter on hover vid horizontell layout
+	.nav-link:hover { border-radius: 5px; }
+
+	// default-värde
+	.container { max-width: 960px; }
+}
+
+// >= xl
+@media (min-width: 1200px) {
+	
+	// default-värde
+	.container { max-width: 1140px; }
 }

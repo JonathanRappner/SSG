@@ -20,8 +20,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 function pagination($page, $total_results, $results_per_page, $link_prefix, $scroll_to_id = null, $max_pages = 12)
 {
 	return 
-		pagination_base($page, $total_results, $results_per_page, $link_prefix, $scroll_to_id, $max_pages, 'd-none d-sm-none d-md-block') //stora
-		. pagination_base($page, $total_results, $results_per_page, $link_prefix, $scroll_to_id, min(4, $max_pages), 'd-block d-md-none'); //lilla
+		pagination_base($page, $total_results, $results_per_page, $link_prefix, $scroll_to_id, $max_pages, 'd-none d-sm-none d-lg-block') //stora
+		. pagination_base($page, $total_results, $results_per_page, $link_prefix, $scroll_to_id, min(4, $max_pages), 'd-block d-lg-none'); //lilla
 }
 
 /**

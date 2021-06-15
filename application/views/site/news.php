@@ -50,18 +50,18 @@ shuffle($carousel_images);
 	<?php endif;?>
 
 	<!-- Bildspel -->
-	<div id="carousel" class="row px-3 py-2 px-md-4 py-md-3 mb-4 rounded shadow-sm d-flex align-items-center" style="background-image:url('<?=base_url($carousel_images[0])?>');">
-			<img src="<?=base_url('images/logo-gray.svg')?>">
-			<h1 class="m-0 ml-2 ml-sm-3 ml-lg-4">Swedish Strategic Group</h1>
-			<?php if(XMAS):?><div class="holiday_icon">🎅</div><?php endif;?>
-			<?php if(CAKE):?><div class="holiday_icon">🎂</div><?php endif;?>
-			<?php if(EASTER):?><div class="holiday_icon">🐣</div><?php endif;?>
+	<div id="carousel" class="row px-3 py-2 px-lg-4 py-lg-3 mb-0 mb-lg-4 shadow-sm d-flex align-items-center" style="background-image:url('<?=base_url($carousel_images[0])?>');">
+		<img src="<?=base_url('images/logo-gray.svg')?>">
+		<h1 class="m-0 ml-2 ml-sm-3 ml-lg-4">Swedish Strategic Group</h1>
+		<?php if(XMAS):?><div class="holiday_icon">🎅</div><?php endif;?>
+		<?php if(CAKE):?><div class="holiday_icon">🎂</div><?php endif;?>
+		<?php if(EASTER):?><div class="holiday_icon">🐣</div><?php endif;?>
 	</div>
 
 	<div class="row">
 		
 		<!-- Vänsterkolumn -->
-		<div id="leftcol" class="col-lg-9 pr-0">
+		<div id="leftcol" class="col-lg-9 pl-0 pr-0">
 
 			<?php if($this->member->valid && $user_is_member):?>
 				<!-- Chat -->
