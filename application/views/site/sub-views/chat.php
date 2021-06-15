@@ -6,7 +6,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 $this->load->library("Permissions");
 
-?><div id="chat" class="row px-2 py-2 mb-3 mr-0 mr-lg-3 bg-white rounded shadow-sm">
+?><div id="chat" class="col px-2 py-2 mb-3 mr-0 mr-lg-3 bg-white rounded shadow-sm">
 	<script>
 		var earliest_message_id = <?=json_encode($earliest_message_id)?>;
 		var member_id = <?=json_encode($this->member->id)?>;
