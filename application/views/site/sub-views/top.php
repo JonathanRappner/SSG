@@ -82,7 +82,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 			<!-- Inloggning -->
-			<div id="userbox_wrapper" class="col-lg-3 col-xl-4 pr-0 pl-2 pl-xl-0 pb-2 pb-xl-0 text-right mt-2 mt-md-0">
+			<div id="userbox_wrapper" class="col-lg-3 col-xl-4 pr-lg-0 pl-2 pl-xl-0 pb-2 pb-xl-0 text-right mt-2 mt-md-0">
 				
 				<?php if($this->member->valid):?>
 					<div id="userbox" class="mt-lg-1 mb-2 mb-lg-0">
