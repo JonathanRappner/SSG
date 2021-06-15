@@ -4,7 +4,7 @@
 */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-?><div id="wrapper_top" class="bg-dark mb-0 mb-lg-3 shadow-sm">
+?><div id="wrapper_top" class="bg-dark mb-0 mb-lg-3 shadow-lg">
 
 	<div class="container">
 		<div class="row">
