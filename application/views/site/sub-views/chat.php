@@ -28,7 +28,7 @@ $this->load->library("Permissions");
 			<div>&ndash;Inga chatmeddelanden 😢&ndash;</div>
 		<?php else:?>
 			<?php foreach($chat_messages as $message):?>
-				<div class="row chat_row" data-message_id="<?=$message->id?>">
+				<div class="row chat_row<?=($message->is_new ? ' is_new' : null)?>" data-message_id="<?=$message->id?>">
 					<div class="message_left col">
 						<a href="<?=base_url('forum/ucp.php?i=pm&mode=compose&u='. $message->phpbb_user_id)?>" target="_blank" style="color:#<?=$message->user_color?>" title="<?=$message->user_title?>"><?=$message->name?></a>:
 						<?=$message->text?>

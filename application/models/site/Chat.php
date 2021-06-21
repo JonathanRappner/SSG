@@ -55,6 +55,9 @@ class Chat extends CI_Model
 		$where_clause = $message_id != null
 			? 'WHERE c.created < (SELECT created FROM ssg_chat WHERE id = '. $this->db->escape($message_id) .')'
 			: null;
+		
+		// denna användarens chat_last_viewed
+		$chat_last_viewed = $this->db->query('SELECT chat_last_viewed FROM ssg_members WHERE id = ?', $this->member->id)->row()->chat_last_viewed;
 
 		$sql =
 			'SELECT
@@ -64,7 +67,8 @@ class Chat extends CI_Model
 				UNIX_TIMESTAMP(last_edited) AS last_edited_timestamp,
 				u.username AS name, m.phpbb_user_id,
 				u.user_colour user_color,
-				g.group_name user_title
+				g.group_name user_title,
+				COALESCE(last_edited, created) > ? AS is_new
 			FROM ssg_chat c
 			INNER JOIN ssg_members m
 				ON c.member_id = m.id
@@ -75,9 +79,9 @@ class Chat extends CI_Model
 			'. $where_clause .'
 			ORDER BY c.created DESC
 			LIMIT 0, '. $this->db->escape($length);
-		$messages = $this->db->query($sql)->result();
+		$messages = $this->db->query($sql, $chat_last_viewed)->result();
 
-		//formatering
+		// formatering
 		foreach($messages as $message)
 		{
 			$message->timespan_string = $this->timespan_string($message->created_timestamp, $message->last_edited_timestamp); //timespan-strängen

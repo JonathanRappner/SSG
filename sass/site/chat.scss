@@ -75,6 +75,17 @@ div.chat_row div.message_right button{
 	padding: 2px 4px !important;
 }
 
+// Chat-meddelande som inte setts tidigare
+div.chat_row.is_new{
+	$is_new_bg: #fff9ea;
+	
+	background-color: $is_new_bg;
+
+	&:hover{
+		background-color: darken($is_new_bg, 2%) !important;
+	}
+}
+
 // input-raden 
 #input_row{
 	height: 30px;
