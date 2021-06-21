@@ -61,7 +61,7 @@ shuffle($carousel_images);
 	<div class="row">
 		
 		<!-- Vänsterkolumn -->
-		<div id="leftcol" class="col-lg-9 pl-0 pr-0">
+		<div id="leftcol" class="col-lg-9 pl-0 pr-0 pr-lg-2">
 
 			<?php if($this->member->valid && $user_is_member):?>
 				<!-- Chat -->
