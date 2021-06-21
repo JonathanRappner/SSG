@@ -71,12 +71,29 @@ class Members extends CI_Model
 				active DESC,
 				g.sorting ASC,
 				r.sorting ASC';
-		$result = $this->db->query($sql, $member_id)->result();
+		$result = $this->db->query($sql)->result();
 
 		//hämta avatar-url:er
 		foreach($result as $row)
 			$row->avatar_url = $this->member->get_phpbb_avatar($row->id);
 		
 		return $result;
+	}
+
+	/**
+	 * Uppdatera tiden när medlemmen senast tittade på chat-rutan.
+	 *
+	 * @param int $member_id
+	 * @return null
+	 */
+	public function update_chat_viewed($member_id)
+	{
+		$this->db
+			->where(array('id' => $member_id))
+			->update('ssg_members', array('chat_last_viewed' => 'NOW()'));
+		
+		$this->db->query('UPDATE ssg_members SET chat_last_viewed = NOW() WHERE id = ?', $member_id);
+
+		return 200;
 	}
 }

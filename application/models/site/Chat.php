@@ -89,6 +89,10 @@ class Chat extends CI_Model
 			$message->text = $this->dechunkify($chunks);
 		}
 
+		// Uppdatera tiden då medlemmen senast såg chaten
+		$this->load->model('api/members');
+		$this->members->update_chat_viewed($this->member->id);
+
 		return $messages;
 	}
 
