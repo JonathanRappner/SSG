@@ -21,10 +21,10 @@ ul.member_list{
 
 // medlemmar i medlemslistan 
 ul.member_list li{
-	
 	font-weight: bold;
+	
+	a,
+	a:hover{ color: #000; }
 }
-ul.member_list li a,
-ul.member_list li a:hover{ color: #000; }
 
 .inactive{ color: gray; }
