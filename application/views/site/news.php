@@ -19,7 +19,7 @@ shuffle($carousel_images);
 	<link rel="stylesheet" href="<?=base_url('css/site/signup-box.css')?>">
 	<link rel="stylesheet" href="<?=base_url('css/site/chat.css?1')?>">
 	<link rel="stylesheet" href="<?=base_url('css/site/latest_posts.css')?>">
-	<script src="<?=base_url('js/site/news.js')?>"></script>
+	<script src="<?=base_url('js/site/news.js?0')?>"></script>
 
 	<?php if($user_is_member):?>
 		<script src="<?=base_url('js/deadline.js')?>"></script>
@@ -69,14 +69,19 @@ shuffle($carousel_images);
 			<?php endif;?>
 
 			<!-- Nyhetsflöde -->
-			<?php if(!$this->member->valid) $this->load->view('site/sub-views/new_member_welcome.php');?>
-			<?php $this->load->view('site/sub-views/newsfeed');?>
+			<div id="news_desktop_container">
+				<div id="news_container">
+					<?php if(!$this->member->valid) $this->load->view('site/sub-views/new_member_welcome.php');?>
+					<?php $this->load->view('site/sub-views/newsfeed');?>
+				</div>
+			</div>
 
 		</div>
 
 		<!-- Högerkolumn -->
 		<div id="rightcol" class="col-lg-3 p-0">
 			<?php $this->load->view('site/sub-views/signup_box', (array)$next_event);?>
+			<div id="news_mobile_container"></div>
 			<?php if($this->member->valid) $this->load->view('site/sub-views/latest_posts', array('posts'=>$posts));?>
 			<?php $this->load->view('site/sub-views/links');?>
 			<?php $this->load->view('site/sub-views/ts3_viewer');?>
