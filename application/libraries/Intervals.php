@@ -22,7 +22,7 @@ class Intervals
 		//hämta intervaller
 		$interval = $this->get_interval();
 
-		if($interval >= 1)
+		if(ENVIRONMENT == 'production' && $interval >= 1)
 			$this->daily();
 	}
 
