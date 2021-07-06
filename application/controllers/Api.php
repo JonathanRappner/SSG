@@ -77,7 +77,14 @@ class API extends CI_Controller
 		$this->output($member);
 	}
 	
-	public function members()
+	
+	/**
+	 * Hämta alla medlemmar eller sök efter vissa.
+	 * @param string $search_phrase Valfri, om null, ger alla medlemmar.
+	 * 
+	 * @return null Returerar inget men skriver ut json-objekt.
+	 */
+	public function members($search_phrase = null)
 	{
 		//moduler
 		$this->load->model('api/members');
@@ -89,8 +96,8 @@ class API extends CI_Controller
 			return;
 		}
 
-		//hämta data
-		$members = $this->members->get_members();
+		//hämta alla medlemmar
+		$members = $this->members->get_members($search_phrase);
 
 		$this->output($members);
 	}

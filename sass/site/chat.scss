@@ -1,10 +1,5 @@
 // --Chat-rutan-- 
 
-// Wrapper 
-#chat{
-	height: 400px;
-}
-
 // top-right icons/buttons wrapper 
 #chat div.status {
 	position: absolute;
@@ -38,51 +33,68 @@ div.chat-list {
 }
 
 // meddelande-rad 
-div.chat-list div.chat_row {
-	width: 100%;
-	border-bottom: 1px dashed rgb(216, 216, 216);
-	list-style-type: none;
-	padding: 3px 0;
-}
-div.chat-list div.chat_row:hover { background-color:rgb(245, 245, 245); }
+div.chat-list {
 
-// namn-länk 
-div.chat-list div.chat_row a{
-	color: #000;
-	font-weight: bold;
-}
+	// meddelanderad
+	div.chat_row{
+		width: 100%;
+		border-bottom: 1px dashed rgb(216, 216, 216);
+		list-style-type: none;
+		padding: 3px 0;
 
-// datum-text 
-div.chat-list p.timespan{
-	color:rgb(167, 167, 167);
-	font-size: 0.6rem;
-	margin: 0 0 0 2px;
-}
+		// namn-länk 
+		a {
+			color: #000;
+			font-weight: bold;
+		}
 
-// vänsterkolumnen i varje meddelanderad 
-// div.chat_row div.message_left{
-// }
+		// Om ens egent namn är mentioned (@Smorfty)
+		span.mentioned{
+			font-weight: bold;
+		}
 
-// högerkolumnen i varje meddelanderad 
-div.chat_row div.message_right{
-	padding-right: 0;
-}
+		// edit/delete-knapparna 
+		div.message_right button{
+			font-size: .6rem !important;
+			height: 22px !important;
+			padding: 2px 4px !important;
+		}
 
-// edit/delete-knapparna 
-div.chat_row div.message_right button{
-	font-size: .6rem !important;
-	height: 22px !important;
-	padding: 2px 4px !important;
-}
+		&:hover { background-color:rgb(245, 245, 245); }
+	}
 
-// Chat-meddelande som inte setts tidigare
-div.chat_row.is_new{
-	$is_new_bg: #fff9ea;
-	
-	background-color: $is_new_bg;
+	// En meddelanderad där du är mentioned
+	div.chat_row.mentioned{
+		$mentioned_bg: #ffd1d1;
 
-	&:hover{
-		background-color: darken($is_new_bg, 2%) !important;
+		background-color: $mentioned_bg !important; // skriver över is_new-färgen
+
+		&:hover{
+			background-color: darken($mentioned_bg, 2%) !important;
+		}
+	}
+
+	// Chat-meddelande som inte setts tidigare
+	div.chat_row.is_new{
+		$is_new_bg: #fff9ea;
+		
+		background-color: $is_new_bg;
+
+		&:hover{
+			background-color: darken($is_new_bg, 2%);
+		}
+	}
+
+	// högerkolumnen i varje meddelanderad 
+	div.message_right{
+		padding-right: 0;
+	}
+
+	// datum-text 
+	p.timespan{
+		color:rgb(167, 167, 167);
+		font-size: 0.6rem;
+		margin: 0 0 0 2px;
 	}
 }
 
@@ -148,6 +160,28 @@ ul.formatting_popover{
 	margin: 0 8px 8px 8px;
 }
 
+// Mentions (@smorfty) sökresultat
+#mentions {
+	display: flex;
+	flex-direction: column;
+	
+	border: 1px solid #CCC;
+	border-radius: 4px;
+
+	div {
+		cursor: pointer;
+		padding: 4px;
+	}
+
+	// resultat med attributet data-selected
+	div[data-selected] {
+		font-weight: bold;
+		background-color: #e4e4e4;
+	}
+
+	&:empty { display: none; } // göm hela elementet om resultat saknas
+}
+
 
 // >= sm 
 @media (min-width: 576px) {
@@ -160,9 +194,6 @@ ul.formatting_popover{
 
 // >= lg
 @media (min-width: 992px) {
-	#chat{
-		height: 220px;
-	}
 	div.chat-list {
 		height: 162px;
 	}

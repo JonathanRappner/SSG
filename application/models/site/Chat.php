@@ -84,13 +84,20 @@ class Chat extends CI_Model
 		// formatering
 		foreach($messages as $message)
 		{
-			$message->timespan_string = $this->timespan_string($message->created_timestamp, $message->last_edited_timestamp); //timespan-strängen
+			//timespan-strängen
+			$message->timespan_string = $this->timespan_string($message->created_timestamp, $message->last_edited_timestamp);
 
+			// ändra från "1"/"0" till true/false
+			$message->is_new = $message->is_new ? 'true' : false;
+
+			// Dela upp texten i url- och icke-url-chunks. Formatera url-chunks och sätt sedan ihop dem igen.
 			$chunks = $this->chunkify($message->text);
 			foreach($chunks as $chunk)
 				$chunk->text = $this->format_text($chunk->text, $chunk->is_url);
-
 			$message->text = $this->dechunkify($chunks);
+
+			// är inloggade medlemen mentioned ("Hej @Smorfty!"), skicka med meddelandetexten så den kan få en highlight-klass
+			$message->mentioned = $this->mention_highlight($message->text);
 		}
 
 		// Uppdatera tiden då medlemmen senast såg chaten
@@ -398,6 +405,26 @@ class Chat extends CI_Model
 			$output .= $chunk->text;
 
 		return $output;
+	}
+
+	
+	/**
+	 * Highlight:a ens namn om man är mentionad
+	 * @param string $text
+	 * 
+	 * @return string
+	 */
+	private function mention_highlight(&$text, $member_name = null)
+	{
+		// om inget $member_name anges, sätt till inloggade medlemens namn
+		if(!$member_name)
+			$member_name = $this->member->name;
+
+		// Ersätt "@Smorfty" med "<span class='mentioned'>Smorfty</span>"
+		$nbr_of_replacements = 0;
+		$text = preg_replace('/'."@{$member_name}".'/i', "<span class='mentioned'>$0</span>", $text, -1, $nbr_of_replacements);
+
+		return $nbr_of_replacements > 0;
 	}
 
 	/**

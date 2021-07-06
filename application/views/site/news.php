@@ -17,13 +17,13 @@ shuffle($carousel_images);
 	<!-- Page-specific CSS/JS -->
 	<link rel="stylesheet" href="<?=base_url('css/site/news.css?4')?>">
 	<link rel="stylesheet" href="<?=base_url('css/site/signup-box.css')?>">
-	<link rel="stylesheet" href="<?=base_url('css/site/chat.css?1')?>">
+	<link rel="stylesheet" href="<?=base_url('css/site/chat.css?2')?>">
 	<link rel="stylesheet" href="<?=base_url('css/site/latest_posts.css')?>">
 	<script src="<?=base_url('js/site/news.js?0')?>"></script>
 
 	<?php if($user_is_member):?>
-		<script src="<?=base_url('js/deadline.js')?>"></script>
-		<script src="<?=base_url('js/site/chat.js')?>"></script>
+		<script src="<?=base_url('js/deadline.js?0')?>"></script>
+		<script src="<?=base_url('js/site/chat.js?1')?>"></script>
 	<?php endif;?>
 	
 	<title>Swedish Strategic Group - Swedish Arma 3 Clan</title>

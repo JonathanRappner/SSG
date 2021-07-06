@@ -42,16 +42,29 @@ class Members extends CI_Model
 
 		return $row;
 	}
-
+	
 	/**
-	 * Hämta alla medlemmar.
-	 *
+	 * Hämta alla medlemmar eller sök.
+	 * @param mixed $search_phrase
+	 * 
 	 * @return array
 	 */
-	public function get_members()
+	public function get_members($search_phrase)
 	{
+		// sök
+		if($search_phrase)
+		{
+			$where_statement = "WHERE m.name LIKE '{$search_phrase}%'"; // används för mentions ("@smorfty") i chatten, sök på fraser som _börjar_ med sökordet
+			$limit_statement = 'LIMIT 5'; // begränsa mängden resultat
+		}
+		else
+		{
+			$where_statement = null;
+			$limit_statement = null;
+		}
+
 		$sql =
-			'SELECT
+			"SELECT
 				m.name AS name,
 				m.id AS id,
 				g.name AS group_name,
@@ -67,10 +80,12 @@ class Members extends CI_Model
 				ON m.group_id = g.id
 			LEFT JOIN ssg_roles r
 				ON m.role_id = r.id
+			{$where_statement}
 			ORDER BY
 				active DESC,
 				g.sorting ASC,
-				r.sorting ASC';
+				r.sorting ASC
+			{$limit_statement}";
 		$result = $this->db->query($sql)->result();
 
 		//hämta avatar-url:er

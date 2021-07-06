@@ -23,12 +23,12 @@ $this->load->library("Permissions");
 
 	</div>
 
-	<div id="chat-list" class="chat-list row">
+	<div id="chat-list" class="chat-list">
 		<?php if(!$chat_messages || count($chat_messages) <= 0):?>
 			<div>&ndash;Inga chatmeddelanden 😢&ndash;</div>
 		<?php else:?>
 			<?php foreach($chat_messages as $message):?>
-				<div class="row chat_row<?=($message->is_new ? ' is_new' : null)?>" data-message_id="<?=$message->id?>">
+				<div class="row chat_row<?=($message->is_new ? ' is_new' : null)?><?=($message->mentioned ? ' mentioned' : null)?>" data-message_id="<?=$message->id?>">
 					<div class="message_left col">
 						<a href="<?=base_url('forum/ucp.php?i=pm&mode=compose&u='. $message->phpbb_user_id)?>" target="_blank" style="color:#<?=$message->user_color?>" title="<?=$message->user_title?>"><?=$message->name?></a>:
 						<?=$message->text?>
@@ -44,6 +44,7 @@ $this->load->library("Permissions");
 			<?php endforeach;?>
 		<?php endif;?>
 	</div>
+	
 	<div id="input_row" class="input-group">
 		<input type="text" id="message" maxlength="998" class="form-control mr-2" data-emojiable="true">
 		
@@ -71,4 +72,7 @@ $this->load->library("Permissions");
 			<div class="spinner-border spinner-border-sm"></div>
 		</button>
 	</div>
+
+	<div id="mentions" class="input-group mt-2"></div>
+
 </div><!-- end #chat -->
