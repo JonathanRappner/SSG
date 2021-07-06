@@ -39,18 +39,7 @@ class API extends CI_Controller
 
 	public function index()
 	{
-		//$data konverteras till json-objekt
-		$data = new stdClass;
-		$data->member = site_url('GET api/member/{int}');
-		$data->members = site_url('GET api/members');
-		$data->streamer = site_url('GET api/streamer/{int}');
-		$data->streamers = site_url('GET api/streamers');
-		$data->message = site_url('GET, POST, PUT & DELETE api/message/?message_id={int}[&text={string}]');
-		$data->messages = site_url('GET api/messages/?length={int}[&message_id={int}] message_id = get messages after this message');
-		$data->global_alert_dismiss = site_url('POST api/global_alert_dismiss/?id={int}');
-
-		//skriv ut
-		$this->output($data);
+		echo 'SSG API';
 	}
 
 	/**
