@@ -23,7 +23,7 @@ shuffle($carousel_images);
 
 	<?php if($user_is_member):?>
 		<script src="<?=base_url('js/deadline.js?0')?>"></script>
-		<script src="<?=base_url('js/site/chat.js?1')?>"></script>
+		<script src="<?=base_url('js/site/chat.js?2')?>"></script>
 	<?php endif;?>
 	
 	<title>Swedish Strategic Group - Swedish Arma 3 Clan</title>

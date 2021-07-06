@@ -456,8 +456,8 @@ function display_mentions_list(data)
 		var icon = "";
 		if(group_code)
 		{
-			icon =  "<img class='group_icon_16 d-none d-md-inline' src='http://ssg.localhost/images/group_icons/"+ group_code +"_16.png'>"; // desktop-ikon
-			icon += "<img class='group_icon_16 d-inline d-md-none' src='http://ssg.localhost/images/group_icons/"+ group_code +"_32.png'>"; // mobil-ikon
+			icon =  "<img class='group_icon_16 d-none d-md-inline' src='"+ base_url +"images/group_icons/"+ group_code +"_16.png'>"; // desktop-ikon
+			icon += "<img class='group_icon_16 d-inline d-md-none' src='"+ base_url +"images/group_icons/"+ group_code +"_32.png'>"; // mobil-ikon
 		}
 		
 		// skapa namn-rad
