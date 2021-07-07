@@ -30,6 +30,7 @@ class Members extends CI_Model
 				'. $where .'
 				AND active
 				AND NOT dummy
+				AND (SELECT COUNT(*) FROM ssg_members m WHERE m.group_id = ssg_groups.id) > 0
 			ORDER BY sorting ASC';
 		$groups = $this->db->query($sql)->result();
 
