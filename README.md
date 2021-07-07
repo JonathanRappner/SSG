@@ -20,3 +20,4 @@ All instructions, comments and text in this projects are written in Swedish.
 
 ## XML
 Requests till t.ex: https://ssg-clan.se/xml/vl.xml redirectas till XML-controllern som ger tillbaka en auto-genererad xml-fil.
+.paa-filerna (emblemens textura-fil) måste fortfarande ligga i /xml-mappen.
