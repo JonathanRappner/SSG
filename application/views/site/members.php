@@ -9,7 +9,7 @@ $this->current_page = 'members';
 
 	<!-- CSS/JS -->
 	<?php $this->load->view('site/sub-views/head');?>
-	<link rel="stylesheet" href="<?=base_url('css/site/members.css')?>">
+	<link rel="stylesheet" href="<?=base_url('css/site/members.css?0')?>">
 
 	<title>Swedish Strategic Group - Medlemmar</title>
 
