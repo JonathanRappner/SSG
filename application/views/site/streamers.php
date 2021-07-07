@@ -12,29 +12,9 @@ $this->current_page = 'streamers';
 	<?php $this->load->view('site/sub-views/head');?>
 
 	<!-- Custom CSS/JS -->
-	<script src="https://embed.twitch.tv/embed/v1.js"></script>
-	<link rel="stylesheet" href="<?php echo base_url('css/site/streamers.css');?>">
+	<link rel="stylesheet" href="<?=base_url('css/site/streamers.css')?>">
 
 	<title>Swedish Strategic Group - Streamers</title>
-
-	<script>
-		// skapa Twitch.Embed-objekt som fyller i .twitch_container-elementen
-		$(document).ready(function(){
-			<?php foreach($streamers as $streamer):?>
-				<?php if($streamer->prefered == 'twitch'):?>
-					new Twitch.Embed(
-						"twitch_<?=$streamer->member_id?>", {
-							width: "100%",
-							height: 170,
-							channel: "<?=$streamer->channel_twitch?>",
-							autoplay: false,
-							layout: "video"
-						}
-					);
-				<?php endif;?>
-			<?php endforeach;?>
-		});
-	</script>
 
 </head>
 <body>
@@ -42,46 +22,28 @@ $this->current_page = 'streamers';
 <!-- Top -->
 <?php $this->load->view('site/sub-views/top');?>
 
-<div id="wrapper_streamers" class="container p-0">
+<div id="wrapper_streamers" class="container">
 
-	<h1>Streamers</h1>
-
-	<div id="intro" class="mb-4">
-		<p>Många av SSG:s medlemmar streamar våra OP:ar och träningar.</p>
-		<p>Här kan du se om någon av dem är live just nu eller titta i deras video-arkiv på Twitch eller YouTube.</p>
+	<div id="intro" class="row pt-2 pt-lg-0 mb-4 px-4 px-lg-0">
+		<h1 class="col-12 px-0">Streamers</h1>
+		<p class="m-0">Många av SSG:s medlemmar streamar våra OP:ar (sön 18.00 - 22.00) och träningar (ons 19.00 - 21.00).</p>
+		<p class="m-0">Här kan du se om någon av dem är live just nu eller titta i deras video-arkiv på Twitch eller YouTube.</p>
 	</div>
 
-	<div id="streamers">
+	<div id="streamers" class="row px-4 px-lg-0">
 
-		<div class="row">
-			<?php
-			foreach($streamers as $streamer)
-			{
-				echo '<div class="col-12 col-sm-6 col-md-4">';
+		<?php
+		foreach($streamers as $streamer)
+		{
+			echo '<div class="col-12 col-sm-6 col-md-4 px-0">';
 				echo '<h3>';
 					echo '<a href="'. ($streamer->prefered == 'youtube' ? "https://www.youtube.com/channel/{$streamer->channel_youtube}/videos" : "https://www.twitch.tv/{$streamer->channel_twitch}/videos") .'" target="_blank">';
 						echo group_icon($streamer->group_code, $streamer->group_name, true) . $streamer->name;
 					echo '</a>';
 				echo '</h3>';
-				if($streamer->prefered == 'youtube')
-				{
-					echo
-					"<iframe
-						width='100%'
-						height='170'
-						src='https://www.youtube.com/embed/live_stream?channel={$streamer->channel_youtube}'
-						frameborder='0'
-						allowfullscreen>
-					</iframe>";
-				}
-				else
-				{
-					echo "<div id=\"twitch_{$streamer->member_id}\" class=\"twitch_container\"></div>"; // skapa tom container, twitch js fyller i senare
-				}
-				echo '</div>';
-			}
-			?>
-		</div>
+			echo '</div>';
+		}
+		?>
 
 	</div>
 
