@@ -40,8 +40,8 @@ class Admin_members implements Adminpanel
 			assert($var2 == null || is_numeric($var2), "Inkorrekt sidnummer: $var2");
 			$this->page = $var2; //sida för medlemstabellen
 			$this->total_members = $this->CI->db->query('SELECT COUNT(*) AS count FROM ssg_members WHERE group_id IS NULL')->row()->count;
-			$this->members = $this->get_orphan_members($this->page, $this->results_per_page);
-			$this->groups = $this->get_active_groups();
+			$this->members = $this->get_members();
+			$this->orphan_members = $this->get_orphan_members($this->page, $this->results_per_page);
 		}
 		else if($this->view == 'group') //grupp-vy
 		{
@@ -96,9 +96,6 @@ class Admin_members implements Adminpanel
 			
 			//success
 			$this->CI->alerts->add_alert('success', 'Ändringarna sparades utan problem.');
-			if($vars->group_id > 0)
-				redirect('signup/admin/members/group/'. $vars->group_id);
-			else
 			redirect('signup/admin/members');
 		}
 	}
@@ -111,9 +108,7 @@ class Admin_members implements Adminpanel
 		echo '<div id="wrapper_members">';
 
 		if($this->view == 'main') //huvud-vy
-			$this->view_main($this->groups, $this->members, $this->page, $this->total_members);
-		else if($this->view == 'group') //grupp-vy
-			$this->view_group($this->group, $this->members);
+			$this->view_main($this->members, $this->orphan_members, $this->page, $this->total_members);
 		else if($this->view == 'member') //medlems-vy
 			$this->view_member($this->loaded_member, $this->promotions);
 		else if($this->view == 'delete_promotion_confirm') //ta bort bumpning, bekräftan
@@ -127,33 +122,73 @@ class Admin_members implements Adminpanel
 	/**
 	 * Listar grupper och samtliga medlemmar.
 	 *
-	 * @param array $groups	Till grupp-vy-länkarna.
-	 * @param array $members Till medlemstabellen.
+	 * @param array $members Medlemmar med grupp-tabellen.
+	 * @param array $orphan_members Medlemmar utan grupp-tabellen.
 	 * @param int $page Sida för medlemstabellen.
 	 * @param int $total_members Totala antalet medlemmar i tabellen.
 	 * @return void
 	 */
-	private function view_main($groups, $members, $page, $total_members)
+	private function view_main($members, $orphan_members, $page, $total_members)
 	{
-		//variabler
-		$prev_group = null;
+		$prev_group = isset($members) ? $members[0]->group_id : null;
 
-		//gruppikonerna
-		echo '<h5 class="mt-4">Gruppöversikt</h5>';
-		echo '<div class="row">';
-		foreach($groups as $grp)
-		{
-			echo '<a class="group_box col-6 col-sm-4 col-md-3" href="'. base_url('signup/admin/members/group/'. $grp->id) .'">';
-			echo '<img class="group_icon" src="'. base_url('images/group_icons/'. $grp->code .'.png') .'" />';
-			echo "<h6>$grp->name</h6>";
-			echo '</a>';
-		}
-		echo '</div>';
-
-		//medlemstabell
-		echo '<hr>';
-		echo '<h5 class="mt-4">Medlemmar utan grupp</h5>';
+		// Medlemmar med grupp
 		echo '<div id="wrapper_member_table" class="table-responsive table-sm">';
+		echo '<h5 class="mt-4">Medlemmar som har grupp</h5>';
+		echo '<table class="table table-hover clickable">';
+			echo '<thead class="table-borderless">';
+				echo '<tr>';
+					echo '<th scope="col">Namn</th>';
+					echo '<th scope="col">Grupp</th>';
+					echo '<th scope="col">Befattning</th>';
+					echo '<th scope="col">Närvaro</th>';
+					echo '<th scope="col">Aktiv</th>';
+					echo '<th scope="col">Min Sida</th>';
+				echo '</tr>';
+			echo '</thead>';;
+			echo '<tbody>';
+				if(count($members) > 0)
+					foreach($members as $member)
+					{
+						$new_group_string = $member->group_id != $prev_group ? 'class="new_group_row"' : null;
+						echo '<tr data-url="'. base_url('signup/admin/members/member/'. $member->id) .'"'. $new_group_string .'>';
+						
+							// Namn
+							echo "<td scope='row' class='font-weight-bold'>$member->name</td>";
+
+							// Grupp
+							echo '<td>';
+								echo group_icon($member->group_code);
+								echo isset($member->group_name) ? $member->group_name : '-';
+							echo '</td>';
+
+							// Befattning
+							echo '<td>'. (isset($member->role_name) ? $member->role_name : '-') .'</td>';
+
+							// Närvaro
+							echo '<td class="font-weight-bold text-'. ($member->attendance >= 50 ? 'success': 'danger') .'">'. $member->attendance .'%</td>';
+
+							// Aktiv/supporter
+							echo '<td class="font-weight-bold text-'. ($member->is_active ? 'success': 'primary') .'">'. ($member->is_active ? 'Aktiv' : 'Supporter') .'</td>';
+
+							// Min sida-länk
+							echo '<td class="btn_manage">';
+								echo '<a class="btn btn-primary" href="'. base_url('signup/mypage/'. $member->id) .'"><i class="fas fa-search"></i></a>';
+							echo '</td>';
+						echo '</tr>';
+
+						$prev_group = $member->group_id;
+					}
+				else
+					echo '<tr><td colspan="3" class="text-center">&ndash; Inga medlemmar &ndash;</td></tr>';
+			echo '</tbody>';
+		echo '</table>';
+		echo '</div>'; // end #wrapper_member_table
+
+		// Medlemmar utan grupp
+		echo '<hr>';
+		echo '<div id="wrapper_orphan_member_table" class="table-responsive table-sm">';
+		echo '<h5 class="mt-4">Medlemmar utan grupp</h5>';
 		echo '<table class="table table-hover clickable">';
 			echo '<thead class="table-borderless">';
 				echo '<tr>';
@@ -163,18 +198,18 @@ class Admin_members implements Adminpanel
 				echo '</tr>';
 			echo '</thead>';
 			echo '<tbody>';
-				if(count($members) > 0)
-					foreach($members as $member)
+				if(count($orphan_members) > 0)
+					foreach($orphan_members as $member)
 					{
 						echo '<tr data-url="'. base_url('signup/admin/members/member/'. $member->id) .'">';
 						
-							//nick
+							// Namn
 							echo "<td scope='row' class='font-weight-bold'>$member->name</td>";
 
-							//befattning
+							// Befattning
 							echo '<td>'. (isset($member->role_name) ? $member->role_name : '-') .'</td>';
 
-							//Min sida-länk
+							// Min sida-länk
 							echo '<td class="btn_manage">';
 								echo '<a class="btn btn-primary" href="'. base_url('signup/mypage/'. $member->id) .'"><i class="fas fa-search"></i></a>';
 							echo '</td>';
@@ -186,80 +221,9 @@ class Admin_members implements Adminpanel
 			echo '</table>';
 
 			//pagination
-			echo pagination($page, $total_members, $this->results_per_page, base_url('signup/admin/members/main/'), 'wrapper_member_table');
+			echo pagination($page, $total_members, $this->results_per_page, base_url('signup/admin/members/main/'), 'wrapper_orphan_member_table');
 
-		echo '</div>';
-	}
-
-	/**
-	 * Grupp-vy
-	 * Översikt av gruppens medlemmar.
-	 *
-	 * @param object $group Grupp-data.
-	 * @param array $members Gruppens medlemmar.
-	 * @return void
-	 */
-	private function view_group($group, $members)
-	{
-		//breadcrumbs
-		echo '<nav aria-label="breadcrumb"><ol class="breadcrumb">';
-			echo '<li class="breadcrumb-item"><a href="'. base_url('signup/admin/members') .'">Hem</a></li>';
-			echo '<li class="breadcrumb-item active" aria-current="page">'. $group->name .'</li>';
-		echo '</ol></nav>';
-
-		//ikon & rubrik
-		echo '<h4>';
-			echo '<img class="group_heading_icon" src="'. base_url('images/group_icons/'. $group->code .'_32.png') .'" />';
-			echo $group->name;
-		echo '</h4>';
-		
-		//medlemstabellen
-		echo '<div id="wrapper_member_table" class="table-responsive table-sm">';
-		echo '<table class="table table-hover clickable">';
-			echo '<thead class="table-borderless">';
-				echo '<tr>';
-					echo '<th scope="col">Namn</th>';
-					echo '<th scope="col">Befattning</th>';
-					echo '<th scope="col" title="Andel av anmälningar som varit: Ja, JIP eller QIP under det senaste kvartalet." data-toggle="tooltip">Närvaro <i class="fas fa-question-circle"></i></th>';
-					echo '<th scope="col" title="Senast bumpad. Hovra över datum för att se tid sedan bumpning i dagar." data-toggle="tooltip">Bumpad <i class="fas fa-question-circle"></i></th>';
-					echo '<th scope="col" title="Nej = Supporter" data-toggle="tooltip">Aktiv <i class="fas fa-question-circle"></i></th>';
-				echo '</tr>';
-			echo '</thead><tbody>';
-				if(count($members) > 0)
-					foreach($members as $member)
-					{
-						//ny grupp?
-						echo '<tr data-url="'. base_url('signup/admin/members/member/'. $member->id) .'">';
-						
-							//nick
-							echo '<td scope="row">';
-								echo "<strong>$member->name</strong>";
-								echo isset($member->rank_name)
-									? rank_icon($member->rank_icon, $member->rank_name)
-									: null;
-							echo '</td>';
-
-							//befattning
-							echo '<td>'. (isset($member->role_name) ? $member->role_name : '-') .'</td>';
-
-							//närvaro
-							echo '<td class="font-weight-bold text-'. ($member->attendance > 50 ? 'success': 'danger') .'">'. $member->attendance .'%</td>';
-
-							//bumpad
-							echo isset($member->rank_date_days_ago) ? '<td title="'. $member->rank_date_days_ago .' dagar sedan" data-toggle="tooltip">' : '<td>';
-								echo isset($member->rank_date) ? $member->rank_date : '?';
-							echo '</td>';
-
-							//aktiv
-							echo '<td>'. ($member->is_active ? '<strong class="text-success">Ja</strong>' : '<strong class="text-danger">Nej</strong>') .'</td>';
-						
-						echo '</tr>';
-					}
-				else
-					echo '<tr><td colspan="5" class="text-center">&ndash; Inga medlemmar &ndash;</td></tr>';
-			echo '</tbody></table>';
-
-		echo '</div>';
+		echo '</div>'; // end #wrapper_orphan_member_table
 	}
 
 	/**
@@ -292,8 +256,7 @@ class Admin_members implements Adminpanel
 
 		//breadcrumbs
 		echo '<nav aria-label="breadcrumb"><ol class="breadcrumb">';
-			echo '<li class="breadcrumb-item"><a href="'. base_url('signup/admin/members') .'">Hem</a></li>';
-			echo isset($member->group_id) ? '<li class="breadcrumb-item"><a href="'. base_url('signup/admin/members/group/'. $member->group_id) .'">'. $member->group_name .'</a></li>' : null;
+			echo '<li class="breadcrumb-item"><a href="'. base_url('signup/admin/members') .'">Medlemmar</a></li>';
 			echo '<li class="breadcrumb-item active" aria-current="page">'. $member->name .'</li>';
 		echo '</ol></nav>';
 
@@ -310,7 +273,7 @@ class Admin_members implements Adminpanel
 
 		echo '<hr>';
 
-		//bumpningshistorik
+		// Bumpningshistorik
 		echo '<h5>Bumpningar</h5>';
 		echo '<div class="row">';
 			echo '<div id="wrapper_promotions_table" class="table-responsive table-sm col-lg-8">';
@@ -351,14 +314,14 @@ class Admin_members implements Adminpanel
 							echo '<tr><td colspan="3" class="text-center">&ndash; Inga bumpningar &ndash;</td></tr>';
 					echo '</tbody>';
 				echo '</table>';
-			echo '</div>'; //end #wrapper_promotions_table
-		echo '</div>'; //end div.row
+			echo '</div>'; // end #wrapper_promotions_table
+		echo '</div>'; // end div.row
 
 
 		echo '<hr>';
 
 
-		//lägg till bumpning
+		// Lägg till bumpning
 		echo '<h5>Lägg till bumpning</h5>';
 		echo '<form action="'. base_url('signup/admin/members/add_promotion/') .'" method="post">';
 		echo '<input type="hidden" name="member_id" value="'. $this->loaded_member->id .'">';
@@ -596,6 +559,82 @@ class Admin_members implements Adminpanel
 		return $members;
 	}
 
+
+	/**
+	 * Hämta medlemmar som finns med i en grupp.
+	 * @return array
+	 */
+	private function get_members()
+	{
+		$members = array();
+		
+		// Medlemmar
+		$sql =
+			'SELECT
+				m.id, m.name, m.is_active,
+				g.id AS group_id, g.name AS group_name, g.code AS group_code,
+				r.name AS role_name
+			FROM ssg_members AS m
+			INNER JOIN ssg_groups AS g
+				ON m.group_id = g.id
+			LEFT JOIN ssg_roles AS r
+				ON m.role_id = r.id
+			ORDER BY
+				g.sorting ASC,
+				m.is_active DESC,
+				CASE # medlemmar utan role listas sist i gruppen
+					WHEN r.id IS NULL THEN 0
+					ELSE 1
+				END DESC,
+				r.sorting ASC,
+				m.registered_date ASC';
+		$query = $this->CI->db->query($sql);
+		foreach($query->result() as $row)
+			$members[] = $row;
+
+		
+		// Närvaro
+		foreach($members as $member)
+		{
+			//variabler
+			$attendance = array();
+			$positive = 0; //antal positiva anmälningar
+			$negative = 0; //antal negativa anmälningar
+
+			$sql =
+				'SELECT 
+					attendance-0 AS id,
+					attendance AS name,
+					COUNT(attendance) AS count
+				FROM ssg_signups
+				INNER JOIN ssg_events AS events
+					ON ssg_signups.event_id = events.id
+				INNER JOIN ssg_event_types event_types
+					ON events.type_id = event_types.id
+				WHERE
+					event_types.obligatory
+					AND member_id = ?
+					AND events.start_datetime >= DATE_SUB(NOW(), INTERVAL 3 MONTH) #senaste kvartalet
+				GROUP BY attendance';
+			$query = $this->CI->db->query($sql, $member->id);
+			foreach($query->result() as $row)
+			{
+				if($row->id <= 3) //Ja, JIP eller QIP == true
+					$positive += $row->count;
+				else //NOSHOW eller Oanmäld frånvaro
+					$negative += $row->count;
+			}
+
+			//räkna ut andel positiva anmälningar i procent
+			$total = $positive + $negative;
+			$member->attendance = $total > 0
+				? floor(($positive / $total) * 100)
+				: 0;
+		}
+		
+		return $members;
+	}
+
 	/**
 	 * Hämta medlemmar utan grupp.
 	 *
@@ -605,7 +644,6 @@ class Admin_members implements Adminpanel
 	 */
 	private function get_orphan_members($page, $results_per_page)
 	{
-		//varibaler
 		$members = array();
 		
 		$sql =

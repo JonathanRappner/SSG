@@ -15,7 +15,6 @@ class Admin_main implements Adminpanel
 
 	public function main($var1, $var2, $var3)
 	{
-		
 	}
 
 	public function view()
