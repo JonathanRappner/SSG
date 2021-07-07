@@ -148,7 +148,7 @@ if(isset($loaded_member->rank_date))
 <!-- Topp -->
 <?php $this->load->view('signup/sub-views/top')?>
 
-<div id="wrapper" class="container p-0">
+<div id="wrapper" class="container">
 
 	<!-- Rubrik + "Välj medlem" -->
 	<div class="row">
@@ -177,47 +177,49 @@ if(isset($loaded_member->rank_date))
 	</div>
 
 	<!-- Medlemsdata -->
-	<div class="col-12 col-lg-6 p-0">
-		<div id="wrapper_info" class="card bg-white border-0 shadow-sm">
-	
-			<h4 class="card-header bg-dark text-white">
-				<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>⛄<?php endif;?>
-				<?php if(EASTER):?>🐤<?php endif;?>
-				Medlemsdata
-			</h4>
-	
-			<div class="card-body pt-2">
-				<dl class="col">
-					<dt>Namn:</dt>
-					<dd><?=isset($loaded_member->name) ? $loaded_member->name : '-'?></dd>
-	
-					<dt>Enhet:</dt>
-					<dd><?=isset($loaded_member->group_name) ? group_icon($loaded_member->group_code) . $loaded_member->group_name : '-'?></dd>
-	
-					<dt>Befattning:</dt>
-					<dd><?=isset($loaded_member->role_name) ? $loaded_member->role_name : '-'?></dd>
-	
-					<dt>Grad:</dt>
-					<dd><?=isset($loaded_member->rank_name) ? rank_icon($loaded_member->rank_icon, $loaded_member->rank_name). $loaded_member->rank_name : '-'?></dd>
-					
-					<dt>Senast bumpad:</dt>
-					<dd><?=isset($bump_string) ? $bump_string : '?'?></dd>
-	
-					<dt>Aktiv:</dt>
-					<dd><?=$loaded_member->is_active ? 'Ja': 'Nej'?></dd>
-	
-					<dt>UID:</dt>
-					<dd><?=isset($loaded_member->uid) ? $loaded_member->uid : '-'?></dd>
-	
-					<dt>Registreringsdatum:</dt>
-					<dd><?=isset($loaded_member->registered_date) ? $loaded_member->registered_date : '-'?></dd>
-	
-					<dt>Behörighetsgrupper:</dt>
-					<dd><?=count($loaded_member->permission_groups) > 0 ? $admin_groups : 'Inga'?></dd>
-				</dl>
-			</div><!-- end div.card-body -->
-		</div><!-- end div.card -->
-	</div><!-- end div.col-12 -->
+	<div class="row">
+		<div class="col-12 col-lg-6 p-0">
+			<div id="wrapper_info" class="card bg-white border-0 shadow-sm">
+		
+				<h4 class="card-header bg-dark text-white">
+					<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>⛄<?php endif;?>
+					<?php if(EASTER):?>🐤<?php endif;?>
+					Medlemsdata
+				</h4>
+		
+				<div class="card-body pt-2">
+					<dl class="col">
+						<dt>Namn:</dt>
+						<dd><?=isset($loaded_member->name) ? $loaded_member->name : '-'?></dd>
+		
+						<dt>Enhet:</dt>
+						<dd><?=isset($loaded_member->group_name) ? group_icon($loaded_member->group_code) . $loaded_member->group_name : '-'?></dd>
+		
+						<dt>Befattning:</dt>
+						<dd><?=isset($loaded_member->role_name) ? $loaded_member->role_name : '-'?></dd>
+		
+						<dt>Grad:</dt>
+						<dd><?=isset($loaded_member->rank_name) ? rank_icon($loaded_member->rank_icon, $loaded_member->rank_name). $loaded_member->rank_name : '-'?></dd>
+						
+						<dt>Senast bumpad:</dt>
+						<dd><?=isset($bump_string) ? $bump_string : '?'?></dd>
+		
+						<dt>Aktiv:</dt>
+						<dd><?=$loaded_member->is_active ? 'Ja': 'Nej'?></dd>
+		
+						<dt>UID:</dt>
+						<dd><?=isset($loaded_member->uid) ? $loaded_member->uid : '-'?></dd>
+		
+						<dt>Registreringsdatum:</dt>
+						<dd><?=isset($loaded_member->registered_date) ? $loaded_member->registered_date : '-'?></dd>
+		
+						<dt>Behörighetsgrupper:</dt>
+						<dd><?=count($loaded_member->permission_groups) > 0 ? $admin_groups : 'Inga'?></dd>
+					</dl>
+				</div><!-- end div.card-body -->
+			</div><!-- end div.card -->
+		</div><!-- end div.col-12 -->
+	</div>
 
 	<!-- Statistik-rubrik + "Visa data sedan:" -->
 	<div class="row mb-3">
