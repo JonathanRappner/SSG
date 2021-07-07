@@ -113,7 +113,7 @@ class Site extends CI_Controller
 
 	public function murkel()
 	{
-		$this->load->library('april_fools');
+		$this->load->library('holidays/april_fools');
 		
 		echo '<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">';
 		echo '<h1>Murkels hörna</h1>';
