@@ -19,7 +19,7 @@ $this->current_page = 'members';
 <!-- Top -->
 <?php $this->load->view('site/sub-views/top');?>
 
-<div id="wrapper_members" class="container p-0">
+<div id="wrapper_members" class="container">
 
 	<h1>Medlemmar</h1>
 
