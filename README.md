@@ -17,3 +17,6 @@ All instructions, comments and text in this projects are written in Swedish.
 	 3. Redigera filen och mata in dina databas-uppgifter.
 3. Kör filen **install.sql** i din databas.
 4. Obs: I skrivandets stund (januari 2019) laddar hemsidan medlemsuppgifter och kollar inloggningar mot tabellen smf_members. Tabellen tillhandahålls av gamla sidan (SimpleMachines Forum). Hemsidan bör själv skapa placeholder-events i ssg_events en månad framåt.
+
+## XML
+Requests till t.ex: https://ssg-clan.se/xml/vl.xml redirectas till XML-controllern som ger tillbaka en auto-genererad xml-fil.

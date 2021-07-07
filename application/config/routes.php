@@ -50,6 +50,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] = 'site';
-$route['murkel'] = 'site/murkel';
+$route['murkel'] = 'site/murkel'; // emoji-randomizer
+$route['xml/(:any)'] = 'xml/index/$1'; // ssg-clan.se/xml/vl
+$route['xml/(:any).xml'] = 'xml/index/$1'; // ssg-clan.se/xml/vl.xml
+
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

@@ -24,13 +24,14 @@ css/*.css
 *.sh
 
 # stuff
-images/carousel/
-images/rank_icons/
-images/arma3_sync_manual/
-images/guider/
-old_gallery/
-docs/
-xml/
-files/
-gallery/
+/images/carousel/
+/images/rank_icons/
+/images/arma3_sync_manual/
+/images/guider/
+/old_gallery/
+/docs/
+/xml/
+/xml_old/
+/files/
+/gallery/
 phpinfo.php
