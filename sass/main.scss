@@ -38,14 +38,6 @@ h6 { font-size: 1rem; }
 }
 
 
-
-
-
-
-
-
-
-
 // Enhetsikoner 16px 
 img.group_icon_16{
 	width: 16px;
@@ -62,6 +54,16 @@ img.group_icon_32{
 	position: relative;
 	bottom: 2px;
 	left: 0px;
+}
+
+// grupp saknas (fontawesome-frågetecken)
+i.group_icon_16{
+	margin-right: 3px;
+}
+
+// grupp saknas (fontawesome-frågetecken)
+i.group_icon_32{
+	margin-right: 6px;
 }
 
 // Gradikon 

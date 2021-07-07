@@ -118,7 +118,8 @@ function group_icon($group_code, $group_name = null, $big = false)
 			return "<img class=\"group_icon_32 d-inline\" src=\"{$icon_string_start}_32.png\" {$tooltip_string} />";
 	}
 	else
-		return '<i class="fas fa-question-circle"></i>';
+		return '<i class="fas fa-question-circle group_icon_'. ($big ? '32' : '16') .'"></i>';
+
 }
 
 /**
