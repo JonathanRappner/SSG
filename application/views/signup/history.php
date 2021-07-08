@@ -23,13 +23,13 @@ $this->current_page = 'history';
 <!-- Top -->
 <?php $this->load->view('signup/sub-views/top')?>
 
-<div id="wrapper" class="container p-0">
+<div id="wrapper" class="container">
 
 	<h1>Historik</h1>
 
 	<p>Här kan du se gamla events. Klicka på ett event i listan för att se fler detaljer.</p>
 
-	<div id="wrapper_events_table" class="table-responsive table-sm">
+	<div id="wrapper_events_table" class="row table-responsive table-sm">
 		<div class="px-3 py-2 mb-3 bg-white rounded shadow-sm">
 			<table class="table table-hover clickable">
 				<thead class="table-borderless">

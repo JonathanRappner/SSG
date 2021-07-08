@@ -146,6 +146,15 @@ dl { line-height: 1.1rem; }
 .text-notsigned{color: #848484;}
 .text-awol{color: #fff; background-color: #7B23A8; padding:4px;}
 
+// md och mindre
+@media (max-width: 991px) {
+
+	// card-headers ingen rundad kant på mobil
+	.card-header:first-child {
+		border-radius: 0;
+	}
+}
+
 // >= sm 
 @media (min-width: 576px) {
 	

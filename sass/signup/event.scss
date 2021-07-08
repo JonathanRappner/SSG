@@ -18,12 +18,9 @@
 }
 
 // Mindre text i tabellen i mobilversionen 
-div.wrapper_signups_table{
-	font-size:0.7rem;
-}
-
 // ingen overflow-scrollbar tillåten 
-div.wrapper_signups_table table{
+.signups_table{
+	font-size:0.7rem;
 	table-layout:fixed;
 }
 
@@ -42,7 +39,7 @@ table i.fas{
 // Layouts större än sm 
 @media (min-width: 576px) {
 	// Större text i tabellen i desktop-versionen 
-	div.wrapper_signups_table{
+	.signups_table{
 		font-size:1rem;
 	}
 }
@@ -51,7 +48,7 @@ table i.fas{
 @media (min-width: 992px){
 	
 	// tabell 
-	div.wrapper_signups_table{
+	.signups_table{
 		font-size:0.8rem;
 	}
 	

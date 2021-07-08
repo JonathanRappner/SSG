@@ -29,7 +29,7 @@ foreach($signups as $s)
 	<?php $this->load->view('signup/sub-views/head')?>
 
 	<!-- Page-specific -->
-	<link rel="stylesheet" href="<?=base_url('css/signup/event.css')?>">
+	<link rel="stylesheet" href="<?=base_url('css/signup/event.css?0')?>">
 	<link rel="stylesheet" href="<?=base_url('css/signup/event_stats.css')?>">
 	<link rel="stylesheet" href="<?=base_url('css/signup/form.css')?>">
 	<script src="<?=base_url('js/signup/clickable_table.js')?>"></script>
@@ -46,13 +46,13 @@ foreach($signups as $s)
 <!-- Topp -->
 <?php $this->load->view('signup/sub-views/top')?>
 
-<div id="main_wrapper" class="container p-0">
+<div id="main_wrapper" class="container">
 
 	<!-- Titel & knappar + Statistik -->
-	<div id="row_event_top" class="row mb-4">
+	<div class="row">
 		
 		<!-- Titel & knappar -->
-		<div id="event_info" class="col-lg-6 mb-3 mb-lg-0">
+		<div id="event_info" class="col-12 col-lg-6 mb-3 mb-lg-0 px-0 pr-lg-3 order-1 order-lg-1">
 
 			<div class="card border-0 shadow-sm">
 
@@ -136,94 +136,97 @@ foreach($signups as $s)
 
 		<?php if(!$is_gsu):?>
 		<!-- Statistik -->
-		<div class="col-lg">
+		<div id="statistics" class="col-12 col-lg px-0 order-3 order-lg-2">
 			<?php $this->load->view('signup/sub-views/event_stats', array('stats'=>$advanced_stats, 'non_signed'=>count($non_signups), 'obligatory'=>$event->obligatory, 'is_old'=>$event->is_old))?>
 		</div>
 		<?php endif;?>
 
+		<!-- Anmälningar -->
+		<div class="col-12 px-0 order-2 order-lg-3">
+			<div class="card border-0 shadow-sm">
+		
+				<h4 class="card-header bg-dark text-white">
+					<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>🎁<?php endif;?>
+					<?php if(EASTER):?>🐇<?php endif;?>
+					Anmälningar
+				</h4>
+		
+				<div class="card-body table-responsive table-sm px-2 pt-1 pb-0">
+					<table class="signups_table table table-hover<?=$is_admin ? ' clickable' : null ?>">
+						<thead class="table-borderless">
+							<tr>
+								<th scope="col">Namn</th>
+								<th scope="col">Grupp</th>
+								<th scope="col">Befattning</th>
+								<th scope="col">Närvaro</th>
+								<th class="column_message" scope="col">Meddelande</th>
+							</tr>
+						</thead>
+						<tbody>
+		
+							<?php
+							//Anmälningar
+							$prev_group = null;
+							$gray_row = false;
+							foreach($signups as $s)
+							{
+								//variabler
+								$clickable_url = base_url("signup/mypage/$s->member_id");
+								$att = $this->attendance->get_type_by_id($s->attendance_id); //närvaro-objekt
+								$message = mb_strlen($s->message) <= $message_max_length
+									? $s->message
+									: "<abbr title='$s->message' data-toggle='tooltip'>". mb_substr($s->message, 0, ($message_max_length-3)) .'...</abbr>';
+								
+								//ny grupp
+								if($s->group_code != $prev_group)
+								{
+									echo '<tr class="new_group_row"'. ($is_admin ? " data-url='$clickable_url'" : null) .'>';
+									$prev_group = $s->group_code;
+								}
+								else
+									echo '<tr'. ($is_admin ? " data-url='$clickable_url'" : null) .'>';
+								
+								//namn
+								echo
+								"<th scope='row' class='truncate'>
+									$s->member_name
+								</th>";
+								// ". (isset($s->rank_name) ? '<img class="rank_icon" src="'. base_url("images/rank_icons/$s->rank_icon") .'" title="'. $s->rank_name .'" data-toggle="tooltip" />' : null) ."
+									
+								//grupp med ikon
+								echo
+									"<td class='text-nowrap'>
+										". group_icon($s->group_code) ."
+										<span class='d-inline d-md-none'>". strtoupper($s->group_code) ."</span>
+										<span class='d-none d-md-inline'>$s->group_name</span>
+									</td>";
+								
+								if(isset($s->role_name_long))
+									echo "<td class='truncate'><abbr title='$s->role_name_long' data-toggle='tooltip'>$s->role_name</abbr></td>";
+								else
+									echo "<td class='truncate'>$s->role_name</td>";
+								
+								
+								echo "<td><span class='$att->class'>$att->text</span></td>"; //närvaro
+								echo
+									"<td class='truncate'>
+										<abbr title='$s->message' data-toggle='tooltip'>$s->message_highlighted</abbr>
+									</td>"; //message
+								echo '</tr>';
+							}
+		
+							if(count($signups) <= 0)
+								echo '<tr><td colspan="5" class="text-center">&ndash; Inga anmälningar &ndash;</td></tr>';
+							?>
+						</tbody>
+					</table>
+				</div><!--end div.body-->
+		
+			</div><!--end div.card-->
+		</div>
+
 	</div>
 
-	<!-- Anmälningar -->
-	<div class="wrapper_signups_table card border-0 shadow-sm">
-
-		<h4 class="card-header bg-dark text-white">
-			<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>🎁<?php endif;?>
-			<?php if(EASTER):?>🐇<?php endif;?>
-			Anmälningar
-		</h4>
-
-		<div class="card-body table-responsive table-sm px-2 pt-1 pb-0">
-			<table class="table table-hover<?=$is_admin ? ' clickable' : null ?>">
-				<thead class="table-borderless">
-					<tr>
-						<th scope="col">Namn</th>
-						<th scope="col">Grupp</th>
-						<th scope="col">Befattning</th>
-						<th scope="col">Närvaro</th>
-						<th class="column_message" scope="col">Meddelande</th>
-					</tr>
-				</thead>
-				<tbody>
-
-					<?php
-					//Anmälningar
-					$prev_group = null;
-					$gray_row = false;
-					foreach($signups as $s)
-					{
-						//variabler
-						$clickable_url = base_url("signup/mypage/$s->member_id");
-						$att = $this->attendance->get_type_by_id($s->attendance_id); //närvaro-objekt
-						$message = mb_strlen($s->message) <= $message_max_length
-							? $s->message
-							: "<abbr title='$s->message' data-toggle='tooltip'>". mb_substr($s->message, 0, ($message_max_length-3)) .'...</abbr>';
-						
-						//ny grupp
-						if($s->group_code != $prev_group)
-						{
-							echo '<tr class="new_group_row"'. ($is_admin ? " data-url='$clickable_url'" : null) .'>';
-							$prev_group = $s->group_code;
-						}
-						else
-							echo '<tr'. ($is_admin ? " data-url='$clickable_url'" : null) .'>';
-						
-						//namn
-						echo
-						"<th scope='row' class='truncate'>
-							$s->member_name
-						</th>";
-						// ". (isset($s->rank_name) ? '<img class="rank_icon" src="'. base_url("images/rank_icons/$s->rank_icon") .'" title="'. $s->rank_name .'" data-toggle="tooltip" />' : null) ."
-							
-						//grupp med ikon
-						echo
-							"<td class='text-nowrap'>
-								". group_icon($s->group_code) ."
-								<span class='d-inline d-md-none'>". strtoupper($s->group_code) ."</span>
-								<span class='d-none d-md-inline'>$s->group_name</span>
-							</td>";
-						
-						if(isset($s->role_name_long))
-							echo "<td class='truncate'><abbr title='$s->role_name_long' data-toggle='tooltip'>$s->role_name</abbr></td>";
-						else
-							echo "<td class='truncate'>$s->role_name</td>";
-						
-						
-						echo "<td><span class='$att->class'>$att->text</span></td>"; //närvaro
-						echo
-							"<td class='truncate'>
-								<abbr title='$s->message' data-toggle='tooltip'>$s->message_highlighted</abbr>
-							</td>"; //message
-						echo '</tr>';
-					}
-
-					if(count($signups) <= 0)
-						echo '<tr><td colspan="5" class="text-center">&ndash; Inga anmälningar &ndash;</td></tr>';
-					?>
-				</tbody>
-			</table>
-		</div><!--end div.body-->
-
-	</div><!--end div.wrapper_signups_table-->
 
 	<!-- Ej anmälda -->
 	<?php if( //ej anmälda, aktiva medlemmar
@@ -232,51 +235,53 @@ foreach($signups as $s)
 		&& !empty($non_signups)
 		&& $this->permissions->has_permissions(array('s0', 's1', 'grpchef'))):
 	?>
-		<div class="wrapper_signups_table card border-0 shadow-sm mt-4">
-			<h4 class="card-header bg-dark text-white">
-				<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>🕯<?php endif;?>
-				<span title="Endast S0, S1 och gruppchefer ser listan." data-toggle="tooltip">Aktiva medlemmar som inte anmält sig <i class='fas fa-question-circle'></i></span>
-			</h4>
-
-			<div class="card-body table-responsive table-sm px-2 pt-1 pb-0">
-				<table class="table table-hover<?=$is_admin ? ' clickable' : null ?>">
-					<thead class="table-borderless">
-						<tr>
-							<th scope="col" class="column_non_signed_name">Namn</th>
-							<th scope="col">Enhet</th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php
-						$prev_group = null;
-						foreach($non_signups as $member):?>
-							<?php
-								//variabler
-								$clickable_url = base_url("signup/mypage/$member->id");
-
-								//ny tabell-rad
-								if($member->group_code != $prev_group) //rad med ny grupp
-								{
-									echo '<tr class="new_group_row"'. ($is_admin ? " data-url='$clickable_url'" : null) .'>';
-									$prev_group = $member->group_code;
-								}
-								else //samma grupp som förra raden
-									echo '<tr'. ($is_admin ? " data-url='$clickable_url'" : null) .'>';
-							?>
-								<th scope="row"><?=$member->name?></th>
-								<td><?php
-									echo group_icon($member->group_code);
-									echo isset($member->group_name)
-										? $member->group_name
-										: null;
-								?></td>
+		<div class="row">
+			<div class="card border-0 shadow-sm mt-4">
+				<h4 class="card-header bg-dark text-white">
+					<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>🕯<?php endif;?>
+					<span title="Endast S0, S1 och gruppchefer ser listan." data-toggle="tooltip">Aktiva medlemmar som inte anmält sig <i class='fas fa-question-circle'></i></span>
+				</h4>
+	
+				<div class="card-body table-responsive table-sm px-2 pt-1 pb-0">
+					<table class="signups_table table table-hover<?=$is_admin ? ' clickable' : null ?>">
+						<thead class="table-borderless">
+							<tr>
+								<th scope="col" class="column_non_signed_name">Namn</th>
+								<th scope="col">Enhet</th>
 							</tr>
-						<?php endforeach?>
-					</tbody>
-				</table>
-			</div><!--end div-card-body-->
-
-		</div><!--end div.wrapper_signups_table-->
+						</thead>
+						<tbody>
+							<?php
+							$prev_group = null;
+							foreach($non_signups as $member):?>
+								<?php
+									//variabler
+									$clickable_url = base_url("signup/mypage/$member->id");
+	
+									//ny tabell-rad
+									if($member->group_code != $prev_group) //rad med ny grupp
+									{
+										echo '<tr class="new_group_row"'. ($is_admin ? " data-url='$clickable_url'" : null) .'>';
+										$prev_group = $member->group_code;
+									}
+									else //samma grupp som förra raden
+										echo '<tr'. ($is_admin ? " data-url='$clickable_url'" : null) .'>';
+								?>
+									<th scope="row"><?=$member->name?></th>
+									<td><?php
+										echo group_icon($member->group_code);
+										echo isset($member->group_name)
+											? $member->group_name
+											: null;
+									?></td>
+								</tr>
+							<?php endforeach?>
+						</tbody>
+					</table>
+				</div><!--end div-card-body-->
+	
+			</div><!--end div.wrapper_signups_table-->
+		</div>
 	<?php endif?>
 
 	<?php if(!$event->is_old):?>

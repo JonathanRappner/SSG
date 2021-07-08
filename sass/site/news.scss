@@ -142,15 +142,6 @@ div.links a{
 div.links a img { width: 100%; }
 div.links a:hover { text-decoration: none; }
 
-// md och mindre
-@media (max-width: 991px) {
-
-	// newsfeed+senaste foruminlägg+ts3 osv: ingen rundad kant på header, på mobil
-	.card-header:first-child {
-		border-radius: 0;
-	}
-}
-
 // sm eller större 
 @media (min-width: 576px) {
 	#carousel{ height: 85px; } // bredd: 540px
