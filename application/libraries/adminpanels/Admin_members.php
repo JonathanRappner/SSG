@@ -150,6 +150,14 @@ class Admin_members implements Adminpanel
 				if(count($members) > 0)
 					foreach($members as $member)
 					{
+						// röd, orange, grön
+						if($member->attendance < 50)
+							$attendance_class = 'text-danger';
+						else if($member->attendance < 60)
+							$attendance_class = 'text-warning';
+						else
+							$attendance_class = 'text-success';
+
 						$new_group_string = $member->group_id != $prev_group ? 'class="new_group_row"' : null;
 						echo '<tr data-url="'. base_url('signup/admin/members/member/'. $member->id) .'"'. $new_group_string .'>';
 						
@@ -166,7 +174,7 @@ class Admin_members implements Adminpanel
 							echo '<td>'. (isset($member->role_name) ? $member->role_name : '-') .'</td>';
 
 							// Närvaro
-							echo '<td class="font-weight-bold text-'. ($member->attendance >= 50 ? 'success': 'danger') .'">'. $member->attendance .'%</td>';
+							echo "<td class='font-weight-bold ${attendance_class}'>". $member->attendance .'%</td>';
 
 							// Aktiv/supporter
 							echo '<td class="font-weight-bold text-'. ($member->is_active ? 'success': 'primary') .'">'. ($member->is_active ? 'Aktiv' : 'Supporter') .'</td>';
