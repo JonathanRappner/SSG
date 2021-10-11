@@ -74,8 +74,8 @@ class Members extends CI_Model
 			ORDER BY
 				m.is_active DESC,
 				r.id = NULL ASC, #medlemmar utan befattning hamnar sist
-				rank_sorting DESC,
 				r.sorting ASC,
+				rank_sorting DESC,
 				m.id ASC';
 		$members = $this->db->query($sql, array($group_id))->result();
 
