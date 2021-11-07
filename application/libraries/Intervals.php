@@ -22,7 +22,7 @@ class Intervals
 		//hämta intervaller
 		$interval = $this->get_interval();
 
-		if(ENVIRONMENT == 'production' && $interval >= 1)
+		if($interval >= 1)
 			$this->daily();
 	}
 
@@ -54,11 +54,15 @@ class Intervals
 
 		//metoder
 		$this->CI->eventsignup->create_auto_events();
-		$this->archive_old_events();
 		$this->remove_outdated_recesses();
 		$this->CI->chat->prune_messages();
 		$this->remove_old_global_alerts();
-		$this->set_yearly_flairs();
+
+		if(ENVIRONMENT == 'production')
+		{
+			$this->set_yearly_flairs();
+			$this->archive_old_events();
+		}
 
 		$this->update_interval();
 	}
