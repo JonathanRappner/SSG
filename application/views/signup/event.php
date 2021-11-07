@@ -142,7 +142,7 @@ foreach($signups as $s)
 		<?php endif;?>
 
 		<!-- Anmälningar -->
-		<div class="col-12 px-0 order-2 order-lg-3">
+		<div class="col-12 pt-3 px-0 order-2 order-lg-3">
 			<div class="card border-0 shadow-sm">
 		
 				<h4 class="card-header bg-dark text-white">
