@@ -29,7 +29,7 @@ foreach($signups as $s)
 	<?php $this->load->view('signup/sub-views/head')?>
 
 	<!-- Page-specific -->
-	<link rel="stylesheet" href="<?=base_url('css/signup/event.css?0')?>">
+	<link rel="stylesheet" href="<?=base_url('css/signup/event.css?1')?>">
 	<link rel="stylesheet" href="<?=base_url('css/signup/event_stats.css')?>">
 	<link rel="stylesheet" href="<?=base_url('css/signup/form.css')?>">
 	<script src="<?=base_url('js/signup/clickable_table.js')?>"></script>
@@ -191,7 +191,7 @@ foreach($signups as $s)
 								echo
 								"<th scope='row' class='truncate'>
 									$s->member_name
-									". (isset($s->rank_name) ? '<img class="rank_icon_16" src="'. base_url("images/rank_icons/$s->rank_icon") .'" title="'. $s->rank_name .'" data-toggle="tooltip" />' : null) ."
+									". rank_icon($s->rank_icon, $s->rank_name, $big = false) ."
 								</th>";
 									
 								//grupp med ikon
