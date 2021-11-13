@@ -159,6 +159,7 @@ foreach($signups as $s)
 								<th scope="col">Grupp</th>
 								<th scope="col">Befattning</th>
 								<th scope="col">Närvaro</th>
+								<th scope="col">Anmäld i tid</th>
 								<th class="column_message" scope="col">Meddelande</th>
 							</tr>
 						</thead>
@@ -190,8 +191,8 @@ foreach($signups as $s)
 								echo
 								"<th scope='row' class='truncate'>
 									$s->member_name
+									". (isset($s->rank_name) ? '<img class="rank_icon_16" src="'. base_url("images/rank_icons/$s->rank_icon") .'" title="'. $s->rank_name .'" data-toggle="tooltip" />' : null) ."
 								</th>";
-								// ". (isset($s->rank_name) ? '<img class="rank_icon" src="'. base_url("images/rank_icons/$s->rank_icon") .'" title="'. $s->rank_name .'" data-toggle="tooltip" />' : null) ."
 									
 								//grupp med ikon
 								echo
@@ -201,17 +202,31 @@ foreach($signups as $s)
 										<span class='d-none d-md-inline'>$s->group_name</span>
 									</td>";
 								
+								// befattning
 								if(isset($s->role_name_long))
 									echo "<td class='truncate'><abbr title='$s->role_name_long' data-toggle='tooltip'>$s->role_name</abbr></td>";
 								else
 									echo "<td class='truncate'>$s->role_name</td>";
 								
+								//närvaro
+								echo "<td><span class='$att->class'>$att->text</span></td>"; 
+
+								// anmäld i tid
+								$signed_datetime = "{$s->signed_date} {$s->signed_time}";
+								$deadline_datetime = date('Y-m-d G:i', $event->deadline_epoch);
+								$changed_string = $signed_datetime != "{$s->last_changed_date} {$s->last_changed_time}"
+									? " (Ändrad: {$s->last_changed_date} {$s->last_changed_time})"
+									: null;
+								echo
+									"<td title='Anmälan gjord: {$signed_datetime}". $changed_string ."'>
+										". ($signed_datetime > $deadline_datetime ? "<i class='text-danger fas fa-stopwatch'></i> Nej" : "<i class='text-success fas fa-check'></i> Ja") ."
+									</td>";
 								
-								echo "<td><span class='$att->class'>$att->text</span></td>"; //närvaro
+								// meddelande
 								echo
 									"<td class='truncate'>
 										<abbr title='$s->message' data-toggle='tooltip'>$s->message_highlighted</abbr>
-									</td>"; //message
+									</td>"; 
 								echo '</tr>';
 							}
 		
