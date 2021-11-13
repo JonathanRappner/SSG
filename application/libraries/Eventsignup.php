@@ -22,9 +22,6 @@ class Eventsignup
 	 */
 	public function get_event($event_id)
 	{
-		// variabler
-		$deadline_time = '00:00:00';
-
 		$sql =
 			"SELECT
 				ssg_events.id, ssg_events.title, forum_link, preview_image, obligatory,
@@ -37,7 +34,8 @@ class Eventsignup
 				DATE_FORMAT(ADDTIME(start_datetime, length_time), '%Y-%m-%d') AS end_date,
 				TIME_FORMAT(start_datetime, '%H:%i') AS start_time,
 				TIME_FORMAT(ADDTIME(start_datetime, length_time), '%H:%i') AS end_time,
-				UNIX_TIMESTAMP(DATE_FORMAT(start_datetime, ?)) AS deadline_epoch,
+				UNIX_TIMESTAMP(DATE_FORMAT(start_datetime, '%Y-%m-%d 00:00:00')) AS deadline_epoch,
+				DATE_FORMAT(start_datetime, '%Y-%m-%d 00:00') AS deadline_datetime,
 				ADDTIME(start_datetime, length_time) < NOW() AS is_old
 			FROM ssg_events
 			LEFT JOIN ssg_members
@@ -45,7 +43,7 @@ class Eventsignup
 			INNER JOIN ssg_event_types
 				ON ssg_events.type_id = ssg_event_types.id
 			WHERE ssg_events.id = ?";
-		$query = $this->CI->db->query($sql, array("%Y-%m-%d $deadline_time", $event_id));
+		$query = $this->CI->db->query($sql, $event_id);
 
 		if($query->num_rows() <= 0)
 			show_error("Ogiltigt event-id: $event_id");

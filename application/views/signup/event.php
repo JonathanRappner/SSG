@@ -213,13 +213,15 @@ foreach($signups as $s)
 
 								// anmäld i tid
 								$signed_datetime = "{$s->signed_date} {$s->signed_time}";
-								$deadline_datetime = date('Y-m-d G:i', $event->deadline_epoch);
 								$changed_string = $signed_datetime != "{$s->last_changed_date} {$s->last_changed_time}"
 									? " (Ändrad: {$s->last_changed_date} {$s->last_changed_time})"
 									: null;
 								echo
 									"<td title='Anmälan gjord: {$signed_datetime}". $changed_string ."'>
-										". ($signed_datetime > $deadline_datetime ? "<i class='text-danger fas fa-stopwatch'></i> Nej" : "<i class='text-success fas fa-check'></i> Ja") ."
+										". ($signed_datetime > $event->deadline_datetime
+											? '<i class="text-danger fas fa-stopwatch"></i> Nej'
+											: '<i class="text-success fas fa-check"></i> Ja'
+										) ."
 									</td>";
 								
 								// meddelande
