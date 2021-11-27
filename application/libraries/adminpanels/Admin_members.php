@@ -56,6 +56,7 @@ class Admin_members implements Adminpanel
 			$this->ranks = $this->CI->db->query('SELECT id, name FROM ssg_ranks WHERE NOT obsolete ORDER BY sorting ASC')->result();
 			$this->member_id = $var2;
 			$this->loaded_member = $this->CI->member->get_member_data($this->member_id);
+			$this->loaded_member->stats = $this->get_member_stats($this->member_id);
 			$this->promotions = $this->get_promotions($this->member_id);
 		}
 		else if($this->view == 'delete_promotion_confirm') //ta bort bumpning, bekräftan
@@ -107,11 +108,13 @@ class Admin_members implements Adminpanel
 	{
 		echo '<div id="wrapper_members">';
 
-		if($this->view == 'main') //huvud-vy
+		if($this->view == 'main') // huvud-vy
 			$this->view_main($this->members, $this->orphan_members, $this->page, $this->total_members);
-		else if($this->view == 'member') //medlems-vy
+		else if($this->view == 'member') // medlems-vy
 			$this->view_member($this->loaded_member, $this->promotions);
-		else if($this->view == 'delete_promotion_confirm') //ta bort bumpning, bekräftan
+		else if($this->view == 'group') // grupp-vy
+			$this->view_group($this->members, $this->group, $this->group_id);
+		else if($this->view == 'delete_promotion_confirm') // ta bort bumpning, bekräftan
 			$this->view_delete_promotion_confirm($this->promotion_id);
 		else
 			echo '<p>Inkorrekt url.</p>';
@@ -130,27 +133,38 @@ class Admin_members implements Adminpanel
 	 */
 	private function view_main($members, $orphan_members, $page, $total_members)
 	{
-		$prev_group = isset($members) ? $members[0]->group_id : null;
+		$prev_group = null;
 
 		// Medlemmar med grupp
 		echo '<div id="wrapper_member_table" class="table-responsive table-sm">';
-		echo '<h5 class="mt-4">Medlemmar som har grupp</h5>';
-		echo '<table class="table table-hover clickable">';
-			echo '<thead class="table-borderless">';
-				echo '<tr>';
-					echo '<th scope="col">Namn</th>';
-					echo '<th scope="col">Grupp</th>';
-					echo '<th scope="col">Befattning</th>';
-					echo '<th scope="col">Närvaro</th>';
-					echo '<th scope="col">Aktiv</th>';
-					echo '<th scope="col">Min Sida</th>';
-				echo '</tr>';
-			echo '</thead>';;
-			echo '<tbody>';
 				if(count($members) > 0)
+				{
 					foreach($members as $member)
 					{
-						// röd, orange, grön
+						// ny grupp, start
+						if($member->group_id != $prev_group)
+						{
+							// avsluta förra gruppens tabell, men inte på första gruppen (eftersom det inte finns någon föregående grupp)
+							if($member != $members[0])
+								echo '</tbody></table>';
+
+							echo '<a href="'. base_url('signup/admin/members/group/'. $member->group_id) .'" class="text-dark">';
+								echo "<h3>". group_icon($member->group_code, $member->group_name, true) ."{$member->group_name}</h3>";
+							echo "</a>";
+							echo '<table class="table table-hover clickable mb-5">';
+							echo '<thead class="table-borderless">';
+								echo '<tr>';
+									echo '<th scope="col">Namn</th>';
+									echo '<th scope="col">Befattning</th>';
+									echo '<th scope="col">Närvaro</th>';
+									echo '<th scope="col">Aktiv</th>';
+									echo '<th scope="col">Min Sida</th>';
+								echo '</tr>';
+							echo '</thead>';;
+							echo '<tbody>';
+						}
+
+						// närvaro-färg
 						if($member->attendance < 50)
 							$attendance_class = 'text-danger';
 						else if($member->attendance < 60)
@@ -158,17 +172,11 @@ class Admin_members implements Adminpanel
 						else
 							$attendance_class = 'text-success';
 
-						$new_group_string = $member->group_id != $prev_group ? 'class="new_group_row"' : null;
-						echo '<tr data-url="'. base_url('signup/admin/members/member/'. $member->id) .'"'. $new_group_string .'>';
+						// medlemsraden
+						echo '<tr data-url="'. base_url('signup/admin/members/member/'. $member->id) .'">';
 						
 							// Namn
 							echo "<td scope='row' class='font-weight-bold'>$member->name</td>";
-
-							// Grupp
-							echo '<td>';
-								echo group_icon($member->group_code);
-								echo isset($member->group_name) ? $member->group_name : '-';
-							echo '</td>';
 
 							// Befattning
 							echo '<td>'. (isset($member->role_name) ? $member->role_name : '-') .'</td>';
@@ -187,6 +195,7 @@ class Admin_members implements Adminpanel
 
 						$prev_group = $member->group_id;
 					}
+				}
 				else
 					echo '<tr><td colspan="3" class="text-center">&ndash; Inga medlemmar &ndash;</td></tr>';
 			echo '</tbody>';
@@ -235,6 +244,103 @@ class Admin_members implements Adminpanel
 	}
 
 	/**
+	 * Gruppvy med mer detaljerad medlemsinfo
+	 *
+	 * @param array $members Gruppens medlemmar
+	 * @param array $group Gruppens id, namn och kod
+	 * @return void
+	 */
+	private function view_group($members, $group)
+	{
+		//breadcrumbs
+		echo '<nav aria-label="breadcrumb"><ol class="breadcrumb">';
+			echo '<li class="breadcrumb-item"><a href="'. base_url('signup/admin/members') .'">Hem</a></li>';
+			echo '<li class="breadcrumb-item active" aria-current="page">'. $group->name .'</li>';
+		echo '</ol></nav>';
+
+		//ikon & rubrik
+		echo '<h4>';
+			echo '<img class="group_heading_icon" src="'. base_url('images/group_icons/'. $group->code .'_32.png') .'" />';
+			echo $group->name;
+		echo '</h4>';
+		
+		//medlemstabellen
+		echo '<div id="wrapper_member_table" class="table-responsive table-sm" style="font-size: 0.9rem">';
+		echo '<table class="table table-hover clickable">';
+			echo '<thead class="table-borderless">';
+				echo '<tr>';
+					echo '<th scope="col">Namn</th>';
+					echo '<th scope="col">Befattning</th>';
+					echo '<th scope="col" title="Ja, JIP eller QIP under det senaste kvartalet." data-toggle="tooltip">Närvaro <i class="fas fa-question-circle"></i></th>';
+					echo '<th scope="col" title="Under det senaste kvartalet." data-toggle="tooltip">Sena anmälningar <i class="fas fa-question-circle"></i></th>';
+					echo '<th scope="col" title="Under det senaste kvartalet." data-toggle="tooltip">Oanmäld frånvaro <i class="fas fa-question-circle"></i></th>';
+					echo '<th scope="col">Senast bumpad</th>';
+					echo '<th scope="col">Bumpa tidigast</th>';
+					echo '<th scope="col" title="Nej = Supporter" data-toggle="tooltip">Aktiv <i class="fas fa-question-circle"></i></th>';
+				echo '</tr>';
+			echo '</thead><tbody>';
+				if(count($members) > 0)
+					foreach($members as $member)
+					{
+						
+						echo '<tr data-url="'. base_url('signup/admin/members/member/'. $member->id) .'">';
+						
+							//nick
+							echo '<td scope="row">';
+								echo "<strong>$member->name</strong>";
+								echo isset($member->rank_name)
+									? rank_icon($member->rank_icon, $member->rank_name)
+									: null;
+							echo '</td>';
+
+							// befattning
+							echo '<td>'. (isset($member->role_name) ? $member->role_name : '-') .'</td>';
+
+							// närvaro
+							if($member->attendance < 50) $attendance_class = 'text-danger';
+							else if($member->attendance < 60) $attendance_class = 'text-warning';
+							else $attendance_class = 'text-success';
+							echo "<td class='font-weight-bold {$attendance_class}'>{$member->attendance}%</td>";
+
+							// Sen anmälan
+							if($member->late_signups >= 20) $late_class = 'text-danger';
+							else if($member->late_signups > 0) $late_class = 'text-warning';
+							else $late_class = 'text-success';
+							echo "<td class='{$late_class} font-weight-bold'>";
+								echo "{$member->late_signups}%";
+							echo '</td>';
+
+							// Oanmäld frånvaro
+							if($member->awol > 10) $awol_class = 'text-danger';
+							else if($member->awol > 0) $awol_class = 'text-warning';
+							else $awol_class = 'text-success';
+							echo "<td class='{$awol_class} font-weight-bold'>";
+								echo "{$member->awol}%";
+							echo '</td>';
+
+							// senast bumpad
+							echo '<td>';
+								echo isset($member->rank_date) ? $member->rank_date : '?';
+							echo '</td>';
+
+							// Närmsta bump
+							echo '<td class=" font-weight-bold '. ($member->rank_next_date >= date('Y-m-d') ? 'text-danger' : 'text-success') .'">';
+								echo $member->rank_next_date;
+							echo '</td>';
+
+							//aktiv
+							echo '<td>'. ($member->is_active ? '<strong class="text-success">Ja</strong>' : '<strong class="text-danger">Nej</strong>') .'</td>';
+						
+						echo '</tr>';
+					}
+				else
+					echo '<tr><td colspan="5" class="text-center">&ndash; Inga medlemmar &ndash;</td></tr>';
+			echo '</tbody></table>';
+
+		echo '</div>';
+	}
+
+	/**
 	 * Medlems-vy.
 	 *
 	 * @param object $member
@@ -264,7 +370,8 @@ class Admin_members implements Adminpanel
 
 		//breadcrumbs
 		echo '<nav aria-label="breadcrumb"><ol class="breadcrumb">';
-			echo '<li class="breadcrumb-item"><a href="'. base_url('signup/admin/members') .'">Medlemmar</a></li>';
+			echo '<li class="breadcrumb-item"><a href="'. base_url('signup/admin/members') .'">Hem</a></li>';
+			echo isset($member->group_id) ? '<li class="breadcrumb-item"><a href="'. base_url('signup/admin/members/group/'. $member->group_id) .'">'. $member->group_name .'</a></li>' : null;
 			echo '<li class="breadcrumb-item active" aria-current="page">'. $member->name .'</li>';
 		echo '</ol></nav>';
 
@@ -278,6 +385,37 @@ class Admin_members implements Adminpanel
 
 		//min sida-länk
 		echo '<a href="'. base_url('signup/mypage/'. $member->id) .'" class="btn btn-primary" style="font-size: 1.4rem;">'. $member->name .'s &quot;Min sida&quot; &raquo;</a>';
+
+		echo '<hr>';
+
+
+		// --Statistik--
+
+		// Närvaro-färg
+		if($member->stats->attendance < 50) $attendance_class = 'text-danger';
+		else if($member->stats->attendance < 60) $attendance_class = 'text-warning';
+		else $attendance_class = 'text-success';
+
+		// Sen anmälan-färg
+		if($member->stats->late_signups >= 20) $late_class = 'text-danger';
+		else if($member->stats->late_signups > 0) $late_class = 'text-warning';
+		else $late_class = 'text-success';
+
+		// Oanmäld frånvaro-färg
+		if($member->stats->awol > 10) $awol_class = 'text-danger';
+		else if($member->stats->awol > 0) $awol_class = 'text-warning';
+		else $awol_class = 'text-success';
+
+		echo '<h5>Statistk</h5>';
+		echo '<p class="mb-1"><strong title="Ja, JIP eller QIP under det senaste kvartalet." data-toggle="tooltip">Närvaro <i class="fas fa-question-circle"></i>:</strong> ';
+		echo "<span class='{$attendance_class} font-weight-bold'>{$member->stats->attendance}%</span></p>";
+		echo '<p class="mb-1"><strong title="Under det senaste kvartalet." data-toggle="tooltip">Sena anmälningar <i class="fas fa-question-circle"></i>:</strong> ';
+		echo "<span class='{$attendance_class} font-weight-bold'>{$member->stats->late_signups}%</span></p>";
+		echo '<p class="mb-1"><strong title="Under det senaste kvartalet." data-toggle="tooltip">Oanmäld frånvaro <i class="fas fa-question-circle"></i>:</strong> ';
+		echo "<span class='{$awol_class} font-weight-bold'>{$member->stats->awol}%</span></p>";
+		echo '<p class="mb-1"><strong title="Ett kvartal efter förra bumpningen" data-toggle="tooltip">Bumpa tidigast <i class="fas fa-question-circle"></i>:</strong> ';
+		echo "<span class='". ($member->stats->next_bump_date >= date('Y-m-d') ? 'text-danger' : 'text-success') ." font-weight-bold'>{$member->stats->next_bump_date}</span></p>";
+
 
 		echo '<hr>';
 
@@ -507,6 +645,7 @@ class Admin_members implements Adminpanel
 			$sql =
 				'SELECT
 					proms.id, name, icon, date,
+					DATE_ADD(date, INTERVAL 3 MONTH) AS next_date,
 					DATEDIFF(NOW(), proms.date) AS days_ago
 				FROM ssg_promotions proms
 				INNER JOIN ssg_ranks ranks
@@ -521,52 +660,122 @@ class Admin_members implements Adminpanel
 				$member->rank_name = $row->name;
 				$member->rank_icon = $row->icon;
 				$member->rank_date = $row->date;
+				$member->rank_next_date = $row->next_date;
 				$member->rank_date_days_ago = $row->days_ago;
 			}
 		}
 
 		//närvaro
 		foreach($members as $member)
-		{
-			//variabler
-			$attendance = array();
-			$positive = 0; //antal positiva anmälningar
-			$negative = 0; //antal negativa anmälningar
-
-			$sql =
-				'SELECT 
-					attendance-0 AS id,
-					attendance AS name,
-					COUNT(attendance) AS count
-				FROM ssg_signups
-				INNER JOIN ssg_events events
-					ON ssg_signups.event_id = events.id
-				INNER JOIN ssg_event_types event_types
-					ON events.type_id = event_types.id
-				WHERE
-					event_types.obligatory
-					AND member_id = ?
-					AND events.start_datetime >= DATE_SUB(NOW(), INTERVAL 3 MONTH) #senaste kvartalet
-				GROUP BY attendance';
-			$query = $this->CI->db->query($sql, $member->id);
-			foreach($query->result() as $row)
-			{
-				if($row->id <= 3) //Ja, JIP eller QIP == true
-					$positive += $row->count;
-				else //NOSHOW eller Oanmäld frånvaro
-					$negative += $row->count;
-			}
-
-			//räkna ut andel positiva anmälningar i procent
-			$total = $positive + $negative;
-			$member->attendance = $total > 0
-				? floor(($positive / $total) * 100)
-				: 0;
+		{	
+			// sena anmälningar och oanmäld frånvaro
+			$stats = $this->get_member_stats($member->id);
+			$member->attendance = $stats->attendance;
+			$member->late_signups = $stats->late_signups;
+			$member->awol = $stats->awol;
 		}
 
 		return $members;
 	}
 
+	/**
+	 * Hämta en medlems närvaro- och anmälningsstatistik.
+	 * @param int $member_id
+	 * @return array
+	 */
+	private function get_member_stats($member_id)
+	{
+		$stats = new stdClass;
+
+		//variabler
+		$attendance = array();
+		$positive = 0; //antal positiva anmälningar
+		$negative = 0; //antal negativa anmälningar
+		$awol = 0; //antal oanmäld frånvaro
+
+		$sql =
+			'SELECT 
+				attendance-0 AS id,
+				attendance AS name,
+				COUNT(attendance) AS count
+			FROM ssg_signups
+			INNER JOIN ssg_events AS events
+				ON ssg_signups.event_id = events.id
+			INNER JOIN ssg_event_types event_types
+				ON events.type_id = event_types.id
+			WHERE
+				event_types.obligatory
+				AND member_id = ?
+				AND events.start_datetime >= DATE_SUB(NOW(), INTERVAL 3 MONTH) #senaste kvartalet
+			GROUP BY attendance';
+		$query = $this->CI->db->query($sql, $member_id);
+		foreach($query->result() as $row)
+		{
+			if($row->id <= 3) //Ja, JIP eller QIP == true
+				$positive += $row->count;
+			else //NOSHOW eller Oanmäld frånvaro
+			{
+				$negative += $row->count;
+				if($row->id == 6)
+					$awol += $row->count;
+			}
+		}
+		//räkna ut andel positiva anmälningar i procent
+		$total = $positive + $negative;
+		$stats->attendance = $total > 0
+			? floor(($positive / $total) * 100)
+			: 0;
+
+		// oanmäld frånvaro
+		$stats->awol = $total > 0
+			? floor(($awol / $total) * 100)
+			: 0;
+
+
+		// sena anmälningar
+		$sql =
+			'SELECT
+				signed_datetime < DATE_FORMAT(ssg_events.start_datetime, "%Y-%m-%d 00:00:00") AS good_boy
+			FROM ssg_signups
+			INNER JOIN ssg_events
+				ON ssg_signups.event_id = ssg_events.id
+			INNER JOIN ssg_event_types
+				ON ssg_events.type_id = ssg_event_types.id
+			WHERE
+				member_id = ?
+				AND ssg_event_types.obligatory
+				AND ssg_events.start_datetime >= DATE_SUB(NOW(), INTERVAL 3 MONTH)';
+		$query = $this->CI->db->query($sql, $member_id);
+		$deadline = new stdClass;
+		$deadline->good_boy = 0;
+		$deadline->bad_boy = 0;
+		foreach($query->result() as $row)
+		{
+			if($row->good_boy)
+				$deadline->good_boy++;
+			else
+				$deadline->bad_boy++;
+		}
+
+		$total = $deadline->good_boy + $deadline->bad_boy;
+		$stats->late_signups = $total > 0
+			? floor(($deadline->bad_boy / $total) * 100)
+			: 0;
+
+		
+		// Datum för nästa bumpning
+		$sql =
+			'SELECT
+				DATE_ADD(date, INTERVAL 3 MONTH) AS next_date
+			FROM ssg_promotions proms
+			WHERE proms.member_id = ?
+			ORDER BY date DESC
+			LIMIT 1';
+		$query = $this->CI->db->query($sql, $member_id);
+		$stats->next_bump_date = $query->row()->next_date;
+
+		return $stats;
+	}
 
 	/**
 	 * Hämta medlemmar som finns med i en grupp.

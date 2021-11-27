@@ -30,7 +30,7 @@ $this->current_page = 'admin';
 	<h1>Admin</h1>
 
 	<div class="row">
-		<div class="col-sm-3">
+		<div class="col-sm-2">
 			<nav class="navbar navbar-light">
 				<ul class="navbar-nav">
 					<?php
