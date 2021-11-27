@@ -22,9 +22,9 @@ if(isset($event_id))
 
 		<!-- Header -->
 		<div class="card-header bg-dark text-white">
-			<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>🎄
-			<?php elseif(CAKE):?>🍰<?php endif;?>
-			<?php if(EASTER):?>🐇<?php endif;?>
+			<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div><span class="font-weight-normal">🎄</span>
+			<?php elseif(CAKE):?><span class="font-weight-normal">🍰</span><?php endif;?>
+			<?php if(EASTER):?><span class="font-weight-normal">🐇</span><?php endif;?>
 			Nästa event <?php if(APRIL_FOOLS) echo $this->april_fools->random_emojis(microtime())?>
 		</div>
 

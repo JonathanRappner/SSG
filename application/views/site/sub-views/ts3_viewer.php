@@ -6,9 +6,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 ?><div class="card ts3_viewer border-0 shadow-sm">
 
 	<div class="card-header bg-dark text-white">
-		<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div>🤶<?php endif;?>
-		<?php if(CAKE):?>🎂<?php endif;?>
-		<?php if(EASTER):?>🥚<?php endif;?>
+		<?php if(XMAS):?><div class="snow_edge left"></div><div class="snow_pattern"></div><div class="snow_edge right"></div><span class="font-weight-normal">🤶</span><?php endif;?>
+		<?php if(CAKE):?><span class="font-weight-normal">🎂</span><?php endif;?>
+		<?php if(EASTER):?><span class="font-weight-normal">🥚</span><?php endif;?>
 		Teamspeak 3 <?php if(APRIL_FOOLS) echo $this->april_fools->random_emojis(microtime())?>
 	</div>
 
