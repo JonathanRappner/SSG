@@ -583,7 +583,6 @@ class Eventsignup
 	{
 		//variabler
 		$multiples = 4; //antal gånger i framtiden mallarna ska appliceras (4 = skapa events fyra veckor frammåt)
-		$days_in_a_week = 7; //förhoppningsvis ändras inte detta i framtiden :P
 
 		//hämta mallar
 		$templates = array();
