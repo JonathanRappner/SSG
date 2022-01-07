@@ -187,6 +187,9 @@ class Intervals
 			10 => 15,
 			11 => 21,
 			12 => 22,
+			13 => 49,
+			14 => 50,
+			15 => 51,
 		); //key: år, value = medalj-id
 
 		//hämta users
