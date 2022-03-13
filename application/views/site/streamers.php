@@ -35,13 +35,16 @@ $this->current_page = 'streamers';
 		<?php
 		foreach($streamers as $streamer)
 		{
-			echo '<div class="col-12 col-sm-6 col-md-4 px-0">';
-				echo '<h3>';
-					echo '<a href="'. ($streamer->prefered == 'youtube' ? "https://www.youtube.com/channel/{$streamer->channel_youtube}/videos" : "https://www.twitch.tv/{$streamer->channel_twitch}/videos") .'" target="_blank">';
-						echo group_icon($streamer->group_code, $streamer->group_name, true) . $streamer->name;
-					echo '</a>';
-				echo '</h3>';
-			echo '</div>';
+			if($streamer->visible)
+			{
+				echo '<div class="col-12 col-sm-6 col-md-4 px-0">';
+					echo '<h3>';
+						echo '<a href="'. ($streamer->prefered == 'youtube' ? "https://www.youtube.com/channel/{$streamer->channel_youtube}/videos" : "https://www.twitch.tv/{$streamer->channel_twitch}/videos") .'" target="_blank">';
+							echo group_icon($streamer->group_code, $streamer->group_name, true) . $streamer->name;
+						echo '</a>';
+					echo '</h3>';
+				echo '</div>';
+			}
 		}
 		?>
 
