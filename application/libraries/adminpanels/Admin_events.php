@@ -37,7 +37,7 @@ class Admin_events implements Adminpanel
 		$this->CI->load->library('attendance');
 		$this->CI->load->library('eventsignup');
 
-		//post variabler finns, gå till submits
+		//post-variabler finns, gå till submits
 		if($this->CI->input->post('task') != null)
 		{
 			$this->submit($this->CI->input->post('task'));
@@ -136,14 +136,14 @@ class Admin_events implements Adminpanel
 		//--print--
 		echo '<div id="wrapper_events_form" '. ($is_new ? 'style="display: none;"' : null) .'>';
 
-		//heading
+		// Heading
 		echo $is_new
 			? '<h5>Skapa nytt event</h5>'
 			: '<h5>Redigera event</h5>';
 
 		echo '<form class="ssg_form" action="'. base_url('signup/admin/events') .'" method="post">';
 		
-		//task
+		// Task
 		echo '<input type="hidden" name="task" value="event">';
 
 		//event_id hidden input
@@ -157,7 +157,7 @@ class Admin_events implements Adminpanel
 				<input type="text" id="input_title" name="title" class="form-control" value="'. ($is_new ? null : $this->event->title) .'" required>
 			</div>';
 
-		//skapare
+		// Skapare
 		echo 
 			'<div class="form-group">
 				<label for="input_author">Skapare</label>
@@ -167,7 +167,7 @@ class Admin_events implements Adminpanel
 				</select>
 			</div>';
 		
-		//start-datum
+		// Start-datum
 		echo 
 			'<div class="form-group">
 				<label for="input_start_date">Start-datum<span class="text-danger">*</span></label>
@@ -181,14 +181,14 @@ class Admin_events implements Adminpanel
 				<input type="time" id="input_start_time" name="start_time" class="form-control" value="'. ($is_new ? null : $this->event->start_time) .'" required>
 			</div>';
 		
-		//längd
+		// Längd
 		echo 
 			'<div class="form-group">
 				<label for="input_length_time">Längd<span class="text-danger">*</span></label>
 				<input type="time" id="input_length_time" name="length_time" class="form-control" value="'. ($is_new ? null : $this->event->length_time) .'" required>
 			</div>';
 
-		//typ
+		// Typ
 		echo 
 			'<div class="form-group">
 				<label for="input_type">Event-typ<span class="text-danger">*</span></label>
@@ -197,19 +197,33 @@ class Admin_events implements Adminpanel
 				</select>
 			</div>';
 
-		//forum-länk
+		// Forum-länk
 		echo 
 			'<div class="form-group">
 				<label for="input_forum_link">Forum-länk</label>
 				<input type="text" id="input_forum_link" name="forum_link" class="form-control" value="'. ($is_new ? null : $this->event->forum_link) .'">
 			</div>';
 
-		//förhandsvisningsbild
+		// Förhandsvisningsbild
 		echo 
 			'<div class="form-group">
 				<label for="input_preview_image">Förhandsvisningsbild</label>
 				<input type="text" id="input_preview_image" name="preview_image" class="form-control" value="'. ($is_new ? null : $this->event->preview_image) .'" placeholder="https://coolabilder.se/bild.jpg">
 			</div>';
+
+		// Obligatorisk
+		echo  '<div class="form-group">';
+			echo '<label for="input_obligatory">Obligatorisk</label>';
+			echo '<input class="ml-2" type="checkbox" id="input_obligatory" name="obligatory" '. (!$is_new && $this->event->obligatory ? 'checked' : null) .'>';
+			echo '<span class="ml-2 font-italic">(Aktiva medlemmar som inte anmäler sig till ett obligatoriskt event får "Ej anmäld frånvaro" i efterhand.)</span>';
+		echo '</div>';
+
+		// Highlight
+		echo  '<div class="form-group">';
+			echo '<label for="input_highlight">Highlightas</label>';
+			echo '<input class="ml-2" type="checkbox" id="input_highlight" name="highlight" '. (!$is_new && $this->event->highlight ? 'checked' : null) .'>';
+			echo '<span class="ml-2 font-italic">(Visa eventet i "Nästa event"-rutan på startsidan och Events-sidan.)</span>';
+		echo '</div>';
 
 		//submit
 		echo '<button type="submit" class="btn btn-success">'. ($is_new ? 'Skapa event <i class="fas fa-plus-circle"></i>' : 'Spara ändringar <i class="far fa-edit"></i>') .'</button>';
@@ -300,7 +314,9 @@ class Admin_events implements Adminpanel
 		$data->author_id = $this->CI->input->post('author_id') == 0 ? null : $this->CI->input->post('author_id');
 		$data->forum_link = strlen(trim($this->CI->input->post('forum_link'))) > 0 ? strip_tags(trim($this->CI->input->post('forum_link'))) : null;
 		$data->preview_image = strlen(trim($this->CI->input->post('preview_image'))) > 0 ? strip_tags(trim($this->CI->input->post('preview_image'))) : null;
-		
+		$data->obligatory = $this->CI->input->post('obligatory') && true;
+		$data->highlight = $this->CI->input->post('highlight') && true;
+
 		//tidsvariabler
 		$data->length_time = $this->CI->input->post('length_time');
 		$data->length_hours = substr($data->length_time, 0, strpos($data->length_time, ':'));
@@ -340,8 +356,8 @@ class Admin_events implements Adminpanel
 		}
 
 		$sql =
-			'INSERT INTO ssg_events(title, author, start_datetime, length_time, type_id, forum_link, preview_image)
-			VALUES (?, ?, ?, ?, ?, ?, ?)';
+			'INSERT INTO ssg_events(title, author, start_datetime, length_time, type_id, forum_link, preview_image, obligatory, highlight)
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
 		$query = $this->CI->db->query($sql, array(
 			$data->title,
 			$data->author_id,
@@ -350,6 +366,8 @@ class Admin_events implements Adminpanel
 			$this->CI->input->post('type_id'),
 			$data->forum_link,
 			$data->preview_image,
+			$data->obligatory,
+			$data->highlight
 		));
 
 		$this->CI->alerts->add_alert('success', 'Eventet skapades utan problem.');
@@ -389,7 +407,9 @@ class Admin_events implements Adminpanel
 				length_time = ?,
 				type_id = ?,
 				forum_link = ?,
-				preview_image = ?
+				preview_image = ?,
+				obligatory = ?,
+				highlight = ?
 			WHERE id = ?';
 		$query = $this->CI->db->query($sql, array(
 			$data->title,
@@ -399,6 +419,8 @@ class Admin_events implements Adminpanel
 			$this->CI->input->post('type_id'),
 			$data->forum_link,
 			$data->preview_image,
+			$data->obligatory,
+			$data->highlight,
 			$this->CI->input->post('event_id')
 		));
 

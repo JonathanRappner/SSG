@@ -22,13 +22,15 @@ class Events extends CI_Model
 	{
 		// Variabler
 		$see_gsu = false;
+
+		// Visa visa GSU:er för S4 (Faddergruppen) och Rekryter
 		if($permission_groups)
 			foreach($permission_groups as $group)
-				if($group->id == 12 || $group->id == 14)
+				if($group->id == 12 || $group->id == 14) // se db-tabellen phpbb_groups
 					$see_gsu = true;
 		$where_clause = $see_gsu
-			? 'AND (ssg_event_types.display OR ssg_events.type_id = 5)' // visa events med display = 1 eller av typen GSU/ASU
-			: 'AND ssg_event_types.display'; // visa endast events med display = 1
+			? 'AND (ssg_events.highlight OR ssg_events.type_id = 5)' // S4 och Rekryter
+			: 'AND ssg_events.highlight'; // vanliga medlemmar
 
 		// Exekvera
 		$sql =
@@ -37,7 +39,7 @@ class Events extends CI_Model
 			INNER JOIN ssg_event_types
 				ON ssg_events.type_id = ssg_event_types.id
 			WHERE
-				ADDTIME(start_datetime, length_time) >= NOW()
+				ADDTIME(start_datetime, length_time) >= NOW() # framtida event
 				'. $where_clause .'
 			ORDER BY start_datetime ASC
 			LIMIT 1';

@@ -108,6 +108,8 @@ class Admin_autoevents implements Adminpanel
 						echo '<th scope="col">Typ</th>';
 						echo '<th scope="col">Dag</th>';
 						echo '<th scope="col">Tid</th>';
+						echo '<th scope="col">Obligatorisk</th>';
+						echo '<th scope="col">Highlightas</th>';
 						echo '<th scope="col">Ta bort</th>';
 					echo '</tr>';
 				echo '</thead><tbody>';
@@ -134,6 +136,16 @@ class Admin_autoevents implements Adminpanel
 								//Tid
 								echo '<td>';
 									echo "$auto_event->start_time - $auto_event->end_time";
+								echo '</td>';
+							
+								//Obligatorisk
+								echo '<td>';
+									echo $auto_event->obligatory ? '✅' : '❌';
+								echo '</td>';
+							
+								//Highlight
+								echo '<td>';
+									echo $auto_event->highlight ? '✅' : '❌';
 								echo '</td>';
 							
 								//Ta bort
@@ -185,45 +197,59 @@ class Admin_autoevents implements Adminpanel
 			
 			echo '<form class="ssg_form" action="'. base_url('signup/admin/autoevents/'. ($is_new ? 'add_auto_event' : 'update_auto_event')) .'" method="post">';
 
-				//auto-event-id
+				// auto-event-id
 				echo !$is_new
 					? '<input type="hidden" name="auto_event_id" value="'. $this->auto_event->id .'">'
 					: null;
 				
-				//Titel
+				// Titel
 				echo  '<div class="form-group">';
 					echo '<label for="input_title">Titel<span class="text-danger">*</span></label>';
 					echo '<input type="text" id="input_title" name="title" class="form-control" value="'. ($is_new ? null : $this->auto_event->title) .'" required>';
 				echo '</div>';
 
-				//Event-typ
+				// Event-typ
 				echo '<div class="form-group">';
 					echo '<label for="input_event_type">Event-typ</label>';
 					echo '<select class="form-control" id="input_event_type" name="type_id">'. $event_types_options_string .'</select>';
 				echo '</div>';
 
-				//Veckodag
+				// Veckodag
 				echo '<div class="form-group">';
 					echo '<label for="input_day">Veckodag</label>';
 					echo '<select class="form-control" id="input_day" name="day">'. $day_options_string .'</select>';
 				echo '</div>';
 
-				//Start-tid
+				// Start-tid
 				echo  '<div class="form-group">';
 					echo '<label for="input_start_time">Start-tid<span class="text-danger">*</span></label>';
 					echo '<input type="time" id="input_start_time" name="start_time" class="form-control" value="'. ($is_new ? '00:00' : $this->auto_event->start_time) .'" required>';
 				echo '</div>';
 
-				//Längd
+				// Längd
 				echo  '<div class="form-group">';
 					echo '<label for="input_length_time">Längd<span class="text-danger">*</span></label>';
 					echo '<input type="time" id="input_length_time" name="length_time" class="form-control" value="'. ($is_new ? '01:00' : $this->auto_event->length_time) .'" required>';
 				echo '</div>';
 
-				//Tillbaka
+				// Obligatorisk
+				echo  '<div class="form-group">';
+					echo '<label for="input_obligatory">Obligatorisk</label>';
+					echo '<input class="ml-2" type="checkbox" id="input_obligatory" name="obligatory" '. ($is_new || $this->auto_event->obligatory ? 'checked' : null) .'>';
+					echo '<span class="ml-2 font-italic">(Aktiva medlemmar som inte anmäler sig till ett obligatoriskt event får "Ej anmäld frånvaro" i efterhand.)</span>';
+				echo '</div>';
+
+				// Highlight
+				echo  '<div class="form-group">';
+					echo '<label for="input_highlight">Highlightas</label>';
+					echo '<input class="ml-2" type="checkbox" id="input_highlight" name="highlight" '. ($is_new || $this->auto_event->highlight ? 'checked' : null) .'>';
+					echo '<span class="ml-2 font-italic">(Visa eventet i "Nästa event"-rutan på startsidan och Events-sidan.)</span>';
+				echo '</div>';
+
+				// Tillbaka
 				if(!$is_new) echo '<a href="'. base_url('signup/admin/autoevents') .'" class="btn btn-primary">&laquo; Tillbaka</a> ';
 
-				//Submit
+				// Submit
 				echo '<button type="submit" class="btn btn-success">'. ($is_new ? 'Skapa auto-event <i class="fas fa-plus-circle"></i>' : 'Spara ändringar <i class="fas fa-save"></i>') .'</button>';
 
 			echo '</form>';
@@ -242,7 +268,7 @@ class Admin_autoevents implements Adminpanel
 	{
 		$sql =
 			'SELECT 
-				ae.id, start_day, type_id,
+				ae.id, start_day, type_id, obligatory, highlight,
 				ae.title AS auto_title,
 				et.title AS type_title,
 				TIME_FORMAT(start_time, "%H:%i") AS start_time,
@@ -263,7 +289,7 @@ class Admin_autoevents implements Adminpanel
 	{
 		$sql =
 			'SELECT 
-				id, start_day, type_id, title,
+				id, start_day, type_id, title, obligatory, highlight,
 				TIME_FORMAT(start_time, "%H:%i") AS start_time,
 				TIME_FORMAT(length_time, "%H:%i") AS length_time
 			FROM ssg_auto_events
@@ -293,6 +319,8 @@ class Admin_autoevents implements Adminpanel
 			'start_day' => $vars->day,
 			'start_time' => $vars->start_time,
 			'length_time' => $vars->length_time,
+			'obligatory' => isset($vars->obligatory),
+			'highlight' => isset($vars->highlight),
 			'type_id' => $vars->type_id,
 		);
 		$this->CI->db->insert('ssg_auto_events', $data);
@@ -321,6 +349,8 @@ class Admin_autoevents implements Adminpanel
 			'start_day' => $vars->day,
 			'start_time' => $vars->start_time,
 			'length_time' => $vars->length_time,
+			'obligatory' => isset($vars->obligatory),
+			'highlight' => isset($vars->highlight),
 			'type_id' => $vars->type_id,
 		);
 		$this->CI->db->where('id', $vars->auto_event_id)->update('ssg_auto_events', $data);

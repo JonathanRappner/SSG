@@ -22,15 +22,16 @@ class Signup_box extends CI_Model
 		// Variabler
 		$deadline_time = '00:00:00';
 		$event = new stdClass;
-		// Är rekryt eller S4? (Kan inte kra has_permissions() eftersom den alltid ger true för admins)
+		
+		// Är rekryt eller S4? (Kan inte använda has_permissions() eftersom den alltid ger true för admins)
 		$see_gsu = false;
 		if($permission_groups)
 			foreach($permission_groups as $group)
-				if($group->id == 12 || $group->id == 14)
+				if($group->id == 12 || $group->id == 14) // se db-tabell phpbb_groups
 					$see_gsu = true;
 		$where_clause = $see_gsu
-			? 'AND (ssg_event_types.display OR ssg_events.type_id = 5)' // visa events med display = 1 eller av typen GSU/ASU
-			: 'AND ssg_event_types.display'; // visa endast events med display = 1
+			? 'AND (ssg_events.highlight OR ssg_events.type_id = 5)' // visa events med display = 1 eller av typen GSU/ASU
+			: 'AND ssg_events.highlight'; // visa endast events med display = 1
 
 		//event
 		$sql =

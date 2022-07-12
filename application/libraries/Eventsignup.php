@@ -24,7 +24,7 @@ class Eventsignup
 	{
 		$sql =
 			"SELECT
-				ssg_events.id, ssg_events.title, forum_link, preview_image, obligatory,
+				ssg_events.id, ssg_events.title, forum_link, preview_image, obligatory, highlight,
 				author AS author_id,
 				type_id-0 AS type_id,
 				ssg_event_types.title AS type_name,
@@ -81,7 +81,7 @@ class Eventsignup
 		$events = array();
 		$sql =
 			'SELECT
-				ssg_events.id, ssg_events.title, author, forum_link, preview_image,
+				ssg_events.id, ssg_events.title, author, obligatory, highlight, forum_link, preview_image,
 				ssg_event_types.title-0 AS type_id,
 				ssg_event_types.title AS type_name,
 				DATE_FORMAT(start_datetime, "%Y-%m-%d") AS start_date,
@@ -588,7 +588,7 @@ class Eventsignup
 		$templates = array();
 		$sql =
 			'SELECT
-				id, title, start_day, type_id,
+				id, title, start_day, type_id, obligatory, highlight,
 				DATE_FORMAT(start_time, "%H:%i") AS start_time,
 				DATE_FORMAT(ADDTIME(start_time, length_time), "%H:%i") AS end_time,
 				length_time,
@@ -613,12 +613,14 @@ class Eventsignup
 				if(count($overlap) <= 0 && !$during_recess) //skippa om mallen overlap:ar andra events eller ligger under uppehåll
 				{
 					$sql =
-						"INSERT INTO ssg_events(title, start_datetime, length_time, type_id)
-						VALUES (?, ?, ?, ?)";
+						"INSERT INTO ssg_events(title, start_datetime, length_time, obligatory, highlight, type_id)
+						VALUES (?, ?, ?, ?, ?, ?)";
 					$this->CI->db->query($sql, array(
 						$template->title,
 						$next_occurance_start,
 						$template->length_time,
+						$template->obligatory,
+						$template->highlight,
 						$template->type_id
 					));
 				}

@@ -58,6 +58,9 @@ $this->current_page = 'events';
 							<dt class="col-5">Närvaro:</dt>
 							<dd class="col-7"><span class="<?=$next_event->member_attendance->class?>"><?=$next_event->member_attendance->text?></span></dd>
 
+							<dt class="col-5">Obligatoriskt:</dt>
+							<dd class="col-7" id="obligatory"><?=$next_event->obligatory ? '<span class="text-success font-weight-bold">Ja</span>' : '<span class="text-danger font-weight-bold">Nej</span>'?></dd>
+
 							<dt class="col-5">Anmälnings-deadline:</dt>
 							<dd class="col-7" id="deadline">&nbsp;</dd>
 
