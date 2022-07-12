@@ -59,7 +59,7 @@ class Signup extends CI_Controller
 		else
 		{
 			//ladda vy
-			$this->load->view('signup/events_empty');
+			$this->load->view('signup/events_empty', array('global_alerts' => $this->global_alerts));
 		}
 	}
 
