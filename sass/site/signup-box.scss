@@ -47,3 +47,43 @@ div.signup_box{
 		font-size: 1.5rem;
 	}
 }
+
+// Övriga events
+div.signup_box{
+	div.other_events{
+		font-size: 0.9rem;
+		
+		// varje event-rad
+		a {
+			color: black;
+			padding: 0;
+			margin-bottom: 0.1rem;
+
+			&:hover{
+				text-decoration: none;
+
+				// hover-effekt på knapparna när man hovrar över hela a-taggen
+				.btn-success{
+					background-color: #1e7e34;
+    				border-color: #1e7e34;
+				}
+			}
+
+			// gröna knapparna
+			.btn{
+				padding: 0 0.4rem;
+			}
+
+			.title {
+				text-overflow: ellipsis;
+				overflow: hidden;
+				white-space: nowrap;
+				margin-right: 8px;
+			}
+
+			.date{
+				white-space: nowrap;
+			}
+		}
+	}
+}

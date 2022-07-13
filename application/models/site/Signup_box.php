@@ -14,7 +14,7 @@ class Signup_box extends CI_Model
 	/**
 	 * Hämta event
 	 *
-	 * @param array $permission_groups Den inloggade medlemmns permission groups $member->permission_groups
+	 * @param array $permission_groups Den inloggade medlemmens permission groups $member->permission_groups
 	 * @return object
 	 */
 	public function get_upcomming_event($permission_groups = null)
@@ -65,6 +65,55 @@ class Signup_box extends CI_Model
 			$event->member_signup = $this->get_member_signup($event->event_id, $this->member->id);
 
 		return $event;
+	}
+
+	/**
+	 * Hämta flera icke obligatoriska events.
+	 *
+	 * @param array $permission_groups Den inloggade medlemmens permission groups $member->permission_groups
+	 * @return array
+	 */
+	public function get_other_events($permission_groups = null)
+	{
+		// Variabler
+		$number_of_events = 2;
+		$deadline_time = '00:00:00';
+		$events = array();
+
+		// Hämta nästa highlightade events id så att det inte hämtas här
+		$this->load->model('signup/Events');
+		$next_event_id = $this->Events->get_next_event_id($permission_groups);
+		
+		// Visa inte gsu/asu-events för se som inte är rekryt eller S4
+		$see_gsu = false;
+		$where_clause = null;
+		if($permission_groups)
+			foreach($permission_groups as $group)
+				if($group->id == 12 || $group->id == 14) // se db-tabell phpbb_groups
+					$see_gsu = true;
+		if(!$see_gsu)
+			$where_clause .='AND ssg_events.type_id != 5'; // GSU/ASU
+
+		//event
+		$sql =
+			'SELECT
+				ssg_events.id AS event_id,
+				ssg_events.title,
+				ssg_event_types.title AS type_name,
+				DATE_FORMAT(start_datetime, "%Y-%m-%d") AS start_date,
+				TIME_FORMAT(start_datetime, "%H:%i") AS start_time,
+				UNIX_TIMESTAMP(start_datetime) AS epoch
+			FROM ssg_events
+			INNER JOIN ssg_event_types
+				ON ssg_events.type_id = ssg_event_types.id
+			WHERE
+				ADDTIME(start_datetime, length_time) >= NOW()
+				AND ssg_events.id != '. $next_event_id .'
+				'. $where_clause .'
+			ORDER BY start_datetime ASC
+			LIMIT '. $number_of_events;
+
+		return $this->db->query($sql, $deadline_time)->result();
 	}
 
 	/**

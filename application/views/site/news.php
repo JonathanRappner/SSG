@@ -16,7 +16,7 @@ shuffle($carousel_images);
 
 	<!-- Page-specific CSS/JS -->
 	<link rel="stylesheet" href="<?=base_url('css/site/news.css?4')?>">
-	<link rel="stylesheet" href="<?=base_url('css/site/signup-box.css')?>">
+	<link rel="stylesheet" href="<?=base_url('css/site/signup-box.css?0')?>">
 	<link rel="stylesheet" href="<?=base_url('css/site/chat.css?2')?>">
 	<link rel="stylesheet" href="<?=base_url('css/site/latest_posts.css')?>">
 	<script src="<?=base_url('js/site/news.js?0')?>"></script>
@@ -80,7 +80,7 @@ shuffle($carousel_images);
 
 		<!-- Högerkolumn -->
 		<div id="rightcol" class="col-lg-3 p-0">
-			<?php $this->load->view('site/sub-views/signup_box', (array)$next_event);?>
+			<?php $this->load->view('site/sub-views/signup_box', array('next' => $next_event, 'other' => $other_events));?>
 			<div id="news_mobile_container"></div>
 			<?php if($this->member->valid) $this->load->view('site/sub-views/latest_posts', array('posts'=>$posts));?>
 			<?php $this->load->view('site/sub-views/links');?>
