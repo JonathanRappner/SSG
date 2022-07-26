@@ -199,7 +199,6 @@ class Admin_recesses implements Adminpanel
 				id, start_date, length_days,
 				DATE_FORMAT(DATE_ADD(start_date, INTERVAL length_days DAY), "%Y-%m-%d") AS end_date
 			FROM ssg_recesses
-			WHERE start_date >= DATE_FORMAT(NOW(), "%Y-%m-%d")
 			ORDER BY start_date ASC';
 		return $this->CI->db->query($sql)->result();
 	}
