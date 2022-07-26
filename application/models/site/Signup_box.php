@@ -73,7 +73,7 @@ class Signup_box extends CI_Model
 	 * @param array $permission_groups Den inloggade medlemmens permission groups $member->permission_groups
 	 * @return array
 	 */
-	public function get_other_events($permission_groups = null)
+	public function get_other_events($member)
 	{
 		// Variabler
 		$number_of_events = 2;
@@ -82,13 +82,13 @@ class Signup_box extends CI_Model
 
 		// Hämta nästa highlightade events id så att det inte hämtas här
 		$this->load->model('signup/Events');
-		$next_event_id = $this->Events->get_next_event_id($permission_groups);
+		$next_event_id = $this->Events->get_next_event_id($member->permission_groups);
 		
 		// Visa inte gsu/asu-events för se som inte är rekryt eller S4
 		$see_gsu = false;
 		$where_clause = null;
-		if($permission_groups)
-			foreach($permission_groups as $group)
+		if($member->permission_groups)
+			foreach($member->permission_groups as $group)
 				if($group->id == 12 || $group->id == 14) // se db-tabell phpbb_groups
 					$see_gsu = true;
 		if(!$see_gsu)
@@ -102,7 +102,8 @@ class Signup_box extends CI_Model
 				ssg_event_types.title AS type_name,
 				DATE_FORMAT(start_datetime, "%Y-%m-%d") AS start_date,
 				TIME_FORMAT(start_datetime, "%H:%i") AS start_time,
-				UNIX_TIMESTAMP(start_datetime) AS epoch
+				UNIX_TIMESTAMP(start_datetime) AS epoch,
+				(SELECT COUNT(*) FROM ssg_signups s WHERE ssg_events.id = s.event_id AND s.member_id = '. $member->id .') AS signed_up
 			FROM ssg_events
 			INNER JOIN ssg_event_types
 				ON ssg_events.type_id = ssg_event_types.id

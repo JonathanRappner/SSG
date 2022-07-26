@@ -108,15 +108,23 @@ function relative_date($epoch)
 					<div class="other_events d-flex flex-column">
 						<?php foreach($other as $key=>$event):?>
 							<a class="d-flex justify-content-between" href="<?=base_url("signup/event/$event->event_id/showform")?>">
+
+								<!-- Event-titel -->
 								<div class="title" title="<?=$event->title?>">
 									<?=$event->title?>
 								</div>
+
+								<!-- Anmäl-knapp -->
 								<div class="d-flex flex-row">
 									<div class="date mr-1" title="<?=$event->start_date?>"><?='('. relative_date($event->epoch) .')'?></div>
-									<div class="btn btn-sm btn-success">
-										<i class="fas fa-chevron-right"></i>
+									<div class="btn btn-sm <?=$event->signed_up ? 'btn-primary' : 'btn-success'?>" <?=$event->signed_up ? 'style="font-size:0.7rem;padding:1px 6px;"' : null?>>
+										<?=$event->signed_up
+											? '<i class="fas fa-pen"></i>'
+											: '<i class="fas fa-chevron-right"></i>'
+										?>
 									</div>
 								</div>
+
 							</a>
 						<?php endforeach;?>
 					</div>
