@@ -87,11 +87,9 @@ class Mypage extends CI_Model
 			FROM ssg_signups
 			INNER JOIN ssg_events
 				ON ssg_signups.event_id = ssg_events.id
-			INNER JOIN ssg_event_types
-				ON ssg_events.type_id = ssg_event_types.id
 			WHERE
 				member_id = ?
-				AND ssg_event_types.obligatory
+				AND ssg_events.obligatory
 				'. $where;
 		$query = $this->db->query($sql, $this->loaded_member->id);
 		$this->deadline = new stdClass;
@@ -119,7 +117,7 @@ class Mypage extends CI_Model
 			WHERE
 				member_id = ?
 				AND attendance < 4
-				AND ssg_event_types.obligatory
+				AND ssg_events.obligatory
 				'. $where .'
 			GROUP BY ssg_events.type_id
 			ORDER BY attendance ASC';
@@ -136,13 +134,11 @@ class Mypage extends CI_Model
 			FROM ssg_signups
 			INNER JOIN ssg_events
 				ON ssg_signups.event_id = ssg_events.id
-			INNER JOIN ssg_event_types
-				ON ssg_events.type_id = ssg_event_types.id
 			INNER JOIN ssg_groups
 				ON ssg_signups.group_id = ssg_groups.id
 			WHERE
 				member_id = ?
-				AND ssg_event_types.obligatory
+				AND ssg_events.obligatory
 				AND NOT ssg_groups.dummy
 				'. $where .'
 			GROUP BY ssg_signups.group_id
@@ -162,13 +158,11 @@ class Mypage extends CI_Model
 			FROM ssg_signups
 			INNER JOIN ssg_events
 				ON ssg_signups.event_id = ssg_events.id
-			INNER JOIN ssg_event_types
-				ON ssg_events.type_id = ssg_event_types.id
 			INNER JOIN ssg_roles
 				ON ssg_signups.role_id = ssg_roles.id
 			WHERE
 				member_id = ?
-				AND ssg_event_types.obligatory
+				AND ssg_events.obligatory
 				AND NOT ssg_roles.dummy
 				'. $where .'
 			GROUP BY ssg_signups.role_id
