@@ -42,7 +42,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						<th scope="col">Typ</th>
 						<th scope="col">Datum</th>
 						<th scope="col">Din närvaro</th>
-						<th scope="col">Debriefad</th>
+						<th scope="col">Din debrief</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -54,8 +54,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						<td><span class="text-<?=$event->current_member_attendance->code?>"><?=$event->current_member_attendance->text?></span></td>
 						<td>
 							<?=$event->debriefed
-								? '<span class="badge badge-success">Ja</span>'
-								: '<span class="badge badge-danger">Nej</span>'
+								? '<span class="badge badge-success">Skriven</span>'
+								: '<span class="badge badge-danger">Saknas</span>'
 							?>
 						</td>
 					</tr>
