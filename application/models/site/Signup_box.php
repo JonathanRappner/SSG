@@ -75,6 +75,10 @@ class Signup_box extends CI_Model
 	 */
 	public function get_other_events($member)
 	{
+		// ladda inte other events för gäster
+		if(!$member)
+			return;
+
 		// Variabler
 		$number_of_events = 2;
 		$deadline_time = '00:00:00';
