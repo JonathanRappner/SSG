@@ -135,7 +135,7 @@ function rank_icon($rank_icon, $rank_name, $big = false)
 	if(!$big) // 16px
 		return
 			"<img
-				class='rank_icon_16 d-inline'
+				class='rank_icon_16 d-inline mr-1'
 				src='". base_url('images/rank_icons/16/'. $rank_icon) ."'
 				srcset='". base_url('images/rank_icons/16/'. $rank_icon) ." 1x, ". base_url('images/rank_icons/'. $rank_icon) ." 1.25x'
 				title='{$rank_name}' data-toggle='tooltip'
