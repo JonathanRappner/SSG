@@ -701,10 +701,8 @@ class Admin_members implements Adminpanel
 			FROM ssg_signups
 			INNER JOIN ssg_events AS events
 				ON ssg_signups.event_id = events.id
-			INNER JOIN ssg_event_types event_types
-				ON events.type_id = event_types.id
 			WHERE
-				event_types.obligatory
+				events.obligatory
 				AND member_id = ?
 				AND events.start_datetime >= DATE_SUB(NOW(), INTERVAL 3 MONTH) #senaste kvartalet
 			GROUP BY attendance';
@@ -739,11 +737,9 @@ class Admin_members implements Adminpanel
 			FROM ssg_signups
 			INNER JOIN ssg_events
 				ON ssg_signups.event_id = ssg_events.id
-			INNER JOIN ssg_event_types
-				ON ssg_events.type_id = ssg_event_types.id
 			WHERE
 				member_id = ?
-				AND ssg_event_types.obligatory
+				AND ssg_events.obligatory
 				AND ssg_events.start_datetime >= DATE_SUB(NOW(), INTERVAL 3 MONTH)';
 		$query = $this->CI->db->query($sql, $member_id);
 		$deadline = new stdClass;
@@ -826,10 +822,8 @@ class Admin_members implements Adminpanel
 				FROM ssg_signups
 				INNER JOIN ssg_events AS events
 					ON ssg_signups.event_id = events.id
-				INNER JOIN ssg_event_types event_types
-					ON events.type_id = event_types.id
 				WHERE
-					event_types.obligatory
+					events.obligatory
 					AND member_id = ?
 					AND events.start_datetime >= DATE_SUB(NOW(), INTERVAL 3 MONTH) #senaste kvartalet
 				GROUP BY attendance';

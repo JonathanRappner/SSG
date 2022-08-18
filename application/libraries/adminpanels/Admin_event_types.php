@@ -104,8 +104,6 @@ class Admin_event_types implements Adminpanel
 					echo '<tr>';
 						echo '<th scope="col">Titel</th>';
 						echo '<th scope="col">Antal events</th>';
-						echo '<th scope="col">Obligatorisk</th>';
-						echo '<th scope="col">Highlight:a</th>';
 						echo '<th scope="col">Ta bort</th>';
 					echo '</tr>';
 				echo '</thead><tbody>';
@@ -122,16 +120,6 @@ class Admin_event_types implements Adminpanel
 								//Antal events
 								echo '<td>';
 									echo $event_type->events_count;
-								echo '</td>';
-							
-								//Obligatirisk
-								echo '<td>';
-									echo $event_type->obligatory ? '<strong class="text-success">Ja</strong>' : '<strong class="text-danger">Nej</strong>';
-								echo '</td>';
-							
-								//Highlight:a
-								echo '<td>';
-									echo $event_type->display ? '<strong class="text-success">Ja</strong>' : '<strong class="text-danger">Nej</strong>';
 								echo '</td>';
 							
 								//Ta bort
@@ -175,24 +163,6 @@ class Admin_event_types implements Adminpanel
 					echo '<label for="input_title">Titel<span class="text-danger">*</span></label>';
 					echo '<input type="text" id="input_title" name="title" class="form-control" value="'. ($is_new ? null : $this->event_type->title) .'" required>';
 				echo '</div>';
-				
-				//Obligatorisk
-				echo '<div class="form-group form-check">';
-					echo '<input class="form-check-input" type="checkbox" value="1" '. (!$is_new && $this->event_type->obligatory ? 'checked' : null) .' id="input_obligatory" name="obligatory">';
-					echo '<label class="form-check-label" for="input_obligatory">';
-						echo 'Obligatorisk ';
-						echo '<small>(Om ett event är obligatoriskt så får aktiva medlemmar som ej anmält sig en "Oanmäld frånvaro"-anmälan.)</small>';
-					echo '</label>';
-				echo '</div>';
-				
-				//Highlight:a
-				echo '<div class="form-group form-check">';
-					echo '<input class="form-check-input" type="checkbox" value="1" '. (!$is_new && $this->event_type->display ? 'checked' : null) .' id="input_display" name="display">';
-					echo '<label class="form-check-label" for="input_display">';
-						echo 'Highlight:a ';
-						echo '<small>(Events som ska highlight:as, visas i anmälningsrutan på framsidan och visas stort på Events-sidan)</small>';
-					echo '</label>';
-				echo '</div>';
 
 				//Tillbaka
 				echo '<a href="'. base_url('signup/admin/eventtypes') .'" class="btn btn-primary">&laquo; Tillbaka</a> ';
@@ -234,15 +204,12 @@ class Admin_event_types implements Adminpanel
 	{
 		$sql =
 			'SELECT
-				et.id, et.title, obligatory, display,
+				et.id, et.title,
 				COUNT(e.type_id) AS events_count
 			FROM ssg_event_types et
 			LEFT OUTER JOIN ssg_events e
 				ON et.id = e.type_id
-			GROUP BY et.id
-			ORDER BY
-				obligatory DESC,
-				display DESC';
+			GROUP BY et.id';
 		return $this->CI->db->query($sql)->result();
 	}
 
@@ -257,14 +224,9 @@ class Admin_event_types implements Adminpanel
 		//input-sanering
 		assert(isset($vars), 'Post-variabler saknas.');
 		assert(!empty($vars->title), "title: $vars->title");
-
-		$display = isset($vars->display);
-		$obligatory = isset($vars->obligatory);
 		
 		$data = array(
-			'title' => $vars->title,
-			'display' => $display,
-			'obligatory' => $obligatory,
+			'title' => $vars->title
 		);
 		$this->CI->db->insert('ssg_event_types', $data);
 	}
@@ -282,13 +244,8 @@ class Admin_event_types implements Adminpanel
 		assert(!empty($vars->title), "title: $vars->title");
 		assert(isset($vars->id) && is_numeric($vars->id), "id: $vars->id");
 
-		$display = isset($vars->display);
-		$obligatory = isset($vars->obligatory);
-
 		$data = array(
-			'title' => $vars->title,
-			'display' => $display,
-			'obligatory' => $obligatory,
+			'title' => $vars->title
 		);
 		$this->CI->db->where('id', $vars->id)->update('ssg_event_types', $data);
 	}
