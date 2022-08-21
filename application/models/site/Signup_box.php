@@ -80,7 +80,7 @@ class Signup_box extends CI_Model
 			return;
 
 		// Variabler
-		$number_of_events = 2;
+		$number_of_events = 3;
 		$deadline_time = '00:00:00';
 		$events = array();
 
