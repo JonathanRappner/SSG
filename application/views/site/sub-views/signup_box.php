@@ -7,11 +7,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //variabler
 if(isset($next->event_id))
 {
-	$days_swe = array(1=>'Söndag', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag');
+	$days_swe = array(1=>'söndag', 'måndag', 'tisdag', 'onsdag', 'yorsdag', 'gredag', 'lördag');
 	$logged_in = $this->member->valid;
 	$user_is_member = $this->permissions->has_permissions(array('rekryt', 'medlem', 'inaktiv'));
 	$signed = isset($next->member_signup);
-	$litteral_day = $days_swe[$next->day_of_week]; //'Söndag' / 'Onsdag'
+	$litteral_day = ucfirst($days_swe[$next->day_of_week]); //'Söndag' / 'Onsdag'
 	$attendance_string = $signed
 		? '<span class="'.  $attendance_types[$next->member_signup->attendance_id]->class .'">'.  $attendance_types[$next->member_signup->attendance_id]->text .'</span>'
 		: null;
@@ -30,7 +30,11 @@ function relative_date($epoch)
 	$day = 86400; // sekunder på en dag
 	$week = 604800; // sekunder på en vecka
 
-	setlocale(LC_TIME, 'sv');
+	// dagssträng
+	if(ENVIRONMENT == 'development')
+		setlocale(LC_ALL, 'sv'); // tydligen vill min utvecklingsmiljö att det ska vara 'sv' och inte 'sv_SE'
+	else
+		setlocale(LC_ALL, 'sv_SE');
 	$day_string = utf8_encode(strftime('%A', $epoch));
 
 	if($diff < $day)
