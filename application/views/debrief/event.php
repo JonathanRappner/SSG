@@ -126,7 +126,7 @@ $attendance_classes = array(
 									</ul>
 
 								<?php else : ?>
-									<p>Ingen har anmält sig till denna grupp.</p>
+									<p>Ingen från denna grupp har anmält sig till detta event.</p>
 								<?php endif; ?>
 							</div>
 
