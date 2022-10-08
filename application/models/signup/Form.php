@@ -20,6 +20,7 @@ class Form extends CI_Model
 			FROM ssg_groups
 			WHERE
 				active
+				AND selectable
 			ORDER BY sorting ASC';
 		$query = $this->db->query($sql);
 		foreach($query->result() as $row)
