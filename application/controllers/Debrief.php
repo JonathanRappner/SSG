@@ -44,7 +44,13 @@ class Debrief extends CI_Controller
 		);
 	}
 
-	/** Vy för enskilt event */
+		
+	/**
+	 * Vy för enskilt event
+	 *
+	 * @param  mixed $event_id
+	 * @return void
+	 */
 	public function event($event_id = null)
 	{
 		if(!$this->check_login()) return;

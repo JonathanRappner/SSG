@@ -154,7 +154,7 @@ function rank_icon($rank_icon, $rank_name, $big = false)
  */
 function strip_bbcode($text)
 {
-	return preg_replace('/[[\/\!]*?[^\[\]]*?]/si', null, $text);
+	return preg_replace('/[[\/\!]*?[^\[\]]*?]/si', '', $text);
 }
 
 /**

@@ -169,13 +169,13 @@ class Eventsignup
 	{
 		$sql =
 			"SELECT
-				event_id, group_id, role_id, signed_datetime, last_changed_datetime, message,
-				attendance AS attendance_name,
-				attendance-0 AS attendance_id
-			FROM ssg_signups
+				s.event_id, s.group_id, s.role_id, s.signed_datetime, s.last_changed_datetime, s.message,
+				s.attendance AS attendance_name,
+				s.attendance-0 AS attendance_id
+			FROM ssg_signups s
 			WHERE
-				event_id = ?
-				AND member_id = ?";
+				s.event_id = ?
+				AND s.member_id = ?";
 		$query = $this->CI->db->query($sql, array($event_id, $member_id));
 		$signup = $query->row();
 

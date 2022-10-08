@@ -1,0 +1,21 @@
+// Klickbart Card
+.card a.card-link {
+	color: black;
+	height: 100%;
+
+	&:hover {
+		color: black;
+		text-decoration: none;
+		background-color: #f5f5f5;
+	}
+}
+
+// Overview -> varje medlems betyg
+ul.member_scores {
+	line-height: 1.2rem;
+}
+
+//
+.score_string {
+	letter-spacing: -0.4rem;
+}
