@@ -175,7 +175,7 @@ class Debrief_model extends CI_Model
 		// Genomsnittsbetyget för hela eventet
 		$overview->score_avg = $overview->total_score > 0
 			? str_replace('.', ',', round($overview->total_score / $overview->total_debriefs, 1)) // avrunda och byt punkt till kommatecken
-			: 0;
+			: '-';
 
 		return $overview;
 	}
