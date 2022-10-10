@@ -49,7 +49,7 @@ $attendance_classes = array(
 			</div>
 		</div>
 
-		<!-- Alert + Skriv debrief-knapp -->
+		<!-- Rubrik + Alert + Skriv debrief-knapp -->
 		<div class="row">
 			<div class="col mb-3">
 
