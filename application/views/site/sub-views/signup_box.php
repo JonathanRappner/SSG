@@ -20,7 +20,7 @@ if(isset($next->event_id))
 /**
  * Relativ datum-sträng. T.ex: 'på tisdag', 'imorgon (tis)' eller '2022-08-20'
  *
- * @param array $epoch Unix timestamp.
+ * @param int $epoch Unix timestamp.
  */
 function relative_date($epoch)
 {
