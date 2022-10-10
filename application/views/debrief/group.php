@@ -71,6 +71,23 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			</div>
 		</div>
 
+		<!-- Summering -->
+		<div class="row">
+			<div class="col pb-3">
+				<div class="card shadow-sm">
+					<h5 class="card-title mb-4">
+						<i class="fas fa-clipboard-list-check"></i>
+						Summering
+					</h5>
+					<div class="card-body">
+						genomsnittspoäng<br>
+						medlemmars poäng<br>
+						hur många är klara?
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<!-- Bra -->
 		<div class="row">
 			<div class="col pb-3">
