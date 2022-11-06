@@ -7,7 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <head>
 	<?php $this->load->view('signup/sub-views/head');?>
 
-	<title>Debrief - Inloggning</title>
+	<title>Debriefs</title>
 
 </head>
 <body>
@@ -16,13 +16,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 	<h1 class="mt-4">Inloggning</h1>
 
-	<p>För att komma åt debriefing:ar måste du vara registrerad på vårt forum.</p>
-	<p>Du måste även vara antagen som rekryt, medlem eller inaktiv medlem.</p>
-	<p>Om du vill registrera dig, gör du det <a href="<?=base_url('forum/ucp.php?mode=register')?>">Här</a>.</p>
+	<p>För att komma åt debriefs måste du vara antagen som rekryt, medlem eller inaktiv medlem.</p>
+	<p>Om du vill ansöka om att gå med i klanen gör du det <a href="<?=base_url('forum/viewforum.php?f=4')?>">Här</a>.</p>
 
 	<p>
 		<a class="btn btn-primary" href="<?=base_url()?>">Tillbaka</a>
-		<a class="btn btn-success" href="<?=base_url('forum/ucp.php?mode=login&redirect=../debrief')?>">Logga in</a>
 	</p>
 
 	<!-- Footer -->

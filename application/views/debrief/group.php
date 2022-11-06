@@ -1,10 +1,19 @@
 <?php
 
 /** 
- * Vy som listar de senaste events och vilka du har debriefat.
+ * Vy som för en grupps debrief över ett specifikt event.
  */
 defined('BASEPATH') or exit('No direct script access allowed');
 
+// Variabler
+$attendance_classes = array(
+	1 => 'text-signed',
+	2 => 'text-jip',
+	3 => 'text-qip',
+	4 => 'text-noshow',
+	5 => 'text-notsigned',
+	6 => 'text-awol',
+);
 
 ?>
 <!DOCTYPE html>
@@ -15,7 +24,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 	<link rel="stylesheet" href="<?= base_url('css/debrief/group.css?0') ?>">
 
-	<title>SSG Debrief - <?= strtoupper($group->code) ?> - <?= $event->title ?> </title>
+	<title><?= strtoupper($group->code) ?> - <?= $event->title ?></title>
 
 </head>
 
@@ -75,14 +84,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
 		<div class="row">
 			<div class="col pb-3">
 				<div class="card shadow-sm">
-					<h5 class="card-title mb-4">
-						<i class="fas fa-clipboard-list-check"></i>
-						Summering
-					</h5>
 					<div class="card-body">
+						
+						<h5 class="card-title mb-4">
+							<i class="fas fa-clipboard"></i>
+							Summering
+						</h5>
+						
 						genomsnittspoäng<br>
 						medlemmars poäng<br>
 						hur många är klara?
+
 					</div>
 				</div>
 			</div>

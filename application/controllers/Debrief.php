@@ -120,15 +120,55 @@ class Debrief extends CI_Controller
 	{
 		if (!$this->check_login()) return;
 
+		// Moduler
+		$this->load->library('eventsignup');
+		$this->load->model('debrief/debrief_model');
+
+		// Variabler
+		if(!$member_id){ // inget member_id i URL: sätt till inloggade användarens id
+			$member_id = $this->member->id;
+		} else if($member_id != $this->member->id && !$this->permissions->has_permissions(array('grpchef', 's0', 's1'))) // ett id är satt, id:t är inte ditt eget och du har inte rätt rättigheter
+			die('Du har inte rättigheterna för att ändra på andra användares debriefs.');
+		$member = $this->db->query('SELECT name FROM ssg_members WHERE id = ?', $member_id)->row();
+		$event = $this->eventsignup->get_event($event_id);
+		$signup = $this->eventsignup->get_signup($event_id, $member_id);
+		$group = $this->db->query('SELECT id, name, code, dummy FROM ssg_groups WHERE id = ?', $signup->group_id)->row();
+		$groups = $this->db->query('SELECT id, name FROM ssg_groups WHERE NOT dummy AND active ORDER BY sorting ASC')->result();
+		$role = $this->db->query('SELECT id, name, name_long, dummy FROM ssg_roles WHERE id = ?', $signup->role_id)->row();
+		$group_roles = $this->db->query( // grupp-id med alla dess roller
+			'SELECT rg.group_id, role_id, r.name, r.name_long
+			FROM ssg_roles_groups rg
+			INNER JOIN ssg_roles r ON rg.role_id = r.id
+			WHERE NOT r.dummy
+			ORDER BY rg.group_id, r.sorting ASC'
+		)->result();
+
+		if(!$signup)
+			die("Medlem {$member_id} har inte anmält sig till event {$event_id}.");
+
 
 		$this->load->view(
 			'debrief/form',
 			array(
 				'global_alerts' => $this->global_alerts,
-				'event_id' => $event_id,
-				'member_id' => $member_id,
+				'event' => $event,
+				'signup' => $signup,
+				'member' => $member,
+				'group' => $group,
+				'groups' => $groups,
+				'role' => $role,
+				'group_roles' => $group_roles,
+				'debriefing_myself' => $member_id == $this->member->id,
 			)
 		);
+	}
+
+	/** Skapa eller uppdatera debrief och signup-data. */
+	public function submit() {
+		echo '<h1>Submit debug</h1>';
+		echo '<pre>';
+		print_r($this->input->post());
+		echo '</pre>';
 	}
 
 	/**

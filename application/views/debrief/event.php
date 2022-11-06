@@ -1,7 +1,7 @@
 <?php
 
 /** 
- * Vy som listar de senaste events och vilka du har debriefat.
+ * Vy för alla gruppers debrief från ett event.
  */
 defined('BASEPATH') or exit('No direct script access allowed');
 
@@ -25,7 +25,7 @@ $attendance_classes = array(
 
 	<link rel="stylesheet" href="<?= base_url('css/debrief/event.css?0') ?>">
 
-	<title>SSG Debrief - <?= $event->title ?></title>
+	<title><?= $event->title ?></title>
 
 </head>
 
