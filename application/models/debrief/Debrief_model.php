@@ -127,7 +127,7 @@ class Debrief_model extends CI_Model
 				INNER JOIN ssg_members m
 					ON s.member_id = m.id
 				
-				INNER JOIN ssg_roles r
+				LEFT OUTER JOIN ssg_roles r
 					ON m.role_id = r.id
 
 				LEFT OUTER JOIN ssg_debriefs d
@@ -185,9 +185,9 @@ class Debrief_model extends CI_Model
 		if(!$score)
 			return null;
 
-		$string = "{$score}<span class='score_string'>";
+		$string = "<span class='score_string'>";
 		for ($i = 0; $i < $score; $i++)
-			$string .= '⭐';
+			$string .= '<img class="star" src="'. base_url('images/star.svg') .'" />';
 
 		return "$string</span>";
 	}
