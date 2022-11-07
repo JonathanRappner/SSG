@@ -1,0 +1,19 @@
+// betyg-stjärnor
+.star-container {
+	display: flex;
+
+	// alla stjärnor
+	.star {
+		width: 48px;
+		height: 48px;
+		cursor: pointer;
+		background-image: url("/images/star.svg");
+		background-size: cover;
+		filter: grayscale(0.5) opacity(0.5);
+	}
+
+	// vald stjärna
+	.highlight {
+		filter: none;
+	}
+}

@@ -93,7 +93,8 @@ $attendance_classes = array(
 						
 						genomsnittspoäng<br>
 						medlemmars poäng<br>
-						hur många är klara?
+						hur många är klara?<br>
+						länkar för admin att skriva debrief för andra medlemmar
 
 					</div>
 				</div>
@@ -109,7 +110,7 @@ $attendance_classes = array(
 
 						<h5 class="card-title mb-4">
 							<i class="fas fa-thumbs-up"></i>
-							Vad har varit bra / roligt
+							<span class="text-success">Vad har varit bra / roligt</span>
 						</h5>
 
 						<ul class="list-group">
@@ -147,7 +148,7 @@ $attendance_classes = array(
 
 						<h5 class="card-title mb-4">
 							<i class="fas fa-thumbs-down"></i>
-							Vad har varit dåligt / tråkigt?
+							<span class="text-danger">Vad har varit dåligt / tråkigt?</span>
 						</h5>
 
 						<ul class="list-group">
@@ -183,7 +184,7 @@ $attendance_classes = array(
 
 						<h5 class="card-title mb-4">
 							<i class="fas fa-yin-yang"></i>
-							Vad kan vi göra bättre?
+							<span class="text-warning">Vad kan vi göra bättre?</span>
 						</h5>
 
 						<ul class="list-group">
@@ -219,7 +220,7 @@ $attendance_classes = array(
 					<div class="card-body">
 						<h5 class="card-title mb-4">
 							<i class="fas fa-tools"></i>
-							Tekniskt strul
+							<span class="text-info">Tekniskt strul</span>
 						</h5>
 
 						<ul class="list-group">

@@ -19,6 +19,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	</script>
 
 	<?php $this->load->view('debrief/sub-views/head') ?>
+	<link rel="stylesheet" href="<?= base_url('css/debrief/form.css?0') ?>">
 	<script src="<?= base_url('js/debrief/form.js?0') ?>"></script>
 </head>
 
@@ -68,6 +69,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 						<form method="post" action="<?= base_url('debrief/submit') ?>">
 
+							<input type="hidden" name="score" value="" />
+
 							<!-- Grupp -->
 							<div class="form-group">
 								<label for="group">Grupp</label>
@@ -116,7 +119,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							<!-- Betyg -->
 							<div class="form-group">
 								<label for="score">Betyg</label>
-								<p>stjärnor</p>
+								<div class="star-container">
+									<div class="star" data-star_number="1"></div>
+									<div class="star" data-star_number="2"></div>
+									<div class="star" data-star_number="3"></div>
+									<div class="star" data-star_number="4"></div>
+									<div class="star" data-star_number="5"></div>
+								</div>
 							</div>
 
 							<!-- Bra/roligt -->
@@ -150,7 +159,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							<div class="form-group">
 								<label for="tech">
 									<i class="fas fa-tools"></i>
-									<span class="text-primary">Tekniskt strul</span>
+									<span class="text-info">Tekniskt strul</span>
 								</label>
 								<textarea class="form-control" name="review_tech" id="tech" rows="4"></textarea>
 							</div>
