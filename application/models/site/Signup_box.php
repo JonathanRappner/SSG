@@ -82,21 +82,20 @@ class Signup_box extends CI_Model
 		// Variabler
 		$number_of_events = 3;
 		$deadline_time = '00:00:00';
-		$events = array();
 
 		// Hämta nästa highlightade events id så att det inte hämtas här
 		$this->load->model('signup/Events');
 		$next_event_id = $this->Events->get_next_event_id($member->permission_groups);
 		
 		// Visa inte gsu/asu-events för se som inte är rekryt eller S4
-		$see_gsu = false;
-		$where_clause = null;
-		if($member->permission_groups)
-			foreach($member->permission_groups as $group)
-				if($group->id == 12 || $group->id == 14) // se db-tabell phpbb_groups
-					$see_gsu = true;
-		if(!$see_gsu)
-			$where_clause .='AND ssg_events.type_id != 5'; // GSU/ASU
+		// $see_gsu = false;
+		// $where_clause = null;
+		// if($member->permission_groups)
+		// 	foreach($member->permission_groups as $group)
+		// 		if($group->id == 12 || $group->id == 14) // se db-tabell phpbb_groups
+		// 			$see_gsu = true;
+		// if(!$see_gsu)
+		// 	$where_clause .='AND ssg_events.type_id != 5'; // GSU/ASU
 
 		//event
 		$sql =
@@ -114,7 +113,6 @@ class Signup_box extends CI_Model
 			WHERE
 				ADDTIME(start_datetime, length_time) >= NOW()
 				AND ssg_events.id != '. $next_event_id .'
-				'. $where_clause .'
 			ORDER BY start_datetime ASC
 			LIMIT '. $number_of_events;
 
