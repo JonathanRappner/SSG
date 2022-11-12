@@ -33,6 +33,7 @@ $attendance_classes = array(
 		// sätt initial state-variabel
 		let state = <?= $init_state ?>;
 		const member_id = <?= $member_id ?>;
+		const attendance_classes = <?= json_encode($attendance_classes) ?>;
 	</script>
 
 </head>
@@ -63,19 +64,14 @@ $attendance_classes = array(
 
 				<h2 class="mb-3">Debrief - <?= $event->title ?></h2>
 
-				<?php if (!$signup) : /* igen anmälan */ ?>
-					<div class="alert alert-warning">Du har inte anmält dig till detta event och kan inte skriva en debrief för det.</div>
-				<?php elseif ($signup->attendance_id > 3) : /* anmälan är negativ */ ?>
-					<div class="alert alert-warning">Du är anmäld som <span class="<?= $attendance_classes[$signup->attendance_id] ?>"><?= $signup->attendance_name ?></span> till detta event och kan inte skriva en debrief för det.</div>
-				<?php elseif (!$debrief) : /* ingen debrief */ ?>
-					<a href="<?= base_url('debrief/form/' . $event->id) ?>" class="btn btn-success">
-						Skriv din debrief <i class="fas fa-chevron-right"></i>
-					</a>
-				<?php else : /* debrief är skriven */ ?>
-					<a href="<?= base_url('debrief/form/' . $event->id) ?>" class="btn btn-primary">
-						Redigera din debrief <i class="fas fa-pen"></i>
-					</a>
-				<?php endif; ?>
+				<!-- Ingen anmälan -->
+				<div id="alert_no_signup" class="alert alert-warning d-none">Du har inte anmält dig till detta event och kan inte skriva en debrief för det.</div>
+
+				<!-- Negativ anmälan -->
+				<div id="alert_negative_signup" class="alert alert-warning d-none">Du är anmäld som <span></span> till detta event och kan inte skriva en debrief för det.</div>
+
+				<!-- Ny/Redigera debrief-knapp -->
+				<a href="<?= base_url('debrief/form/' . $event->id) ?>" id="btn_form" class="btn d-none"></a>
 
 			</div>
 		</div>
@@ -90,8 +86,8 @@ $attendance_classes = array(
 						<h5 class="card-title">Sammanfattning</h5>
 
 						<p class="card-text">
-							<strong>Debriefs skrivna:</strong> <?= $overview->total_debriefs ?>/<?= $overview->total_signups ?><br>
-							<strong>Eventets genomsnittsbetyg:</strong> <?= $overview->score_avg ?>
+							<strong>Debriefs skrivna:</strong> <span id="value_total_debriefs"></span><br>
+							<strong>Eventets genomsnittsbetyg:</strong> <span id="value_average_score"></span>
 						</p>
 
 					</div>

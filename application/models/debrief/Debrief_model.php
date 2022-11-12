@@ -188,17 +188,18 @@ class Debrief_model extends CI_Model
 	public function get_event_state($event_id, $last_modified_prev = 0)
 	{
 		// Kolla om några nya debriefs har skrivits sedan senast
-		$sql =
-			'SELECT last_modified
-			FROM ssg_debriefs
-			WHERE event_id = ?
-			ORDER BY last_modified DESC
-			LIMIT 1';
-		$query = $this->db->query($sql, array($event_id));
-		$last_modified = $query->row()->last_modified;
+		///////////////////////////gör detta i api:et istället
+		// $sql =
+		// 	'SELECT last_modified
+		// 	FROM ssg_debriefs
+		// 	WHERE event_id = ?
+		// 	ORDER BY last_modified DESC
+		// 	LIMIT 1';
+		// $query = $this->db->query($sql, array($event_id));
+		// $last_modified = $query->row()->last_modified ?? -1;
 
-		if ($last_modified < $last_modified_prev) // inga nya debriefs har skrivits
-			return false;
+		// if ($last_modified < $last_modified_prev) // inga nya debriefs har skrivits
+		// 	return '{}';
 
 
 		// Hämta alla aktiva grupper
@@ -255,12 +256,24 @@ class Debrief_model extends CI_Model
 				$signup = new stdClass;
 				$signup->id = $row->member_id;
 				$signup->name = $row->member_name;
-				$signup->score = $row->score-0;
+				$signup->score = $row->score - 0;
 
 				$grp->signups[] = $signup;
 			}
 			$grp->signups = $grp->signups;
 		}
+
+
+		// Inloggade medlemmens signup
+		$signup = $this->eventsignup->get_signup($event_id, $this->member->id);
+		if ($signup) {
+			$data->signup_attendance_id = $signup->attendance_id - 0;
+			$data->signup_attendance_name = $signup->attendance_name ?? null;
+		} else {
+			$data->signup_attendance_id = 0;
+			$data->signup_attendance_name = null;
+		}
+
 
 		return json_encode($data);
 	}
