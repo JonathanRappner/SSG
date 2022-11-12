@@ -24,8 +24,16 @@ $attendance_classes = array(
 	<?php $this->load->view('debrief/sub-views/head') ?>
 
 	<link rel="stylesheet" href="<?= base_url('css/debrief/event.css?0') ?>">
+	<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+	<script src="<?= base_url('js/debrief/event.js') ?>"></script>
 
 	<title><?= $event->title ?></title>
+
+	<script>
+		// sätt initial state-variabel
+		let state = <?= $init_state ?>;
+		const member_id = <?= $member_id ?>;
+	</script>
 
 </head>
 
@@ -67,7 +75,7 @@ $attendance_classes = array(
 					<a href="<?= base_url('debrief/form/' . $event->id) ?>" class="btn btn-primary">
 						Redigera din debrief <i class="fas fa-pen"></i>
 					</a>
-				<?php endif; ?> (göm om +1h efter event och inte admin)
+				<?php endif; ?>
 
 			</div>
 		</div>
@@ -78,11 +86,14 @@ $attendance_classes = array(
 
 				<div class="card shadow-sm">
 					<div class="card-body">
+
 						<h5 class="card-title">Sammanfattning</h5>
+
 						<p class="card-text">
 							<strong>Debriefs skrivna:</strong> <?= $overview->total_debriefs ?>/<?= $overview->total_signups ?><br>
 							<strong>Eventets genomsnittsbetyg:</strong> <?= $overview->score_avg ?>
 						</p>
+
 					</div>
 				</div>
 
@@ -96,45 +107,42 @@ $attendance_classes = array(
 				<div class="col-md-4 py-2 d-flex align-items-stretch">
 
 					<div class="card shadow-sm w-100">
-						<?php if (count($grp->signups) > 0):?>
-							<a class="card-link" href="<?=base_url("debrief/group/{$event->id}/{$grp->id}")?>">
-						<?php endif; ?>
-						<div class="card-body">
+						<?php if (count($grp->signups) > 0) : ?>
+							<a class="card-link" href="<?= base_url("debrief/group/{$event->id}/{$grp->id}") ?>">
+							<?php endif; ?>
+							<div class="card-body">
 
-							<!-- Grupp-card titel -->
-							<h5 class="card-title">
-								<?= group_icon($grp->code, $grp->name, true) ?>
-								<?= $grp->name ?>
-							</h5>
+								<!-- Grupp-card titel -->
+								<h5 class="card-title">
+									<?= group_icon($grp->code, $grp->name, true) ?>
+									<?= $grp->name ?>
+								</h5>
 
-							<!-- Grupp-card text -->
-							<div class="card-text">
-								<?php if (count($grp->signups) > 0) : ?>
+								<!-- Grupp-card text -->
+								<div class="card-text">
+									<?php if (count($grp->signups) > 0) : ?>
 
-									<small>(stor tydlig gemonsnittspoäng med label under)</small>
+										<div class="row text-center mb-3">
+											<h1 class="col-12"><?= $overview->score_avg ?></h1>
+											<small class="col-12">Genomsnittsbetyg</small>
+										</div>
 
-									<!-- Gruppsummering -->
-									<p>
-										<strong>Debriefs skrivna:</strong> <?= $grp->reviews_count ?>/<?= $grp->signups_count ?><br>
-										<strong>Gruppens genomsnittsbetyg:</strong> <?= $grp->reviews_score_avg ?>
-									</p>
+										<!-- Betyg från gruppens medlemmar -->
+										<ul class="member_scores pl-3 mb-0">
+											<?php foreach ($grp->signups as $s) : ?>
+												<li><strong><?= $s->member_name ?></strong>: <?= $s->score_string ?? '-' ?></li>
+											<?php endforeach; ?>
+										</ul>
 
-									<!-- Betyg från gruppens medlemmar -->
-									<strong>Betyg:</strong>
-									<ul class="member_scores">
-										<?php foreach ($grp->signups as $s) : ?>
-											<li><strong><?= $s->member_name ?></strong>: <?= $s->score_string ?? '-' ?></li>
-										<?php endforeach; ?>
-									</ul>
+									<?php else : ?>
+										<p>Ingen från denna grupp har anmält sig till detta event.</p>
+									<?php endif; ?>
+								</div>
 
-								<?php else : ?>
-									<p>Ingen från denna grupp har anmält sig till detta event.</p>
-								<?php endif; ?>
 							</div>
 
-						</div>
-
-						<?php if (count($grp->signups) > 0):?></a><?php endif; ?>
+							<?php if (count($grp->signups) > 0) : ?>
+							</a><?php endif; ?>
 					</div>
 
 				</div>

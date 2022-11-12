@@ -67,8 +67,7 @@ class Debrief extends CI_Controller
 		// Variabler
 		$event = $this->eventsignup->get_event($event_id);
 		$signup = $this->eventsignup->get_signup($event_id, $this->member->id);
-		$debrief = $this->debrief_model->get_debrief($event_id, $this->member->id);
-		$overview = $this->debrief_model->get_overview($event_id);
+		$init_state = $this->debrief_model->get_event_state($event_id);
 
 		// eventet finns inte
 		if (!$event) {
@@ -80,10 +79,10 @@ class Debrief extends CI_Controller
 			'debrief/event',
 			array(
 				'global_alerts' => $this->global_alerts,
+				'member_id' => $this->member->id,
 				'event' => $event,
 				'signup' => $signup,
-				'debrief' => $debrief,
-				'overview' => $overview,
+				'init_state' => $init_state
 			)
 		);
 	}

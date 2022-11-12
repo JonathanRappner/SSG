@@ -180,14 +180,104 @@ class Debrief_model extends CI_Model
 		return $overview;
 	}
 
+	/**
+	 * Hämta state-JSON-sträng med data för event-sidan
+	 * @param int $event_id
+	 * @param int $last_modified_prev Senast ändrad-datumsträng (ex: '2022-10-08 13:21:42') när klientens state uppdaterades.
+	 */
+	public function get_event_state($event_id, $last_modified_prev = 0)
+	{
+		// Kolla om några nya debriefs har skrivits sedan senast
+		$sql =
+			'SELECT last_modified
+			FROM ssg_debriefs
+			WHERE event_id = ?
+			ORDER BY last_modified DESC
+			LIMIT 1';
+		$query = $this->db->query($sql, array($event_id));
+		$last_modified = $query->row()->last_modified;
+
+		if ($last_modified < $last_modified_prev) // inga nya debriefs har skrivits
+			return false;
+
+
+		// Hämta alla aktiva grupper
+		$data = new stdClass;
+		$data->groups = array();
+		$sql =
+			'SELECT id, code, name
+			FROM ssg_groups
+			WHERE
+				active
+				AND NOT dummy
+				AND selectable
+			ORDER BY
+				enabler ASC,
+				sorting ASC';
+		$query = $this->db->query($sql);
+		foreach ($query->result() as $row) {
+			$group = new stdClass;
+			$group->id = $row->id;
+			$group->code = $row->code;
+			$group->name = $row->name;
+
+			$data->groups[] = $group;
+		}
+
+
+		// hämta signups och debrief-betyg
+		foreach ($data->groups as $grp) {
+			// Hämta alla medlemmar med positiva anmälningar och dess poäng (om de har en review)
+			$sql =
+				'SELECT
+					s.member_id,
+					m.name AS member_name,
+					d.score
+				FROM ssg_signups s
+
+				INNER JOIN ssg_members m
+					ON s.member_id = m.id
+				
+				LEFT OUTER JOIN ssg_roles r
+					ON m.role_id = r.id
+
+				LEFT OUTER JOIN ssg_debriefs d
+					ON s.member_id = d.member_id AND s.event_id = d.event_id
+				WHERE
+					s.event_id = ?
+					AND s.group_id = ?
+					AND s.attendance-0 <= 3 # endast positiva anmälningar
+				ORDER BY
+					r.sorting ASC';
+			$query = $this->db->query($sql, array($event_id, $grp->id));
+			$grp->signups = array();
+			foreach ($query->result() as $row) {
+				$signup = new stdClass;
+				$signup->id = $row->member_id;
+				$signup->name = $row->member_name;
+				$signup->score = $row->score-0;
+
+				$grp->signups[] = $signup;
+			}
+			$grp->signups = $grp->signups;
+		}
+
+		return json_encode($data);
+	}
+
+
+	public function get_group_state($event_id, $group_id, $last_modified_prev)
+	{
+	}
+
 	public function score_string($score)
 	{
-		if(!$score)
+		if (!$score)
 			return null;
 
 		$string = "<span class='score_string'>";
 		for ($i = 0; $i < $score; $i++)
-			$string .= '<img class="star" src="'. base_url('images/star.svg') .'" />';
+			$string .= '<img class="star" src="' . base_url('images/star.svg') . '" />';
 
 		return "$string</span>";
 	}
