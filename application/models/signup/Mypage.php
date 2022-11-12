@@ -36,7 +36,7 @@ class Mypage extends CI_Model
 		$this->page_data->results_per_page = 20;
 		$this->page_data->page = $page;
 		$attendance_colors = array(1=>'#28a745', '#285ca6', '#fea500', '#fc302b', '#848484', '#7B23A8');
-		$this->since_date = preg_match('/^([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$/', $this->input->get('since_date')) //visa pie-charts för ett specifikt datum
+		$this->since_date = preg_match('/^([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$/', $this->input->get('since_date') ?? '') //visa pie-charts för ett specifikt datum
 			? $this->input->get('since_date')
 			: null;
 

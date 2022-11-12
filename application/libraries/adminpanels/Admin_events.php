@@ -31,7 +31,7 @@ class Admin_events implements Adminpanel
 	 * @param int $page Sidnummer (sida 1 = 0, sida 2 = 1, osv.)
 	 * @return void
 	 */
-	public function main($event_id = 0, $page = 0, $var3)
+	public function main($event_id = 0, $page = 0, $var3 = null)
 	{
 		//moduler
 		$this->CI->load->library('attendance');
@@ -327,7 +327,7 @@ class Admin_events implements Adminpanel
 		//inte för långa events
 		if(strtotime($data->length_time) >= strtotime('24:00'))
 		{
-			$this->CI->alerts->add_alert('danger', 'Eventet sparades inte då det är för långt: <strong>'. $length_hours .'</strong>');
+			$this->CI->alerts->add_alert('danger', 'Eventet sparades inte då det är för långt: <strong>'. $data->length_hours .'</strong>');
 			redirect('signup/admin/events');
 			return;
 		}
@@ -348,7 +348,7 @@ class Admin_events implements Adminpanel
 	private function insert_event($data)
 	{
 		//kolla om event kommer overlap:a andra events
-		if($overlaps = $this->CI->eventsignup->is_overlapping($start_datetime, $end_datetime))
+		if($overlaps = $this->CI->eventsignup->is_overlapping($data->start_datetime, $data->end_datetime))
 		{
 			$this->CI->alerts->add_alert('danger', 'Eventet skapades inte då det krockar med: <strong>'. current($overlaps) .'</strong>');
 			redirect('signup/admin/events');
@@ -383,7 +383,7 @@ class Admin_events implements Adminpanel
 	private function update_event($data)
 	{
 		//kolla om event kommer overlap:a andra events (räkna inte med detta event)
-		$overlaps = $this->CI->eventsignup->is_overlapping($start_datetime, $end_datetime);
+		$overlaps = $this->CI->eventsignup->is_overlapping($data->start_datetime, $data->end_datetime);
 		
 		//lägg alla overlaps utom detta event i $overlaps_sans_self
 		$overlaps_sans_self = array();

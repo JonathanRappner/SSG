@@ -5,8 +5,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $this->current_page = 'event';
 $title = "$event->title";
 $date_and_time = "$event->start_date ($event->start_time - $event->end_time)";
-setlocale(LC_ALL, 'sv_SE'); //så att strftime() ger svenska strings
-$day_string = utf8_encode(strftime("%A", strtotime($event->start_date))); //måndag, tisdag, osv.
+
+// 'måndag', 'tisdag', osv.
+$dateTimeObj = new DateTime($event->start_date);
+$day_string = IntlDateFormatter::formatObject($dateTimeObj, 'eeee', 'sv' );
+
 $message_max_length = 50;
 $is_admin = $this->permissions->has_permissions(array('s0', 's1', 'grpchef')); //om true = gör tabeller clickable
 $is_gsu = $event->type_id == 5; // om event är GSU/ASU: visa annorlunda formulär
@@ -21,7 +24,9 @@ $this->preselects = $this->member_not_signed
 $patterns = array('/(?<!\w)(jip)(?!\w)/i', '/(?<!\w)(qip)(?!\w)/i', '/(?<!\w)(noshow)(?!\w)/i');
 $replacements = array('<span class="text-jip">JIP</span>', '<span class="text-qip">QIP</span>', '<span class="text-noshow">NOSHOW</span>');
 foreach($signups as $s)
-	$s->message_highlighted = preg_replace($patterns, $replacements, $s->message);
+	$s->message_highlighted = $s->message
+		? preg_replace($patterns, $replacements, $s->message)
+		: $s->message;
 
 ?><!DOCTYPE html>
 <html lang="sv">
@@ -174,7 +179,7 @@ foreach($signups as $s)
 								//variabler
 								$clickable_url = base_url("signup/mypage/$s->member_id");
 								$att = $this->attendance->get_type_by_id($s->attendance_id); //närvaro-objekt
-								$message = mb_strlen($s->message) <= $message_max_length
+								$message = mb_strlen($s->message ?? '') <= $message_max_length
 									? $s->message
 									: "<abbr title='$s->message' data-toggle='tooltip'>". mb_substr($s->message, 0, ($message_max_length-3)) .'...</abbr>';
 								
@@ -198,7 +203,7 @@ foreach($signups as $s)
 								echo
 									"<td class='text-nowrap'>
 										". group_icon($s->group_code) ."
-										<span class='d-inline d-md-none'>". strtoupper($s->group_code) ."</span>
+										<span class='d-inline d-md-none'>". strtoupper($s->group_code ?? '') ."</span>
 										<span class='d-none d-md-inline'>$s->group_name</span>
 									</td>";
 								

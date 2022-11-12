@@ -53,7 +53,9 @@ class Eventsignup
 
 		// Gör om imgur-mp4/gif-länkar till thumbnail-jpg:s
 		// "https://i.imgur.com/U5hgCAn.mp4" -> "https://i.imgur.com/U5hgCAnb.jpg"
-		$event->preview_image_safe = preg_replace(array('/(\.mp4)$/i', '/(\.gif)$/i'), 'b.jpg', $event->preview_image);
+		$event->preview_image_safe = $event->preview_image
+			? preg_replace(array('/(\.mp4)$/i', '/(\.gif)$/i'), 'b.jpg', $event->preview_image)
+			: null;
 
 		
 		// första april
@@ -236,7 +238,7 @@ class Eventsignup
 		foreach ($query->result() as $row)
 		{
 			//input-sanering
-			$row->message = trim(strip_tags($row->message));
+			$row->message = $row->message ? trim(strip_tags($row->message)) : null;
 
 			//första april
 			if(APRIL_FOOLS && !empty($row->message)) $row->message .= ' '. $this->CI->april_fools->random_emojis($row->message);

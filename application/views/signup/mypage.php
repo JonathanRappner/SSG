@@ -102,7 +102,7 @@ if($member_has_signups)
 $admin_groups = null;
 foreach($loaded_member->permission_groups as $group)
 	$admin_groups .= "$group->name, ";
-$admin_groups = mb_substr($admin_groups, 0, -2); // ta bort sista ", "
+$admin_groups = mb_substr($admin_groups ?? '', 0, -2); // ta bort sista ", "
 
 //tid sedan senaste bumpning
 if(isset($loaded_member->rank_date))
@@ -414,7 +414,7 @@ if(isset($loaded_member->rank_date))
 						echo
 							"<td class='text-nowrap'>
 								". group_icon($s->group_code) ."
-								<span class='d-inline d-md-none'>". strtoupper($s->group_code) ."</span>
+								<span class='d-inline d-md-none'>". strtoupper($s->group_code ?? '') ."</span>
 								<span class='d-none d-md-inline'>$s->group_name</span>
 							</td>";
 						
