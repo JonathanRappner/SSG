@@ -98,15 +98,13 @@ $attendance_classes = array(
 
 		<!-- Grupp -->
 		<div class="row">
-			<?php foreach ($overview->groups as $grp) : ?>
+			<?php foreach ($groups as $grp) : ?>
 
-				<div class="col-md-4 py-2 d-flex align-items-stretch">
+				<div id="grp_card_<?= $grp->code ?>" class="col-md-4 py-2 d-flex align-items-stretch">
 
 					<div class="card shadow-sm w-100">
-						<?php if (count($grp->signups) > 0) : ?>
-							<a class="card-link" href="<?= base_url("debrief/group/{$event->id}/{$grp->id}") ?>">
-							<?php endif; ?>
-							<div class="card-body">
+						<a class="card-link" href="<?= base_url("debrief/group/{$event->id}/{$grp->id}") ?>">
+							<div class="card-body h-100">
 
 								<!-- Grupp-card titel -->
 								<h5 class="card-title">
@@ -115,30 +113,28 @@ $attendance_classes = array(
 								</h5>
 
 								<!-- Grupp-card text -->
-								<div class="card-text">
-									<?php if (count($grp->signups) > 0) : ?>
+								<div class="card-text grp_has_signups">
 
 										<div class="row text-center mb-3">
-											<h1 class="col-12"><?= $overview->score_avg ?></h1>
+											<h1 class="avg_score col-12">-</h1>
 											<small class="col-12">Genomsnittsbetyg</small>
 										</div>
 
 										<!-- Betyg från gruppens medlemmar -->
 										<ul class="member_scores pl-3 mb-0">
-											<?php foreach ($grp->signups as $s) : ?>
-												<li><strong><?= $s->member_name ?></strong>: <?= $s->score_string ?? '-' ?></li>
-											<?php endforeach; ?>
+											<li><strong>member-name</strong>: score</li>
+											<li><strong>member-name</strong>: score</li>
+											<li><strong>member-name</strong>: score</li>
 										</ul>
 
-									<?php else : ?>
-										<p>Ingen från denna grupp har anmält sig till detta event.</p>
-									<?php endif; ?>
 								</div>
 
+								<div class="card-text grp_no_signups h-75 d-flex align-items-center">
+									<span>Ingen från denna grupp har anmält sig till eventet.</span>
+								</div>
+								
 							</div>
-
-							<?php if (count($grp->signups) > 0) : ?>
-							</a><?php endif; ?>
+						</a>
 					</div>
 
 				</div>

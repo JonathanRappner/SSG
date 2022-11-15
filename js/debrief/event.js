@@ -4,7 +4,7 @@ $(document).ready(() => {
 })
 
 /**
- * Uppdatera gruppernas genomsnittspoäng, totala antalet anmälda och totala antalet debriefs som är skrivna
+ * Uppdatera gruppernas genomsnittsbetyg, totala antalet anmälda och totala antalet debriefs som är skrivna
  * @param {object} state 
  */
 const updateValues = state => {
@@ -22,6 +22,12 @@ const updateValues = state => {
 		if (grp.signups.some(signup => signup.id - 0 === member_id - 0 && signup.score > 0)) {
 			state.member_has_debriefed = true
 		}
+
+		const debriefs = grp.signups.filter(signup => signup.score > 0) // samla alla signups i gruppen som har debriefs
+		const totalScore = _.sumBy(debriefs, 'score')
+		grp.averageScore = debriefs.length > 0
+			? ((Math.round((totalScore / debriefs.length) * 10) / 10) + '').replace('.', ',') // avrunda till en decimal och byt . mot ,
+			: '-'
 	})
 }
 
@@ -58,7 +64,7 @@ const updateElements = state => {
 	}
 
 
-	// -- text/värden --
+	// -- Summering --
 	let debriefs_count = 0
 	let signups_count = 0
 	let total_score = 0
@@ -68,7 +74,7 @@ const updateElements = state => {
 		total_score += _.sumBy(grp.signups, signup => signup.score)
 	})
 	let average_score = Math.round((total_score / debriefs_count) * 10) / 10 // avrunda till en decimal
-	average_score = (average_score+'').replace('.', ',') // komma som decimaltecken
+	average_score = (average_score + '').replace('.', ',') // komma som decimaltecken
 
 	// Antalet skrivna debriefs / antal anmälningar
 	$('#value_total_debriefs').html(`${debriefs_count} / ${signups_count}`)
@@ -76,4 +82,22 @@ const updateElements = state => {
 	// Genomsnittbetyg
 	$('#value_average_score').html(average_score)
 
+
+	// -- Grupp-rutor --
+	state.groups.forEach(grp => {
+		if(grp.averageScore === '-') {
+			// inga debriefs
+			$(`#grp_card_${grp.code} .grp_has_signups`).removeClass('d-block').addClass('d-none')
+			$(`#grp_card_${grp.code} .grp_no_signups`).removeClass('d-none').addClass('d-flex')
+		} else {
+			// har debriefs
+			$(`#grp_card_${grp.code} .grp_has_signups`).removeClass('d-none').addClass('d-block')
+			$(`#grp_card_${grp.code} .grp_no_signups`).removeClass('d-flex').addClass('d-none')
+		}
+
+		// Gruppernas genomsnittsbetyg
+		$(`#grp_card_${grp.code} .avg_score`).html(grp.averageScore)
+
+		// Varje medlems betyg
+	})
 }

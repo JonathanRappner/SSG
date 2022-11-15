@@ -66,6 +66,7 @@ class Debrief extends CI_Controller
 
 		// Variabler
 		$event = $this->eventsignup->get_event($event_id);
+		$groups = $this->db->query('SELECT id, code, name FROM ssg_groups WHERE active AND NOT dummy AND selectable ORDER BY enabler ASC, sorting ASC')->result();
 		$init_state = $this->debrief_model->get_event_state($event_id);
 
 		// eventet finns inte
@@ -80,6 +81,7 @@ class Debrief extends CI_Controller
 				'global_alerts' => $this->global_alerts,
 				'member_id' => $this->member->id,
 				'event' => $event,
+				'groups' => $groups,
 				'init_state' => $init_state
 			)
 		);
