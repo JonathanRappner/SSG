@@ -118,13 +118,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 							<!-- Betyg -->
 							<div class="form-group">
-								<label for="score">Betyg</label>
+								<label for="score" class="w-100">Betyg</label>
 								<div class="star-container">
 									<div class="star" data-star_number="1"></div>
 									<div class="star" data-star_number="2"></div>
 									<div class="star" data-star_number="3"></div>
 									<div class="star" data-star_number="4"></div>
 									<div class="star" data-star_number="5"></div>
+									<span class="invalid_text">Du måste ge eventet ett betyg.</span>
 								</div>
 							</div>
 
@@ -165,9 +166,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							</div>
 
 							<button type="submit" class="btn btn-success">
-								Spara
-								<i class="fas fa-save"></i>
+								Spara <i class='fas fa-save'></i>
 							</button>
+
 						</form>
 
 					</div>

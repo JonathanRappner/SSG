@@ -75,7 +75,7 @@ $attendance_classes = array(
 					<a href="<?= base_url('debrief/form/' . $event->id) ?>" class="btn btn-primary">
 						Redigera din debrief <i class="fas fa-pen"></i>
 					</a>
-				<?php endif; ?> (göm om +1h efter event och inte admin)
+				<?php endif; ?>
 
 			</div>
 		</div>

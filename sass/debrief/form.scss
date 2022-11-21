@@ -1,6 +1,12 @@
 // betyg-stjärnor
 .star-container {
-	display: flex;
+	display: inline-flex;
+	align-items: center;
+
+	// osynlig invalid
+	border-radius: 8px;
+	padding: 0.2rem;
+	border: 2px solid transparent;
 
 	// alla stjärnor
 	.star {
@@ -15,5 +21,21 @@
 	// vald stjärna
 	.highlight {
 		filter: none;
+	}
+
+	// Validering
+	&.invalid {
+		border: 2px solid red;
+
+		.invalid_text {
+			display: block;
+		}
+	}
+
+	// Visa inte felmeddelandet om det inte .star-container också är .invalid
+	.invalid_text {
+		display: none;
+		color: red;
+		margin: 0 1rem;
 	}
 }

@@ -4,6 +4,9 @@ $(document).ready(function () {
 	updateRoles()
 	$('#group').change(() => updateRoles())
 
+	// form-submit-event
+	$('form').submit(validateForm)
+
 	// Betygsstjärnor
 	$('.star').mouseenter(e => hoverStar($(e.target).data('star_number') - 0)) // hover
 	$('.star-container').mouseleave(() => clearHoverStars()) // rensa hover och sätt till det sparade betyget
@@ -33,12 +36,11 @@ const updateRoles = () => {
 	$('#role').html(optionsString)
 }
 
-
 /**
  * Highlightar hovrade stjärnan och alla mindre värda stjärnor ( ͡° ͜ʖ ͡°)
  * @param {number} number Stjärna 1, 2, 3, 4 eller 5
  */
- const hoverStar = number => {
+const hoverStar = number => {
 	$('.star').removeClass('highlight')
 
 	for (let i = 1; i <= number; i++) { // iterera upp till den hovrade stjärnan
@@ -57,4 +59,27 @@ const clearHoverStars = () => {
 	if (score !== '') {
 		hoverStar(score)
 	}
+}
+
+/**
+ * Validerar formuläret.
+ * Returnerar true/false samt tilldelar .error-klasser till fälten som är fel.
+ * @param {object} e Submit-event
+ * @returns True/false
+ */
+const validateForm = () => {
+
+	// värden
+	let valid = true
+	const score = $('input[name=score]').val()-0 // 0 = invalid, 1-5 = valid
+
+	// betyg
+	if(score <= 0) {
+		valid = false
+		$('.star-container').addClass('invalid')
+	}
+
+	///////// tillåt inte rekryt-gruppen eller "vad som helst", alltså inte dummies?
+	
+	return valid
 }
