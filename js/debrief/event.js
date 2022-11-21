@@ -25,7 +25,8 @@ const updateValues = state => {
 
 		const debriefs = grp.signups.filter(signup => signup.score > 0) // samla alla signups i gruppen som har debriefs
 		const totalScore = _.sumBy(debriefs, 'score')
-		grp.averageScore = debriefs.length > 0
+
+		grp.averageScore = totalScore > 0 && debriefs.length > 0
 			? ((Math.round((totalScore / debriefs.length) * 10) / 10) + '').replace('.', ',') // avrunda till en decimal och byt . mot ,
 			: '-'
 	})
@@ -73,7 +74,9 @@ const updateElements = state => {
 		signups_count += grp.signups.length
 		total_score += _.sumBy(grp.signups, signup => signup.score)
 	})
-	let average_score = Math.round((total_score / debriefs_count) * 10) / 10 // avrunda till en decimal
+	let average_score = total_score > 0
+		? Math.round((total_score / debriefs_count) * 10) / 10 // avrunda till en decimal
+		: '-'
 	average_score = (average_score + '').replace('.', ',') // komma som decimaltecken
 
 	// Antalet skrivna debriefs / antal anmälningar
@@ -85,18 +88,17 @@ const updateElements = state => {
 
 	// -- Grupp-rutor --
 	state.groups.forEach(grp => {
-		if (grp.averageScore === '-') {
-			// inga debriefs
-			$(`#grp_card_${grp.code} .grp_has_signups`).removeClass('d-block').addClass('d-none')
-			$(`#grp_card_${grp.code} .grp_no_signups`).removeClass('d-none').addClass('d-flex')
-		} else {
+		if (grp.signups.length > 0) {
 			// har debriefs
 			$(`#grp_card_${grp.code} .grp_has_signups`).removeClass('d-none').addClass('d-block')
 			$(`#grp_card_${grp.code} .grp_no_signups`).removeClass('d-flex').addClass('d-none')
+		} else {
+			// inga debriefs
+			$(`#grp_card_${grp.code} .grp_has_signups`).removeClass('d-block').addClass('d-none')
+			$(`#grp_card_${grp.code} .grp_no_signups`).removeClass('d-none').addClass('d-flex')
 		}
 
 		// Gruppernas genomsnittsbetyg
-		// $(`.avg_score`).html(grp.averageScore)
 		$(`#grp_card_${grp.code} .avg_score`).html(grp.averageScore)
 
 		// Varje medlems betyg
