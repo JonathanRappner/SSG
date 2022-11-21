@@ -78,29 +78,34 @@ $attendance_classes = array(
 
 		<!-- Sammanfattning -->
 		<div class="row">
-			<div class="col pb-3">
 
+			<!-- Debriefs skrivna -->
+			<div class="col-6 pb-3">
 				<div class="card shadow-sm">
-					<div class="card-body">
-
-						<h5 class="card-title">Sammanfattning</h5>
-
-						<p class="card-text">
-							<strong>Debriefs skrivna:</strong> <span id="value_total_debriefs"></span><br>
-							<strong>Eventets genomsnittsbetyg:</strong> <span id="value_average_score"></span>
-						</p>
-
+					<div class="card-body text-center">
+						<h1 id="value_total_debriefs"></h1>
+						<span>Debriefs skrivna</span>
 					</div>
 				</div>
-
 			</div>
+
+			<!-- Genomsnittsbetyg -->
+			<div class="col-6 pb-3">
+				<div class="card shadow-sm">
+					<div class="card-body text-center">
+						<h1 id="value_average_score"></h1>
+						<span>Genomsnittsbetyg</span>
+					</div>
+				</div>
+			</div>
+
 		</div>
 
 		<!-- Grupp -->
 		<div class="row">
 			<?php foreach ($groups as $grp) : ?>
 
-				<div id="grp_card_<?= $grp->code ?>" class="col-md-4 py-2 d-flex align-items-stretch">
+				<div id="grp_card_<?= $grp->code ?>" class="grp_card col-md-4 py-2 d-flex align-items-stretch">
 
 					<div class="card shadow-sm w-100">
 						<a class="card-link" href="<?= base_url("debrief/group/{$event->id}/{$grp->id}") ?>">
@@ -115,24 +120,20 @@ $attendance_classes = array(
 								<!-- Grupp-card text -->
 								<div class="card-text grp_has_signups">
 
-										<div class="row text-center mb-3">
-											<h1 class="avg_score col-12">-</h1>
-											<small class="col-12">Genomsnittsbetyg</small>
-										</div>
+									<div class="row text-center mb-3">
+										<h1 class="avg_score col-12">-</h1>
+										<small class="col-12">Genomsnittsbetyg</small>
+									</div>
 
-										<!-- Betyg från gruppens medlemmar -->
-										<ul class="member_scores pl-3 mb-0">
-											<li><strong>member-name</strong>: score</li>
-											<li><strong>member-name</strong>: score</li>
-											<li><strong>member-name</strong>: score</li>
-										</ul>
+									<!-- Betyg från gruppens medlemmar -->
+									<div class="member_scores pl-3 mb-0"></div>
 
 								</div>
 
 								<div class="card-text grp_no_signups h-75 d-flex align-items-center">
 									<span>Ingen från denna grupp har anmält sig till eventet.</span>
 								</div>
-								
+
 							</div>
 						</a>
 					</div>

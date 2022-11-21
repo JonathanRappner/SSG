@@ -77,7 +77,7 @@ const updateElements = state => {
 	average_score = (average_score + '').replace('.', ',') // komma som decimaltecken
 
 	// Antalet skrivna debriefs / antal anmälningar
-	$('#value_total_debriefs').html(`${debriefs_count} / ${signups_count}`)
+	$('#value_total_debriefs').html(`${debriefs_count}/${signups_count}`)
 
 	// Genomsnittbetyg
 	$('#value_average_score').html(average_score)
@@ -85,7 +85,7 @@ const updateElements = state => {
 
 	// -- Grupp-rutor --
 	state.groups.forEach(grp => {
-		if(grp.averageScore === '-') {
+		if (grp.averageScore === '-') {
 			// inga debriefs
 			$(`#grp_card_${grp.code} .grp_has_signups`).removeClass('d-block').addClass('d-none')
 			$(`#grp_card_${grp.code} .grp_no_signups`).removeClass('d-none').addClass('d-flex')
@@ -96,8 +96,20 @@ const updateElements = state => {
 		}
 
 		// Gruppernas genomsnittsbetyg
+		// $(`.avg_score`).html(grp.averageScore)
 		$(`#grp_card_${grp.code} .avg_score`).html(grp.averageScore)
 
 		// Varje medlems betyg
+		const membersScoreElement = `#grp_card_${grp.code} .member_scores`
+		$(membersScoreElement).html('') // rensa poäng-rader
+		_.sortBy(grp.signups, s => s.score <= 0).forEach(signup => { // sortera så att icke-debrief:ade signups hamnar sist
+			$(membersScoreElement).append(
+				`<div class="member_score">
+					<strong>${signup.name}</strong>:
+					${signup.score > 0 ? `(${signup.score})` : '-'}
+					<div class="stars" style="width: ${(signup.score * 17)}px;"></div>
+				</div>`
+			)
+		})
 	})
 }
