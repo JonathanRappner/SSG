@@ -128,9 +128,10 @@ class Debrief extends CI_Controller
 			$member_id = $this->member->id;
 		} else if($member_id != $this->member->id && !$this->permissions->has_permissions(array('grpchef', 's0', 's1'))) // ett id är satt, id:t är inte ditt eget och du har inte rätt rättigheter
 			die('Du har inte rättigheterna för att ändra på andra användares debriefs.');
-		$member = $this->db->query('SELECT name FROM ssg_members WHERE id = ?', $member_id)->row();
+		$member = $this->db->query('SELECT id, name FROM ssg_members WHERE id = ?', $member_id)->row();
 		$event = $this->eventsignup->get_event($event_id);
 		$signup = $this->eventsignup->get_signup($event_id, $member_id);
+		$debrief = $this->debrief_model->get_debrief($event_id, $member_id);
 		$group = $this->db->query('SELECT id, name, code, dummy FROM ssg_groups WHERE id = ?', $signup->group_id)->row();
 		$groups = $this->db->query('SELECT id, name FROM ssg_groups WHERE NOT dummy AND active ORDER BY sorting ASC')->result();
 		$role = $this->db->query('SELECT id, name, name_long, dummy FROM ssg_roles WHERE id = ?', $signup->role_id)->row();
@@ -152,6 +153,7 @@ class Debrief extends CI_Controller
 				'global_alerts' => $this->global_alerts,
 				'event' => $event,
 				'signup' => $signup,
+				'debrief' => $debrief,
 				'member' => $member,
 				'group' => $group,
 				'groups' => $groups,
@@ -164,10 +166,12 @@ class Debrief extends CI_Controller
 
 	/** Skapa eller uppdatera debrief och signup-data. */
 	public function submit() {
-		echo '<h1>Submit debug</h1>';
-		echo '<pre>';
-		print_r($this->input->post());
-		echo '</pre>';
+		if (!$this->check_login()) return;
+
+		// Moduler
+		$this->load->model('debrief/debrief_model');
+
+		$this->debrief_model->submit($this->input->post());
 	}
 
 	/**

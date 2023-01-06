@@ -283,6 +283,10 @@ class Debrief_model extends CI_Model
 	{
 	}
 
+	/**
+	 * HTML-stjärnor
+	 * @param int $score Betyg
+	 */
 	public function score_string($score)
 	{
 		if (!$score)
@@ -293,5 +297,51 @@ class Debrief_model extends CI_Model
 			$string .= '<img class="star" src="' . base_url('images/star.svg') . '" />';
 
 		return "$string</span>";
+	}
+
+	/**
+	 * Spara värden till anmälan och debrief.
+	 * @param array $data POST-variabler från formuläret
+	 */
+	public function submit($data) {
+		$data = (object)$data;
+
+		// Parameter-hygien
+		if(
+			!$data
+			|| !isset($data->event_id) || !is_numeric($data->event_id)
+			|| !isset($data->member_id) || !is_numeric($data->member_id)
+			|| !isset($data->score) || !is_numeric($data->score)
+			|| !isset($data->group) || !is_numeric($data->group)
+			|| !isset($data->role) || !is_numeric($data->role)
+			|| !isset($data->attendance) || !is_numeric($data->attendance)
+			|| !isset($data->review_good) || strlen($data->review_good) <= 0
+			|| !isset($data->review_bad) || strlen($data->review_bad) <= 0
+		)
+		{
+			if(ENVIRONMENT == 'development') echo '<pre>'. print_r($data, true) .'</pre>';
+			die('Parametrar saknas eller är felaktiga.');
+		}
+
+		// Uppdatera grupp och befattning som spelades
+		$this->db->update(
+			'ssg_signups', // table
+			array('group_id' => $data->group, 'role_id' => $data->role, 'attendance' => $data->attendance), // values
+			array('event_id' => $data->event_id, 'member_id' => $data->member_id) // where
+		);
+
+
+		// -- Skapa eller uppdatera debrief --
+		
+		// ta bort variabler som inte ska in i ssg_debriefs
+		$group_id = $data->group;
+		unset($data->group);
+		unset($data->role);
+		unset($data->attendance);
+
+		// exekvera
+		$this->db->replace('ssg_debriefs', $data);
+
+		redirect(base_url("debrief/group/{$data->event_id}/{$group_id}"));
 	}
 }

@@ -8,6 +8,7 @@ $(document).ready(function () {
 	$('form').submit(validateForm)
 
 	// Betygsstjärnor
+	clearHoverStars(); // om ett betyg redan finns i input[name=score]: uppdatera stjärnorna
 	$('.star').mouseenter(e => hoverStar($(e.target).data('star_number') - 0)) // hover
 	$('.star-container').mouseleave(() => clearHoverStars()) // rensa hover och sätt till det sparade betyget
 	$('.star').click(e => $('input[name=score]').val($(e.target).data('star_number') - 0)) // sätt betyget
@@ -18,6 +19,13 @@ $(document).ready(function () {
  */
 const updateRoles = () => {
 	const group_id = $('#group').val() // vald grupp-id
+
+	if(group_id === '') {
+		$('#role').prop('disabled', true)
+		$('#role').html('<option value="">-- Välj grupp först --</option>')
+		return
+	}
+	$('#role').prop('disabled', false)
 
 	// Skapa sträng med <option>:s
 	let optionsString = ''
@@ -67,7 +75,7 @@ const clearHoverStars = () => {
  * @param {object} e Submit-event
  * @returns True/false
  */
-const validateForm = () => {
+const validateForm = e => {
 
 	// värden
 	let valid = true
@@ -78,8 +86,6 @@ const validateForm = () => {
 		valid = false
 		$('.star-container').addClass('invalid')
 	}
-
-	///////// tillåt inte rekryt-gruppen eller "vad som helst", alltså inte dummies?
 	
 	return valid
 }

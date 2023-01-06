@@ -20,7 +20,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 	<?php $this->load->view('debrief/sub-views/head') ?>
 	<link rel="stylesheet" href="<?= base_url('css/debrief/form.css?0') ?>">
-	<script src="<?= base_url('js/debrief/form.js?0') ?>"></script>
+	<script src="<?= base_url('js/debrief/form.js?1') ?>"></script>
 </head>
 
 <body>
@@ -69,27 +69,30 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 						<form method="post" action="<?= base_url('debrief/submit') ?>">
 
-							<input type="hidden" name="score" value="" />
+							<input type="hidden" name="event_id" value="<?=$event->id ?>" />
+							<input type="hidden" name="member_id" value="<?=$member->id ?>" />
+							<input type="hidden" name="score" value="<?=$debrief ? $debrief->score : null ?>" />
 
 							<!-- Grupp -->
 							<div class="form-group">
 								<label for="group">Grupp</label>
-								<select class="form-control" name="group" id="group">
+								<select class="form-control" name="group" id="group" required>
+									<option value="">-- Välj grupp --</option>
 									<?php foreach ($groups as $grp) : ?>
 										<option value="<?= $grp->id ?>" <?= $grp->id == $group->id ? 'selected' : null ?>><?= $grp->name ?></option>
 									<?php endforeach; ?>
 								</select>
 								<?php if ($group->dummy) : ?>
-									<small class="form-text text-muted">I din anmälan anmälde du dig inte till en riktig grupp. Välj vilken grupp du spelade med.</small>
+									<small class="form-text text-muted">I din anmälan valde du ingen grupp. Välj vilken grupp du spelade med.</small>
 								<?php endif; ?>
 							</div>
 
 							<!-- Befattning -->
 							<div class="form-group">
 								<label for="role">Befattning</label>
-								<select class="form-control" name="role" id="role"></select>
+								<select class="form-control" name="role" id="role" required></select>
 								<?php if ($role->dummy) : ?>
-									<small class="form-text text-muted">I din anmälan anmälde du dig inte till en riktig befattning. Välj vilken befattning du spelade som.</small>
+									<small class="form-text text-muted">I din anmälan valde du ingen befattning. Välj vilken befattning du spelade som.</small>
 								<?php endif; ?>
 							</div>
 
@@ -133,18 +136,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							<div class="form-group">
 								<label for="good">
 									<i class="fas fa-thumbs-up"></i>
-									<span class="text-success">Vad har varit bra/roligt?</span>
+									<span class="text-success required">Vad har varit bra/roligt?</span>
 								</label>
-								<textarea class="form-control" name="review_good" id="good" rows="4" placeholder="Bra OP, mycket skjuta, mycket action, slut från mig."></textarea>
+								<textarea class="form-control" name="review_good" id="good" rows="4" required placeholder="Bra OP, mycket skjuta, mycket action, slut från mig."><?=$debrief ? $debrief->review_good : null ?></textarea>
 							</div>
 
 							<!-- Dåligt/tråkigt -->
 							<div class="form-group">
 								<label for="bad">
 									<i class="fas fa-thumbs-down"></i>
-									<span class="text-danger">Vad har varit dåligt/tråkigt?</span>
+									<span class="text-danger required">Vad har varit dåligt/tråkigt?</span>
 								</label>
-								<textarea class="form-control" name="review_bad" id="bad" rows="4"></textarea>
+								<textarea class="form-control" name="review_bad" id="bad" rows="4" required><?=$debrief ? $debrief->review_bad : null ?></textarea>
 							</div>
 
 							<!-- Bättre -->
@@ -153,7 +156,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 									<i class="fas fa-yin-yang"></i>
 									<span class="text-warning">Vad kan vi göra bättre?</span>
 								</label>
-								<textarea class="form-control" name="review_improvement" id="improvement" rows="4"></textarea>
+								<textarea class="form-control" name="review_improvement" id="improvement" rows="4"><?=$debrief ? $debrief->review_improvement : null ?></textarea>
 							</div>
 
 							<!-- Tekniskt strul -->
@@ -162,7 +165,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 									<i class="fas fa-tools"></i>
 									<span class="text-info">Tekniskt strul</span>
 								</label>
-								<textarea class="form-control" name="review_tech" id="tech" rows="4"></textarea>
+								<textarea class="form-control" name="review_tech" id="tech" rows="4"><?=$debrief ? $debrief->review_tech : null ?></textarea>
 							</div>
 
 							<button type="submit" class="btn btn-success">
