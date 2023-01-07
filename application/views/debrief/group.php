@@ -71,9 +71,9 @@ $attendance_classes = array(
 				</div>
 
 				<?php if (!$signup) : /* igen anmälan */ ?>
-					<div class="alert alert-warning">Du har inte anmält dig till detta event och kan inte skriva en debrief för det.</div>
+					<div class="alert alert-warning">Du har inte anmält dig till detta event och kan inte skriva en debrief.</div>
 				<?php elseif ($signup->attendance_id > 3) : /* anmälan är negativ */ ?>
-					<div class="alert alert-warning">Du är anmäld som <span class="<?= $attendance_classes[$signup->attendance_id] ?>"><?= $signup->attendance_name ?></span> till detta event och kan inte skriva en debrief för det.</div>
+					<div class="alert alert-warning">Du är anmäld som <span class="<?= $attendance_classes[$signup->attendance_id] ?>"><?= $signup->attendance_name ?></span> till detta event och kan inte skriva en debrief.</div>
 				<?php elseif (!$debrief) : /* ingen debrief */ ?>
 					<a href="<?= base_url('debrief/form/' . $event->id) ?>" class="btn btn-success">
 						Skriv din debrief <i class="fas fa-chevron-right"></i>

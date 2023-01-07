@@ -65,10 +65,10 @@ $attendance_classes = array(
 				<h2 class="mb-3">Debrief - <?= $event->title ?></h2>
 
 				<!-- Ingen anmälan -->
-				<div id="alert_no_signup" class="alert alert-warning d-none">Du har inte anmält dig till detta event och kan inte skriva en debrief för det.</div>
+				<div id="alert_no_signup" class="alert alert-warning d-none">Du har inte anmält dig till detta event och kan inte skriva en debrief.</div>
 
 				<!-- Negativ anmälan -->
-				<div id="alert_negative_signup" class="alert alert-warning d-none">Du är anmäld som <span></span> till detta event och kan inte skriva en debrief för det.</div>
+				<div id="alert_negative_signup" class="alert alert-warning d-none">Du är anmäld som <span></span> till detta event och kan inte skriva en debrief.</div>
 
 				<!-- Ny/Redigera debrief-knapp -->
 				<a href="<?= base_url('debrief/form/' . $event->id) ?>" id="btn_form" class="btn d-none"></a>
