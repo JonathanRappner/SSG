@@ -278,9 +278,60 @@ class Debrief_model extends CI_Model
 		return json_encode($data);
 	}
 
-
-	public function get_group_state($event_id, $group_id, $last_modified_prev)
+	/**
+	 * Hämta state-JSON-sträng med data för grupp-sidan
+	 * @param int $event_id
+	 * @param int $group_id
+	 * @param int $last_modified_prev Senast ändrad-datumsträng (ex: '2022-10-08 13:21:42') när klientens state uppdaterades.
+	 */
+	public function get_group_state($event_id, $group_id, $last_modified_prev = 0)
 	{
+		$data = new stdClass;
+
+		// Hämta alla medlemmar med positiva anmälningar och dess poäng (om de har en review)
+		$sql =
+			'SELECT
+				s.member_id,
+				m.name AS member_name,
+				m.phpbb_user_id,
+				d.score,
+				d.review_good,
+				d.review_bad,
+				d.review_improvement,
+				d.review_tech
+			FROM ssg_signups s
+
+			INNER JOIN ssg_members m
+				ON s.member_id = m.id
+			
+			LEFT OUTER JOIN ssg_roles r
+				ON m.role_id = r.id
+
+			LEFT OUTER JOIN ssg_debriefs d
+				ON s.member_id = d.member_id AND s.event_id = d.event_id
+			WHERE
+				s.event_id = ?
+				AND s.group_id = ?
+				AND s.attendance-0 <= 3 # endast positiva anmälningar
+			ORDER BY
+				r.sorting ASC';
+		$query = $this->db->query($sql, array($event_id, $group_id));
+		$data->signups = array();
+		foreach ($query->result() as $row) {
+			$signup = new stdClass;
+			$signup->id = $row->member_id;
+			$signup->name = $row->member_name;
+			$signup->avatar_url = $this->member->get_phpbb_avatar($row->phpbb_user_id);
+			$signup->score = $row->score - 0;
+			$signup->review_good = $row->review_good ? nl2br($row->review_good) : null;
+			$signup->review_bad = $row->review_good ? nl2br($row->review_bad) : null;
+			$signup->review_improvement = $row->review_good ? nl2br($row->review_improvement) : null;
+			$signup->review_tech = $row->review_good ? nl2br($row->review_tech) : null;
+
+			$data->signups[] = $signup;
+		}
+
+		return json_encode($data);
 	}
 
 	/**
@@ -322,6 +373,10 @@ class Debrief_model extends CI_Model
 			if(ENVIRONMENT == 'development') echo '<pre>'. print_r($data, true) .'</pre>';
 			die('Parametrar saknas eller är felaktiga.');
 		}
+
+		// Får bara ändra sin egen debrief om man inte är admin
+		if($data->member_id != $this->member->id && !$this->permissions->has_permissions(array('s0', 's1', 'grpchef')))
+			die('Du har inte rättigheterna för att medlemmens debrief.');
 
 		// Uppdatera grupp och befattning som spelades
 		$this->db->update(

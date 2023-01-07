@@ -7,69 +7,94 @@ body {
 }
 
 // Lägger till röd asterisk efter texten
-.required::after{
-	content: ' *';
+.required::after {
+	content: " *";
 	color: red;
 }
 
-// navbar items 
+// navbar items
 .navbar-dark .navbar-nav .nav-link {
-	color: rgba(255,255,255,.8);
+	color: rgba(255, 255, 255, 0.8);
 }
-.navbar-dark .navbar-nav .nav-link:hover{
+.navbar-dark .navbar-nav .nav-link:hover {
 	color: #212529;
 }
 
-// mindre padding i card headers 
-h3.card-header { padding: 0.7rem 1rem; }
-h4.card-header { padding: 0.5rem 0.8rem; }
+// mindre padding i card headers
+h3.card-header {
+	padding: 0.7rem 1rem;
+}
+h4.card-header {
+	padding: 0.5rem 0.8rem;
+}
 
-// header-länkar 
-.card-header a{ color: #FFF; }
+// header-länkar
+.card-header a {
+	color: #fff;
+}
 
-// Nästa event-title "av Nisse"-text 
-h1 small, h2 small, h3 small, h4 small, h5 small{ color: #d4d4d4 !important; }
+// Nästa event-title "av Nisse"-text
+h1 small,
+h2 small,
+h3 small,
+h4 small,
+h5 small {
+	color: #d4d4d4 !important;
+}
 
-// gör btn-primary lite ljusare 
+// gör btn-primary lite ljusare
 .btn-primary {
-	background-color: #3A99FC !important;
-	border-color: #3A99FC !important;
+	background-color: #3a99fc !important;
+	border-color: #3a99fc !important;
 }
 .btn-primary:hover {
-	background-color: #007DFF !important;
-	border-color: #007DFF !important;
+	background-color: #007dff !important;
+	border-color: #007dff !important;
 }
 
-// celler som ska kortas ner om de innehåller för mycket text 
+// celler som ska kortas ner om de innehåller för mycket text
 .truncate {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
-// muspekar-ikon för tabellrader 
+// muspekar-ikon för tabellrader
 table.clickable tbody tr:hover {
 	cursor: pointer;
 }
 
-// Tabell grå 
-tr.grayed{ background-color: #B0B0B0; }
-tr.grayed:hover { color: white; background-color: #858585 !important; }
+// Tabell grå
+tr.grayed {
+	background-color: #b0b0b0;
+}
+tr.grayed:hover {
+	color: white;
+	background-color: #858585 !important;
+}
 
-// Avatar i toppraden 
-#userbox .avatar{
+// Avatar i toppraden
+#userbox .avatar {
 	max-width: 42px;
 	max-height: 42px;
 }
 
-// länk till forum-profil 
-#userbox a{
-	color: #FFF;
+// länk till forum-profil
+#userbox a {
+	color: #fff;
 	text-decoration: none;
 	display: inline-block;
 }
 
 // Bootstrap badge padding
-.badge{
+.badge {
 	padding: 0.35em 0.5em;
+}
+
+// xs och sm
+@media (max-width: 576px) {
+	// Mindre textstorlek
+	table {
+		font-size: 0.8rem;
+	}
 }

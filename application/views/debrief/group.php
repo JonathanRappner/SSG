@@ -22,9 +22,16 @@ $attendance_classes = array(
 <head>
 	<?php $this->load->view('debrief/sub-views/head') ?>
 
-	<link rel="stylesheet" href="<?= base_url('css/debrief/group.css?0') ?>">
+	<link rel="stylesheet" href="<?= base_url('css/debrief/group.css?1') ?>">
+	<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+	<script src="<?= base_url('js/debrief/group.js?0') ?>"></script>
 
 	<title><?= strtoupper($group->code) ?> - <?= $event->title ?></title>
+
+	<script>
+		// sätt initial state-variabel
+		let state = <?= $init_state ?>;
+	</script>
 
 </head>
 
@@ -82,23 +89,40 @@ $attendance_classes = array(
 
 		<!-- Summering -->
 		<div class="row">
-			<div class="col pb-3">
-				<div class="card shadow-sm">
-					<div class="card-body">
-						
-						<h5 class="card-title mb-4">
-							<i class="fas fa-clipboard"></i>
-							Summering
-						</h5>
-						
-						genomsnittspoäng<br>
-						medlemmars poäng<br>
-						hur många är klara?<br>
-						länkar för admin att skriva debrief för andra medlemmar
 
+			<!-- Medlemmars betyg -->
+			<div class="col pb-3">
+				<div class="card shadow-sm h-100">
+					<div class="card-body">
+						<div id="member_scores" class="pl-3 mb-0"></div>
 					</div>
 				</div>
 			</div>
+			
+			<!-- Debriefs skrivna -->
+			<div class="col pb-3">
+				<div class="card shadow-sm h-100">
+					<div class="card-body h-100 d-flex justify-content-center align-items-center">
+						<div class="d-flex flex-column text-center">
+							<h1 id="value_total_debriefs"></h1>
+							<span>Debriefs skrivna</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Genomsnittsbetyg -->
+			<div class="col pb-3">
+				<div class="card shadow-sm h-100">
+					<div class="card-body h-100 d-flex justify-content-center align-items-center">
+						<div class="d-flex flex-column text-center">
+							<h1 id="value_average_score"></h1>
+							<span>Genomsnittsbetyg</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
 		</div>
 
 		<!-- Bra -->
@@ -113,24 +137,7 @@ $attendance_classes = array(
 							<span class="text-success">Vad har varit bra / roligt</span>
 						</h5>
 
-						<ul class="list-group">
-							<li class="list-group-item list-group-item-success">
-								<img class="mini-avatar" src="<?= $this->member->avatar_url ?? base_url('images/unknown.png') ?>" /><strong>Smorfty</strong><br>
-								Kul OP. Mycket action. Slut från mig.
-							</li>
-							<li class="list-group-item list-group-item-success">
-								<img class="mini-avatar" src="<?= base_url('images/unknown.png') ?>" /><strong>Åsa-Nisse</strong><br>
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-							</li>
-							<li class="list-group-item list-group-item-success">
-								<img class="mini-avatar" src="<?= base_url('images/unknown.png') ?>" /><strong>Klabbarparn</strong><br>
-								A simple list group item
-							</li>
-							<li class="list-group-item list-group-item-success">
-								<img class="mini-avatar" src="<?= base_url('images/unknown.png') ?>" /><strong>Sjökvist</strong><br>
-								A simple list group item
-							</li>
-						</ul>
+						<ul id="reviews_good" class="list-group"></ul>
 
 					</div>
 				</div>
@@ -151,24 +158,7 @@ $attendance_classes = array(
 							<span class="text-danger">Vad har varit dåligt / tråkigt?</span>
 						</h5>
 
-						<ul class="list-group">
-							<li class="list-group-item list-group-item-danger">
-								<img class="mini-avatar" src="<?= $this->member->avatar_url ?? base_url('images/unknown.png') ?>" /><strong>Smorfty</strong><br>
-								Kul OP. Mycket action. Slut från mig.
-							</li>
-							<li class="list-group-item list-group-item-danger">
-								<img class="mini-avatar" src="<?= base_url('images/unknown.png') ?>" /><strong>Åsa-Nisse</strong><br>
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-							</li>
-							<li class="list-group-item list-group-item-danger">
-								<img class="mini-avatar" src="<?= base_url('images/unknown.png') ?>" /><strong>Klabbarparn</strong><br>
-								A simple list group item
-							</li>
-							<li class="list-group-item list-group-item-danger">
-								<img class="mini-avatar" src="<?= base_url('images/unknown.png') ?>" /><strong>Sjökvist</strong><br>
-								A simple list group item
-							</li>
-						</ul>
+						<ul id="reviews_bad" class="list-group"></ul>
 
 					</div>
 				</div>
@@ -187,24 +177,7 @@ $attendance_classes = array(
 							<span class="text-warning">Vad kan vi göra bättre?</span>
 						</h5>
 
-						<ul class="list-group">
-							<li class="list-group-item list-group-item-warning">
-								<img class="mini-avatar" src="<?= $this->member->avatar_url ?? base_url('images/unknown.png') ?>" /><strong>Smorfty</strong><br>
-								Kul OP. Mycket action. Slut från mig.
-							</li>
-							<li class="list-group-item list-group-item-warning">
-								<img class="mini-avatar" src="<?= base_url('images/unknown.png') ?>" /><strong>Åsa-Nisse</strong><br>
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-							</li>
-							<li class="list-group-item list-group-item-warning">
-								<img class="mini-avatar" src="<?= base_url('images/unknown.png') ?>" /><strong>Klabbarparn</strong><br>
-								A simple list group item
-							</li>
-							<li class="list-group-item list-group-item-warning">
-								<img class="mini-avatar" src="<?= base_url('images/unknown.png') ?>" /><strong>Sjökvist</strong><br>
-								A simple list group item
-							</li>
-						</ul>
+						<ul id="reviews_improvement" class="list-group"></ul>
 
 					</div>
 				</div>
@@ -223,24 +196,8 @@ $attendance_classes = array(
 							<span class="text-info">Tekniskt strul</span>
 						</h5>
 
-						<ul class="list-group">
-							<li class="list-group-item list-group-item-info">
-								<img class="mini-avatar" src="<?= $this->member->avatar_url ?? base_url('images/unknown.png') ?>" /><strong>Smorfty</strong><br>
-								Kul OP. Mycket action. Slut från mig.
-							</li>
-							<li class="list-group-item list-group-item-info">
-								<img class="mini-avatar" src="<?= base_url('images/unknown.png') ?>" /><strong>Åsa-Nisse</strong><br>
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-							</li>
-							<li class="list-group-item list-group-item-info">
-								<img class="mini-avatar" src="<?= base_url('images/unknown.png') ?>" /><strong>Klabbarparn</strong><br>
-								A simple list group item
-							</li>
-							<li class="list-group-item list-group-item-info">
-								<img class="mini-avatar" src="<?= base_url('images/unknown.png') ?>" /><strong>Sjökvist</strong><br>
-								A simple list group item
-							</li>
-						</ul>
+						<ul id="reviews_tech" class="list-group"></ul>
+
 					</div>
 				</div>
 

@@ -15,7 +15,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 	<!-- Page-specific -->
 	<script src="<?= base_url('js/signup/clickable_table.js') ?>"></script>
-	<!-- <link rel="stylesheet" href="<xxx?=base_url('css/signup/events.css?3')?>"> -->
 
 	<title>SSG Debrief</title>
 
@@ -37,8 +36,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			Klicka på ett event för att se en sammanställning av alla dess debriefs.
 		</p>
 
-		<div id="wrapper_events_table" class="row table-responsive table-sm">
-			<div class="px-3 py-2 mb-3 bg-white rounded shadow-sm">
+		<div id="wrapper_events_table" class="row">
+			<div class="px-3 py-2 mb-3 bg-white rounded shadow-sm table-responsive table-sm">
 				<table class="table table-hover clickable">
 					<thead class="table-borderless">
 						<tr>

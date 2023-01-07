@@ -82,7 +82,7 @@ class Debrief extends CI_Controller
 				'member_id' => $this->member->id,
 				'event' => $event,
 				'groups' => $groups,
-				'init_state' => $init_state
+				'init_state' => $init_state,
 			)
 		);
 	}
@@ -101,6 +101,7 @@ class Debrief extends CI_Controller
 		$signup = $this->eventsignup->get_signup($event_id, $this->member->id);
 		$debrief = $this->debrief_model->get_debrief($event_id, $this->member->id);
 		$group = $this->db->query('SELECT id, name, code FROM ssg_groups WHERE id = ?', $group_id)->row();
+		$init_state = $this->debrief_model->get_group_state($event_id, $group_id);
 
 		$this->load->view(
 			'debrief/group',
@@ -110,6 +111,7 @@ class Debrief extends CI_Controller
 				'signup' => $signup,
 				'debrief' => $debrief,
 				'group' => $group,
+				'init_state' => $init_state,
 			)
 		);
 	}
@@ -133,7 +135,7 @@ class Debrief extends CI_Controller
 		$signup = $this->eventsignup->get_signup($event_id, $member_id);
 		$debrief = $this->debrief_model->get_debrief($event_id, $member_id);
 		$group = $this->db->query('SELECT id, name, code, dummy FROM ssg_groups WHERE id = ?', $signup->group_id)->row();
-		$groups = $this->db->query('SELECT id, name FROM ssg_groups WHERE NOT dummy AND active AND selectable ORDER BY sorting ASC')->result();
+		$groups = $this->db->query('SELECT id, name FROM ssg_groups WHERE NOT dummy AND active AND selectable ORDER BY enabler ASC, sorting ASC')->result();
 		$role = $this->db->query('SELECT id, name, name_long, dummy FROM ssg_roles WHERE id = ?', $signup->role_id)->row();
 		$group_roles = $this->db->query( // grupp-id med alla dess roller
 			'SELECT rg.group_id, role_id, r.name, r.name_long
