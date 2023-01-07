@@ -133,7 +133,7 @@ class Debrief extends CI_Controller
 		$signup = $this->eventsignup->get_signup($event_id, $member_id);
 		$debrief = $this->debrief_model->get_debrief($event_id, $member_id);
 		$group = $this->db->query('SELECT id, name, code, dummy FROM ssg_groups WHERE id = ?', $signup->group_id)->row();
-		$groups = $this->db->query('SELECT id, name FROM ssg_groups WHERE NOT dummy AND active ORDER BY sorting ASC')->result();
+		$groups = $this->db->query('SELECT id, name FROM ssg_groups WHERE NOT dummy AND active AND selectable ORDER BY sorting ASC')->result();
 		$role = $this->db->query('SELECT id, name, name_long, dummy FROM ssg_roles WHERE id = ?', $signup->role_id)->row();
 		$group_roles = $this->db->query( // grupp-id med alla dess roller
 			'SELECT rg.group_id, role_id, r.name, r.name_long
