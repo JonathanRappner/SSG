@@ -21,11 +21,11 @@ $preview = $this->preview->get_data();
 <meta name="twitter:domain" content="<?=$preview->domain;?>">
 <meta name="twitter:card" content="summary_large_image">
 
-<meta property="og:title" content="<?=$preview->title;?>" />
-<meta property="og:description" content="<?=$preview->description;?>" />
-<meta property="og:url" content="<?=$preview->url;?>" />
-<meta property="og:image" content="<?=$preview->image_url;?>" />
-<meta property="og:type" content="article" />
+<meta property="og:title" content="<?=$preview->title;?>">
+<meta property="og:description" content="<?=$preview->description;?>">
+<meta property="og:url" content="<?=$preview->url;?>">
+<meta property="og:image" content="<?=$preview->image_url;?>">
+<meta property="og:type" content="article">
 
 
 <!-- JS -->

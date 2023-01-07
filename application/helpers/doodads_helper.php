@@ -111,9 +111,9 @@ function group_icon($group_code, $group_name = null, $big = false)
 	if($group_code != null && !in_array($group_code, $no_icon))
 	{
 		if(!$big) // 16px
-			return "<img class='group_icon_16 d-inline' src='{$icon_string_start}_16.png' srcset='{$icon_string_start}_16.png 1x, {$icon_string_start}_32.png 1.25x' {$tooltip_string} />";
+			return "<img class='group_icon_16 d-inline' src='{$icon_string_start}_16.png' srcset='{$icon_string_start}_16.png 1x, {$icon_string_start}_32.png 1.25x' {$tooltip_string}>";
 		else // 32px
-			return "<img class='group_icon_32 d-inline' src='{$icon_string_start}_32.png' srcset='{$icon_string_start}_32.png 1x, {$icon_string_start}_64.png 1.25x' {$tooltip_string} />";
+			return "<img class='group_icon_32 d-inline' src='{$icon_string_start}_32.png' srcset='{$icon_string_start}_32.png 1x, {$icon_string_start}_64.png 1.25x' {$tooltip_string}>";
 	}
 	else
 		return '<i class="fas fa-question-circle group_icon_'. ($big ? '32' : '16') .'"></i>';
@@ -139,10 +139,10 @@ function rank_icon($rank_icon, $rank_name, $big = false)
 				src='". base_url('images/rank_icons/16/'. $rank_icon) ."'
 				srcset='". base_url('images/rank_icons/16/'. $rank_icon) ." 1x, ". base_url('images/rank_icons/'. $rank_icon) ." 1.25x'
 				title='{$rank_name}' data-toggle='tooltip'
-			/>";
+			>";
 		else // 48px
 			return
-				'<img class="rank_icon_48 d-inline" src="'. base_url('images/rank_icons/'. $rank_icon) .'" title="'. $rank_name .'" data-toggle="tooltip" />';
+				'<img class="rank_icon_48 d-inline" src="'. base_url('images/rank_icons/'. $rank_icon) .'" title="'. $rank_name .'" data-toggle="tooltip">';
 }
 
 /**
@@ -244,7 +244,7 @@ function bbcode_parse($text)
 		'<span style="display:inline-block;width:100%;text-align:center;">$1</span>',
 		'<a href="$1">$1</a>',
 		'<a href="$1">$2</a>',
-		'<a class="newsfeed_image" href="$1" data-toggle="lightbox"><img src="$1" alt /></a>', //bilder ska inte vara inline
+		'<a class="newsfeed_image" href="$1" data-toggle="lightbox"><img src="$1" alt></a>', //bilder ska inte vara inline
 		'<iframe class="youtube" frameborder="0" src="https://www.youtube.com/embed/$1"></iframe>',
 		'<video autoplay loop muted><source src="$1" type="video/mp4">Din webbläsare stödjer inte videos.</video>',
 		'😎',
