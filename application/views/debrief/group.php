@@ -24,7 +24,7 @@ $attendance_classes = array(
 
 	<link rel="stylesheet" href="<?= base_url('css/debrief/group.css?1') ?>">
 	<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
-	<script src="<?= base_url('js/debrief/group.js?0') ?>"></script>
+	<script src="<?= base_url('js/debrief/group.js?2') ?>"></script>
 
 	<title><?= strtoupper($group->code) ?> - <?= $event->title ?></title>
 

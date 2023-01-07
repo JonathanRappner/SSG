@@ -48,54 +48,73 @@ const updateElements = state => {
 	})
 
 	// Review - Bra
-	$('#reviews_good').html('')
-	state.signups.forEach(signup => {
-		if (signup.review_good) {
-			$('#reviews_good').append(
-				`<li class="list-group-item list-group-item-success">
-				<img class="mini-avatar" src="${signup.avatar_url}" alt="Avatar"><strong>${signup.name}</strong><br>
-				<span class="review_text">${signup.review_good}</span>
-			</li>`
-			)
-		}
-	})
+	if (state.signups.some(s => s.review_good)) { // om reviews finns
+		$('#reviews_good').html('')
+		state.signups.forEach(signup => {
+			if (signup.review_good) {
+				$('#reviews_good').append(
+					`<li class="list-group-item list-group-item-success">
+					<img class="mini-avatar" src="${signup.avatar_url}" alt="Avatar"><strong>${signup.name}</strong><br>
+					<span class="review_text">${signup.review_good}</span>
+				</li>`
+				)
+			}
+		})
+	} else { // om inga reviews finns
+		$('#reviews_good').html('<span>-</span>')
+	}
 
 	// Review - Dåligt
-	$('#reviews_bad').html('')
-	state.signups.forEach(signup => {
-		if (signup.review_bad) {
-			$('#reviews_bad').append(
-				`<li class="list-group-item list-group-item-danger">
-				<img class="mini-avatar" src="${signup.avatar_url}" alt="Avatar"><strong>${signup.name}</strong><br>
-				<span class="review_text">${signup.review_bad}</span>
-			</li>`
-			)
-		}
-	})
+	if (state.signups.some(s => s.review_bad)) { // om reviews finns
+		$('#reviews_bad').html('')
+		state.signups.forEach(signup => {
+			if (signup.review_bad) {
+				$('#reviews_bad').append(
+					`<li class="list-group-item list-group-item-danger">
+					<img class="mini-avatar" src="${signup.avatar_url}" alt="Avatar"><strong>${signup.name}</strong><br>
+					<span class="review_text">${signup.review_bad}</span>
+				</li>`
+				)
+			}
+		})
+	} else { // om inga reviews finns
+		$('#reviews_bad').html('<span>-</span>')
+	}
 
 	// Review - Vad kan vi göra bättre
-	$('#reviews_improvement').html('')
-	state.signups.forEach(signup => {
-		if (signup.review_improvement) {
-			$('#reviews_improvement').append(
-				`<li class="list-group-item list-group-item-warning">
-				<img class="mini-avatar" src="${signup.avatar_url}" alt="Avatar"><strong>${signup.name}</strong><br>
-				<span class="review_text">${signup.review_improvement}</span>
-			</li>`
-			)
-		}
-	})
+	if (state.signups.some(s => s.review_improvement)) { // om reviews finns
+		$('#reviews_improvement').html('')
+		state.signups.forEach(signup => {
+			if (signup.review_improvement) {
+				$('#reviews_improvement').append(
+					`<li class="list-group-item list-group-item-warning">
+					<img class="mini-avatar" src="${signup.avatar_url}" alt="Avatar"><strong>${signup.name}</strong><br>
+					<span class="review_text">${signup.review_improvement}</span>
+				</li>`
+				)
+			}
+		})
+	} else { // om inga reviews finns
+		$('#reviews_improvement').html('<span>-</span>')
+	}
 
 	// Review - Teknikstrul
-	$('#reviews_tech').html('')
-	state.signups.forEach(signup => {
-		if (signup.review_improvement) {
-			$('#reviews_tech').append(
-				`<li class="list-group-item list-group-item-info">
-				<img class="mini-avatar" src="${signup.avatar_url}" alt="Avatar"><strong>${signup.name}</strong><br>
-				<span class="review_text">${signup.review_tech}</span>
-			</li>`
-			)
-		}
-	})
+	if (state.signups.some(s => s.review_tech)) { // om reviews finns
+		$('#reviews_tech').html('')
+		state.signups.forEach(signup => {
+			if (signup.review_tech) {
+				$('#reviews_tech').append(
+					`<li class="list-group-item list-group-item-info">
+					<img class="mini-avatar" src="${signup.avatar_url}" alt="Avatar"><strong>${signup.name}</strong><br>
+					<span class="review_text">${signup.review_tech}</span>
+				</li>`
+				)
+			}
+		})
+	} else { // om inga reviews finns
+		$('#reviews_tech').html('<span>-</span>')
+	}
+
+
+
 }
