@@ -406,7 +406,7 @@ class Admin_members implements Adminpanel
 		else if($member->stats->awol > 0) $awol_class = 'text-warning';
 		else $awol_class = 'text-success';
 
-		echo '<h5>Statistk</h5>';
+		echo '<h5>Statistik</h5>';
 		echo '<p class="mb-1"><strong title="Ja, JIP eller QIP under det senaste kvartalet." data-toggle="tooltip">Närvaro <i class="fas fa-question-circle"></i>:</strong> ';
 		echo "<span class='{$attendance_class} font-weight-bold'>{$member->stats->attendance}%</span></p>";
 		echo '<p class="mb-1"><strong title="Under det senaste kvartalet." data-toggle="tooltip">Sena anmälningar <i class="fas fa-question-circle"></i>:</strong> ';
