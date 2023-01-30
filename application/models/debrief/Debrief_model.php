@@ -66,7 +66,7 @@ class Debrief_model extends CI_Model
 			LEFT OUTER JOIN ssg_debriefs d
 				ON e.id = d.event_id AND d.member_id = ?
 			WHERE
-				ADDTIME(start_datetime, length_time) < NOW()
+				start_datetime <= NOW()
 			ORDER BY start_datetime DESC
 			LIMIT ?, ?';
 		$query = $this->db->query($sql, array($this->member->id, $page * $results_per_page, $results_per_page));
