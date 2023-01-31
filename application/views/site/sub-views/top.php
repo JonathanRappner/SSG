@@ -35,6 +35,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							<li class="nav-item">
 								<a class="nav-link" href="<?=base_url('signup')?>">Events</a>
 							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="<?=base_url('debrief')?>">Debriefs</a>
+							</li>
 						<?php endif;?>
 						
 						<li class="nav-item<?=$this->current_page == 'members' ? ' active' : null?>">

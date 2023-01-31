@@ -27,6 +27,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							<a class="nav-link" href="<?php echo base_url('signup');?>">Events</a>
 						</li>
 	
+						<li class="nav-item">
+							<a class="nav-link" href="<?php echo base_url('debrief');?>">Debriefs</a>
+						</li>
+	
 						<li class="nav-item<?php echo $this->current_page == 'history' ? ' active' : null;?>">
 							<a class="nav-link" href="<?php echo base_url('signup/history');?>">Historik</a>
 						</li>
