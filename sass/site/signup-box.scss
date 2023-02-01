@@ -1,83 +1,97 @@
-// --Anmälningsrutan-- 
+// --Anmälningsrutan--
 
-// titel 
-div.signup_box h2{ font-size: 1.3rem; }
-div.signup_box h2 a{ color: #000; }
-div.signup_box h2 a:hover{ text-decoration: none; }
-
-// datum/tid 
-div.signup_box p.date{
-	font-size: .8rem;
-	margin: 0;
-}
-
-// antal anmälda, siffra
-div.signup_box{
-	p.count{
-		margin: 0; line-height: normal;
-		
-		a{
-			color: #000;
-			font-size: 4rem;
-			font-weight: bold;
-			&:hover{ text-decoration: none; }
-		}
-	}
-}
-
-
-// deadline 
-.deadline{
+// deadline
+.deadline {
 	font-weight: bold;
 	margin-bottom: 4px;
 }
 
-// Anmäl dig / Ändra anmälan-knapp 
-div.signup_box{
+// Anmäl dig / Ändra anmälan-knapp
+div.signup_box {
+	// titel
+	h2 {
+		font-size: 1.3rem;
+		a {
+			color: #000;
+			&:hover {
+				text-decoration: none;
+			}
+		}
+	}
 	a.btn_signup_new,
 	a.btn_signup_edit,
 	a.btn_debrief {
 		margin: 6px auto;
+		small {
+			font-size: 1rem;
+		}
 	}
-	a.btn_signup_new { font-size: 2.0rem; } // ny anmälan 
-	a.btn_signup_edit { font-size: 1.4rem; } // redigera anmälan 
-	a.btn_debrief { font-size: 1.5rem; } // skriv debrief
-
-	// Knappikon 
-	a.btn_signup_new i,
-	a.btn_signup_edit i{
+	a.btn_signup_new {
+		font-size: 2rem;
+	} // ny anmälan
+	a.btn_signup_edit {
+		font-size: 1.4rem;
+	} // redigera anmälan
+	a.btn_debrief {
 		font-size: 1.5rem;
+	} // skriv debrief
+
+	// Knappikon
+	a.btn_signup_new i,
+	a.btn_signup_edit i {
+		font-size: 1.5rem;
+	}
+
+	// datum/tid
+	p.date {
+		font-size: 0.8rem;
+		margin: 0;
+	}
+
+	// antal anmälda, siffra
+	p.count {
+		margin: 0;
+		line-height: normal;
+
+		a {
+			color: #000;
+			font-size: 4rem;
+			font-weight: bold;
+			&:hover {
+				text-decoration: none;
+			}
+		}
 	}
 }
 
 // Övriga events
-div.signup_box{
-	div.other_events{
+div.signup_box {
+	div.other_events {
 		font-size: 0.9rem;
-		
+
 		// varje event-rad
 		a {
 			color: black;
 			padding: 0;
 			margin-bottom: 0.1rem;
 
-			&:hover{
+			&:hover {
 				text-decoration: none;
 
 				// hover-effekt på knapparna när man hovrar över hela a-taggen
-				.btn-success{
+				.btn-success {
 					background-color: #1e7e34;
-    				border-color: #1e7e34;
+					border-color: #1e7e34;
 				}
-				
+
 				.btn-primary {
 					background-color: #0069d9;
-    				border-color: #0069d9;
+					border-color: #0069d9;
 				}
 			}
 
 			// gröna knapparna
-			.btn{
+			.btn {
 				padding: 0 0.4rem;
 			}
 
@@ -88,7 +102,7 @@ div.signup_box{
 				margin-right: 8px;
 			}
 
-			.date{
+			.date {
 				white-space: nowrap;
 			}
 		}

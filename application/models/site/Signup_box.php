@@ -12,7 +12,7 @@ class Signup_box extends CI_Model
 	}
 
 	/**
-	 * Hämta event
+	 * Hämta nästkommande obligatoriska event
 	 *
 	 * @param array $permission_groups Den inloggade medlemmens permission groups $member->permission_groups
 	 * @return object
@@ -65,6 +65,42 @@ class Signup_box extends CI_Model
 			$event->member_signup = $this->get_member_signup($event->event_id, $this->member->id);
 
 		return $event;
+	}
+
+	/**
+	 * Hämta det föregående eventet som skedde idag.
+	 * Används åt debrief-knappen.
+	 *
+	 * @param int $member_id
+	 * @param array $permission_groups Den inloggade medlemmens permission groups $member->permission_groups
+	 * @return object
+	 */
+	public function get_debrief_event($member_id, $permission_groups = null)
+	{
+		// måste vara med i klanen för att se knappen
+		if(!$this->permissions->has_permissions(array('rekryt', 'medlem', 'inaktiv')))
+			return null;
+
+		// variabler
+		$event = new stdClass;
+
+		//event
+		$sql =
+			'SELECT
+				e.id, e.title,
+				(SELECT COUNT(*) FROM ssg_signups s WHERE e.id = s.event_id AND s.member_id = ? AND attendance-0 < 4) AS member_signed
+			FROM ssg_events e
+			WHERE
+				DATE_FORMAT(start_datetime, "%Y-%m-%d") = DATE_FORMAT(NOW(), "%Y-%m-%d") # idag
+				AND start_datetime <= NOW() # efter starttiden
+			ORDER BY start_datetime DESC
+			LIMIT 1';
+		$row = $this->db->query($sql, array($member_id))->row();
+		
+		// Om ingen positiv anmälan finns: returnera null
+		return $row->member_signed > 0
+			? $row
+			: null;
 	}
 
 	/**

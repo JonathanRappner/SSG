@@ -61,6 +61,7 @@ class Site extends CI_Controller
 				'news' => $news,
 				'page' => $page,
 				'next_event' => $this->signup_box->get_upcomming_event($this->member->valid ? $this->member->permission_groups : null),
+				'debrief_event' => $this->signup_box->get_debrief_event($this->member->valid ? $this->member->id : null, $this->member->valid ? $this->member->permission_groups : null),
 				'other_events' => $this->signup_box->get_other_events($this->member->valid ? $this->member : null),
 				'attendance_types' => $attendance_types,
 				'chat_messages' => $chat_messages,

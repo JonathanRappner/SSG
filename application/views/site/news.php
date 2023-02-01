@@ -16,7 +16,7 @@ shuffle($carousel_images);
 
 	<!-- Page-specific CSS/JS -->
 	<link rel="stylesheet" href="<?=base_url('css/site/news.css?4')?>">
-	<link rel="stylesheet" href="<?=base_url('css/site/signup-box.css?2')?>">
+	<link rel="stylesheet" href="<?=base_url('css/site/signup-box.css?3')?>">
 	<link rel="stylesheet" href="<?=base_url('css/site/chat.css?2')?>">
 	<link rel="stylesheet" href="<?=base_url('css/site/latest_posts.css')?>">
 	<script src="<?=base_url('js/site/news.js?0')?>"></script>

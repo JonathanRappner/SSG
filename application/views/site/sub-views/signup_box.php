@@ -15,12 +15,6 @@ if (isset($next->event_id)) {
 	$attendance_string = $signed
 		? '<span class="' .  $attendance_types[$next->member_signup->attendance_id]->class . '">' .  $attendance_types[$next->member_signup->attendance_id]->text . '</span>'
 		: null;
-	
-	// är eventet igång nu? (funkar inte korrekt om slutdatumet är dagen efter start-datumet)
-	$now_string = date('Y-m-d G:i');
-	$event_running = 
-		$now_string >= "{$next->start_date} {$next->start_time}"
-		&& $now_string < "{$next->start_date} {$next->end_time}";
 }
 
 /**
@@ -50,6 +44,14 @@ function relative_date($epoch)
 		return date('Y-m-d', $epoch);
 }
 ?><div class="signup_box">
+
+	<!-- Debrief-knapp -->
+	<?php if($debrief_event) : ?>
+	<a class="btn_debrief btn btn-danger d-flex flex-column shadow-sm mx-4 mx-md-0 mb-3" href="<?= base_url("debrief/form/{$debrief_event->id}") ?>">
+		<div>Skriv debrief <i class="fas fa-comments ml-1"></i></div>
+		<small><?=$debrief_event->title?></small>
+	</a>
+	<?php endif; ?>
 
 	<div class="card border-0 shadow-sm">
 
@@ -99,11 +101,6 @@ function relative_date($epoch)
 						<a class="btn_signup_edit btn btn-primary" href="<?= base_url("signup/event/{$next->event_id}/showform") ?>">
 							Ändra anmälan <?php if (APRIL_FOOLS) echo $this->april_fools->random_emojis(microtime(), 1) ?><i class="fas fa-edit"></i>
 						</a>
-						<?php if($event_running): ?>
-							<a class="btn_debrief btn btn-info" href="<?= base_url("debrief/form/{$next->event_id}") ?>">
-								Skriv debrief <i class="fas fa-comments ml-1"></i>
-							</a>
-						<?php endif;?>
 					<?php elseif ($logged_in && $user_is_member) : ?>
 						<a class="btn_signup_new btn btn-success" href="<?= base_url("signup/event/{$next->event_id}/showform") ?>">
 							Anmäl dig <?php if (APRIL_FOOLS) echo $this->april_fools->random_emojis(microtime(), 1) ?><i class="fas fa-chevron-right"></i>
