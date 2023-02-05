@@ -11,6 +11,31 @@ const updateValues = state => {
 	// skapa variabler ifall de inte finns
 	state.totalSignups = 0
 	state.totalDebriefs = 0
+
+	// länkar
+	state.signups.forEach(s => {
+		s.review_good = linksHtml(s.review_good)
+		s.review_bad = linksHtml(s.review_bad)
+		s.review_improvement = linksHtml(s.review_improvement)
+		s.review_tech = linksHtml(s.review_tech)
+		s.review_media = linksHtml(s.review_media)
+	})
+}
+
+/**
+ * Gör om länkar till a-tags
+ * @param {string} string 
+ * @returns string
+ */
+const linksHtml = (string) => {
+	if(!string) {
+		return string
+	}
+
+	return string.replaceAll(
+		/http[^\s<]+/gi, // matcha allt f.o.m. "http" tills du når ett whitespace eller "<" (som i "<br>").
+		'<strong>[<a href="$&" target="_blank">länk</a>]</strong>'
+	)
 }
 
 /**
@@ -113,6 +138,23 @@ const updateElements = state => {
 		})
 	} else { // om inga reviews finns
 		$('#reviews_tech').html('<span>-</span>')
+	}
+
+	// Review - Media
+	if (state.signups.some(s => s.review_media)) { // om reviews finns
+		$('#reviews_media').html('')
+		state.signups.forEach(signup => {
+			if (signup.review_media) {
+				$('#reviews_media').append(
+					`<li class="list-group-item list-group-item-primary">
+					<img class="mini-avatar" src="${signup.avatar_url}" alt="Avatar"><strong>${signup.name}</strong><br>
+					<span class="review_text">${signup.review_media}</span>
+				</li>`
+				)
+			}
+		})
+	} else { // om inga reviews finns
+		$('#reviews_media').html('<span>-</span>')
 	}
 
 

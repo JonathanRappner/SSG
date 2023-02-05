@@ -27,7 +27,7 @@ class Debrief_model extends CI_Model
 		$sql =
 			'SELECT
 				score,
-				review_good, review_bad, review_improvement, review_tech
+				review_good, review_bad, review_improvement, review_tech, review_media
 			FROM ssg_debriefs d
 			WHERE
 				d.event_id = ?
@@ -298,7 +298,8 @@ class Debrief_model extends CI_Model
 				d.review_good,
 				d.review_bad,
 				d.review_improvement,
-				d.review_tech
+				d.review_tech,
+				d.review_media
 			FROM ssg_signups s
 
 			INNER JOIN ssg_members m
@@ -324,9 +325,10 @@ class Debrief_model extends CI_Model
 			$signup->avatar_url = $this->member->get_phpbb_avatar($row->phpbb_user_id);
 			$signup->score = $row->score - 0;
 			$signup->review_good = $row->review_good ? nl2br($row->review_good) : null;
-			$signup->review_bad = $row->review_good ? nl2br($row->review_bad) : null;
-			$signup->review_improvement = $row->review_good ? nl2br($row->review_improvement) : null;
-			$signup->review_tech = $row->review_good ? nl2br($row->review_tech) : null;
+			$signup->review_bad = $row->review_bad ? nl2br($row->review_bad) : null;
+			$signup->review_improvement = $row->review_improvement ? nl2br($row->review_improvement) : null;
+			$signup->review_tech = $row->review_tech ? nl2br($row->review_tech) : null;
+			$signup->review_media = $row->review_media ? nl2br($row->review_media) : null;
 
 			$data->signups[] = $signup;
 		}

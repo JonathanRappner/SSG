@@ -168,6 +168,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<textarea class="form-control" name="review_tech" id="tech" rows="4"><?=$debrief ? $debrief->review_tech : null ?></textarea>
 							</div>
 
+							<!-- Media -->
+							<div class="form-group">
+								<label for="media">
+									<i class="fas fa-film"></i>
+									<span class="text-primary">Stream, screenshots och klipp</span>
+								</label>
+								<textarea class="form-control" name="review_media" id="media" rows="4"><?=$debrief ? $debrief->review_media : null ?></textarea>
+							</div>
+
 							<button type="submit" class="btn btn-success">
 								Spara <i class='fas fa-save'></i>
 							</button>

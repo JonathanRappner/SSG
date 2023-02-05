@@ -24,7 +24,7 @@ $attendance_classes = array(
 
 	<link rel="stylesheet" href="<?= base_url('css/debrief/group.css?1') ?>">
 	<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
-	<script src="<?= base_url('js/debrief/group.js?2') ?>"></script>
+	<script src="<?= base_url('js/debrief/group.js?3') ?>"></script>
 
 	<title><?= strtoupper($group->code) ?> - <?= $event->title ?></title>
 
@@ -204,9 +204,24 @@ $attendance_classes = array(
 			</div>
 		</div>
 
+		<!-- Media -->
+		<div class="row">
+			<div class="col pb-3">
 
+				<div class="card shadow-sm">
+					<div class="card-body">
+						<h5 class="card-title mb-4">
+							<i class="fas fa-film"></i>
+							<span class="text-primary">Stream, screenshots och klipp</span>
+						</h5>
 
+						<ul id="reviews_media" class="list-group"></ul>
 
+					</div>
+				</div>
+
+			</div>
+		</div>
 
 	</div>
 
