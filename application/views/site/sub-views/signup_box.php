@@ -47,7 +47,7 @@ function relative_date($epoch)
 
 	<!-- Debrief-knapp -->
 	<?php if($debrief_event) : ?>
-	<a class="btn_debrief btn btn-danger d-flex flex-column shadow-sm mx-4 mx-md-0 mb-3" href="<?= base_url("debrief/form/{$debrief_event->id}") ?>">
+	<a class="btn_debrief btn btn-success d-flex flex-column shadow-sm mx-4 mx-md-0 mb-3" href="<?= base_url("debrief/form/{$debrief_event->id}") ?>">
 		<div>Skriv debrief <i class="fas fa-comments ml-1"></i></div>
 		<small><?=$debrief_event->title?></small>
 	</a>
