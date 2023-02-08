@@ -34,7 +34,7 @@ const linksHtml = (string) => {
 
 	return string.replaceAll(
 		/http[^\s<]+/gi, // matcha allt f.o.m. "http" tills du når ett whitespace eller "<" (som i "<br>").
-		'<strong>[<a href="$&" target="_blank">länk</a>]</strong>'
+		'<strong><a href="$&" target="_blank">$&</a></strong>'
 	)
 }
 
