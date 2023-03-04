@@ -251,7 +251,7 @@ class Chat extends CI_Model
 		if($is_url)
 		{
 			// Anti-Bezz-bus
-			$link_title = preg_match('/kfVsfOSbJY0/', $text) // Rebecca Rebecca Black - Friday
+			$link_title = preg_match('/(kfVsfOSbJY0)|(pm_TiGtFDl0)|(DPVTl9K0lqc)|(WqVIvVh-dkI)/', $text) // Rebecca Rebecca Black - Friday
 				? 'Han länkar till Rebecca Black - Friday, igen...'
 				: 'länk';
 
