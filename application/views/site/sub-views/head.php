@@ -43,14 +43,14 @@ $preview = $this->preview->get_data();
 <link rel="stylesheet" href="<?=base_url('css/main.css?3')?>">
 <link rel="stylesheet" href="<?=base_url('css/site/main.css?1')?>">
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-192568364-1"></script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4ZDK1GLV4B"></script>
 <script>
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-	gtag('config', 'UA-192568364-1');
+  gtag('config', 'G-4ZDK1GLV4B');
 </script>
 
 <?php if(XMAS):?>
