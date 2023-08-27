@@ -798,9 +798,9 @@ class Admin_members implements Adminpanel
 				CASE # medlemmar utan role listas sist i gruppen
 					WHEN r.id IS NULL THEN 0
 					ELSE 1
-				END DESC,
-				r.sorting ASC,
-				m.registered_date ASC';
+				END DESC
+				#r.sorting ASC,
+				#m.registered_date ASC';
 		$query = $this->CI->db->query($sql);
 		foreach($query->result() as $row)
 			$members[] = $row;
