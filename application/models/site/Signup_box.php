@@ -98,7 +98,7 @@ class Signup_box extends CI_Model
 		$row = $this->db->query($sql, array($member_id))->row();
 		
 		// Om ingen positiv anmälan finns: returnera null
-		return $row->member_signed > 0
+		return $row && $row->member_signed > 0
 			? $row
 			: null;
 	}
