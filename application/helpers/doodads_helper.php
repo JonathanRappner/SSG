@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
  * Generiska helper-funktioner till allt möjligt.
@@ -19,7 +19,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 function pagination($page, $total_results, $results_per_page, $link_prefix, $scroll_to_id = null, $max_pages = 12)
 {
-	return 
+	return
 		pagination_base($page, $total_results, $results_per_page, $link_prefix, $scroll_to_id, $max_pages, 'd-none d-sm-none d-lg-block') //stora
 		. pagination_base($page, $total_results, $results_per_page, $link_prefix, $scroll_to_id, min(4, $max_pages), 'd-block d-lg-none'); //lilla
 }
@@ -43,45 +43,44 @@ function pagination_base($page, $total_results, $results_per_page, $link_prefix,
 	$link_suffix = isset($scroll_to_id) ? "#$scroll_to_id" : null;
 
 	$output = "<nav class='$class'><ul class='pagination'>";
-	
+
 	//föregående
 	$output .= $page > 0
 		?
-			'<li class="page-item"><a class="page-link" href="'. $link_prefix . 0 . $link_suffix .'"><i class="fas fa-step-backward"></i></a></li>
-			<li class="page-item"><a class="page-link" href="'. $link_prefix . ($page-1) . $link_suffix .'"><i class="fas fa-chevron-left"></i></a></li>'
+		'<li class="page-item"><a class="page-link" href="' . $link_prefix . 0 . $link_suffix . '"><i class="fas fa-step-backward"></i></a></li>
+			<li class="page-item"><a class="page-link" href="' . $link_prefix . ($page - 1) . $link_suffix . '"><i class="fas fa-chevron-left"></i></a></li>'
 		:
-			'<li class="page-item disabled"><span class="page-link"><i class="fas fa-step-backward"></i></span></li>
+		'<li class="page-item disabled"><span class="page-link"><i class="fas fa-step-backward"></i></span></li>
 			<li class="page-item disabled"><span class="page-link"><i class="fas fa-chevron-left"></i></span></li>';
-	
+
 	//sidlänkar (1, 2, 3, osv.)
-	if($total_pages <= $max_pages) //lista alla sidor
+	if ($total_pages <= $max_pages) //lista alla sidor
 	{
-		for($i = 0; $i < $total_pages; $i++)
-			$output .= 
-				'<li class="page-item'. ($page == $i ? ' active' : null) .'">
-					<a class="page-link" href="'. $link_prefix . $i . $link_suffix .'">'. ($i+1) .'</a>
+		for ($i = 0; $i < $total_pages; $i++)
+			$output .=
+				'<li class="page-item' . ($page == $i ? ' active' : null) . '">
+					<a class="page-link" href="' . $link_prefix . $i . $link_suffix . '">' . ($i + 1) . '</a>
 				</li>';
-	}
-	else //visa sidor runt on current page istället (max antal: $max_pages)
+	} else //visa sidor runt on current page istället (max antal: $max_pages)
 	{
 		$start = max($page - floor($max_pages / 2), 0);
 		$end = min($start + $max_pages, $total_pages);
-		$start = min($start, $end-$max_pages); //om mindre än hälften av sidorna ligger efter current
-		
-		for($i=$start; $i<$end; $i++)
-			$output .= 
-				'<li class="page-item'. ($page == $i ? ' active' : null) .'">
-					<a class="page-link" href="'. $link_prefix . $i . $link_suffix .'">'. ($i+1) .'</a>
+		$start = min($start, $end - $max_pages); //om mindre än hälften av sidorna ligger efter current
+
+		for ($i = $start; $i < $end; $i++)
+			$output .=
+				'<li class="page-item' . ($page == $i ? ' active' : null) . '">
+					<a class="page-link" href="' . $link_prefix . $i . $link_suffix . '">' . ($i + 1) . '</a>
 				</li>';
 	}
-	
+
 	//nästa
-	$output .= $page < ($total_pages-1)
+	$output .= $page < ($total_pages - 1)
 		?
-			'<li class="page-item"><a class="page-link" href="'. $link_prefix . ($page+1) . $link_suffix .'"><i class="fas fa-chevron-right"></i></a></li>
-			<li class="page-item"><a class="page-link" href="'. $link_prefix . ($total_pages-1) . $link_suffix .'"><i class="fas fa-step-forward"></i></a></i>'
+		'<li class="page-item"><a class="page-link" href="' . $link_prefix . ($page + 1) . $link_suffix . '"><i class="fas fa-chevron-right"></i></a></li>
+			<li class="page-item"><a class="page-link" href="' . $link_prefix . ($total_pages - 1) . $link_suffix . '"><i class="fas fa-step-forward"></i></a></i>'
 		:
-			'<li class="page-item disabled"><span class="page-link"><i class="fas fa-chevron-right"></i></span></li>
+		'<li class="page-item disabled"><span class="page-link"><i class="fas fa-chevron-right"></i></span></li>
 			<li class="page-item disabled"><span class="page-link"><i class="fas fa-step-forward"></i></span></li>';
 
 	$output .= '</ul></nav>';
@@ -108,16 +107,13 @@ function group_icon($group_code, $group_name = null, $big = false)
 	$icon_string_start = base_url("images/group_icons/{$group_code}");
 	$tooltip_string = isset($group_name) ? "data-toggle=\"tooltip\" title=\"{$group_name}\"" : null;
 
-	if($group_code != null && !in_array($group_code, $no_icon))
-	{
-		if(!$big) // 16px
+	if ($group_code != null && !in_array($group_code, $no_icon)) {
+		if (!$big) // 16px
 			return "<img class='group_icon_16 d-inline' src='{$icon_string_start}_16.png' srcset='{$icon_string_start}_16.png 1x, {$icon_string_start}_32.png 1.25x' {$tooltip_string}>";
 		else // 32px
 			return "<img class='group_icon_32 d-inline' src='{$icon_string_start}_32.png' srcset='{$icon_string_start}_32.png 1x, {$icon_string_start}_64.png 1.25x' {$tooltip_string}>";
-	}
-	else
-		return '<i class="fas fa-question-circle group_icon_'. ($big ? '32' : '16') .'"></i>';
-
+	} else
+		return '<i class="fas fa-question-circle group_icon_' . ($big ? '32' : '16') . '"></i>';
 }
 
 /**
@@ -129,20 +125,20 @@ function group_icon($group_code, $group_name = null, $big = false)
  */
 function rank_icon($rank_icon, $rank_name, $big = false)
 {
-	if(!$rank_icon) $rank_icon = 'inaktiv.png';
-	if(!$rank_name) $rank_name = 'Inaktiv';
+	if (!$rank_icon) $rank_icon = 'inaktiv.png';
+	if (!$rank_name) $rank_name = 'Inaktiv';
 
-	if(!$big) // 16px
+	if (!$big) // 16px
 		return
 			"<img
 				class='rank_icon_16 d-inline mr-1'
-				src='". base_url('images/rank_icons/16/'. $rank_icon) ."'
-				srcset='". base_url('images/rank_icons/16/'. $rank_icon) ." 1x, ". base_url('images/rank_icons/'. $rank_icon) ." 1.25x'
+				src='" . base_url('images/rank_icons/16/' . $rank_icon) . "'
+				srcset='" . base_url('images/rank_icons/16/' . $rank_icon) . " 1x, " . base_url('images/rank_icons/' . $rank_icon) . " 1.25x'
 				title='{$rank_name}' data-toggle='tooltip'
 			>";
-		else // 48px
-			return
-				'<img class="rank_icon_48 d-inline" src="'. base_url('images/rank_icons/'. $rank_icon) .'" title="'. $rank_name .'" data-toggle="tooltip">';
+	else // 48px
+		return
+			'<img class="rank_icon_48 d-inline" src="' . base_url('images/rank_icons/' . $rank_icon) . '" title="' . $rank_name . '" data-toggle="tooltip">';
 }
 
 /**
@@ -174,31 +170,48 @@ function relative_time_string($date)
 	$six_days = 518400;
 
 	//variabler
-	$days_swe = array(1=>'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag', 'söndag');
+	$days_swe = array(1 => 'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag', 'söndag');
 	$now = time();
 	$diff = abs($now - $date);
 	$date_string = date('Y-m-d G:i', $date);
 	$unix_day = floor(($date + date('Z')) / 86400); //dagar sedan 1970-01-01, justerat efter tidszon
 	$unix_day_now = floor(($now + date('Z')) / 86400);
 
-	if($diff < $min) //mindre än en minut sedan
-		$output = 'nyss';
-	else if($diff < $hour) //mer än en minut sedan (ex: '35 minuter sedan')
+	if ($date < $now) // förr
 	{
-		$minutes = floor($diff / $min);
-		$units_string = $minutes == 1 ? 'minut' : 'minuter';
-		$output = "$minutes $units_string sedan";
-	}
-	else if($diff < $day && $unix_day == $unix_day_now) //mer än en timme sedan OCH samma datum-dag (ex: 'idag 20:05')
-		$output = 'idag '. date('G:i', $date);
-	else if($unix_day_now - $unix_day == 1) //mer är en timme OCH förra dagen (ex: 'igår 0:22')
-		$output = 'igår '. date('G:i', $date);
-	else if($diff < $six_days) //mer är en dag sedan (ex: 'i fredags 13:49') (använd six_days so att det inte står "i fredags" på en fredag)
-		$output = 'i '. $days_swe[date('N', $date)] . 's '. date('G:i', $date);
-	else //mer än sex dagar sedan
-		$output = $date_string;
+		if ($diff < $min) // mindre än en minut sedan
+			return 'nyss';
+		else if ($diff < $hour) // mer än en minut sedan (ex: '35 minuter sedan')
+		{
+			$minutes = floor($diff / $min);
+			$units_string = $minutes == 1 ? 'minut' : 'minuter';
+			return "$minutes $units_string sedan";
+		} else if ($diff < $day && $unix_day == $unix_day_now) // mer än en timme sedan OCH samma datum-dag (ex: 'idag 20:05')
+			return 'idag ' . date('G:i', $date);
+		else if ($unix_day_now - $unix_day == 1) // mer är en timme OCH förra dagen (ex: 'igår 0:22')
+			return 'igår ' . date('G:i', $date);
+		else if ($diff < $six_days) // mer är en dag sedan (ex: 'i fredags 13:49') (använd six_days so att det inte står "i fredags" på en fredag)
+			return 'i ' . $days_swe[date('N', $date)] . 's ' . date('G:i', $date);
+		else // mer än sex dagar sedan
+			return $date_string;
+	} else { // framtiden
 
-	return $output;
+		if ($diff < $min) // mindre än en minut sedan
+			return 'nu!';
+		else if ($diff < $hour) // mer än en minut sedan (ex: 'om 35 minuter')
+		{
+			$minutes = floor($diff / $min);
+			$units_string = $minutes == 1 ? 'minut' : 'minuter';
+			return "om $minutes $units_string";
+		} else if ($diff < $day && $unix_day == $unix_day_now) // mer än en timme sedan OCH samma datum-dag (ex: 'idag 20:05')
+			return 'idag ' . date('G:i', $date);
+		else if ($unix_day_now - $unix_day == 1) // mer är en timme OCH nästa dagen (ex: 'igår 0:22')
+			return 'imorgon ' . date('G:i', $date);
+		else if ($diff < $six_days) // mer är en dag sedan (ex: 'i fredags 13:49') (använd six_days so att det inte står "i fredags" på en fredag)
+			return 'på ' . $days_swe[date('N', $date)] . ' ' . date('G:i', $date);
+		else // mer än sex i framtiden
+			return $date_string;
+	}
 }
 
 /**

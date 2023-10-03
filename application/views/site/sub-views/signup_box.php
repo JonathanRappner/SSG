@@ -17,32 +17,6 @@ if (isset($next->event_id)) {
 		: null;
 }
 
-/**
- * Relativ datum-sträng. T.ex: 'på tisdag', 'imorgon (tis)' eller '2022-08-20'
- *
- * @param int $epoch Unix timestamp.
- */
-function relative_date($epoch)
-{
-	$now = time();
-	$diff = $epoch - $now;
-
-	// relativ dagssträng
-	$day = 86400; // sekunder på en dag
-	$week = 604800; // sekunder på en vecka
-	$dateTimeObj = new DateTime();
-	$dateTimeObj->setTimestamp($epoch);
-	$day_string = IntlDateFormatter::formatObject( $dateTimeObj, 'eeee', 'sv' );
-
-	if ($diff < $day)
-		return 'idag ' . date('G:i', $epoch);
-	else if ($diff < ($day * 2))
-		return 'imorgon ' . date('G:i', $epoch);
-	else if ($diff < $week)
-		return "på {$day_string}";
-	else
-		return date('Y-m-d', $epoch);
-}
 ?><div class="signup_box">
 
 	<!-- Debrief-knapp -->
@@ -126,7 +100,7 @@ function relative_date($epoch)
 
 								<!-- Anmäl-knapp -->
 								<div class="d-flex flex-row">
-									<div class="date mr-1" title="<?= $event->start_date ?>"><?= '(' . relative_date($event->epoch) . ')' ?></div>
+									<div class="date mr-1" title="<?= $event->start_date ?>"><?= '(' . relative_time_string($event->epoch) . ')' ?></div>
 									<div class="btn btn-sm <?= $event->signed_up ? 'btn-primary' : 'btn-success' ?>" <?= $event->signed_up ? 'style="font-size:0.7rem;padding:1px 6px;"' : null ?>>
 										<?= $event->signed_up
 											? '<i class="fas fa-pen"></i>'
