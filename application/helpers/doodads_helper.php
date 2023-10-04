@@ -205,7 +205,7 @@ function relative_time_string($date)
 			return "om $minutes $units_string";
 		} else if ($diff < $day && $unix_day == $unix_day_now) // mer än en timme sedan OCH samma datum-dag (ex: 'idag 20:05')
 			return 'idag ' . date('G:i', $date);
-		else if ($unix_day_now - $unix_day == 1) // mer är en timme OCH nästa dagen (ex: 'igår 0:22')
+		else if ($unix_day == ($unix_day_now + 1)) // mer är en timme OCH nästa dagen (ex: 'igår 0:22')
 			return 'imorgon ' . date('G:i', $date);
 		else if ($diff < $six_days) // mer är en dag sedan (ex: 'i fredags 13:49') (använd six_days so att det inte står "i fredags" på en fredag)
 			return 'på ' . $days_swe[date('N', $date)] . ' ' . date('G:i', $date);
