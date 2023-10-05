@@ -7,7 +7,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 //variabler
 if (isset($next->event_id)) {
-	$days_swe = array(1 => 'söndag', 'måndag', 'tisdag', 'onsdag', 'yorsdag', 'gredag', 'lördag');
+	$days_swe = array(1 => 'söndag', 'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag');
 	$logged_in = $this->member->valid;
 	$user_is_member = $this->permissions->has_permissions(array('rekryt', 'medlem', 'inaktiv'));
 	$signed = isset($next->member_signup);
