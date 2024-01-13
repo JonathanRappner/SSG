@@ -337,6 +337,68 @@ class Debrief_model extends CI_Model
 	}
 
 	/**
+	 * Hämta summering av teknikstrul-reviews
+	 * @param int $event_id
+	 */
+	public function get_tech_reviews($event_id)
+	{
+		$this->load->library('Attendance');
+
+		$sql = 
+			'SELECT
+				m.name AS member_name,
+				g.code AS group_code,
+				g.name AS group_name,
+				ra.name AS rank_name,
+				ra.icon AS rank_icon,
+				s.attendance-0 AS attendance_id,
+				d.score,
+				d.review_tech
+			FROM ssg_debriefs d
+
+			INNER JOIN ssg_signups s
+				ON d.member_id = s.member_id AND s.event_id = d.event_id
+			
+			INNER JOIN ssg_members m
+				ON d.member_id = m.id
+				
+			INNER JOIN ssg_groups g
+				ON m.group_id = g.id
+				
+			INNER JOIN ssg_roles ro
+				ON m.role_id = ro.id
+
+			INNER JOIN ssg_ranks ra
+				ON (SELECT p.rank_id FROM ssg_promotions p WHERE p.member_id = m.id ORDER BY p.date DESC LIMIT 1) = ra.id
+				
+			WHERE
+				d.event_id = ?
+				AND d.review_tech IS NOT NULL
+				AND LENGTH(d.review_tech) > 3
+			ORDER BY
+				g.sorting ASC,
+				ro.sorting ASC';
+		$query = $this->db->query($sql, array($event_id));
+		$reviews = array();
+		foreach ($query->result() as $row)
+		{
+			$review = new stdClass;
+			$review->member_name = $row->member_name;
+			$review->group_code = $row->group_code;
+			$review->group_name = $row->group_name;
+			$review->rank_name = $row->rank_name;
+			$review->rank_icon = $row->rank_icon;
+			$review->attendance = $this->attendance->get_type_by_id($row->attendance_id);
+			$review->score = $row->score;
+			$review->text = nl2br($row->review_tech);
+
+			$reviews[] = $review;
+		}
+
+		return $reviews;
+	}
+
+	/**
 	 * HTML-stjärnor
 	 * @param int $score Betyg
 	 */

@@ -166,6 +166,29 @@ class Debrief extends CI_Controller
 		);
 	}
 
+	/**	Summering av ett events teknikstrul */
+	public function tech($event_id = null)
+	{
+		if (!$this->check_login()) return;
+
+		// Moduler
+		$this->load->library('eventsignup');
+		$this->load->model('debrief/debrief_model');
+
+		// Variabler
+		$event = $this->eventsignup->get_event($event_id);
+		$tech_reviews = $this->debrief_model->get_tech_reviews($event_id);
+
+		$this->load->view(
+			'debrief/tech',
+			array(
+				'global_alerts' => $this->global_alerts,
+				'event' => $event,
+				'reviews' => $tech_reviews
+			)
+		);
+	}
+
 	/** Skapa eller uppdatera debrief och signup-data. */
 	public function submit() {
 		if (!$this->check_login()) return;

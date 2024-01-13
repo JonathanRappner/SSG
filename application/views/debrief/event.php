@@ -70,8 +70,14 @@ $attendance_classes = array(
 				<!-- Negativ anmälan -->
 				<div id="alert_negative_signup" class="alert alert-warning d-none">Du är anmäld som <span></span> till detta event och kan inte skriva en debrief.</div>
 
-				<!-- Ny/Redigera debrief-knapp -->
-				<a href="<?= base_url('debrief/form/' . $event->id) ?>" id="btn_form" class="btn d-none"></a>
+				<!-- Knappar -->
+				<div class="d-flex justify-content-between">
+					<!-- Ny/Redigera debrief-knapp -->
+					<a href="<?= base_url('debrief/form/' . $event->id) ?>" id="btn_form" class="btn d-none"></a>
+
+					<!-- Teknikstrul-summering -->
+					<a href="<?= base_url('debrief/tech/' . $event->id) ?>" id="btn_tech" class="btn btn-info">Teknikstrul-summering <i class="fas fa-tools"></i></a>
+				</div>
 
 			</div>
 		</div>
