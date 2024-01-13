@@ -52,7 +52,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 		<div id="wrapper_debriefs_table" class="row">
 			<div class="col">
 				<div class="px-3 py-2 mb-3 bg-white rounded shadow-sm table-responsive table-sm">
-					<table class="table table-hover clickable">
+					<table class="table table-hover">
 						<thead class="table-borderless">
 							<tr>
 								<th scope="col">Namn</th>
