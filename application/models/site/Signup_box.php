@@ -142,17 +142,17 @@ class Signup_box extends CI_Model
 				DATE_FORMAT(start_datetime, "%Y-%m-%d") AS start_date,
 				TIME_FORMAT(start_datetime, "%H:%i") AS start_time,
 				UNIX_TIMESTAMP(start_datetime) AS epoch,
-				(SELECT COUNT(*) FROM ssg_signups s WHERE ssg_events.id = s.event_id AND s.member_id = '. $member->id .') AS signed_up
+				(SELECT COUNT(*) FROM ssg_signups s WHERE ssg_events.id = s.event_id AND s.member_id = ?) AS signed_up
 			FROM ssg_events
 			INNER JOIN ssg_event_types
 				ON ssg_events.type_id = ssg_event_types.id
 			WHERE
 				ADDTIME(start_datetime, length_time) >= NOW()
-				AND ssg_events.id != '. $next_event_id .'
+				AND ssg_events.id != ?
 			ORDER BY start_datetime ASC
-			LIMIT '. $number_of_events;
+			LIMIT ?';
 
-		return $this->db->query($sql, $deadline_time)->result();
+		return $this->db->query($sql, array($member->id, $next_event_id, $number_of_events))->result();
 	}
 
 	/**
