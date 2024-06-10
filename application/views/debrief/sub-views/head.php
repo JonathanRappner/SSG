@@ -37,7 +37,7 @@ $preview = $this->preview->get_data();
 <!-- CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <link rel="stylesheet" href="<?=base_url('css/main.css?1');?>">
-<link rel="stylesheet" href="<?=base_url('css/debrief/main.css?0');?>">
+<link rel="stylesheet" href="<?=base_url('css/debrief/main.css?1');?>">
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-4ZDK1GLV4B"></script>
