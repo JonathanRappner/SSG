@@ -85,5 +85,5 @@ defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automat
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
 //--Version--
-define('SSG_VERSION', '1.5.3');
-define('SSG_BUILD_DATE', '2024-01-13');
+define('SSG_VERSION', '1.5.4');
+define('SSG_BUILD_DATE', '2025-04-02');
