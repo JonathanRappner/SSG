@@ -17,8 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<h1 class="mt-4">Inloggning</h1>
 
 	<p>För att komma åt debriefing:ar måste du vara registrerad på vårt forum.</p>
-	<p>Du måste även vara antagen som rekryt, medlem eller inaktiv medlem.</p>
-	<p>Om du vill registrera dig, gör du det <a href="<?=base_url('forum/ucp.php?mode=register')?>">Här</a>.</p>
+	<p>Du måste vara antagen som rekryt, medlem eller inaktiv medlem.</p>
 
 	<p>
 		<a class="btn btn-primary" href="<?=base_url()?>">Tillbaka</a>

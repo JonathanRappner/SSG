@@ -102,7 +102,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				<?php else:?>
 					<div class="mt-2 mb-2 mb-lg-0">
 						<a class="btn btn-success" href="<?=base_url('forum/ucp.php?mode=login&redirect=../')?>">Logga in</a>
-						<a class="btn btn-primary" href="<?=base_url('forum/ucp.php?mode=register')?>">Registrera dig</a>
 					</div>
 				<?php endif;?>
 
