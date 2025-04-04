@@ -34,10 +34,12 @@ $(document).ready(function () {
 	});
 
 	//signupbox deadline countdown
-	$("#deadline_text").html(deadline_timer_tick(deadline_epoch)); //kör medan vi väntar på första tick:en
-	setInterval(function () { //starta ticks med 1000 ms fördröjning
-		$("#deadline_text").html(deadline_timer_tick(deadline_epoch));
-	}, 1000);
+	if(typeof deadline_timer_tick !== 'undefined') {
+		$("#deadline_text").html(deadline_timer_tick(deadline_epoch)); //kör medan vi väntar på första tick:en
+		setInterval(function () { //starta ticks med 1000 ms fördröjning
+			$("#deadline_text").html(deadline_timer_tick(deadline_epoch));
+		}, 1000);
+	}
 });
 
 // 
