@@ -179,6 +179,30 @@ dl {
 	padding: 4px;
 }
 
+// bootstrap-knapp med discord-färger
+.btn-discord {
+	// färger
+	$discord_bg: #7289da;
+	$discord_bg_dark: #4a67cf;
+	$discord_text_color: white;
+
+	// applicera
+	color: $discord_text_color;
+	border-color: $discord_bg;
+	background-color: $discord_bg;
+
+	&:hover {
+		color: $discord_text_color;
+		border-color: $discord_bg_dark;
+		background-color: $discord_bg_dark;
+	}
+
+	// centrera icon
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+
 // md och mindre
 @media (max-width: 991px) {
 	// card-headers ingen rundad kant på mobil

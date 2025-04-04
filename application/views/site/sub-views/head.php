@@ -40,7 +40,7 @@ $preview = $this->preview->get_data();
 
 <!-- CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="<?=base_url('css/main.css?3')?>">
+<link rel="stylesheet" href="<?=base_url('css/main.css?4')?>">
 <link rel="stylesheet" href="<?=base_url('css/site/main.css?1')?>">
 
 <!-- Google tag (gtag.js) -->
