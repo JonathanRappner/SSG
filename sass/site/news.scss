@@ -142,6 +142,11 @@ div.links a{
 div.links a img { width: 100%; }
 div.links a:hover { text-decoration: none; }
 
+// HR:s i "Välkommen till SSG"-texten
+#new_member_welcome hr {
+	margin: 2rem 4rem;
+}
+
 // sm eller större 
 @media (min-width: 576px) {
 	#carousel{ height: 85px; } // bredd: 540px
